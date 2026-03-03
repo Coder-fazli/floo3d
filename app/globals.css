@@ -8,8 +8,8 @@
     --color-primary: #f97316;
     --color-secondary: #3b82f6;
     --color-accent: #8b5cf6;
-    --font-serif: "Instrument Serif", serif;
-    --font-sans: Inter, sans-serif;
+    --font-serif: var(--font-instrument-serif), serif;
+    --font-sans: var(--font-inter), sans-serif;
     --shadow-neobrutalism: 4px 4px 0px 0px rgba(0, 0, 0, 1);
 }
 
@@ -21,7 +21,7 @@
     body {
         background-color: #fdfbf7;
         color: #1a1a1a;
-        font-family: Inter, sans-serif;
+        font-family: var(--font-inter), sans-serif;
         -webkit-font-smoothing: antialiased;
     }
 
@@ -31,7 +31,7 @@
     h4,
     h5,
     h6 {
-        font-family: "Instrument Serif", serif;
+        font-family: var(--font-instrument-serif), serif;
     }
 
     ::-webkit-scrollbar {
@@ -243,6 +243,10 @@
 
         .content {
             @apply w-full max-w-6xl grid grid-cols-1 gap-6;
+
+            @media (min-width: 1024px) {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         .panel {

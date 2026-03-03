@@ -3,49 +3,72 @@
 import { Button } from "@/components/ui/Button";
 import { Box, Download, RefreshCcw, Share2, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
+import { getProject } from "@/lib/actions";
+import { ReactCompareSlider, ReactCompareSliderImage } from  "react-compare-slider";   
 
 export default function Visualizer() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const initialImage = searchParams.get("initialImage");
-  const initialRender = searchParams.get("initialRender");
-  const name = searchParams.get("name");
+  const { id } = useParams();
 
   const hasInitialGenerated = useRef(false);
 
+  const [project, setProject] = useState<any>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [currentImage, setCurrentImage] = useState<string | null>(initialRender || null);
+  const [currentImage, setCurrentImage] = useState<string | null>(null);
 
   const handleBack = () => router.push("/");
 
-  const runGeneration = async () => {
-    if (!initialImage) return;
-
-    try {
-      setIsProcessing(true);
-      // TODO: call /api/generate when backend is ready
-      console.log("Generation will be wired to backend soon");
-    } catch (error) {
-      console.error("Generation failed:", error);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+  // Export functionality
+   const handleExport = async () => {
+      if(!currentImage) return;
+      const response = await fetch(currentImage);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${project?.name || "floo3d-render"}.png`;
+      link.click();
+      URL.revokeObjectURL(url);
+   }
 
   useEffect(() => {
-    if (!initialImage || hasInitialGenerated.current) return;
+     if (id) {
+      getProject(id as string).then(setProject);
+     }
+  }, [id]);
 
-    if (initialRender) {
-      setCurrentImage(initialRender);
-      hasInitialGenerated.current = true;
-      return;
-    }
+   // Running generation on initial load if not already generated
+   
+  const runGeneration = async () => {
+      if (!project) return;
+      try {
+        setIsProcessing(true);
+         const res = await fetch("/api/generate", {
+          method: "POST",
+          body: JSON.stringify({
+            projectId: project._id,
+            imageUrl: project.originalImageUrl,
+          }),
+       });
+       const data = await res.json();
+       setCurrentImage(data.renderedImageUrl);
+      } catch (error) {
+        console.error("Generation failed", error);
+      } finally {
+        setIsProcessing(false);
+      }
+   };
 
+   useEffect(() => {
+    if (!project || hasInitialGenerated.current) return;
     hasInitialGenerated.current = true;
-    runGeneration();
-  }, [initialImage, initialRender]);
+    if (project.renderedImageUrl) {
+      setCurrentImage(project.renderedImageUrl);
+      } else {
+        runGeneration();
+      }
+   }, [project]); // Ensure useEffect runs only when project changes
 
   return (
     <div className="visualizer">
@@ -64,12 +87,12 @@ export default function Visualizer() {
           <div className="panel-header">
             <div className="panel-meta">
               <p>Project</p>
-              <h2>{name || "Untitled project"}</h2>
+              <h2>{project?.name || "Untitled project"}</h2>
               <p className="note">Created by You</p>
             </div>
 
             <div className="panel-actions">
-              <Button size="sm" onClick={() => {}} className="export" disabled={!currentImage}>
+              <Button size="sm" onClick={handleExport} className="export" disabled={!currentImage}>
                 <Download className="w-4 h-4 mr-2" /> Export
               </Button>
               <Button size="sm" onClick={() => {}} className="share" disabled={!currentImage}>
@@ -83,9 +106,10 @@ export default function Visualizer() {
               <img src={currentImage} alt="AI Render" className="render-img" />
             ) : (
               <div className="render-placeholder">
-                {initialImage && (
-                  <img src={initialImage} alt="Original" className="render-fallback" />
-                )}
+                   {project?.originalImageUrl && (
+                    <img src={project.originalImageUrl} alt="Original" 
+                    className="render-fallback" />
+                   )}
               </div>
             )}
 
@@ -99,6 +123,37 @@ export default function Visualizer() {
               </div>
             )}
           </div>
+        </div>
+
+        <div className="panel compare">
+          <div className="panel-header">
+            <div className="panel-meta">
+              <p>Comparison</p>
+              <h3>Before and After</h3>
+            </div>
+              <div className="hint">Drag to Compare</div>
+          </div>
+       
+             <div className="compare-stage">
+                {project?.originalImageUrl && currentImage ? (
+                  <ReactCompareSlider
+                    defaultValue={50}
+                    style={{ width: '100%', height: 'auto' }}
+                    itemOne={
+                    <ReactCompareSliderImage src={project.originalImageUrl} className="compare-img" alt="before"/>
+                  }
+                    itemTwo={
+                    <ReactCompareSliderImage src={currentImage || project?.originalImageUrl} className="compare-img" alt="Original" />
+                  }
+                  />
+                ) :  (
+                  <div className="compare-fallback"> 
+                    {project?.originalImageUrl && (
+                      <img src={project?.originalImageUrl} alt="Before" className="compare-img"/>
+                    )}
+                  </div>
+                )}
+             </div>
         </div>
       </section>
     </div>

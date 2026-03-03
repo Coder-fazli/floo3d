@@ -5,29 +5,32 @@ import { ArrowRight, Clock, Layers } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import Upload from "@/components/Upload";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useUser } from "@clerk/nextjs";
+import { getProjects } from "@/lib/actions";
 
 export default function Home() {
   const router = useRouter();
-  const [projects, setProjects] = useState<DesignItem[]>([]);
+  
+  const { user } = useUser();
+  const [projects, setProjects] = useState<any[]>([]);
 
+  useEffect(() => {
+    if (user) {
+      getProjects(user.id).then(setProjects);
+    }
+  }, [user]);
+  
   const handleUploadComplete = async (base64Image: string) => {
-    const newId = Date.now().toString();
-    const name = `Residence ${newId}`;
-
-    // TODO: call /api/projects/save when backend is ready
-    const newItem: DesignItem = {
-      id: newId,
-      name,
-      sourceImage: base64Image,
-      renderedImage: null,
-      timestamp: Date.now(),
+    if (!user) return;
+    const name = `Residence ${Date.now()}`;
+    const res = await fetch("/api/projects", {
+      method: "POST",
+      body: JSON.stringify({ name, userId: user.id, base64Image }),
+    });
+    const project = await res.json();
+    router.push(`/visualizer/${project._id}`);
     };
-
-    setProjects((prev) => [newItem, ...prev]);
-
-    router.push(`/visualizer/${newId}`);
-  };
 
   return (
     <div className="home">
@@ -84,10 +87,10 @@ export default function Home() {
             {projects.length === 0 ? (
               <div className="empty">No projects yet. Upload a floor plan to get started.</div>
             ) : (
-              projects.map(({ id, name, renderedImage, sourceImage, timestamp }) => (
-                <div key={id} className="project-card group" onClick={() => router.push(`/visualizer/${id}`)}>
+              projects.map(({ _id, name, renderedImageUrl, originalImageUrl, createdAt }) => (
+                <div key={_id} className="project-card group" onClick={() => router.push(`/visualizer/${_id}`)}>
                   <div className="preview">
-                    <img src={renderedImage || sourceImage} alt={name || "Project"} />
+                    <img src={renderedImageUrl || originalImageUrl} alt={name || "Project"} />
                     <div className="badge">
                       <span>My Project</span>
                     </div>
@@ -97,7 +100,7 @@ export default function Home() {
                       <h3>{name}</h3>
                       <div className="meta">
                         <Clock size={12} />
-                        <span>{new Date(timestamp).toLocaleDateString()}</span>
+                        <span>{new Date(createdAt).toLocaleDateString()}</span>
                       </div>
                     </div>
                     <div className="arrow">
