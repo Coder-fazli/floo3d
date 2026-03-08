@@ -2,6 +2,7 @@
 import { connectDb } from "./db";
 import Project from "./models/Project";
 import { uploadImage } from "./cloudinary";
+import User from "./models/User";
 
 
 export async function getProjects(userId: string) {
@@ -21,4 +22,23 @@ export async function updateProject(id: string, renderedImageUrl: string) {
  await Project.findByIdAndUpdate(id, {
     renderedImageUrl, status: "done"
  });
+}
+
+// Credit managment for users(Ai generation costs credits)
+
+export async function getCredits(userId: string) {
+    await connectDb();
+    let user = await User.findOne({ clerkId: userId });
+    if(!user) {
+        user = await User.create({ clerkId: userId, credits: 10 });
+    }
+    return user.credits;
+}
+
+export async function deductCredit(userId:string) {
+    await connectDb();
+    await User.findOneAndUpdate(
+        { clerkId: userId },
+        { $inc: { credits: -1 } }
+    );
 }

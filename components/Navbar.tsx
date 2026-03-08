@@ -1,12 +1,22 @@
 "use client";
 
-import { Box } from "lucide-react";
+import { Zap } from "lucide-react";
+import Image from "next/image";
 import { Button } from "./ui/Button";
 import { useUser, useClerk } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
+import { getCredits } from "@/lib/actions";
 
 const Navbar = () => {
   const { isSignedIn, user } = useUser();
   const { signOut, openSignIn } = useClerk();
+  const [credits, setCredits] = useState<number | null>(null);
+
+ useEffect(() => {
+  if (user) {
+    getCredits(user.id).then(setCredits);
+  }
+ }, [user]);
 
   const handleAuthClick = async () => {
     if (isSignedIn) {
@@ -29,7 +39,7 @@ const Navbar = () => {
       <nav className="inner">
         <div className="left">
           <div className="brand">
-            <Box className="logo" />
+            <Image src="/logo.png" alt="Floo3D Logo" width={100} height={100} className="logo" />
             <span className="name">Floo3D</span>
           </div>
           <ul className="links">
@@ -43,6 +53,12 @@ const Navbar = () => {
         <div className="actions">
           {isSignedIn ? (
             <>
+              <div className="credits">
+                <Zap className="credits-icon" />
+                <span className="credits-count">{credits ?? 10}</span>
+                <span className="credits-divider">|</span>
+                <span className="credits-plan">Free</span>
+              </div>
               <span className="greeting">
                 {user?.firstName ? `Hi, ${user.firstName}` : "Signed in"}
               </span>
@@ -56,7 +72,11 @@ const Navbar = () => {
             </Button>
           )}
 
-          <a href="#upload" className="cta">
+          <a 
+            href={isSignedIn ? "#upload" : undefined} 
+            onClick={!isSignedIn ? () => openSignIn() : undefined}
+            className="cta"
+          >
             Get started
           </a>
         </div>

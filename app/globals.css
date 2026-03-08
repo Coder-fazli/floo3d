@@ -94,7 +94,7 @@
         @apply fixed top-0 w-full z-50 bg-background/90 backdrop-blur-sm border-b border-black/5;
 
         .inner {
-            @apply max-w-7xl mx-auto px-6 h-16 flex items-center justify-between;
+            @apply max-w-7xl mx-auto px-6 h-24 flex items-center justify-between;
 
             .left {
                 @apply flex items-center space-x-8;
@@ -103,7 +103,7 @@
                     @apply flex items-center space-x-2 cursor-pointer;
 
                     .logo {
-                        @apply w-6 h-6 text-black;
+                        @apply w-16 h-16 text-black;
                     }
 
                     .name {
@@ -122,6 +122,26 @@
 
             .actions {
                 @apply flex items-center space-x-4;
+
+                .credits {
+                    @apply inline-flex items-center gap-2 rounded-md px-3 py-1.5 bg-white border border-zinc-200 shadow-sm transition-all duration-200 hover:border-primary hover:shadow-md;
+                }
+
+                .credits-icon {
+                    @apply w-4 h-4 text-primary;
+                }
+
+                .credits-count {
+                    @apply text-sm font-extrabold text-black tracking-tight;
+                }
+
+                .credits-divider {
+                    @apply text-zinc-300 text-sm;
+                }
+
+                .credits-plan {
+                    @apply text-xs font-semibold uppercase tracking-widest text-zinc-400;
+                }
 
                 .greeting {
                     @apply text-xs font-semibold uppercase tracking-wide text-zinc-500;

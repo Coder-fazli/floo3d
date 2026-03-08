@@ -1,14 +1,20 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 import { uploadImage } from "@/lib/cloudinary";
-import { updateProject } from "@/lib/actions";
+import { updateProject, getCredits, deductCredit} from "@/lib/actions";
 import { ROOMIFY_RENDER_PROMPT } from "@/lib/constants";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export async function POST(request: Request) {
-  const { projectId, imageUrl } = await request.json();
+  const { projectId, imageUrl, userId } = await request.json();
 
+// We need to check if user ahs enogh credits before generating the design
+ const credits = await getCredits(userId);
+ if(credits <= 0) {
+  return NextResponse.json({ error: "No credits left" }, { status: 403 });
+ }
+ await deductCredit(userId);
   // fetch the original image and convert to base64
   const imageResponse = await fetch(imageUrl);
   const buffer = await imageResponse.arrayBuffer();
