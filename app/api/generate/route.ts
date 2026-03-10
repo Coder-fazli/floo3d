@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     const mimeType = imageUrl.endsWith(".png") ? "image/png" : "image/jpeg";
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash-preview-image-generation",
+      model: "gemini-2.5-flash-imag",
       generationConfig: {
         responseModalities: ["IMAGE", "TEXT"],
       } as any,
