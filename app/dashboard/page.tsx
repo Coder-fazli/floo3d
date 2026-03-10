@@ -42,6 +42,7 @@ export default function Dashboard() {
     router.push(`/visualizer/${project._id}`);
   };
 
+
   return (
     <div className="home">
       <Navbar />
@@ -101,6 +102,7 @@ export default function Dashboard() {
           </div>
         </div>
       </section>
+
     </div>
   );
 }

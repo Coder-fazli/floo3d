@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { getProject } from "@/lib/actions";
 import { ReactCompareSlider, ReactCompareSliderImage } from "react-compare-slider";
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 
 export default function VisualizerClient() {
   const router = useRouter();
@@ -16,8 +18,9 @@ export default function VisualizerClient() {
   const [project, setProject] = useState<any>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentImage, setCurrentImage] = useState<string | null>(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
-  const handleBack = () => router.push("/");
+  const handleBack = () => router.push("/dashboard");
 
   // Handle Share Button
   const handleShare = async () => {
@@ -112,7 +115,13 @@ export default function VisualizerClient() {
 
           <div className={`render-area ${isProcessing ? "is-processing" : ""}`}>
             {currentImage ? (
-              <img src={currentImage} alt="AI Render" className="render-img" />
+              <img
+                src={currentImage}
+                alt="AI Render"
+                className="render-img"
+                style={{ cursor: "zoom-in" }}
+                onClick={() => setLightboxOpen(true)}
+              />
             ) : (
               <div className="render-placeholder">
                 {project?.originalImageUrl && (
@@ -164,6 +173,14 @@ export default function VisualizerClient() {
           </div>
         </div>
       </section>
+
+      {currentImage && (
+        <Lightbox
+          open={lightboxOpen}
+          close={() => setLightboxOpen(false)}
+          slides={[{ src: currentImage }]}
+        />
+      )}
     </div>
   );
 }
