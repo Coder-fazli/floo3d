@@ -28,7 +28,7 @@ const Navbar = () => {
       }
     } else {
       try {
-        openSignIn();
+        openSignIn({ fallbackRedirectUrl: "/dashboard" });
       } catch (e) {
         console.error(`Sign in failed: ${e}`);
       }
@@ -83,7 +83,7 @@ const Navbar = () => {
                    Get started
                  </a>
            )}
-           
+
           <button className="burger" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -106,7 +106,7 @@ const Navbar = () => {
             {!isSignedIn && (
               <li>
                 <a href={isSignedIn ? "/dashboard" : undefined}
-                  onClick={!isSignedIn ? () => { openSignIn(); setMenuOpen(false); } : undefined}>
+                  onClick={!isSignedIn ? () => { openSignIn({ fallbackRedirectUrl: "/dashboard" }); setMenuOpen(false); } : undefined}>
                   Get started
                 </a>
               </li>
