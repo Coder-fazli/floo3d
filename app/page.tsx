@@ -5,7 +5,7 @@ import { ArrowRight, Clock, Layers } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import Upload from "@/components/Upload";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { getProjects } from "@/lib/actions";
 
@@ -14,6 +14,7 @@ export default function Home() {
   
   const { user } = useUser();
   const [projects, setProjects] = useState<any[]>([]);
+  const isUploading = useRef(false);
 
   useEffect(() => {
     if (user) {
@@ -22,13 +23,16 @@ export default function Home() {
   }, [user]);
   
   const handleUploadComplete = async (base64Image: string) => {
-    if (!user) return;
-    const name = `Residence ${Date.now()}`;
+    if (!user || isUploading.current) return;
+    isUploading.current = true;
+    const name = prompt("Enter a name for your project:");
+    if (!name) { isUploading.current = false; return; }
     const res = await fetch("/api/projects", {
       method: "POST",
       body: JSON.stringify({ name, userId: user.id, base64Image }),
     });
     const project = await res.json();
+    isUploading.current = false;
     router.push(`/visualizer/${project._id}`);
     };
 
