@@ -8,6 +8,7 @@ import { getProject } from "@/lib/actions";
 import { ReactCompareSlider, ReactCompareSliderImage } from "react-compare-slider";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
+import SocialButton from "@/components/kokonutui/social-button";
 
 export default function VisualizerClient() {
   const router = useRouter();
@@ -107,9 +108,10 @@ export default function VisualizerClient() {
               <Button size="sm" onClick={handleExport} className="export" disabled={!currentImage}>
                 <Download className="w-4 h-4 mr-2" /> Export
               </Button>
-              <Button size="sm" onClick={handleShare} className="share" disabled={!currentImage}>
+              {/* <Button size="sm" onClick={handleShare} className="share" disabled={!currentImage}>
                 <Share2 className="w-4 h-4 mr-2" /> Share
-              </Button>
+              </Button> */}
+               <SocialButton shareUrl={typeof window !== "undefined" ? `${window.location.origin}/visualizer/${id}` : ""} />
             </div>
           </div>
 

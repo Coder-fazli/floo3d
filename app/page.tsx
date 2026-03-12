@@ -1,20 +1,36 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
-import { ArrowRight, Clock, Layers } from "lucide-react";
-import { Button } from "@/components/ui/Button";
-import Upload from "@/components/Upload";
+import Hero from "@/components/Hero";
+import { ArrowRight, Clock } from "lucide-react";
+import { Marquee } from "@/components/ui/marquee";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "@clerk/nextjs";
-import { getProjects } from "@/lib/actions";
+import { getProjects, getProject } from "@/lib/actions";
+
+const reviews = [
+  { name: "Sarah M.", handle: "@sarahm", avatar: "SM", color: "bg-violet-500", text: "I rendered my entire apartment floor plan in under 2 minutes. The 3D output is stunning, clients love it." },
+  { name: "James K.", handle: "@jamesk", avatar: "JK", color: "bg-blue-500", text: "As an architect, this saves me hours. The AI understands spatial layout better than I expected." },
+  { name: "Lena R.", handle: "@lenar", avatar: "LR", color: "bg-pink-500", text: "Used it for my renovation project. Before and after comparison slider is a killer feature." },
+  { name: "Omar T.", handle: "@omart", avatar: "OT", color: "bg-emerald-500", text: "Finally a tool that makes floor plans look like real renders. My agency uses this daily now." },
+  { name: "Priya S.", handle: "@priyas", avatar: "PS", color: "bg-amber-500", text: "Super fast, super clean. I shared the link with my client and they approved the design instantly." },
+  { name: "Chris L.", handle: "@chrisl", avatar: "CL", color: "bg-rose-500", text: "The quality blew me away. Looks like a proper architectural visualization tool but way simpler." },
+  { name: "Mia F.", handle: "@miaf", avatar: "MF", color: "bg-cyan-500", text: "I'm not even a designer and I managed to get a beautiful 3D render from my hand-drawn sketch." },
+  { name: "Dev P.", handle: "@devp", avatar: "DP", color: "bg-indigo-500", text: "Best AI tool I've used this year. The export quality is perfect for client presentations." },
+];
 
 export default function Home() {
   const router = useRouter();
   
   const { user } = useUser();
   const [projects, setProjects] = useState<any[]>([]);
+  const [demoProject, setDemoProject] = useState<any>(null);
   const isUploading = useRef(false);
+
+  useEffect(() => {
+    getProject("69b01aef967226f4752324b2").then(setDemoProject);
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -40,43 +56,11 @@ export default function Home() {
     <div className="home">
       <Navbar />
 
-      <section className="hero">
-        <div className="announce">
-          <div className="dot">
-            <div className="pulse"></div>
-          </div>
-          <p>Introducing Floo3D 2.0</p>
-        </div>
-
-        <h1>Build beautiful spaces at the speed of thought with Floo3D</h1>
-
-        <p className="subtitle">
-          Floo3D is an AI-first design environment that helps you visualize, render, and ship architectural projects faster than ever
-        </p>
-
-        <div className="actions">
-          <a href="#upload" className="cta">
-            Start Building <ArrowRight className="icon" />
-          </a>
-          <Button variant="outline" size="lg">
-            Watch Demo
-          </Button>
-        </div>
-
-        <div className="upload-shell" id="upload">
-          <div className="grid-overlay" />
-          <div className="upload-card">
-            <div className="upload-head">
-              <div className="upload-icon">
-                <Layers className="icon" />
-              </div>
-              <h3>Upload your floor plan</h3>
-              <p>Supports JPG, PNG, formats up to 10MB</p>
-            </div>
-            <Upload onComplete={handleUploadComplete} />
-          </div>
-        </div>
-      </section>
+      <Hero
+        onUploadComplete={handleUploadComplete}
+        demoOriginal={demoProject?.originalImageUrl}
+        demoRender={demoProject?.renderedImageUrl}
+      />
 
       <section className="projects">
         <div className="section-inner">
@@ -116,6 +100,38 @@ export default function Home() {
             )}
           </div>
         </div>
+      </section>
+
+      <section className="marquee-section">
+        <div className="marquee-label">Loved by designers & architects</div>
+        <Marquee pauseOnHover repeat={3} className="marquee-strip">
+          {reviews.slice(0, 4).map((r) => (
+            <div key={r.handle} className="review-card">
+              <div className="review-header">
+                <div className={`review-avatar ${r.color}`}>{r.avatar}</div>
+                <div>
+                  <p className="review-name">{r.name}</p>
+                  <p className="review-handle">{r.handle}</p>
+                </div>
+              </div>
+              <p className="review-text">{r.text}</p>
+            </div>
+          ))}
+        </Marquee>
+        <Marquee reverse pauseOnHover repeat={3} className="marquee-strip">
+          {reviews.slice(4).map((r) => (
+            <div key={r.handle} className="review-card">
+              <div className="review-header">
+                <div className={`review-avatar ${r.color}`}>{r.avatar}</div>
+                <div>
+                  <p className="review-name">{r.name}</p>
+                  <p className="review-handle">{r.handle}</p>
+                </div>
+              </div>
+              <p className="review-text">{r.text}</p>
+            </div>
+          ))}
+        </Marquee>
       </section>
     </div>
   );

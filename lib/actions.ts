@@ -11,6 +11,15 @@ export async function getProjects(userId: string) {
     return JSON.parse(JSON.stringify(projects));
 }
 
+export async function getLatestRender() {
+    await connectDb();
+    const project = await Project.findOne({
+        renderedImageUrl: { $exists: true, $ne: null },
+        originalImageUrl: { $exists: true, $ne: null },
+    }).sort("-createdAt");
+    return project ? JSON.parse(JSON.stringify(project)) : null;
+}
+
 export async function getProject(id: string) {
     await connectDb();
     const project = await Project.findById(id);
