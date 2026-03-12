@@ -3,7 +3,7 @@
 import "./Hero.css";
 import { Layers } from "lucide-react";
 import Upload from "@/components/Upload";
-import { ReactCompareSlider, ReactCompareSliderImage } from "react-compare-slider";
+import { ReactCompareSlider, ReactCompareSliderImage, ReactCompareSliderHandle } from "react-compare-slider";
 import { useEffect, useRef, useState } from "react";
 
 interface HeroProps {
@@ -13,7 +13,7 @@ interface HeroProps {
 }
 
 export default function Hero({ onUploadComplete, demoOriginal, demoRender }: HeroProps) {
-  const [sliderPos, setSliderPos] = useState(0);
+  const [sliderPos, setSliderPos] = useState(10);
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -21,14 +21,16 @@ export default function Hero({ onUploadComplete, demoOriginal, demoRender }: Her
     // Wait 800ms after load, then smoothly animate 0 → 50
     const timeout = setTimeout(() => {
       const start = performance.now();
-      const duration = 1400; // ms
+      const duration = 2200; // ms
 
       const animate = (now: number) => {
         const elapsed = now - start;
         const progress = Math.min(elapsed / duration, 1);
-        // ease-out cubic
-        const eased = 1 - Math.pow(1 - progress, 3);
-        setSliderPos(Math.round(eased * 50));
+        // ease-in-out quint — very smooth
+        const eased = progress < 0.5
+          ? 16 * Math.pow(progress, 5)
+          : 1 - Math.pow(-2 * progress + 2, 5) / 2;
+        setSliderPos(Math.round(10 + eased * 40));
         if (progress < 1) {
           rafRef.current = requestAnimationFrame(animate);
         }
@@ -80,6 +82,18 @@ export default function Hero({ onUploadComplete, demoOriginal, demoRender }: Her
                 <ReactCompareSlider
                   position={sliderPos}
                   onPositionChange={setSliderPos}
+                  handle={
+                    <ReactCompareSliderHandle
+                      buttonStyle={{
+                        background: "rgba(255,179,198,0.25)",
+                        border: "1.5px solid rgba(255,179,198,0.6)",
+                        backdropFilter: "blur(6px)",
+                        boxShadow: "0 2px 12px rgba(255,100,130,0.2)",
+                        color: "#fff",
+                      }}
+                      linesStyle={{ background: "rgba(255,179,198,0.9)", width: 2 }}
+                    />
+                  }
                   style={{ width: "100%", height: "100%", borderRadius: "1.25rem", overflow: "hidden" }}
                   itemOne={
                     <ReactCompareSliderImage

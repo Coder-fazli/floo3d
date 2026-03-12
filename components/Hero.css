@@ -131,6 +131,7 @@
     align-items: center;
     justify-content: center;
     aspect-ratio: 4/3;
+    min-height: 380px;
 }
 
 .hero-upload-shell .grid-overlay {
@@ -206,6 +207,7 @@
         0 24px 60px rgba(0,0,0,.12),
         0 8px 20px rgba(0,0,0,.06);
     aspect-ratio: 4/3;
+    min-height: 380px;
     background: #111;
 }
 
