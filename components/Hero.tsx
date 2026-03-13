@@ -50,7 +50,7 @@ interface HeroProps {
 
 export default function Hero({ onUploadComplete, demoOriginal, demoRender }: HeroProps) {
   const { isSignedIn } = useUser();
-  const { openSignIn } = useClerk();
+  const { openSignUp } = useClerk();
 
   // ── Slider auto-animate ──
   const [sliderPos, setSliderPos] = useState(10);
@@ -208,7 +208,7 @@ export default function Hero({ onUploadComplete, demoOriginal, demoRender }: Her
             <div className="sh-card-bottom">
               <button
                 className="sh-upload-btn"
-                onClick={() => !isSignedIn ? openSignIn({ fallbackRedirectUrl: "/dashboard" }) : undefined}
+                onClick={() => !isSignedIn ? openSignUp({ fallbackRedirectUrl: "/dashboard" }) : undefined}
               >
                 {isSignedIn ? "Click above to upload" : "Sign in to upload"}
               </button>

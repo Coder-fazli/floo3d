@@ -57,7 +57,7 @@ function useScrollReveal() {
 }
 
 export default function HowItWorks() {
-  const { openSignIn } = useClerk();
+  const { openSignUp } = useClerk();
   const accuracy = useCountUp(99.9, 1, 2000);
   const speed = useCountUp(5, 0, 1500);
   const uptime24 = useCountUp(24, 0, 1800);
@@ -165,7 +165,7 @@ export default function HowItWorks() {
           <div className="hiw-cta-actions">
             <button
               className="hiw-cta-btn hiw-cta-btn-primary"
-              onClick={() => openSignIn({ fallbackRedirectUrl: "/dashboard" })}
+              onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}
             >
               Start Your First Project
             </button>

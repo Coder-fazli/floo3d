@@ -9,7 +9,7 @@ import "./Navbar.css";
 
 const Navbar = () => {
   const { isSignedIn, user } = useUser();
-  const { signOut, openSignIn } = useClerk();
+  const { signOut, openSignIn, openSignUp } = useClerk();
   const [credits, setCredits] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -57,7 +57,7 @@ const Navbar = () => {
               <button className="navbar-btn-ghost" onClick={() => openSignIn({ fallbackRedirectUrl: "/dashboard" })}>
                 Login
               </button>
-              <button className="navbar-btn-primary" onClick={() => openSignIn({ fallbackRedirectUrl: "/dashboard" })}>
+              <button className="navbar-btn-primary" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>
                 Sign Up
               </button>
             </>
@@ -82,7 +82,7 @@ const Navbar = () => {
               </>
             ) : (
               <li>
-                <a href="#" onClick={() => { openSignIn({ fallbackRedirectUrl: "/dashboard" }); setMenuOpen(false); }}>
+                <a href="#" onClick={() => { openSignUp({ fallbackRedirectUrl: "/dashboard" }); setMenuOpen(false); }}>
                   Sign Up
                 </a>
               </li>
