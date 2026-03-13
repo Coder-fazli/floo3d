@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Floo3D - 2D to 3D Floor Plan Conversion</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#ec5b13",
+                "background-light": "#f8f6f6",
+                "background-dark": "#221610",
+              },
+              fontFamily: {
+                "display": ["Public Sans", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased font-display">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Header/Navigation -->
+<header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 px-6 lg:px-20 py-4 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md sticky top-0 z-50">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-3xl font-bold">layers</span>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-black leading-tight tracking-tight">Floo3D</h2>
+</div>
+<div class="hidden md:flex flex-1 justify-center gap-8">
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Product</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Features</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Pricing</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Gallery</a>
+</div>
+<div class="flex items-center gap-3">
+<button class="hidden sm:block text-slate-700 dark:text-slate-300 text-sm font-bold px-4 py-2">Login</button>
+<button class="flex min-w-[100px] items-center justify-center rounded-xl h-10 px-5 bg-primary text-white text-sm font-bold transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-primary/20">
+                        Sign Up
+                    </button>
+</div>
+</header>
+<main class="flex-1">
+<!-- Hero Section -->
+<div class="max-w-[1280px] mx-auto px-6 lg:px-20 py-12 lg:py-20">
+<div class="flex flex-col gap-12">
+<!-- Hero Text -->
+<div class="max-w-3xl">
+<h1 class="text-slate-900 dark:text-white text-4xl md:text-6xl font-black leading-[1.1] tracking-tight mb-6">
+                                Turn 2D floor plans into <span class="text-primary">3D renders</span> instantly
+                            </h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg md:text-xl font-normal leading-relaxed">
+                                Revolutionize your architectural workflow with AI-powered 3D reconstruction. Fast, accurate, and ready for your next project.
+                            </p>
+</div>
+<!-- Main Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+<!-- Card 1: Upload Area -->
+<div class="flex flex-col gap-6 p-8 bg-white dark:bg-slate-900/50 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center gap-3">
+<div class="bg-primary/10 p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined">upload_file</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white">Upload your floor plan</h3>
+</div>
+<div class="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-10 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer group">
+<div class="bg-white dark:bg-slate-700 p-4 rounded-full shadow-md mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl">cloud_upload</span>
+</div>
+<p class="text-slate-900 dark:text-white font-semibold mb-1">Drag and drop your files</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm text-center">Supports JPG, PNG, or PDF floor plans</p>
+</div>
+<div class="flex flex-col gap-4">
+<button class="w-full flex items-center justify-center rounded-xl h-14 px-6 bg-primary text-white text-lg font-bold shadow-lg shadow-primary/25 hover:opacity-90 transition-opacity">
+                                        Sign in to upload
+                                    </button>
+<div class="flex items-center justify-center gap-4 text-slate-400 text-xs">
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">check_circle</span> Instant AI Analysis</div>
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">check_circle</span> Pro Textures</div>
+</div>
+</div>
+</div>
+<!-- Card 2: Visual Comparison Slider -->
+<div class="flex flex-col gap-6 p-8 bg-white dark:bg-slate-900/50 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-primary/10 p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined">view_in_ar</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white">Before/After Comparison</h3>
+</div>
+<span class="text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full">Live Preview</span>
+</div>
+<!-- Slider Visual Mockup -->
+<div class="relative flex-1 min-h-[320px] rounded-2xl overflow-hidden group">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="3D architectural visualization of a modern living room" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBMi5ZWL4mEIxrsaN1uTfWkWn3Z-UwSjU0n-9-_AO3LO26hnLeHi4_yauQl3rgltbXR93z7ey8dIeDbDMABeLdutGSF0CtsynDKpY4cF7Ljhpo8yT4I9r2R9ymDt35HJJ6DC1v6d3uk1ODRHHmYBU06NZ4Y2LhlByRL-yuWG5yScp_YjbDKtgiZLraUtHAo6GO49GL1awRS0za_CexC59F_V0Sp2wSLwFHP56E7lttc8iFzo5f4dzgb7KljpEomrs2zL6EYItFQq4O5');">
+<!-- Overlay for the "Before" part -->
+<div class="absolute inset-0 w-1/2 overflow-hidden border-r-4 border-white z-10">
+<div class="absolute inset-0 w-[200%] bg-cover bg-center bg-slate-200" data-alt="Technical 2D blueprint of a residential floor plan" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDHoQ7G-ecHrRNJB-ev0fMqV0A-h13aW3oX56YOr_fSXnlGl5TdgBSGLRDE9swcCi7BR8jsY-yxFCZztAeqUsk5gojXsYSuXuXJmAYAZuJno3FJgG9NMcOosxUP4ZTRQQVzLW4MHiuTuOR9YIgbSjLw8JPSB7_OmkkrPAIxM02mMvISEVYgnlIBVvNwRiUNcyiRB8jZSY-b_-6XJJ0FGjSdJWJHK84DRQu4MlZDsMqtj9hlTYJottkVl-Z_QiwWnZPHBKaJyO6lQL_o');"></div>
+</div>
+<!-- Slider Handle -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 size-10 bg-white rounded-full flex items-center justify-center shadow-2xl">
+<span class="material-symbols-outlined text-primary font-bold">unfold_more</span>
+</div>
+<!-- Labels -->
+<div class="absolute bottom-4 left-4 z-20 bg-black/40 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">2D BLUEPRINT</div>
+<div class="absolute bottom-4 right-4 z-20 bg-primary/80 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded">3D RENDER</div>
+</div>
+</div>
+<div class="flex items-center justify-between mt-auto">
+<p class="text-slate-500 dark:text-slate-400 text-sm max-w-[70%] leading-snug">
+                                        Slide to see the magic: From flat blueprints to immersive 3D environments in seconds.
+                                    </p>
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full border-2 border-white bg-slate-300 overflow-hidden" data-alt="User avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAqhaIJy7JlkrJbKeYsVpRmPRjoLqEAV4tdeGeN73Am3O3Pfq7-lkOevVdMp2no_apei2rLtSOb7xwCsWiOwKo4-Y-gR8Pg8N67clYNIChmqxPcNVbM8IvQO8tTd1Yz69UR1FtxzEGhWDmsDzkHYerQkFUHaI954l8BTq_hY3_ecyb-PYv3hYsNcAZObnoIKP7KJvwWkYYiW1pf17Erwroy9NMtG2n1H5b5tMMXOG5idU0ESgpAZwRExzP_Mu12eNOnC5Pj8dM76HXw')"></div>
+<div class="size-8 rounded-full border-2 border-white bg-slate-300 overflow-hidden" data-alt="User avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBUr-1tU1YnYehL438hcTsKdgL8pDwSVGPY3zG1KPE1XDSfA4plzcdMXbtlPDw0ZoMgNkykze5_gadWwbRXVGhi54eglycteMP0jolADcLltyqEtHZj8d8AQjziHp0-32hFIY_M0leGeICGxo2oQy2Q_ynX6ofiWget6c-JGUaEYB3iVAvYHhSVhXJI_Tv6fz3uJPN_ztDLgKh28YLKpDn9Nk4p_1pNjfwSYj2-syJ51FVaCOiFYD7pCIr8xH_2jQ7-BlV82sB7cPNu')"></div>
+<div class="size-8 rounded-full border-2 border-white bg-primary text-white text-[10px] font-bold flex items-center justify-center">+12k</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Trusted By/Metrics (Optional Footer for Hero) -->
+<div class="flex flex-wrap justify-center lg:justify-between items-center gap-8 pt-8 border-t border-slate-200 dark:border-slate-800 opacity-60">
+<p class="text-slate-500 font-semibold text-sm uppercase tracking-widest">Trusted by top agencies</p>
+<div class="flex flex-wrap justify-center gap-10 grayscale">
+<span class="text-2xl font-black italic tracking-tighter">ARCHITECTS.CO</span>
+<span class="text-2xl font-black italic tracking-tighter">FLATLY</span>
+<span class="text-2xl font-black italic tracking-tighter">RENDERHUB</span>
+<span class="text-2xl font-black italic tracking-tighter">PLANSET</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

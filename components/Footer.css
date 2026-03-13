@@ -1,0 +1,327 @@
+/* All classes prefixed ftr- to prevent conflicts */
+
+.ftr-footer {
+    position: relative;
+    width: 100%;
+    background: #f8f6f6;
+    border-top: 1px solid #e2e8f0;
+    padding: 5rem 0 2.5rem;
+    overflow: hidden;
+    font-family: var(--font-sans), "Public Sans", sans-serif;
+}
+
+/* ── Top gradient line ── */
+.ftr-top-line {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(236, 91, 19, 0.5), transparent);
+    pointer-events: none;
+}
+
+/* ── Inner container ── */
+.ftr-inner {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* ── Top: brand + newsletter ── */
+.ftr-top {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 3rem;
+    margin-bottom: 5rem;
+}
+
+/* ── Brand ── */
+.ftr-logo-row {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin-bottom: 1.5rem;
+}
+
+.ftr-logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #ec5b13;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ftr-logo-name {
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    color: #0f172a;
+}
+
+.ftr-brand-desc {
+    font-size: 0.95rem;
+    color: #64748b;
+    line-height: 1.7;
+    max-width: 26rem;
+    margin: 0 0 1.5rem;
+}
+
+.ftr-badges {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.ftr-badge-pill {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #ec5b13;
+    background: rgba(236, 91, 19, 0.08);
+    border: 1px solid rgba(236, 91, 19, 0.2);
+    padding: 0.3rem 0.75rem;
+    border-radius: 9999px;
+}
+
+/* ── Newsletter ── */
+.ftr-newsletter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ftr-newsletter-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 2rem;
+}
+
+.ftr-newsletter-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 0.5rem;
+}
+
+.ftr-newsletter-sub {
+    font-size: 0.875rem;
+    color: #64748b;
+    margin: 0 0 1.5rem;
+}
+
+.ftr-form {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.ftr-input {
+    flex: 1;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #0f172a;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.ftr-input:focus {
+    border-color: #ec5b13;
+    box-shadow: 0 0 0 3px rgba(236, 91, 19, 0.12);
+}
+
+.ftr-subscribe-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #ec5b13;
+    color: #ffffff;
+    font-size: 0.875rem;
+    font-weight: 700;
+    padding: 0.75rem 1.75rem;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+    font-family: inherit;
+}
+
+.ftr-subscribe-btn:hover {
+    opacity: 0.9;
+}
+
+.ftr-subscribe-icon {
+    transition: transform 0.2s;
+}
+
+.ftr-subscribe-btn:hover .ftr-subscribe-icon {
+    transform: translateX(3px);
+}
+
+/* ── Nav grid ── */
+.ftr-nav {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2.5rem;
+    padding: 3rem 0;
+    border-top: 1px solid #e2e8f0;
+}
+
+.ftr-nav-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.ftr-nav-heading {
+    font-size: 0.65rem;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #ec5b13;
+    margin: 0;
+}
+
+.ftr-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.ftr-nav-link {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #64748b;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.ftr-nav-link:hover {
+    color: #ec5b13;
+}
+
+/* ── Bottom bar ── */
+.ftr-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.ftr-copy {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin: 0;
+}
+
+/* ── Socials ── */
+.ftr-socials {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.ftr-social-link {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.ftr-social-link:hover {
+    color: #ec5b13;
+    transform: translateY(-2px);
+}
+
+/* ── Meta ── */
+.ftr-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.ftr-meta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #94a3b8;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+    font-family: inherit;
+    padding: 0;
+}
+
+.ftr-meta-btn:hover {
+    color: #0f172a;
+}
+
+.ftr-divider {
+    width: 1px;
+    height: 1rem;
+    background: #e2e8f0;
+}
+
+.ftr-status-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background: #10b981;
+    flex-shrink: 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+    .ftr-top {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .ftr-nav {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ftr-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .ftr-form {
+        flex-direction: column;
+    }
+
+    .ftr-nav {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+
+    .ftr-meta {
+        flex-wrap: wrap;
+    }
+}

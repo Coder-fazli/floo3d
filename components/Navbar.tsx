@@ -2,10 +2,10 @@
 
 import { Zap, Menu, X, User } from "lucide-react";
 import Image from "next/image";
-import { Button } from "./ui/Button";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { getCredits } from "@/lib/actions";
+import "./Navbar.css";
 
 const Navbar = () => {
   const { isSignedIn, user } = useUser();
@@ -14,100 +14,76 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      getCredits(user.id).then(setCredits);
-    }
+    if (user) getCredits(user.id).then(setCredits);
   }, [user]);
 
-  const handleAuthClick = async () => {
-    if (isSignedIn) {
-      try {
-        await signOut();
-      } catch (e) {
-        console.error(`Sign out failed: ${e}`);
-      }
-    } else {
-      try {
-        openSignIn({ fallbackRedirectUrl: "/dashboard" });
-      } catch (e) {
-        console.error(`Sign in failed: ${e}`);
-      }
-    }
+  const handleSignOut = async () => {
+    try { await signOut(); } catch (e) { console.error(e); }
   };
 
   return (
     <header className="navbar">
-      <nav className="inner">
-        <div className="left">
-          <div className="brand">
-            <Image src="/logo.png" alt="Floo3D Logo" width={100} height={100} className="logo" />
-            <span className="name">Floo3D</span>
-          </div>
-          <ul className="links">
-            <li><a href="">Product</a></li>
-            <li><a href="">Pricing</a></li>
-            <li><a href="">Community</a></li>
-            <li><a href="">Enterprise</a></li>
-          </ul>
+      <nav className="navbar-inner">
+
+        {/* Brand */}
+        <div className="navbar-brand">
+          <Image src="/logo.png" alt="Floo3D" width={32} height={32} className="navbar-logo" />
+          <span className="navbar-name">Floo3D</span>
         </div>
 
-        <div className="actions">
+        {/* Links */}
+        <ul className="navbar-links">
+          <li><a href="">Product</a></li>
+          <li><a href="">Features</a></li>
+          <li><a href="">Pricing</a></li>
+          <li><a href="">Gallery</a></li>
+        </ul>
+
+        {/* Actions */}
+        <div className="navbar-actions">
           {isSignedIn ? (
             <>
-              <div className="credits">
+              <div className="navbar-credits">
                 <Zap className="credits-icon" />
-                <span className="credits-count">{credits ?? 10}</span>
-                <span className="credits-divider hidden-mobile">|</span>
-                <span className="credits-plan hidden-mobile">Free</span>
+                <span>{credits ?? 10}</span>
               </div>
-              <span className="greeting hidden-mobile">
-                {user?.firstName ? `Hi, ${user.firstName}` : "Signed in"}
-              </span>
-              <a href="/dashboard/profile" className="profile-icon" title="Profile">
-                <User className="w-5 h-5" />
+              <a href="/dashboard/profile" className="navbar-profile" title="Profile">
+                <User className="w-4 h-4" />
               </a>
-              <Button size="sm" onClick={handleAuthClick} className="btn hidden-mobile">
-                Log Out
-              </Button>
+              <button className="navbar-btn-ghost" onClick={handleSignOut}>Log Out</button>
             </>
           ) : (
-            <Button size="sm" variant="ghost" onClick={handleAuthClick} className="login">
-              Log In
-            </Button>
+            <>
+              <button className="navbar-btn-ghost" onClick={() => openSignIn({ fallbackRedirectUrl: "/dashboard" })}>
+                Login
+              </button>
+              <button className="navbar-btn-primary" onClick={() => openSignIn({ fallbackRedirectUrl: "/dashboard" })}>
+                Sign Up
+              </button>
+            </>
           )}
-
-           {!isSignedIn && (
-                 <a                                            
-                  onClick={() => openSignIn()}    
-                 className="cta hidden-mobile" >
-                   Get started
-                 </a>
-           )}
-
-          <button className="burger" onClick={() => setMenuOpen(!menuOpen)}>
+          <button className="navbar-burger" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </nav>
 
       {menuOpen && (
-        <div className="mobile-menu">
+        <div className="navbar-mobile">
           <ul>
             <li><a href="" onClick={() => setMenuOpen(false)}>Product</a></li>
+            <li><a href="" onClick={() => setMenuOpen(false)}>Features</a></li>
             <li><a href="" onClick={() => setMenuOpen(false)}>Pricing</a></li>
-            <li><a href="" onClick={() => setMenuOpen(false)}>Community</a></li>
-            <li><a href="" onClick={() => setMenuOpen(false)}>Enterprise</a></li>
-            {isSignedIn && (
+            <li><a href="" onClick={() => setMenuOpen(false)}>Gallery</a></li>
+            {isSignedIn ? (
               <>
                 <li><a href="/dashboard/profile" onClick={() => setMenuOpen(false)}>Profile</a></li>
-                <li><a href="#" onClick={() => { handleAuthClick(); setMenuOpen(false); }}>Log Out</a></li>
+                <li><a href="#" onClick={() => { handleSignOut(); setMenuOpen(false); }}>Log Out</a></li>
               </>
-            )}
-            {!isSignedIn && (
+            ) : (
               <li>
-                <a href={isSignedIn ? "/dashboard" : undefined}
-                  onClick={!isSignedIn ? () => { openSignIn({ fallbackRedirectUrl: "/dashboard" }); setMenuOpen(false); } : undefined}>
-                  Get started
+                <a href="#" onClick={() => { openSignIn({ fallbackRedirectUrl: "/dashboard" }); setMenuOpen(false); }}>
+                  Sign Up
                 </a>
               </li>
             )}

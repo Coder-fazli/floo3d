@@ -2,6 +2,9 @@
 
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import HowItWorks from "@/components/HowItWorks";
+import Blog from "@/components/Blog";
+import Footer from "@/components/Footer";
 import { ArrowRight, Clock } from "lucide-react";
 import { Marquee } from "@/components/ui/marquee";
 import { useRouter } from "next/navigation";
@@ -62,6 +65,48 @@ export default function Home() {
         demoRender={demoProject?.renderedImageUrl}
       />
 
+      <HowItWorks />
+
+      <section className="marquee-section" id="reviews">
+        <div className="marquee-header">
+          <span className="marquee-eyebrow">Real Stories</span>
+          <h2 className="marquee-title">
+            Trusted by <em className="marquee-accent">Thousands</em> of Creators
+          </h2>
+          <p className="marquee-subtitle">Architects, designers, and visionaries who transformed their workflow.</p>
+        </div>
+        <Marquee pauseOnHover repeat={3} className="marquee-strip">
+          {reviews.slice(0, 4).map((r) => (
+            <div key={r.handle} className="review-card">
+              <div className="review-header">
+                <div className={`review-avatar ${r.color}`}>{r.avatar}</div>
+                <div>
+                  <p className="review-name">{r.name}</p>
+                  <p className="review-handle">{r.handle}</p>
+                </div>
+              </div>
+              <p className="review-text">{r.text}</p>
+            </div>
+          ))}
+        </Marquee>
+        <Marquee reverse pauseOnHover repeat={3} className="marquee-strip">
+          {reviews.slice(4).map((r) => (
+            <div key={r.handle} className="review-card">
+              <div className="review-header">
+                <div className={`review-avatar ${r.color}`}>{r.avatar}</div>
+                <div>
+                  <p className="review-name">{r.name}</p>
+                  <p className="review-handle">{r.handle}</p>
+                </div>
+              </div>
+              <p className="review-text">{r.text}</p>
+            </div>
+          ))}
+        </Marquee>
+      </section>
+
+      <Blog />
+
       <section className="projects">
         <div className="section-inner">
           <div className="section-head">
@@ -102,37 +147,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="marquee-section">
-        <div className="marquee-label">Loved by designers & architects</div>
-        <Marquee pauseOnHover repeat={3} className="marquee-strip">
-          {reviews.slice(0, 4).map((r) => (
-            <div key={r.handle} className="review-card">
-              <div className="review-header">
-                <div className={`review-avatar ${r.color}`}>{r.avatar}</div>
-                <div>
-                  <p className="review-name">{r.name}</p>
-                  <p className="review-handle">{r.handle}</p>
-                </div>
-              </div>
-              <p className="review-text">{r.text}</p>
-            </div>
-          ))}
-        </Marquee>
-        <Marquee reverse pauseOnHover repeat={3} className="marquee-strip">
-          {reviews.slice(4).map((r) => (
-            <div key={r.handle} className="review-card">
-              <div className="review-header">
-                <div className={`review-avatar ${r.color}`}>{r.avatar}</div>
-                <div>
-                  <p className="review-name">{r.name}</p>
-                  <p className="review-handle">{r.handle}</p>
-                </div>
-              </div>
-              <p className="review-text">{r.text}</p>
-            </div>
-          ))}
-        </Marquee>
-      </section>
+      <Footer />
     </div>
   );
 }

@@ -31,7 +31,6 @@
     @apply bg-background text-foreground;
     }
 
-    h1,
     h2,
     h3,
     h4,
@@ -99,101 +98,6 @@
         }
     }
 
-    .navbar {
-        @apply fixed top-0 w-full z-50 bg-background/90 backdrop-blur-sm border-b border-black/5;
-
-        .inner {
-            @apply max-w-7xl mx-auto px-6 h-24 flex items-center justify-between;
-
-            .left {
-                @apply flex items-center space-x-8;
-
-                .brand {
-                    @apply flex items-center space-x-2 cursor-pointer;
-
-                    .logo {
-                        @apply w-16 h-16 text-black;
-                    }
-
-                    .name {
-                        @apply text-xl font-serif font-bold text-black tracking-tight;
-                    }
-                }
-
-                .links {
-                    @apply hidden md:flex items-center space-x-6;
-
-                    a {
-                        @apply text-sm font-medium text-zinc-600 hover:text-black transition-colors;
-                    }
-                }
-            }
-
-            .actions {
-                @apply flex items-center space-x-4;
-
-                .credits {
-                    @apply inline-flex items-center gap-2 rounded-md px-3 py-1.5 bg-white border border-zinc-200 shadow-sm transition-all duration-200 hover:border-primary hover:shadow-md;
-                }
-
-                .credits-icon {
-                    @apply w-4 h-4 text-primary;
-                }
-
-                .credits-count {
-                    @apply text-sm font-extrabold text-black tracking-tight;
-                }
-
-                .credits-divider {
-                    @apply text-zinc-300 text-sm;
-                }
-
-                .credits-plan {
-                    @apply text-xs font-semibold uppercase tracking-widest text-zinc-400;
-                }
-
-                .greeting {
-                    @apply text-xs font-semibold uppercase tracking-wide text-zinc-500;
-                }
-
-                .btn {
-                    @apply rounded-md;
-                }
-
-                .login {
-                    @apply text-xs font-bold uppercase tracking-wide text-zinc-900 hover:text-primary transition-colors;
-                }
-
-                .cta {
-                    @apply inline-flex items-center justify-center rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed px-3 py-1.5 text-xs uppercase tracking-wide bg-primary text-white hover:bg-[#EA580C] shadow-sm;
-                }
-
-                .profile-icon {
-                    @apply flex items-center justify-center w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 transition-colors text-zinc-700;
-                }
-
-                .burger {
-                    @apply flex md:hidden items-center justify-center w-8 h-8 rounded-md hover:bg-zinc-100 transition-colors;
-                }
-
-                .hidden-mobile {
-                    @apply hidden md:flex;
-                }
-            }
-        }
-
-        .mobile-menu {
-            @apply md:hidden bg-white border-t border-zinc-100 px-6 py-4;
-
-            ul {
-                @apply flex flex-col space-y-4;
-
-                a {
-                    @apply text-sm font-medium text-zinc-700 hover:text-black transition-colors;
-                }
-            }
-        }
-    }
 
     .upload {
         @apply w-full;
@@ -378,89 +282,49 @@
     .home {
         @apply min-h-screen bg-background relative overflow-x-hidden text-foreground;
 
-        .hero {
-            @apply pt-32 pb-20 px-6 max-w-7xl mx-auto flex flex-col items-center text-center;
-
-            .announce {
-                @apply mb-8 inline-flex items-center px-3 py-1 rounded-md bg-white border border-zinc-200 shadow-sm;
-
-                .dot {
-                    @apply w-4 h-4 rounded bg-blue-100 flex items-center justify-center mr-2;
-
-                    .pulse {
-                        @apply w-2 h-2 rounded-full bg-blue-500 animate-pulse;
-                    }
-                }
-
-                p {
-                    @apply text-[10px] font-bold uppercase tracking-widest text-zinc-600;
-                }
-            }
-
-            h1 {
-                @apply text-6xl md:text-8xl font-serif leading-[0.95] text-black mb-8 max-w-5xl mx-auto;
-            }
-
-            .subtitle {
-                @apply max-w-2xl mx-auto text-xs md:text-sm font-mono uppercase tracking-widest text-zinc-500 mb-10 leading-relaxed;
-            }
-
-            .actions {
-                @apply flex flex-col sm:flex-row gap-4 justify-center mb-16;
-
-                .cta {
-                    @apply inline-flex items-center justify-center rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background px-8 py-3 text-sm uppercase tracking-wide font-bold bg-primary text-white hover:bg-[#ea580c] shadow-md;
-
-                    .icon {
-                        @apply ml-2 w-4 h-4;
-                    }
-                }
-            }
-
-            .upload-shell {
-                @apply w-full max-w-5xl mx-auto relative rounded-3xl overflow-hidden bg-linear-to-b from-blue-100/50 to-white/50 border border-blue-100 p-6 md:p-12 shadow-sm min-h-100 flex items-center justify-center;
-
-                .grid-overlay {
-                    @apply absolute inset-0 opacity-40 pointer-events-none;
-
-                    background-image:
-                            linear-gradient(#3b82f6 1px, transparent 1px),
-                            linear-gradient(90deg, #3b82f6 1px, transparent 1px);
-
-                    background-size: 60px 60px;
-                }
-
-                .upload-card {
-                    @apply relative w-full max-w-xl bg-white rounded-2xl shadow-xl overflow-hidden border border-zinc-100 p-8 z-10 transition-transform hover:scale-[1.01] duration-500;
-
-                    .upload-head {
-                        @apply text-center mb-6;
-
-                        .upload-icon {
-                            @apply w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3;
-
-                            .icon {
-                                @apply text-orange-500 w-6 h-6;
-                            }
-                        }
-
-                        h3 {
-                            @apply text-xl font-serif font-bold text-black;
-                        }
-
-                        p {
-                            @apply text-zinc-500 text-sm mt-1;
-                        }
-                    }
-                }
-            }
-        }
 
         .marquee-section {
-            @apply py-20 bg-white border-b border-zinc-100 flex flex-col gap-6 overflow-hidden;
+            @apply py-24 bg-white border-b border-zinc-100 flex flex-col gap-8 overflow-hidden;
 
-            .marquee-label {
-                @apply text-center text-sm font-medium text-zinc-400 uppercase tracking-widest;
+            .marquee-header {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 0.75rem;
+                padding: 0 1.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .marquee-eyebrow {
+                font-size: 0.7rem;
+                font-weight: 900;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                color: #ec5b13;
+            }
+
+            .marquee-title {
+                font-size: clamp(2rem, 4vw, 3.25rem);
+                font-weight: 900;
+                letter-spacing: -0.03em;
+                color: #0f172a;
+                line-height: 1.1;
+                margin: 0;
+                font-family: var(--font-sans), "Public Sans", sans-serif;
+            }
+
+            .marquee-accent {
+                color: #ec5b13;
+                font-style: italic;
+            }
+
+            .marquee-subtitle {
+                font-size: 1rem;
+                color: #64748b;
+                font-weight: 500;
+                max-width: 28rem;
+                margin: 0;
             }
 
             .marquee-strip {
