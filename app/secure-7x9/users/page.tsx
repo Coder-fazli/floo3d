@@ -29,7 +29,7 @@ export default async function AdminUsers() {
               </tr>
             </thead>
             <tbody>
-              {users.map((u) => (
+              {users.map((u: any) => (
                 <tr key={u.clerkId}>
                   <td>
                     <div className="adm-user-cell">
