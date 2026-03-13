@@ -1,10 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap');
+
 /* All classes prefixed adm- */
 
 .adm-layout {
     display: flex;
     min-height: 100vh;
     background: #f8f6f6;
-    font-family: var(--font-sans), "Public Sans", sans-serif;
+    font-family: "Public Sans", sans-serif;
 }
 
 /* ── Sidebar ── */
@@ -72,24 +74,26 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.625rem 0.75rem;
-    border-radius: 0.625rem;
+    padding: 0.625rem 1rem;
+    border-radius: 0;
     font-size: 0.875rem;
     font-weight: 500;
     color: #64748b;
     text-decoration: none;
     transition: background 0.15s, color 0.15s;
+    border-right: 3px solid transparent;
 }
 
 .adm-nav-link:hover {
     background: #f8fafc;
-    color: #0f172a;
+    color: #ec5b13;
 }
 
 .adm-nav-link-active {
-    background: rgba(236, 91, 19, 0.08);
+    background: rgba(236, 91, 19, 0.05);
     color: #ec5b13;
     font-weight: 600;
+    border-right-color: #ec5b13;
 }
 
 .adm-nav-section {
@@ -257,10 +261,10 @@
 }
 
 .adm-stat-label {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     font-weight: 500;
-    color: #94a3b8;
-    margin: 0 0 0.25rem;
+    color: #64748b;
+    margin: 0 0 0.5rem;
 }
 
 .adm-stat-value {

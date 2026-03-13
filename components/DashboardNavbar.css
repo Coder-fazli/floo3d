@@ -253,3 +253,20 @@
     .dbnav-search { display: none; }
     .dbnav-credits { display: none; }
 }
+
+
+.dbnav-signout {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #334155;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  transition: color 0.15s;
+}
+
+.dbnav-signout:hover {
+  color: #0f172a;
+}

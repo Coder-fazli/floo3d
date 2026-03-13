@@ -10,7 +10,7 @@ import Link from "next/link";
 
 export default function DashboardNavbar() {
   const { user } = useUser();
-  const { openUserProfile } = useClerk();
+  const { openUserProfile, signOut } = useClerk();
   const [credits, setCredits] = useState<number | null>(null);
 
   useEffect(() => {
@@ -55,6 +55,8 @@ export default function DashboardNavbar() {
           </div>
 
           <div className="dbnav-divider" />
+
+          <button className="dbnav-signout" onClick={() => signOut({ redirectUrl: "/" })}>Log Out</button>
 
           <button className="dbnav-user" onClick={() => openUserProfile()}>
             <div className="dbnav-user-info">
