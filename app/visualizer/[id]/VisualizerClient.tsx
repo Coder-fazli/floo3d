@@ -156,15 +156,15 @@ export default function VisualizerClient() {
               </span>
             </div>
             <h2 className="viz-project-title">{project?.name || "Untitled Project"}</h2>
-            <p className="viz-project-sub">Created by You</p>
+            <p className="viz-project-sub">Created by {user?.fullName ?? "You"}</p>
           </div>
 
           <div className="viz-stats-row">
-            <div className="viz-stat-card">
-              <div className="viz-stat-icon"><Layers size={18} /></div>
+            <div className="viz-stat-card" style={{ cursor: "pointer" }} onClick={() => router.push("/dashboard")}>
+              <div className="viz-stat-icon"><RefreshCcw size={18} /></div>
               <div>
-                <p className="viz-stat-label">Status</p>
-                <p className="viz-stat-value">{currentImage ? "Complete" : isProcessing ? "Rendering" : "Pending"}</p>
+                <p className="viz-stat-label">Navigate</p>
+                <p className="viz-stat-value">Back to Dashboard</p>
               </div>
             </div>
             <div className="viz-stat-card">
