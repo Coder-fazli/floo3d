@@ -6,7 +6,11 @@
     display: flex;
     min-height: 100vh;
     background: #f8f6f6;
-    font-family: "Public Sans", sans-serif;
+    font-family: "Public Sans", sans-serif !important;
+}
+
+.adm-layout * {
+    font-family: "Public Sans", sans-serif !important;
 }
 
 /* ── Sidebar ── */
