@@ -11,7 +11,7 @@ import "yet-another-react-lightbox/styles.css";
 import SocialButton from "@/components/kokonutui/social-button";
 import Image from "next/image";
 import Link from "next/link";
-import { Download, RefreshCcw, Maximize2, ZoomIn, Layers, Clock, ChevronRight, Edit } from "lucide-react";
+import { Download, RefreshCcw, Maximize2, ZoomIn, Clock, ChevronRight, Edit } from "lucide-react";
 
 export default function VisualizerClient() {
   const router = useRouter();
@@ -160,11 +160,31 @@ export default function VisualizerClient() {
           </div>
 
           <div className="viz-stats-row">
-            <div className="viz-stat-card" style={{ cursor: "pointer" }} onClick={() => router.push("/dashboard")}>
-              <div className="viz-stat-icon"><RefreshCcw size={18} /></div>
+            <div className="viz-stat-card" style={{ cursor: "pointer", borderColor: "#ec5b13" }} onClick={() => router.push("/dashboard")}>
+              <div className="viz-stat-icon" style={{ color: "#ec5b13" }}><RefreshCcw size={18} /></div>
               <div>
                 <p className="viz-stat-label">Navigate</p>
-                <p className="viz-stat-value">Back to Dashboard</p>
+                <p className="viz-stat-value" style={{ color: "#ec5b13" }}>Back to Dashboard</p>
+              </div>
+            </div>
+            <div className="viz-stat-card" style={{ gap: "0.75rem" }}>
+              <div style={{ display: "flex", gap: "0.5rem" }}>
+                <button className="viz-btn-primary" onClick={handleExport} disabled={!currentImage} style={{ fontSize: "0.8rem", padding: "0.4rem 0.9rem" }}>
+                  <Download size={14} /> Export
+                </button>
+                <SocialButton shareUrl={shareUrl} />
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <p className="viz-stat-label" style={{ margin: 0 }}>Share:</p>
+                <a href="#" className="viz-share-icon" onClick={handleShare} title="Copy link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                </a>
+                <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`} target="_blank" className="viz-share-icon" title="Share on X">
+                  <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`} target="_blank" className="viz-share-icon" title="Share on LinkedIn">
+                  <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </a>
               </div>
             </div>
             <div className="viz-stat-card">
@@ -198,14 +218,14 @@ export default function VisualizerClient() {
                 <ReactCompareSliderImage
                   src={project.originalImageUrl}
                   alt="2D Floor Plan"
-                  style={{ objectFit: "contain", background: "#f8fafc" }}
+                  style={{ objectFit: "cover" }}
                 />
               }
               itemTwo={
                 <ReactCompareSliderImage
                   src={currentImage}
                   alt="3D Render"
-                  style={{ objectFit: "contain", background: "#f8fafc", cursor: "zoom-in" }}
+                  style={{ objectFit: "cover", cursor: "zoom-in" }}
                   onClick={() => setLightboxOpen(true)}
                 />
               }
@@ -238,29 +258,7 @@ export default function VisualizerClient() {
         </div>
 
         {/* Toolbar row */}
-        <div className="viz-toolbar-row">
-
-          {/* Actions card */}
-          <div className="viz-actions-card">
-            <div className="viz-action-btns">
-              <button className="viz-btn-primary" onClick={handleExport} disabled={!currentImage}>
-                <Download size={16} /> Export
-              </button>
-              <SocialButton shareUrl={shareUrl} />
-            </div>
-            <div className="viz-quick-share">
-              <p className="viz-quick-share-label">Quick Share:</p>
-              <a href="#" className="viz-share-icon" onClick={handleShare} title="Copy link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-              </a>
-              <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`} target="_blank" className="viz-share-icon" title="Share on X">
-                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-              </a>
-              <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`} target="_blank" className="viz-share-icon" title="Share on LinkedIn">
-                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-              </a>
-            </div>
-          </div>
+        <div className="viz-toolbar-row" style={{ justifyContent: "flex-end" }}>
 
           {/* Insights card */}
           <div className="viz-insights-card">
