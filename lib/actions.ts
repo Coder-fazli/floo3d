@@ -37,10 +37,11 @@ export async function updateProject(id: string, renderedImageUrl: string) {
 
 export async function getCredits(userId: string) {
     await connectDb();
-    let user = await User.findOne({ clerkId: userId });
-    if(!user) {
-        user = await User.create({ clerkId: userId, credits: 10 });
-    }
+    const user = await User.findOneAndUpdate(
+        { clerkId: userId },
+        { $setOnInsert: { credits: 10 } },
+        { upsert: true, new: true }
+    );
     return user.credits;
 }
 

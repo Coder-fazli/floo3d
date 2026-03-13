@@ -27,11 +27,19 @@
     flex-shrink: 0;
 }
 
-.navbar-logo {
+.navbar-logo-icon {
     width: 2rem;
     height: 2rem;
-    object-fit: contain;
-    border-radius: 6px;
+    background: #ec5b13;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.navbar-name-accent {
+    color: #ec5b13;
 }
 
 .navbar-name {

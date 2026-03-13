@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Floo3D Admin Panel</title>
+<!-- Google Fonts: Public Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#ec5b13',
+            background: '#f8f6f6',
+            cardBorder: '#e2e8f0',
+          },
+          fontFamily: {
+            sans: ['"Public Sans"', 'sans-serif'],
+          },
+          borderRadius: {
+            'card': '1rem',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-layouts">
+    body {
+      background-color: #f8f6f6;
+    }
+    .sidebar-link.active {
+      color: #ec5b13;
+      background-color: rgba(236, 91, 19, 0.05);
+      border-right: 3px solid #ec5b13;
+    }
+    .admin-card {
+      background-color: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 1rem;
+    }
+    /* Hide all pages by default, show active */
+    .page-content {
+      display: none;
+    }
+    .page-content.active {
+      display: block;
+    }
+  </style>
+</head>
+<body class="font-sans text-slate-700">
+<!-- BEGIN: Main Layout Wrapper -->
+<div class="flex min-h-screen">
+<!-- BEGIN: Sidebar -->
+<aside class="w-64 bg-white border-r border-cardBorder fixed h-full z-10" data-purpose="sidebar">
+<div class="p-6">
+<div class="text-2xl font-bold text-primary flex items-center gap-2">
+<span class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white text-xs">F3D</span>
+          Floo3D
+        </div>
+</div>
+<nav class="mt-4 flex flex-col space-y-1">
+<a class="sidebar-link active flex items-center px-6 py-3 text-sm font-medium transition-colors hover:text-primary" href="#" onclick="showPage('overview', this)">
+<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          Overview
+        </a>
+<a class="sidebar-link flex items-center px-6 py-3 text-sm font-medium transition-colors hover:text-primary" href="#" onclick="showPage('users', this)">
+<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          Users
+        </a>
+<a class="sidebar-link flex items-center px-6 py-3 text-sm font-medium transition-colors hover:text-primary" href="#" onclick="showPage('projects', this)">
+<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          Projects
+        </a>
+<a class="sidebar-link flex items-center px-6 py-3 text-sm font-medium transition-colors hover:text-primary" href="#" onclick="showPage('posts', this)">
+<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2zM7 8h5m-5 4h5m-5 4h5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          Posts
+        </a>
+<a class="sidebar-link flex items-center px-6 py-3 text-sm font-medium transition-colors hover:text-primary" href="#" onclick="showPage('settings', this)">
+<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          Settings
+        </a>
+</nav>
+</aside>
+<!-- END: Sidebar -->
+<!-- BEGIN: Main Content Container -->
+<main class="flex-1 ml-64 min-h-screen">
+<!-- BEGIN: Top Bar -->
+<header class="bg-white border-b border-cardBorder h-16 flex items-center justify-between px-8 sticky top-0 z-10" data-purpose="topbar">
+<h1 class="text-xl font-semibold text-slate-800" id="page-title">Overview</h1>
+<div class="flex items-center gap-4">
+<div class="text-right">
+<p class="text-sm font-medium text-slate-900 leading-none">Admin User</p>
+<p class="text-xs text-slate-500">Super Admin</p>
+</div>
+<img alt="Admin" class="w-10 h-10 rounded-full border border-cardBorder" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMqZULRm0DDNz5xQ9D0tNRdkni2obHn4bLmm1HJ6UvygLUFf4g_6eXeXc8JcaJOuWYYtB3AjXcEr_9b6wlWngw90rrPbBsv93uhu1c2p3m97Iwp4QGfu_Gnx0kCOWci1RQ0nOWqo9_XuKyjugwOUuaL4OJsioctMH_KPyIX2pZP0vMr0T4CReR8gIgFCsGz5NPhTiA1dzAehkPwqC-d5E4RaKaOrOv0hKBs4refQ2eBP7bQKp4YTz5gV4DZFe4xhnpiMIOvB8bNPTX"/>
+</div>
+</header>
+<!-- END: Top Bar -->
+<div class="p-8">
+<!-- BEGIN: Overview Page -->
+<section class="page-content active" data-purpose="overview-page" id="page-overview">
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<div class="admin-card p-6">
+<p class="text-sm text-slate-500 font-medium">Total Users</p>
+<h3 class="text-2xl font-bold mt-1">1,284</h3>
+<p class="text-xs text-green-600 mt-2 flex items-center">↑ 12% <span class="text-slate-400 ml-1">since last month</span></p>
+</div>
+<div class="admin-card p-6">
+<p class="text-sm text-slate-500 font-medium">Total Projects</p>
+<h3 class="text-2xl font-bold mt-1">4,592</h3>
+<p class="text-xs text-green-600 mt-2 flex items-center">↑ 8% <span class="text-slate-400 ml-1">since last month</span></p>
+</div>
+<div class="admin-card p-6">
+<p class="text-sm text-slate-500 font-medium">Renders Completed</p>
+<h3 class="text-2xl font-bold mt-1">12,403</h3>
+<p class="text-xs text-green-600 mt-2 flex items-center">↑ 24% <span class="text-slate-400 ml-1">since last month</span></p>
+</div>
+<div class="admin-card p-6">
+<p class="text-sm text-slate-500 font-medium">Credits Given</p>
+<h3 class="text-2xl font-bold mt-1">50,000</h3>
+<p class="text-xs text-slate-400 mt-2">Manual admin distribution</p>
+</div>
+</div>
+<!-- Recent Activity -->
+<div class="admin-card overflow-hidden">
+<div class="p-6 border-b border-cardBorder">
+<h2 class="font-semibold text-lg">Recent Activity</h2>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50 border-b border-cardBorder">
+<tr>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase">User</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase">Action</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase">Target</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase">Date</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-cardBorder">
+<tr>
+<td class="px-6 py-4 text-sm">Alex Johnson</td>
+<td class="px-6 py-4 text-sm"><span class="px-2 py-1 bg-green-100 text-green-700 rounded-md text-xs font-medium">Rendered</span></td>
+<td class="px-6 py-4 text-sm">Modern Kitchen 2D</td>
+<td class="px-6 py-4 text-sm text-slate-500">2 mins ago</td>
+</tr>
+<tr>
+<td class="px-6 py-4 text-sm">Sarah Miller</td>
+<td class="px-6 py-4 text-sm"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-md text-xs font-medium">Uploaded</span></td>
+<td class="px-6 py-4 text-sm">Main Office Floorplan</td>
+<td class="px-6 py-4 text-sm text-slate-500">1 hour ago</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- END: Overview Page -->
+<!-- BEGIN: Users Page -->
+<section class="page-content" data-purpose="users-page" id="page-users">
+<div class="flex justify-between items-center mb-6">
+<div class="relative w-72">
+<input class="w-full pl-10 pr-4 py-2 rounded-lg border-cardBorder focus:ring-primary focus:border-primary text-sm" placeholder="Search users..." type="text"/>
+<svg class="w-4 h-4 absolute left-3 top-2.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</div>
+<div class="admin-card overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50 border-b border-cardBorder">
+<tr>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase">User</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase">User ID</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase">Credits</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase">Projects</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase">Joined</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-cardBorder">
+<tr>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img alt="Avatar" class="w-8 h-8 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCe3sZwnxWHXvPnMxym4-gldL0GOIIgqiA3TIoT3YriP8RJaV1jhAIR_Ygi8_IIVNm4twavIzSzkWbJqu4vxu2ovn2X3jzmJVSb3MS_lfhFJJ7dcUQ4wwwNVAcTfqoJMtQDRoLPnZUTZ5FXjdRxbGeV_6q3UpSv4gQUVbCR5EIxbi_OgCaQ-gQ8ZYOn6bCXZn7LlfiDXEFYXzqw8k8H21uPUep8nbuunZKTTrLNSPmH7V_GG3vLg_326EQX2FL_omLKxrxMi11ZFNxH"/>
+<div>
+<p class="text-sm font-medium text-slate-900">David Chen</p>
+<p class="text-xs text-slate-500">david.c@example.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">USR-82910</td>
+<td class="px-6 py-4">
+<input class="w-16 border-slate-200 rounded p-1 text-sm focus:ring-primary focus:border-primary" type="number" value="150"/>
+</td>
+<td class="px-6 py-4 text-sm">12</td>
+<td class="px-6 py-4 text-sm text-slate-500">Oct 12, 2023</td>
+<td class="px-6 py-4 text-right space-x-2">
+<button class="text-primary hover:text-orange-700 text-sm font-medium">Edit</button>
+<button class="text-red-500 hover:text-red-700 text-sm font-medium">Delete</button>
+</td>
+</tr>
+<!-- More rows... -->
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- END: Users Page -->
+<!-- BEGIN: Projects Page -->
+<section class="page-content" data-purpose="projects-page" id="page-projects">
+<!-- Filter Tabs -->
+<div class="flex gap-4 mb-6 border-b border-cardBorder">
+<button class="px-4 py-2 text-sm font-medium border-b-2 border-primary text-primary">All Projects</button>
+<button class="px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-800">Processing</button>
+<button class="px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-800">Completed</button>
+</div>
+<div class="admin-card overflow-hidden">
+<table class="w-full text-left">
+<thead class="bg-slate-50 border-b border-cardBorder">
+<tr>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase">Project</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase">Owner</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase">Status</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase">Created</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-cardBorder">
+<tr>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 bg-slate-100 rounded overflow-hidden border border-cardBorder">
+<img alt="Thumb" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDX05ePLQAvjDdW79MvT5nu8tg7V40P00Llq1F5OLpS4EoAPpKdLNoE0PhBzU5H0BWcJYBruVMmlHOPBm7kFN74PsOAR0RFc9cdp30XPVY6Eglxj5viMSqFcDspd9_ppSRMjWJj-6ksvt5B83zDg8scsh6Nll39RQj4i2fH6f9Oa1qlWCOjER7GI_YEnYtMrjym-g0dec98v7vXnugvs_REuig3-UgcjG2jJClaS47J3gj7EohTbVfIMhDjzpH2W47_urCZnK2OsApZ"/>
+</div>
+<span class="text-sm font-medium">Luxury Apartment A</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600">Jordan Smith</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Completed</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">2023-11-05</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- END: Projects Page -->
+<!-- BEGIN: Posts Page -->
+<section class="page-content" data-purpose="posts-page" id="page-posts">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-lg font-semibold">Blog Posts</h2>
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-orange-700 transition-colors">New Post</button>
+</div>
+<div class="space-y-4">
+<!-- Post Item -->
+<div class="admin-card p-4 flex items-center justify-between">
+<div>
+<h3 class="font-medium text-slate-900">Top 5 Trends in 3D Architectural Visualization</h3>
+<p class="text-xs text-slate-400 mt-1">/blog/top-5-trends-2024 • Published on Nov 10, 2023</p>
+</div>
+<div class="flex items-center gap-4">
+<span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">Published</span>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-slate-50 text-slate-500 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></button>
+<button class="p-2 hover:bg-slate-50 text-red-400 rounded"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Posts Page -->
+<!-- BEGIN: Settings Page -->
+<section class="page-content" data-purpose="settings-page" id="page-settings">
+<div class="max-w-2xl">
+<div class="admin-card p-8 mb-6">
+<h3 class="text-lg font-semibold mb-6">General App Settings</h3>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-slate-700 mb-1">Site Name</label>
+<input class="w-full border-cardBorder rounded-lg focus:ring-primary focus:border-primary text-sm" type="text" value="Floo3D"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 mb-1">Support Email</label>
+<input class="w-full border-cardBorder rounded-lg focus:ring-primary focus:border-primary text-sm" type="email" value="support@floo3d.io"/>
+</div>
+<div class="flex items-center gap-2 pt-2">
+<input class="rounded text-primary focus:ring-primary" id="maintenance" type="checkbox"/>
+<label class="text-sm text-slate-700" for="maintenance">Maintenance Mode</label>
+</div>
+</div>
+</div>
+<div class="admin-card p-8">
+<h3 class="text-lg font-semibold mb-6">Credit Pricing</h3>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div>
+<label class="block text-sm font-medium text-slate-700 mb-1">Standard Render (Credits)</label>
+<input class="w-full border-cardBorder rounded-lg focus:ring-primary focus:border-primary text-sm" type="number" value="5"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 mb-1">High Quality (Credits)</label>
+<input class="w-full border-cardBorder rounded-lg focus:ring-primary focus:border-primary text-sm" type="number" value="15"/>
+</div>
+</div>
+<button class="bg-primary text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-orange-700 transition-colors">Save Changes</button>
+</div>
+</div>
+</section>
+<!-- END: Settings Page -->
+</div>
+</main>
+<!-- END: Main Content Container -->
+</div>
+<!-- END: Main Layout Wrapper -->
+<script data-purpose="navigation-logic">
+    function showPage(pageId, element) {
+      // Update Title
+      document.getElementById('page-title').innerText = pageId.charAt(0).toUpperCase() + pageId.slice(1);
+      
+      // Update Page Visibility
+      const pages = document.querySelectorAll('.page-content');
+      pages.forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + pageId).classList.add('active');
+
+      // Update Sidebar Links
+      const links = document.querySelectorAll('.sidebar-link');
+      links.forEach(l => l.classList.remove('active'));
+      element.classList.add('active');
+    }
+  </script>
+</body></html>

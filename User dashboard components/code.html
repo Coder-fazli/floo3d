@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Floo3D Admin - User Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 flex-shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col">
+<div class="p-6 flex items-center gap-3">
+<div class="size-10 bg-primary rounded-xl flex items-center justify-center text-white">
+<span class="material-symbols-outlined">view_in_ar</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-white text-base font-bold leading-none">Floo3D Admin</h1>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-normal">Management Panel</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-lg" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Users</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-sm font-medium">Projects</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-sm font-medium">Credits</span>
+</a>
+<div class="pt-4 pb-2 text-[10px] uppercase tracking-wider text-slate-400 font-bold px-3">System</div>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 px-2">
+<div class="size-8 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Admin user avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAws0psMUFJCV1UH-SirQrG0R67s2jV7tcpM95d-4en5dD1CyCn6Ygm1e9PO7llOj5d_BTS1uYb-AqpsoFyBRoEUhnLMWeuZ4DYrMLCsVu5Bckczuh2IQOFsQHUHRC8WNY4ViAqiHXiiFxCNpeWmciXs_exv6rfel2lFK7oj80aT25Znt01zOHEV0JsCObNq1ThQAa0wJ_9A62jHS4zWxy5FJnfOrMxnctawyNLSSCdIqg2FtpHr4uy_Dw5R8_2l8VOiPJtacYUJNsw"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium text-slate-900 dark:text-white truncate">Admin User</p>
+<p class="text-xs text-slate-500 truncate">admin@floo3d.com</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col overflow-hidden bg-background-light dark:bg-background-dark">
+<!-- Top Bar -->
+<header class="h-16 flex items-center justify-between px-8 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-10">
+<div class="flex items-center gap-4">
+<h2 class="text-lg font-bold text-slate-900 dark:text-white">User Details</h2>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-primary focus:border-primary outline-none w-64" placeholder="Search..." type="text"/>
+</div>
+<button class="size-9 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-8">
+<!-- User Header Card -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 mb-6 shadow-sm">
+<div class="flex flex-col md:flex-row items-center gap-6">
+<div class="size-24 rounded-full border-4 border-slate-50 dark:border-slate-800 shadow-sm overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="User profile picture of Alex Rivera" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBITWRt8GXKeJr3biFPy8jGx_jVyZbz5DG-M9HDKmnn3iFrY-WObP-O6pqGS8a-Tj0PoPZ54xaXyMKqNpwV62PmwbBwhIWx9ppo7Z40zZ2T3D0y8Tw1wB_xjSF6C4-Y5xtpJmJJ9g_4ZU1SixMxm0OPobUy1oyEWr2A5setwMRJ9tPAo0UHaQ1oZpI7pojiRVvTq45NVWZuEDAoewkHR_-sr01mxuGv4KXqJuM83o5G2EICoeQAdcNgvo7QjJdWHjDBRYa6DLwrDglR"/>
+</div>
+<div class="flex-1 text-center md:text-left">
+<div class="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-1">
+<h3 class="text-2xl font-bold text-slate-900 dark:text-white">Alex Rivera</h3>
+<span class="px-2.5 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-bold rounded-full">ACTIVE</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 mb-2 font-medium">alex.rivera@example.com</p>
+<div class="flex items-center justify-center md:justify-start gap-4 text-xs text-slate-400 font-medium">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">calendar_today</span> Joined Oct 24, 2023</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">location_on</span> San Francisco, CA</span>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-bold hover:bg-slate-50 dark:hover:bg-slate-800">Edit Profile</button>
+<button class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-bold shadow-lg shadow-primary/20 hover:bg-primary/90">Message</button>
+</div>
+</div>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Total Projects</p>
+<p class="text-3xl font-bold text-slate-900 dark:text-white">12</p>
+</div>
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Credits Remaining</p>
+<div class="flex items-end gap-2">
+<p class="text-3xl font-bold text-slate-900 dark:text-white">10</p>
+<span class="text-primary text-xs font-medium pb-1.5">Renders</span>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Renders Completed</p>
+<p class="text-3xl font-bold text-slate-900 dark:text-white">45</p>
+</div>
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Member Since</p>
+<p class="text-2xl font-bold text-slate-900 dark:text-white">Oct 2023</p>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+<!-- Manage Credits Card -->
+<div class="lg:col-span-1 flex flex-col gap-6">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-sm h-full">
+<h4 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Manage Credits</h4>
+<div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800 mb-6">
+<p class="text-sm text-slate-500 dark:text-slate-400 mb-1">Current Balance</p>
+<p class="text-2xl font-bold text-primary">10 Credits</p>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Adjust Credits</label>
+<div class="flex gap-2">
+<input class="flex-1 px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-primary focus:border-primary outline-none" type="number" value="0"/>
+<button class="px-4 py-2 bg-slate-200 dark:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-300 transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="px-4 py-2 bg-slate-200 dark:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-300 transition-colors">
+<span class="material-symbols-outlined">remove</span>
+</button>
+</div>
+<p class="mt-2 text-xs text-slate-400 italic">Use negative values to remove credits.</p>
+</div>
+<button class="w-full py-2.5 bg-primary text-white rounded-lg font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all mt-4">
+                                    Save Changes
+                                </button>
+</div>
+</div>
+</div>
+<!-- Projects Table Card -->
+<div class="lg:col-span-2">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden h-full flex flex-col">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<h4 class="text-lg font-bold text-slate-900 dark:text-white">Recent Projects</h4>
+<button class="text-sm font-bold text-primary hover:underline">View All</button>
+</div>
+<div class="flex-1 overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50 dark:bg-slate-800/50">
+<tr>
+<th class="px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Project</th>
+<th class="px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
+<th class="px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Created Date</th>
+<th class="px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-slate-200 dark:bg-slate-700 overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Modern Living Room 3D render thumbnail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeebgBR3aEytEKyc7QnQeFY_MFEO1iQMyo-7D0EFfZMQs4P7rD4_DfJmOTen-g88yT74l8Y0m__TiavnfKnmKQMRYK6RKveRpp4jJaadjre62aXm4E8EPpo1X6iOoqdY5jMaR3jPru63KcqrTAyfSqb-yr81g0MZl43ouvqSi_202ZTmwFd38SJltXxT_Xedy0RIg4DZAFkKcnRVwexcAzrvaldo1vyOZSDAcAGd2obWaEozgAJom82wIgSdOjw2YB85GneYWQJnRl"/>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Modern Living Room</span>
+<span class="text-xs text-slate-500">Interior Design</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-[10px] font-bold rounded-md">COMPLETED</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">Oct 26, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="px-3 py-1 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded text-xs font-bold hover:bg-slate-100">View</button>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-slate-200 dark:bg-slate-700 overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Urban Loft Apartment 3D render thumbnail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCES7W9s72M6yPXlotCx8UD3yOjOGvVLAkQXf0ZcqbciovkyeaRAZzvqd57jmQkKnVwAFYnmGyzV0DPeV6DvKk-S31_XvVUD-p9_WEbCKUIJzGPxMnqYM7GkEVDVi8o3xKhY4uwfMMKhEAZjnK8EyNEPGfsvmYcUB3CYf-Ct6LSd_ntZTL6zbFzkZoW7EdfFniOZmbPuMFXqqjOo6UA6Ot5hgT-itrVZNsSeOavAp6yMIRrhGUgcjKSP4jffy-vXD9at0Bhl7fpF9OU"/>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Urban Loft Apartment</span>
+<span class="text-xs text-slate-500">Residential</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 text-[10px] font-bold rounded-md uppercase">Processing</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">Oct 28, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="px-3 py-1 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded text-xs font-bold hover:bg-slate-100">View</button>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-slate-200 dark:bg-slate-700 overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Coffee Shop Concept 3D render thumbnail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBib0aa4x7nFdFGRWcE_NpJ74vEGeYtktB08m7o70b0OQbz9PeOQzldg5AKS8yS34_aL1G0ITOwmOPpLmg9rwc5I7yQj5bJ1R9UluTiNVFvBjPyqHdvTWuNOxDa_ZTxrSoPaTAH8-0-x8JN1hR4LHuW4YfivnQotRCzkaLqjQ09QSjc9ZgayWVkJMPonTq7OyySNgby6dZXUCrtICdtlRKGuY67gfuLbg2MAmizAnZM0yXK5bRIEdqkwsv_ncCsAlE-OxHsnt5NLQ8P"/>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-white">Coffee Shop Concept</span>
+<span class="text-xs text-slate-500">Commercial</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-[10px] font-bold rounded-md">COMPLETED</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">Oct 22, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="px-3 py-1 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded text-xs font-bold hover:bg-slate-100">View</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<!-- Danger Zone -->
+<div class="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-900/30 rounded-xl p-6 shadow-sm">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-red-600 dark:text-red-500">report_problem</span>
+<h4 class="text-lg font-bold text-red-700 dark:text-red-500">Danger Zone</h4>
+</div>
+<p class="text-sm text-red-600/80 dark:text-red-400/80 mb-6">These actions are destructive and cannot be undone. Please proceed with caution.</p>
+<div class="flex flex-wrap gap-3">
+<button class="px-4 py-2 border border-red-200 dark:border-red-900/50 bg-white dark:bg-slate-900 text-red-600 dark:text-red-500 text-sm font-bold rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-base">lock</span>
+                            Suspend Account
+                        </button>
+<button class="px-4 py-2 border border-red-200 dark:border-red-900/50 bg-white dark:bg-slate-900 text-red-600 dark:text-red-500 text-sm font-bold rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-base">restart_alt</span>
+                            Reset Credits
+                        </button>
+<button class="px-4 py-2 bg-red-600 text-white text-sm font-bold rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2 shadow-lg shadow-red-600/20">
+<span class="material-symbols-outlined text-base">delete_forever</span>
+                            Delete Account
+                        </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

@@ -27,8 +27,10 @@ const Navbar = () => {
 
         {/* Brand */}
         <div className="navbar-brand">
-          <Image src="/logo.png" alt="Floo3D" width={32} height={32} className="navbar-logo" />
-          <span className="navbar-name">Floo3D</span>
+          <div className="navbar-logo-icon">
+            <Image src="/logo.png" alt="Floo3D" width={20} height={20} />
+          </div>
+          <span className="navbar-name">Floo<span className="navbar-name-accent">3D</span></span>
         </div>
 
         {/* Links */}
