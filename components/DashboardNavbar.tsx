@@ -14,7 +14,11 @@ export default function DashboardNavbar() {
   const [credits, setCredits] = useState<number | null>(null);
 
   useEffect(() => {
-    if (user) getCredits(user.id).then(setCredits);
+    if (user) getCredits(
+      user.id,
+      user.fullName ?? "",
+      user.emailAddresses[0]?.emailAddress ?? ""
+    ).then(setCredits);
   }, [user]);
 
   return (

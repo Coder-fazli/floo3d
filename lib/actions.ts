@@ -35,11 +35,12 @@ export async function updateProject(id: string, renderedImageUrl: string) {
 
 // Credit managment for users(Ai generation costs credits)
 
-export async function getCredits(userId: string) {
+export async function getCredits(userId: string, name?: 
+  string, email?: string) {
     await connectDb();
     const user = await User.findOneAndUpdate(
         { clerkId: userId },
-        { $setOnInsert: { credits: 10 } },
+        { $setOnInsert: { credits: 10, name: name ?? "", email: email ?? "" } },
         { upsert: true, new: true }
     );
     return user.credits;
@@ -52,3 +53,21 @@ export async function deductCredit(userId:string) {
         { $inc: { credits: -1 } }
     );
 }
+
+// Ф
+export async function getAllUSers() {
+    await connectDb();
+    const users = await User.find({}).sort("-createdAt");
+    return JSON.parse(JSON.stringify(users));
+}
+
+export async function updateUserCredits(clerkId: string, credits: number) {
+    await connectDb();
+    await User.findOneAndUpdate({ clerkId }, { credits });
+}
+
+export async function deleteUSer(clerkId: string) {
+    await connectDb();
+    await User.findOneAndDelete({ clerkId });
+}
+

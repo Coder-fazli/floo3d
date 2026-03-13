@@ -1,14 +1,10 @@
 import { Search } from "lucide-react";
 import Link from "next/link";
+import { getAllUSers } from "@/lib/actions";
 
-const MOCK_USERS = [
-  { id: "USR-82910", name: "David Chen", email: "david.c@example.com", credits: 150, projects: 12, joined: "Oct 12, 2023" },
-  { id: "USR-44201", name: "Sarah Miller", email: "sarah.m@example.com", credits: 5, projects: 4, joined: "Nov 3, 2023" },
-  { id: "USR-91023", name: "Jordan Smith", email: "jordan.s@example.com", credits: 0, projects: 1, joined: "Nov 20, 2023" },
-  { id: "USR-30481", name: "Alex Johnson", email: "alex.j@example.com", credits: 200, projects: 31, joined: "Sep 5, 2023" },
-];
 
-export default function AdminUsers() {
+export default async function AdminUsers() {
+  const users = await getAllUSers();
   return (
     <div className="adm-content">
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem" }}>
@@ -33,12 +29,12 @@ export default function AdminUsers() {
               </tr>
             </thead>
             <tbody>
-              {MOCK_USERS.map((u) => (
-                <tr key={u.id}>
+              {users.map((u) => (
+                <tr key={u.clerkId}>
                   <td>
                     <div className="adm-user-cell">
                       <div className="adm-user-avatar">
-                        <span>{u.name[0]}</span>
+                        <span>{u.name?.[0] ?? "?"}</span>
                       </div>
                       <div>
                         <p className="adm-user-name">{u.name}</p>
@@ -46,14 +42,14 @@ export default function AdminUsers() {
                       </div>
                     </div>
                   </td>
-                  <td style={{ color: "#94a3b8", fontSize: "0.8rem" }}>{u.id}</td>
+                  <td style={{ color: "#94a3b8", fontSize: "0.8rem" }}>{u.clerkId}</td>
                   <td>
                     <input className="adm-credits-input" type="number" defaultValue={u.credits} />
                   </td>
-                  <td>{u.projects}</td>
-                  <td style={{ color: "#94a3b8" }}>{u.joined}</td>
+                  <td>0</td>
+                  <td style={{ color: "#94a3b8" }}>{u.createdAt}</td>
                   <td className="right" style={{ display: "flex", gap: "1rem", justifyContent: "flex-end" }}>
-                    <Link href={`/secure-7x9/users/${u.id}`} className="adm-action-link">View</Link>
+                    <Link href={`/secure-7x9/users/${u.clerkId}`} className="adm-action-link">View</Link>
                     <button className="adm-action-link adm-action-link-danger">Delete</button>
                   </td>
                 </tr>
