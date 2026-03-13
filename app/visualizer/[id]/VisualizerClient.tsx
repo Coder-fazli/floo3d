@@ -198,14 +198,14 @@ export default function VisualizerClient() {
                 <ReactCompareSliderImage
                   src={project.originalImageUrl}
                   alt="2D Floor Plan"
-                  style={{ objectFit: "cover" }}
+                  style={{ objectFit: "contain", background: "#f8fafc" }}
                 />
               }
               itemTwo={
                 <ReactCompareSliderImage
                   src={currentImage}
                   alt="3D Render"
-                  style={{ objectFit: "cover", cursor: "zoom-in" }}
+                  style={{ objectFit: "contain", background: "#f8fafc", cursor: "zoom-in" }}
                   onClick={() => setLightboxOpen(true)}
                 />
               }

@@ -247,8 +247,8 @@
 .viz-compare-wrap {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 7;
-    max-height: 520px;
+    max-height: 600px;
+    min-height: 300px;
     border-radius: 1.25rem;
     overflow: hidden;
     box-shadow: 0 20px 50px rgba(0,0,0,0.12);
