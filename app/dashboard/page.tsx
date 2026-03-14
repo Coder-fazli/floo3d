@@ -20,6 +20,17 @@ export default function Dashboard() {
   const [fileError, setFileError] = useState<string | null>(null);
   const [inputType, setInputType] = useState<"floor-plan" | "room-photo" | "outdoor">("floor-plan");
   const [renderStyle, setRenderStyle] = useState("Modern");
+
+  const STYLES: Record<string, string[]> = {
+    "floor-plan": ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
+    "room-photo": ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
+    "outdoor":    ["Mediterranean", "Japanese", "Tropical", "Cottage", "Modern", "Desert"],
+  };
+
+  const handleInputTypeChange = (type: "floor-plan" | "room-photo" | "outdoor") => {
+    setInputType(type);
+    setRenderStyle(STYLES[type][0]);
+  };
   const isUploading = useRef(false);
 
   const noCredits = credits !== null && credits === 0;
@@ -150,7 +161,7 @@ export default function Dashboard() {
                   <div
                     key={t.id}
                     className={`nr-type-card${inputType === t.id ? " nr-type-card-active" : ""}`}
-                    onClick={() => setInputType(t.id as any)}
+                    onClick={() => handleInputTypeChange(t.id as any)}
                   >
                     <div className={`nr-type-icon${inputType === t.id ? " nr-type-icon-active" : ""}`}>
                       <img src={t.icon} alt={t.label} width={24} height={24} style={{ objectFit: "contain" }} />
@@ -172,7 +183,7 @@ export default function Dashboard() {
                 <h2 className="nr-section-title">Design Style</h2>
               </div>
               <div className="nr-styles">
-                {["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"].map((s) => (
+                {STYLES[inputType].map((s) => (
                   <button
                     key={s}
                     className={`nr-style-pill${renderStyle === s ? " nr-style-pill-active" : ""}`}
