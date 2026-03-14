@@ -59,7 +59,7 @@ export default function HowItWorks2() {
                 <div className="hiw2-tags">
                   <span className="hiw2-tag">PNG/JPG</span>
                   <span className="hiw2-tag">PDF</span>
-                  <span className="hiw2-tag">AutoCAD</span>
+                  <span className="hiw2-tag">Hand-drawn</span>
                 </div>
               </div>
               <div className="hiw2-num">01</div>
@@ -118,15 +118,15 @@ export default function HowItWorks2() {
                   <span className="material-symbols-outlined hiw2-icon">vrpano</span>
                 </div>
                 <h3 className="hiw2-step-title">3. Instant 3D Render</h3>
-                <p className="hiw2-step-desc">Receive a hyper-realistic, interactive 3D environment. Explore the space, change lighting, and swap materials in real-time. Ready for virtual tours, marketing presentations, or client approvals.</p>
+                <p className="hiw2-step-desc">Receive a photorealistic top-down 3D render of your floor plan in seconds. Download in HD, share with clients via a single link, and impress with studio-quality detail — no 3D software needed.</p>
                 <div className="hiw2-checks">
                   <div className="hiw2-check">
                     <span className="material-symbols-outlined hiw2-check-icon">check_circle</span>
-                    4K Resolution
+                    HD PNG Export
                   </div>
                   <div className="hiw2-check">
                     <span className="material-symbols-outlined hiw2-check-icon">check_circle</span>
-                    Interactive Walkthrough
+                    Instant Share Link
                   </div>
                 </div>
               </div>

@@ -14,8 +14,8 @@ const FAQS = [
     a: "Not at all. Floo3D is entirely cloud-based. If you have a modern web browser and a stable internet connection, you can render complex structures effortlessly.",
   },
   {
-    q: "Can I export my designs to other CAD software?",
-    a: "Absolutely. We support high-quality exports in .OBJ, .FBX, and .IFC formats, ensuring seamless integration with AutoCAD, Revit, and Blender.",
+    q: "Can I download or share my renders?",
+    a: "Yes! You can download your finished render as a high-quality PNG file, or share it instantly with clients via a shareable link — perfect for presentations, emails, and social media.",
   },
   {
     q: "Is there a free trial available?",

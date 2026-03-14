@@ -11,7 +11,7 @@ import "yet-another-react-lightbox/styles.css";
 import SocialButton from "@/components/kokonutui/social-button";
 import Image from "next/image";
 import Link from "next/link";
-import { Download, RefreshCcw, Maximize2, ZoomIn, Clock, ChevronRight, Edit } from "lucide-react";
+import { Download, RefreshCcw, Maximize2, ZoomIn, Clock, ChevronRight } from "lucide-react";
 
 export default function VisualizerClient() {
   const router = useRouter();
@@ -24,6 +24,8 @@ export default function VisualizerClient() {
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [modalType, setModalType] = useState<"error" | "credits" | null>(null);
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const cycleZoom = () => setZoomLevel(z => z >= 2 ? 1 : parseFloat((z + 0.5).toFixed(1)));
 
   useEffect(() => {
     if (id) getProject(id as string).then(setProject);
@@ -127,10 +129,6 @@ export default function VisualizerClient() {
           </div>
 
           <div className="viz-nav-right">
-            <button className="viz-nav-btn">
-              <Edit size={15} /> Edit Project
-            </button>
-            <div className="viz-nav-divider" />
             <div className="viz-nav-avatar">
               {user?.imageUrl ? (
                 <img src={user.imageUrl} alt="avatar" />
@@ -198,11 +196,11 @@ export default function VisualizerClient() {
         </div>
 
         {/* Comparison slider */}
-        <div className="viz-compare-wrap">
+        <div className="viz-compare-wrap" style={{ overflow: "hidden" }}>
           {project?.originalImageUrl && currentImage ? (
             <ReactCompareSlider
               defaultValue={50}
-              style={{ width: "100%", height: "100%" }}
+              style={{ width: "100%", height: "100%", transform: `scale(${zoomLevel})`, transformOrigin: "center", transition: "transform 0.3s ease" }}
               handle={
                 <ReactCompareSliderHandle
                   buttonStyle={{
@@ -241,8 +239,9 @@ export default function VisualizerClient() {
             <button className="viz-toolbar-btn" onClick={() => setLightboxOpen(true)} title="Fullscreen">
               <Maximize2 size={16} />
             </button>
-            <button className="viz-toolbar-btn" title="Zoom">
+            <button className="viz-toolbar-btn" title={`Zoom ${zoomLevel}x`} onClick={cycleZoom}>
               <ZoomIn size={16} />
+              {zoomLevel > 1 && <span style={{ fontSize: "0.6rem", fontWeight: 700, marginLeft: 2 }}>{zoomLevel}x</span>}
             </button>
           </div>
 
@@ -265,16 +264,16 @@ export default function VisualizerClient() {
             <h3 className="viz-insights-title">Project Insights</h3>
             <div className="viz-insights-list">
               <div className="viz-insights-row">
-                <span className="viz-insights-key">Processing Time</span>
-                <span className="viz-insights-val">~42 seconds</span>
+                <span className="viz-insights-key">Rendered</span>
+                <span className="viz-insights-val">{project?.updatedAt ? new Date(project.updatedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—"}</span>
               </div>
               <div className="viz-insights-row">
-                <span className="viz-insights-key">Texture Quality</span>
-                <span className="viz-insights-val">4K Ultra HD</span>
+                <span className="viz-insights-key">Output Format</span>
+                <span className="viz-insights-val">PNG (HD)</span>
               </div>
               <div className="viz-insights-row">
-                <span className="viz-insights-key">AI Model</span>
-                <span className="viz-insights-val">Floo3D v2.4</span>
+                <span className="viz-insights-key">Powered by</span>
+                <span className="viz-insights-val">Gemini AI</span>
               </div>
             </div>
             <hr className="viz-insights-divider" />

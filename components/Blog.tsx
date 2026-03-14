@@ -73,7 +73,7 @@ export default function Blog() {
               <p className="blg-card-desc">
                 Explore how green building materials and biophilic design principles are reshaping the urban skyline and our relationship with nature.
               </p>
-              <a href="#" className="blg-read-link">
+              <a href="https://www.archdaily.com/tag/sustainable-architecture" target="_blank" rel="noopener noreferrer" className="blg-read-link">
                 READ FULL STORY
                 <span className="blg-read-line" />
               </a>
@@ -97,7 +97,7 @@ export default function Blog() {
               <p className="blg-card-desc blg-card-desc-sm">
                 A deep dive into the minimalist movement and how to create living spaces that feel both expansive and incredibly cozy.
               </p>
-              <a href="#" className="blg-view-link">VIEW GALLERY</a>
+              <a href="https://www.dezeen.com/tag/minimalism/" target="_blank" rel="noopener noreferrer" className="blg-view-link">VIEW GALLERY</a>
             </div>
           </article>
 
@@ -129,7 +129,7 @@ export default function Blog() {
               <p className="blg-card-desc">
                 Learn the top five lighting tricks our artists use to make digital renders indistinguishable from high-end architectural photography.
               </p>
-              <button className="blg-cta-btn">START LEARNING</button>
+              <a href="https://www.youtube.com/results?search_query=photorealistic+architectural+render+tutorial" target="_blank" rel="noopener noreferrer" className="blg-cta-btn">START LEARNING</a>
             </div>
           </article>
 
@@ -139,10 +139,10 @@ export default function Blog() {
         <div className="blg-footer blg-reveal">
           <div className="blg-footer-btn-wrap">
             <div className="blg-footer-glow" />
-            <button className="blg-footer-btn">
+            <a href="https://www.archdaily.com" target="_blank" rel="noopener noreferrer" className="blg-footer-btn">
               <span>Explore the Archive</span>
               <ArrowUpRight size={20} />
-            </button>
+            </a>
           </div>
         </div>
 
