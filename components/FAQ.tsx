@@ -1,6 +1,7 @@
 "use client";
 
 import "./FAQ.css";
+import Image from "next/image";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -96,7 +97,7 @@ export default function FAQ() {
 
               {/* 3D render layer — revealed on hover */}
               <div className="faq-layer faq-layer-3d">
-                <img src="/faq-3d.png" alt="3D Floor Plan Render" className="faq-layer-img faq-img-scale" />
+                <Image src="/faq-3d.png" alt="3D Floor Plan Render" className="faq-layer-img faq-img-scale" fill style={{ objectFit: "cover" }} />
                 <div className="faq-tint" />
                 <div className="faq-scanner-line" />
               </div>
@@ -104,7 +105,7 @@ export default function FAQ() {
               {/* 2D blueprint layer — hidden on hover */}
               <div className="faq-layer faq-layer-2d">
                 <div className="faq-2d-inner">
-                  <img src="/faq-2d.jpg" alt="2D Blueprint" className="faq-layer-img faq-img-gray" />
+                  <Image src="/faq-2d.jpg" alt="2D Blueprint" className="faq-layer-img faq-img-gray" fill style={{ objectFit: "cover" }} />
                 </div>
                 <div className="faq-2d-overlay" />
                 <div className="faq-grid-overlay" />

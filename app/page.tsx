@@ -1,5 +1,4 @@
-"use client";
-
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import HowItWorks2 from "@/components/HowItWorks2";
@@ -8,11 +7,6 @@ import RecentProjects from "@/components/RecentProjects";
 import Footer from "@/components/Footer";
 import FAQ from "@/components/FAQ";
 import { Marquee } from "@/components/ui/marquee";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { useUser } from "@clerk/nextjs";
-import { getProject } from "@/lib/actions";
-
 const reviews = [
   { name: "David M.", handle: "@davidm", avatar: "/avatars/av1.jpg", text: "I rendered my entire apartment floor plan in under 2 minutes. The 3D output is stunning, clients love it." },
   { name: "Jessica K.", handle: "@jessicak", avatar: "/avatars/av2.jpg", text: "As an architect, this saves me hours. The AI understands spatial layout better than I expected." },
@@ -25,39 +19,11 @@ const reviews = [
 ];
 
 export default function Home() {
-  const router = useRouter();
-  
-  const { user } = useUser();
-  const [demoProject, setDemoProject] = useState<any>(null);
-  const isUploading = useRef(false);
-
-  useEffect(() => {
-    getProject("69b01aef967226f4752324b2").then(setDemoProject);
-  }, []);
-  
-  const handleUploadComplete = async (base64Image: string) => {
-    if (!user || isUploading.current) return;
-    isUploading.current = true;
-    const name = prompt("Enter a name for your project:");
-    if (!name) { isUploading.current = false; return; }
-    const res = await fetch("/api/projects", {
-      method: "POST",
-      body: JSON.stringify({ name, userId: user.id, base64Image }),
-    });
-    const project = await res.json();
-    isUploading.current = false;
-    router.push(`/visualizer/${project._id}`);
-    };
-
   return (
     <div className="home">
       <Navbar />
 
-      <Hero
-        onUploadComplete={handleUploadComplete}
-        demoOriginal={demoProject?.originalImageUrl}
-        demoRender={demoProject?.renderedImageUrl}
-      />
+      <Hero />
 
       <HowItWorks2 />
 
@@ -75,7 +41,7 @@ export default function Home() {
           {reviews.slice(0, 4).map((r) => (
             <div key={r.handle} className="review-card">
               <div className="review-header">
-                <img src={r.avatar} alt={r.name} className="review-avatar" />
+                <Image src={r.avatar} alt={r.name} className="review-avatar" width={40} height={40} />
                 <div>
                   <p className="review-name">{r.name}</p>
                   <p className="review-handle">{r.handle}</p>
@@ -89,7 +55,7 @@ export default function Home() {
           {reviews.slice(4).map((r) => (
             <div key={r.handle} className="review-card">
               <div className="review-header">
-                <img src={r.avatar} alt={r.name} className="review-avatar" />
+                <Image src={r.avatar} alt={r.name} className="review-avatar" width={40} height={40} />
                 <div>
                   <p className="review-name">{r.name}</p>
                   <p className="review-handle">{r.handle}</p>

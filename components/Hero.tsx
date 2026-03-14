@@ -1,11 +1,14 @@
 "use client";
 
 import "./Hero.css";
+import NextImage from "next/image";
 import { useRef, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { ReactCompareSlider, ReactCompareSliderImage, ReactCompareSliderHandle } from "react-compare-slider";
 import { FileUp, Box } from "lucide-react";
 import { PROGRESS_INTERVAL_MS, PROGRESS_STEP, REDIRECT_DELAY_MS } from "@/lib/constants";
+import { getProject } from "@/lib/actions";
 
 const FULL = "Turn 2D floor plans into 3D renders instantly";
 const ACCENT_START = "Turn 2D floor plans into ".length;
@@ -42,15 +45,24 @@ function TypingTitle() {
   );
 }
 
-interface HeroProps {
-  onUploadComplete: (base64Image: string) => void;
-  demoOriginal?: string;
-  demoRender?: string;
-}
-
-export default function Hero({ onUploadComplete, demoOriginal, demoRender }: HeroProps) {
-  const { isSignedIn } = useUser();
+export default function Hero() {
+  const router = useRouter();
+  const { isSignedIn, user } = useUser();
   const { openSignUp } = useClerk();
+  const isUploading = useRef(false);
+
+  // ── Demo project — fetched client-side so page renders instantly ──
+  const [demoOriginal, setDemoOriginal] = useState<string | undefined>();
+  const [demoRender, setDemoRender] = useState<string | undefined>();
+
+  useEffect(() => {
+    getProject("69b01aef967226f4752324b2").then((p: any) => {
+      if (p) {
+        setDemoOriginal(p.originalImageUrl);
+        setDemoRender(p.renderedImageUrl);
+      }
+    }).catch(() => {});
+  }, []);
 
   // ── Slider auto-animate ──
   const [sliderPos, setSliderPos] = useState(10);
@@ -131,7 +143,19 @@ export default function Hero({ onUploadComplete, demoOriginal, demoRender }: Her
           if (next >= 100) {
             clearInterval(intervalRef.current!);
             intervalRef.current = null;
-            timeoutRef.current = setTimeout(() => onUploadComplete(base64), REDIRECT_DELAY_MS);
+            timeoutRef.current = setTimeout(async () => {
+              if (!user || isUploading.current) return;
+              isUploading.current = true;
+              const name = prompt("Enter a name for your project:");
+              if (!name) { isUploading.current = false; return; }
+              const res = await fetch("/api/projects", {
+                method: "POST",
+                body: JSON.stringify({ name, userId: user.id, base64Image: base64 }),
+              });
+              const project = await res.json();
+              isUploading.current = false;
+              router.push(`/visualizer/${project._id}`);
+            }, REDIRECT_DELAY_MS);
             return 100;
           }
           return next;
@@ -272,10 +296,10 @@ export default function Hero({ onUploadComplete, demoOriginal, demoRender }: Her
             <div className="sh-card-footer">
               <p>Slide to see the magic: From flat blueprints to immersive 3D environments in seconds.</p>
               <div className="sh-avatars">
-                <img src="/avatars/female1.jpg" className="sh-avatar" alt="user" />
-                <img src="/avatars/female2.jpg" className="sh-avatar" alt="user" />
-                <img src="/avatars/av4.jpg" className="sh-avatar" alt="user" />
-                <img src="/avatars/av7.jpg" className="sh-avatar" alt="user" />
+                <NextImage src="/avatars/female1.jpg" className="sh-avatar" alt="user" width={32} height={32} priority />
+                <NextImage src="/avatars/female2.jpg" className="sh-avatar" alt="user" width={32} height={32} priority />
+                <NextImage src="/avatars/av4.jpg" className="sh-avatar" alt="user" width={32} height={32} priority />
+                <NextImage src="/avatars/av7.jpg" className="sh-avatar" alt="user" width={32} height={32} priority />
                 <div className="sh-avatar sh-av-count">+12k</div>
               </div>
             </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import "./visualizer.css";
+import NextImage from "next/image";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
@@ -132,7 +133,7 @@ export default function VisualizerClient() {
           <div className="viz-nav-right">
             <div className="viz-nav-avatar">
               {user?.imageUrl ? (
-                <img src={user.imageUrl} alt="avatar" />
+                <NextImage src={user.imageUrl} alt="avatar" width={32} height={32} />
               ) : (
                 <span className="viz-nav-avatar-fallback">{user?.firstName?.[0] ?? "U"}</span>
               )}
@@ -230,7 +231,7 @@ export default function VisualizerClient() {
               }
             />
           ) : project?.originalImageUrl ? (
-            <img src={project.originalImageUrl} alt="Original" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <NextImage src={project.originalImageUrl} alt="Original" fill style={{ objectFit: "cover" }} />
           ) : null}
 
           <div className="viz-compare-label viz-label-left">Original 2D Plan</div>

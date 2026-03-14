@@ -1,6 +1,7 @@
 "use client";
 
 import "./RecentProjects.css";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 const fadeUp = {
@@ -111,7 +112,7 @@ export default function RecentProjects() {
                   <div className="rp-user">
                     <div className="rp-avatar-wrap">
                       {p.avatar ? (
-                        <img src={p.avatar} alt={p.user} className="rp-avatar" />
+                        <Image src={p.avatar} alt={p.user} className="rp-avatar" width={36} height={36} />
                       ) : (
                         <div className="rp-avatar-initials">{p.avatarInitials}</div>
                       )}
@@ -126,7 +127,7 @@ export default function RecentProjects() {
 
                 {/* Image */}
                 <div className="rp-img-wrap">
-                  <img src={p.resultImage} alt={p.title} className="rp-img" />
+                  <Image src={p.resultImage} alt={p.title} className="rp-img" width={340} height={340} />
 
                   {/* Badge */}
                   <div className="rp-badge">
@@ -138,7 +139,7 @@ export default function RecentProjects() {
                   <div className="rp-peek">
                     <div className="rp-peek-card">
                       <div className="rp-peek-thumb-wrap">
-                        <img src={p.thumbImage} alt="plan" className="rp-peek-thumb" />
+                        <Image src={p.thumbImage} alt="plan" className="rp-peek-thumb" width={56} height={56} />
                         <div className="rp-peek-icon-wrap">
                           <span className="material-symbols-outlined rp-peek-icon">{p.peekIcon}</span>
                         </div>

@@ -69,7 +69,7 @@ export default function DashboardNavbar() {
             </div>
             <div className="dbnav-avatar">
               {user?.imageUrl ? (
-                <img src={user.imageUrl} alt="avatar" className="dbnav-avatar-img" />
+                <Image src={user.imageUrl} alt="avatar" className="dbnav-avatar-img" width={32} height={32} />
               ) : (
                 <span className="dbnav-avatar-fallback">
                   {user?.username?.[0]?.toUpperCase() ?? "U"}
