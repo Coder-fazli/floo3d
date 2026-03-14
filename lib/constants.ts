@@ -38,86 +38,151 @@ STYLE & LIGHTING:
 `.trim();
 
 export function buildPrompt(inputType: string, style: string): string {
+
+  // ─── ROOM PHOTO ───────────────────────────────────────────────────────────
   if (inputType === "room-photo") {
+
+    const roomStyles: Record<string, { rules: string; feel: string }> = {
+      Modern: {
+        rules: `
+- FURNITURE: Replace or adapt ornate and heavy pieces so they appear as clean straight-lined furniture — no curves, no carvings, no patterns. Keep the furniture count low.
+- SURFACES: Replace or smooth rough and textured surfaces so floors and walls feel refined and flat.
+- CLUTTER: Remove the least important decorative objects first. Keep only 1–2 functional items visible on surfaces while keeping the room believable.
+- LIGHTING: Replace or adapt existing fixtures so they appear as simple geometric or recessed lights.
+- COLOUR: Shift the overall palette toward neutrals — whites, greys, warm beige. Avoid bold colours.`,
+        feel: "Open, clean and effortlessly refined. Not cold — just intentional.",
+      },
+
+      Scandinavian: {
+        rules: `
+- FURNITURE: Replace or adapt heavy ornate pieces so they appear as simple functional ones — light wood legs, soft fabric upholstery. Keep only what is needed.
+- TEXTILES: Add warmth by introducing layered soft textiles — a simple rug, linen cushions, a throw blanket. These are essential to this style.
+- LIGHTING: Replace or adapt lighting fixtures so they appear as warm-toned pendants or simple floor lamps that create a cosy glow.
+- NATURE: Introduce 1–2 small potted plants or a simple branch in a vase.
+- COLOUR: Shift palette toward soft whites, muted greys, warm wood tones and dusty pastels.`,
+        feel: "Warm, lived-in and quietly joyful — hygge. Cosy but uncluttered.",
+      },
+
+      Industrial: {
+        rules: `
+- FURNITURE: Replace or adapt furniture so it appears raw and sturdy — metal frames, leather or canvas upholstery, reclaimed wood surfaces. Form follows function.
+- SURFACES: Treat imperfection as an asset. If walls show texture, peeling paint or raw material — preserve and enhance it. Do not smooth it over.
+- LIGHTING: Replace or adapt fixtures so they appear as bare Edison bulbs, metal cage pendants or exposed cable fixtures.
+- OBJECTS: Remove the least important soft or decorative items first. Introduce raw functional objects — metal shelving, industrial hardware — while keeping the room believable.
+- COLOUR: Shift palette toward dark and raw — charcoal, black, rust, aged metal, raw wood.`,
+        feel: "Honest, raw and urban — like a professionally converted warehouse or workshop.",
+      },
+
+      Rustic: {
+        rules: `
+- FURNITURE: Replace or adapt pieces so they appear as solid natural wood — farmhouse-style, chunky, nothing factory-modern. Upholstery may include linen or cotton in neutral earthy tones.
+- SURFACES: Age and warm up surfaces. Replace or adapt floors so they appear worn and natural. Walls may feel plastered, whitewashed or stone-textured.
+- TEXTILES: Introduce cosy natural fabrics — a woven rug, cotton throw, linen curtains in cream or terracotta.
+- LIGHTING: Replace or adapt fixtures so they appear as wrought-iron candle-style pendants, lanterns or ceramic lamp bases.
+- OBJECTS: Introduce 1–3 handmade-feeling objects — ceramic bowls, dried botanicals, wooden vessels.`,
+        feel: "Warm, imperfect, grounded and deeply human — as if the room has always been this way.",
+      },
+
+      Luxury: {
+        rules: `
+- FURNITURE: Elevate or replace existing pieces so they appear plush, upholstered or sculptural. Furniture may feel velvet, leather or high-end fabric. Surfaces may include marble, rich wood or polished stone.
+- SURFACES: Elevate floors and walls. Replace or adapt floors so they feel like marble, parquet or rich hardwood. Walls may include panelling, textured wallpaper or a deep rich colour.
+- LIGHTING: Replace or adapt fixtures so they appear as statement pieces — a chandelier, sculptural pendant or dramatic wall sconces.
+- DETAILS: Introduce gold, brass or chrome accents in frames, handles, furniture legs and trims.
+- OBJECTS: Add fresh flowers, framed art, decorative objects in marble or crystal, layered velvet cushions.`,
+        feel: "A 5-star hotel suite — curated, rich, indulgent and deeply impressive.",
+      },
+
+      Minimalist: {
+        rules: `
+- FURNITURE: Reduce furniture to the minimum required for the room's function. Keep only 1–2 essential pieces. Remove the least important items first while keeping the room believable and functional.
+- OBJECTS: Strongly reduce decorative objects. Remove the least important items first. Surfaces should be largely bare — a single object at most per surface.
+- SURFACES: Clean and simplify every surface. Walls should be calm and unadorned. Floors should appear clear and seamless.
+- LIGHTING: Replace or adapt lighting so it appears as one clean overhead light source. Reduce secondary lamps where possible.
+- COLOUR: Reduce the palette to white, off-white and one neutral tone. Avoid patterns.`,
+        feel: "A deliberate act of removal — calm, silent and completely at peace.",
+      },
+    };
+
+    const s = roomStyles[style] ?? {
+      rules: `- Replace or adapt the room's furniture, surfaces, lighting and decor so they match ${style} design principles.`,
+      feel: `A professionally redesigned ${style} interior.`,
+    };
+
     return `
-TASK: Apply a ${style} interior design style to this room photo. This is a renovation, NOT a full redesign — the room must remain clearly recognisable.
+USE THE PROVIDED PHOTO AS THE EXACT STRUCTURAL BASE.
 
-STRICT REQUIREMENTS — DO NOT VIOLATE:
-1) **SAME CAMERA ANGLE**: Do not move, rotate or change the perspective in any way.
-2) **SAME ROOM STRUCTURE**: Walls, ceiling, floor layout, windows, doors and any fixed built-ins (bathtub, toilet, kitchen counters, built-in wardrobes) stay in EXACTLY the same position and proportion.
-3) **SAME ROOM DIMENSIONS**: Do not make the room larger, smaller or change its shape.
-4) **NO TEXT OR WATERMARKS**: Output must be completely clean.
+GLOBAL RULES — DO NOT VIOLATE UNDER ANY CIRCUMSTANCES:
+1) Keep the exact same camera angle and perspective — do not rotate, zoom or shift the viewpoint.
+2) Keep all walls, doors, windows, openings and architectural features in their exact position and proportion.
+3) Do not change the size or shape of the room.
+4) Keep all fixed built-in elements exactly in place — bathtub, toilet, shower, kitchen units, staircases, built-in wardrobes.
+5) Treat any damaged, worn or heavily decorated surfaces as renovation targets — work with them, do not invent new architecture.
+6) No text, labels or watermarks in the output.
+7) Preserve the spatial layout of the room — large furniture should remain in roughly the same position unless the style clearly requires a minor adjustment.
+8) When reducing objects or furniture, remove the least important items first while keeping the room believable and functional.
 
-WHAT TO CHANGE — APPLY ${style.toUpperCase()} STYLE:
-Use these specific style details: ${(() => {
-  const roomStyles: Record<string, string> = {
-    Modern:       "light grey or white polished floors, smooth white or light grey walls, sleek low-profile furniture with clean lines, recessed or track lighting, minimal decor, neutral palette with one warm accent colour",
-    Scandinavian: "light natural wood or pale laminate floors, soft white walls, simple functional furniture with tapered legs, warm pendant lights, cosy linen/wool textiles in muted tones, small potted plants",
-    Industrial:   "dark concrete or aged wood floors, exposed brick or raw plaster walls left as-is, black metal-frame furniture with wood or leather surfaces, Edison bulb pendants, urban raw atmosphere",
-    Rustic:       "warm wood plank floors, stone or rough plaster walls, chunky solid wood furniture, wrought-iron or ceramic light fixtures, earthy tones — cream, brown, terracotta, cosy layered textiles",
-    Luxury:       "marble-look or herringbone parquet floors, wall panelling or rich wallpaper, statement chandelier or designer pendant, velvet or leather upholstered furniture, gold or brass hardware and accents",
-    Minimalist:   "seamless light grey or white floors, pure white walls with zero art or decoration, only one or two essential furniture pieces in white or greige, single overhead light, total calm and emptiness",
-  };
-  return roomStyles[style] || `materials and furniture typical of ${style} interior design`;
-})()}.
+ROOM INTERPRETATION:
+First identify the room type visible in the photo (living room, bedroom, kitchen, bathroom, etc.).
+Preserve the functional layout of that room type throughout the redesign — do not place bedroom furniture in a living room or vice versa.
 
-- **Floor**: Replace floor surface using the style details above (same floor area and shape).
-- **Walls**: Restyle wall finish/colour to match the style — do not move or resize walls.
-- **Moveable furniture**: Replace sofas, chairs, tables, beds, rugs, curtains with style-appropriate pieces.
-- **Lighting fixtures**: Replace ceiling lights, floor lamps, wall sconces with ones matching the style.
-- **Decor**: Replace art, plants, cushions and accessories with style-appropriate items.
+STYLE APPLICATION — ${style.toUpperCase()}:
+Apply the style strongly but realistically, as if the room was professionally redesigned by an interior designer while keeping its original architecture intact.
+Only modify: movable furniture, floor surface, wall finish, lighting fixtures and decorative objects.
+${s.rules}
 
-WHAT MUST STAY THE SAME:
-- The exact position and shape of every wall, window, door and opening.
-- All fixed structural elements (bathtub, shower, toilet, kitchen units, staircases).
-- The overall spatial feel — the output must look like the same room after a renovation.
+STYLE FEEL:
+${s.feel}
 
-FINISH: Photorealistic output. Professional interior photography quality. Natural lighting consistent with the original photo. No watermarks.
+FINISH: The result should look like a professionally photographed interior renovation of the same room. Lighting direction, window light and time-of-day must remain consistent with the input photo. No watermarks.
     `.trim();
   }
 
+  // ─── OUTDOOR ──────────────────────────────────────────────────────────────
   if (inputType === "outdoor") {
     const outdoorStyles: Record<string, string> = {
       Mediterranean: "terracotta or limestone paving, whitewashed stone walls, olive and cypress trees, wooden pergola draped with climbing vines, large terracotta pots with lavender and rosemary, wrought-iron furniture with cushions, warm earthy tones throughout",
-      Japanese: "raked zen gravel with stone arrangements, koi pond or water basin, bamboo screen fencing, stone lanterns and stepping-stone path, bonsai and maple trees, minimalist wooden deck, moss ground cover, calm and serene atmosphere",
-      Tropical: "lush oversized palm trees and banana leaf plants, natural stone or timber decking, infinity-edge pool or water feature, rattan and teak outdoor furniture, string lights and torch lighting, vibrant flowering plants, rich green canopy overhead",
-      Cottage: "colourful wildflower beds and climbing roses on trellises, irregular stone or brick path, white picket or low hedgerow border, rustic wooden bench, herb and vegetable garden corner, soft dappled natural lighting, quaint and lush feel",
-      Modern: "large-format concrete or porcelain paving in neutral tones, geometric lawn panels, architectural ornamental grasses and box hedges, minimalist steel-frame pergola, sleek low-profile outdoor furniture, recessed path lighting, clean lines throughout",
-      Desert: "decomposed granite or sandy gravel ground, clusters of cacti and succulent arrangements, natural sandstone boulders, drought-resistant agave and yucca plants, low adobe or rammed-earth walls, warm terracotta and sand tones, minimal water use",
+      Japanese:      "raked zen gravel with stone arrangements, koi pond or water basin, bamboo screen fencing, stone lanterns and stepping-stone path, bonsai and maple trees, minimalist wooden deck, moss ground cover, calm and serene atmosphere",
+      Tropical:      "lush oversized palm trees and banana leaf plants, natural stone or timber decking, infinity-edge pool or water feature, rattan and teak outdoor furniture, string lights and torch lighting, vibrant flowering plants, rich green canopy overhead",
+      Cottage:       "colourful wildflower beds and climbing roses on trellises, irregular stone or brick path, white picket or low hedgerow border, rustic wooden bench, herb and vegetable garden corner, soft dappled natural lighting, quaint and lush feel",
+      Modern:        "large-format concrete or porcelain paving in neutral tones, geometric lawn panels, architectural ornamental grasses and box hedges, minimalist steel-frame pergola, sleek low-profile outdoor furniture, recessed path lighting, clean lines throughout",
+      Desert:        "decomposed granite or sandy gravel ground, clusters of cacti and succulent arrangements, natural sandstone boulders, drought-resistant agave and yucca plants, low adobe or rammed-earth walls, warm terracotta and sand tones, minimal water use",
     };
 
     const styleDetail = outdoorStyles[style] || `materials, plants, furniture and lighting typical of ${style} landscape design`;
 
     return `
-TASK: Redesign this outdoor space in ${style} landscape design style.
+USE THE PROVIDED PHOTO AS THE EXACT STRUCTURAL BASE.
 
-STRICT REQUIREMENTS:
-1) **KEEP THE SAME VIEW ANGLE**: Do not change the camera perspective or viewing angle.
-2) **KEEP THE SAME BOUNDARIES AND STRUCTURES**: Fences, walls, built structures stay in exact same position.
-3) **REPLACE ALL EXISTING PLANTS, FURNITURE AND DECOR**: Remove everything and redesign entirely.
-4) **NO TEXT OR WATERMARKS**: Output must be clean with no labels or annotations.
+GLOBAL RULES — DO NOT VIOLATE:
+1) Keep the exact same camera angle and perspective.
+2) Keep all boundary walls, fences and permanent built structures in exact position.
+3) Do not change the size or shape of the outdoor space.
+4) No text, labels or watermarks in the output.
 
 REDESIGN WITH ${style.toUpperCase()} OUTDOOR AESTHETIC:
 Use the following specific elements: ${styleDetail}.
 
 - Ground: Replace with ground cover, paving or decking matching the style above.
-- Plants: Add realistic plants, trees, and shrubs exactly as described.
+- Plants: Add realistic plants, trees and shrubs exactly as described.
 - Furniture: Add outdoor seating and dining pieces that fit the style.
-- Lighting: Add appropriate outdoor lighting (path lights, lanterns, string lights, etc.).
-- Decor: Add water features, planters, or decorative elements consistent with the style.
+- Lighting: Add appropriate outdoor lighting — path lights, lanterns, string lights, etc.
+- Decor: Add water features, planters or decorative elements consistent with the style.
+
+Apply the style strongly but realistically, as if professionally landscaped.
 
 FINISH: Photorealistic output. Professional landscape photography quality. Natural daylight lighting. No watermarks.
     `.trim();
   }
 
-  // 2D Floor Plan — specific per style
+  // ─── 2D FLOOR PLAN ────────────────────────────────────────────────────────
   const floorPlanStyles: Record<string, string> = {
-    Modern:        "large-format light grey or white polished concrete or stone floors, white smooth walls, floor-to-ceiling windows where indicated, sleek low-profile furniture with clean straight lines, recessed ceiling lighting, open-plan feel, neutral palette of white/grey/black with one warm accent",
-    Scandinavian:  "light natural oak or pale birch wood floors, white walls, cosy wool rugs in muted tones, simple functional furniture with tapered legs, warm pendant lighting, soft textiles — linen cushions and throws, plants, understated and uncluttered",
-    Industrial:    "polished or raw concrete floors, exposed red brick or dark grey walls, black steel window frames, dark metal-frame furniture with reclaimed wood surfaces, Edison bulb pendant lighting, leather or canvas upholstery, raw and urban atmosphere",
-    Rustic:        "wide-plank reclaimed oak or pine wood floors, exposed stone or whitewashed walls, heavy wooden ceiling beams, chunky farmhouse furniture in natural wood, wrought-iron fixtures, earthy warm tones — terracotta, cream, brown, cosy and lived-in feel",
-    Luxury:        "large-format marble or travertine floors with subtle veining, high ceilings, wall panelling or textured wallpaper in deep jewel tones, statement chandelier lighting, rich upholstered furniture in velvet or leather, gold or brass accents on fixtures and handles, art on walls",
-    Minimalist:    "seamless light grey or white micro-cement or polished concrete floors, pure white walls with zero decoration, only essential furniture — one sofa, one coffee table, one bed — all in neutral white or greige, hidden storage, single pendant light, absolute calm and emptiness",
+    Modern:       "large-format light grey or white polished concrete or stone floors, white smooth walls, sleek low-profile furniture with clean straight lines, recessed ceiling lighting, open-plan feel, neutral palette of white/grey/black with one warm accent",
+    Scandinavian: "light natural oak or pale birch wood floors, white walls, cosy wool rugs in muted tones, simple functional furniture with tapered legs, warm pendant lighting, soft textiles — linen cushions and throws, plants, understated and uncluttered",
+    Industrial:   "polished or raw concrete floors, exposed red brick or dark grey walls, black steel window frames, dark metal-frame furniture with reclaimed wood surfaces, Edison bulb pendant lighting, leather or canvas upholstery, raw and urban atmosphere",
+    Rustic:       "wide-plank reclaimed oak or pine wood floors, exposed stone or whitewashed walls, heavy wooden ceiling beams, chunky farmhouse furniture in natural wood, wrought-iron fixtures, earthy warm tones — terracotta, cream, brown, cosy and lived-in feel",
+    Luxury:       "large-format marble or travertine floors with subtle veining, high ceilings, wall panelling or textured wallpaper in deep jewel tones, statement chandelier lighting, rich upholstered furniture in velvet or leather, gold or brass accents on fixtures and handles, art on walls",
+    Minimalist:   "seamless light grey or white micro-cement or polished concrete floors, pure white walls with zero decoration, only essential furniture — one sofa, one coffee table, one bed — all in neutral white or greige, hidden storage, single pendant light, absolute calm and emptiness",
   };
 
   const floorDetail = floorPlanStyles[style] || `materials, colors and furniture typical of ${style} interior design`;
