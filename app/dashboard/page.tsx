@@ -154,7 +154,7 @@ export default function Dashboard() {
               </div>
               <div className="nr-type-grid">
                 {[
-                  { id: "floor-plan", icon: "/icon-floorplan.png", label: "2D Floor Plan", desc: "Architectural drawing" },
+                  { id: "floor-plan", icon: "/icon-floorplan.png", label: "2D Floor Plan to 3D", desc: "2D Floor Plan" },
                   { id: "room-photo", icon: "/icon-room.png", label: "Room Photo", desc: "Existing room image" },
                   { id: "outdoor", icon: "/icon-outdoor.png", label: "Outdoor / Garden", desc: "Exterior & garden design" },
                 ].map((t) => (

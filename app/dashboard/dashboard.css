@@ -150,10 +150,10 @@
   background: #f1f5f9;
 }
 
-.nr-style-pill-active {
-  background: #ec5b13;
-  color: #ffffff;
-  border-color: #ec5b13;
+.nr-style-pill.nr-style-pill-active {
+  background: #ec5b13 !important;
+  color: #ffffff !important;
+  border-color: #ec5b13 !important;
   box-shadow: 0 2px 8px rgba(236, 91, 19, 0.2);
 }
 

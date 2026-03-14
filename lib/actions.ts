@@ -40,7 +40,7 @@ export async function getCredits(userId: string, name?:
     await connectDb();
     const user = await User.findOneAndUpdate(
         { clerkId: userId },
-        { $setOnInsert: { credits: 10, name: name ?? "", email: email ?? "" } },
+        { $setOnInsert: { credits: 5, name: name ?? "", email: email ?? "" } },
         { upsert: true, new: true }
     );
     return user.credits;
