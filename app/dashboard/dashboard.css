@@ -1,5 +1,153 @@
 /* All classes prefixed db- */
 
+/* ── New Render Flow (nr-) ── */
+.nr-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.nr-section {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  padding: 2rem;
+}
+
+.nr-section-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.nr-step-num {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background: #ec5b13;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nr-section-title {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+}
+
+.nr-check-done {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Type cards grid */
+.nr-type-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.nr-type-card {
+  cursor: pointer;
+  padding: 1.5rem 1rem;
+  background: #f8f6f6;
+  border: 2px solid #e2e8f0;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.nr-type-card:hover {
+  border-color: rgba(236, 91, 19, 0.4);
+}
+
+.nr-type-card-active {
+  border-color: #ec5b13;
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(236, 91, 19, 0.12);
+}
+
+.nr-type-icon {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 9999px;
+  background: #f1f5f9;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+}
+
+.nr-type-icon-active {
+  background: rgba(236, 91, 19, 0.1);
+  color: #ec5b13;
+}
+
+.nr-type-label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.nr-type-desc {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Style pills */
+.nr-styles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.nr-style-pill {
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.nr-style-pill:hover {
+  background: #e2e8f0;
+}
+
+.nr-style-pill-active {
+  background: #ec5b13;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(236, 91, 19, 0.3);
+}
+
+@media (max-width: 640px) {
+  .nr-type-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nr-section {
+    padding: 1.25rem;
+  }
+}
+
 .db-page {
     min-height: 100vh;
     background: #f8f6f6;

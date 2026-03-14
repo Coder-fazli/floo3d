@@ -55,6 +55,8 @@ export default function VisualizerClient() {
           projectId: project._id,
           imageUrl: project.originalImageUrl,
           userId: user?.id,
+          inputType: project.inputType ?? "floor-plan",
+          renderStyle: project.renderStyle ?? "Modern",
         }),
       });
        

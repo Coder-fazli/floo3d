@@ -2,7 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 import { uploadImage } from "@/lib/cloudinary";
 import { updateProject, getCredits, deductCredit} from "@/lib/actions";
-import { ROOMIFY_RENDER_PROMPT } from "@/lib/constants";
+import { buildPrompt } from "@/lib/constants";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
@@ -11,7 +11,7 @@ export const maxDuration = 60;
 
 export async function POST(request: Request) {
   try {
-    const { projectId, imageUrl, userId } = await request.json();
+    const { projectId, imageUrl, userId, inputType = "floor-plan", renderStyle = "Modern" } = await request.json();
 
     const credits = await getCredits(userId);
     if (credits <= 0) {
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
 
     const result = await model.generateContent([
       { inlineData: { data: base64, mimeType } },
-      ROOMIFY_RENDER_PROMPT,
+      buildPrompt(inputType, renderStyle),
     ]);
 
     const parts = result.response.candidates![0].content.parts;

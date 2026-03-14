@@ -6,13 +6,15 @@
 
 
  export async function POST(request: Request) {
-    const {name, userId, base64Image} = await request.json();
+    const { name, userId, base64Image, inputType = "floor-plan", renderStyle = "Modern" } = await request.json();
     await connectDb();
     const imageUrl = await uploadImage(base64Image, "floo3d/originals");
     const project = await Project.create({
         name,
         userId,
         originalImageUrl: imageUrl,
+        inputType,
+        renderStyle,
         status: "pending",
     });
      return NextResponse.json(JSON.parse(JSON.stringify(project)));

@@ -6,7 +6,7 @@ export const PROGRESS_STEP = 5;
 // Image Dimensions
 export const IMAGE_RENDER_DIMENSION = 1024;
 
-export const ROOMIFY_RENDER_PROMPT = `
+const FLOOR_PLAN_PROMPT = `
 TASK: Convert the input 2D floor plan into a **photorealistic, top‑down 3D architectural render**.
 
 STRICT REQUIREMENTS (do not violate):
@@ -36,3 +36,55 @@ STYLE & LIGHTING:
 - Materials: realistic wood/tile floors, clean walls, subtle shadows.
 - Finish: professional architectural visualization; no text, no watermarks, no logos.
 `.trim();
+
+export function buildPrompt(inputType: string, style: string): string {
+  if (inputType === "room-photo") {
+    return `
+TASK: Redesign this room photo in ${style} interior design style.
+
+STRICT REQUIREMENTS:
+1) **KEEP THE SAME VIEW ANGLE**: Do not change the camera perspective or viewing angle.
+2) **KEEP THE SAME ROOM SHAPE**: Walls, windows, doors, and ceiling height stay in exact same position.
+3) **REMOVE ALL EXISTING FURNITURE AND DECOR**: Clear out everything — furniture, rugs, curtains, art, plants, lighting fixtures.
+4) **NO TEXT OR WATERMARKS**: Output must be clean with no labels or annotations.
+
+REDESIGN WITH ${style.toUpperCase()} AESTHETIC:
+- Floors: Replace with materials typical of ${style} design.
+- Walls: Paint or finish walls in colors that match ${style} palette.
+- Furniture: Add realistic furniture pieces typical of ${style} — sofa, coffee table, shelving, bed (if bedroom), dining set (if dining).
+- Lighting: Add ceiling and ambient lighting fixtures matching ${style}.
+- Decor: Add minimal but realistic decor — rugs, cushions, plants, art — consistent with ${style}.
+
+FINISH: Photorealistic output. Professional interior photography quality. Balanced natural lighting. No watermarks.
+    `.trim();
+  }
+
+  if (inputType === "outdoor") {
+    return `
+TASK: Redesign this outdoor space in ${style} landscape design style.
+
+STRICT REQUIREMENTS:
+1) **KEEP THE SAME VIEW ANGLE**: Do not change the camera perspective or viewing angle.
+2) **KEEP THE SAME BOUNDARIES AND STRUCTURES**: Fences, walls, built structures stay in exact same position.
+3) **REPLACE ALL PLANTS, FURNITURE AND DECOR**: Clear out existing landscaping and replace entirely.
+4) **NO TEXT OR WATERMARKS**: Output must be clean with no labels or annotations.
+
+REDESIGN WITH ${style.toUpperCase()} OUTDOOR AESTHETIC:
+- Ground: Replace with paving, grass, gravel, or decking typical of ${style} outdoor design.
+- Plants: Add realistic plants, trees, and shrubs matching ${style} landscape style.
+- Furniture: Add outdoor seating, dining, and lounging furniture typical of ${style}.
+- Lighting: Add outdoor lighting fixtures — path lights, spotlights, string lights — matching ${style}.
+- Decor: Add planters, water features, or decorative elements consistent with ${style}.
+
+FINISH: Photorealistic output. Professional architectural photography quality. Natural daylight lighting. No watermarks.
+    `.trim();
+  }
+
+  // Default — 2D Floor Plan (original prompt + style)
+  return `
+${FLOOR_PLAN_PROMPT}
+
+DESIGN STYLE: Apply a ${style} interior design aesthetic throughout the render.
+Use materials, colors, furniture and finishes typical of ${style} design.
+  `.trim();
+}

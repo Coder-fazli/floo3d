@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Floo3D - Create New Render</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 lg:px-20 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-4">
+<div class="size-8 flex items-center justify-center bg-primary rounded-lg text-white">
+<span class="material-symbols-outlined text-2xl">layers</span>
+</div>
+<h2 class="text-xl font-bold leading-tight tracking-[-0.015em]">Floo3D</h2>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<nav class="hidden md:flex gap-6">
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-sm font-semibold text-primary" href="#">Projects</a>
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Assets</a>
+</nav>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-xl h-10 w-10 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 transition-colors">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-xl h-10 w-10 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 transition-colors">
+<span class="material-symbols-outlined text-xl">settings</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/20" data-alt="User profile avatar circle" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBAmo9PlxCR0ZJLKc5Wmygp_IXOCAGzvr5pvm3ik_jjESl-dXbiPcSW5nRxc-nddbRoSQWsyM1jDR-gyPG8c0lGJSDdr7KWcCf-MNGJIsVAnJpBpgT5Cm1tnZdPfPLTZ4b0OtT29HGxqGLX1JerQeLA20SjLxTAI0yILFktDSMvmf_vUeBaj6mnMXv9DBEINXEx9g3J-1qXpKbB7g5u43WFZl6M_sRVianVyDf0dK3cWslP7MsltJSO0-iXHktQx6TTLoJdh420_VaT");'></div>
+</div>
+</header>
+<!-- Breadcrumbs -->
+<div class="px-6 lg:px-40 py-6 max-w-[1440px] mx-auto w-full">
+<nav class="flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 mb-8">
+<a class="hover:text-primary transition-colors" href="#">Dashboard</a>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Projects</a>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="text-slate-900 dark:text-slate-100">New Render</span>
+</nav>
+<div class="max-w-4xl">
+<h1 class="text-4xl font-black leading-tight tracking-[-0.033em] mb-3">Create New 3D Render</h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg">Follow the steps to transform your inputs into high-quality 3D designs.</p>
+</div>
+<!-- Main Flow -->
+<div class="mt-12 space-y-12">
+<!-- STEP 1: Input Type Selector -->
+<section>
+<div class="flex items-center gap-3 mb-6">
+<div class="size-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">1</div>
+<h2 class="text-2xl font-bold tracking-tight">Select Input Type</h2>
+<span class="material-symbols-outlined text-primary ml-auto">check_circle</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Selected Card -->
+<div class="group cursor-pointer p-6 bg-white dark:bg-slate-900 border-2 border-primary rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center gap-4">
+<div class="size-16 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-4xl">architecture</span>
+</div>
+<div>
+<h3 class="font-bold text-lg text-slate-900 dark:text-slate-100">2D Floor Plan</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Top-down architectural drawing</p>
+</div>
+</div>
+<!-- Unselected Card -->
+<div class="group cursor-pointer p-6 bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm hover:border-primary/50 transition-all flex flex-col items-center text-center gap-4">
+<div class="size-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-primary/70 transition-colors">
+<span class="material-symbols-outlined text-4xl">photo_camera</span>
+</div>
+<div>
+<h3 class="font-bold text-lg text-slate-900 dark:text-slate-100">Room Photo</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Photo of an existing room</p>
+</div>
+</div>
+<!-- Unselected Card -->
+<div class="group cursor-pointer p-6 bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm hover:border-primary/50 transition-all flex flex-col items-center text-center gap-4">
+<div class="size-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-primary/70 transition-colors">
+<span class="material-symbols-outlined text-4xl">view_in_ar</span>
+</div>
+<div>
+<h3 class="font-bold text-lg text-slate-900 dark:text-slate-100">Existing Render</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Already rendered 3D image</p>
+</div>
+</div>
+</div>
+</section>
+<!-- STEP 2: Style Selector -->
+<section class="opacity-100 transition-opacity duration-500">
+<div class="flex items-center gap-3 mb-6">
+<div class="size-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">2</div>
+<h2 class="text-2xl font-bold tracking-tight">Style Selector</h2>
+</div>
+<div class="flex flex-wrap gap-3">
+<button class="px-6 py-2.5 rounded-full bg-primary text-white font-bold text-sm transition-all shadow-sm">
+                                Modern
+                            </button>
+<button class="px-6 py-2.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-sm hover:bg-slate-300 dark:hover:bg-slate-700 transition-all">
+                                Scandinavian
+                            </button>
+<button class="px-6 py-2.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-sm hover:bg-slate-300 dark:hover:bg-slate-700 transition-all">
+                                Industrial
+                            </button>
+<button class="px-6 py-2.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-sm hover:bg-slate-300 dark:hover:bg-slate-700 transition-all">
+                                Rustic
+                            </button>
+<button class="px-6 py-2.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-sm hover:bg-slate-300 dark:hover:bg-slate-700 transition-all">
+                                Luxury
+                            </button>
+<button class="px-6 py-2.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-sm hover:bg-slate-300 dark:hover:bg-slate-700 transition-all">
+                                Minimalist
+                            </button>
+</div>
+</section>
+<!-- STEP 3: Upload Zone -->
+<section class="opacity-100 transition-opacity duration-500">
+<div class="flex items-center gap-3 mb-6">
+<div class="size-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">3</div>
+<h2 class="text-2xl font-bold tracking-tight">Upload Assets</h2>
+</div>
+<div class="relative group">
+<div class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl bg-white dark:bg-slate-900 p-12 flex flex-col items-center justify-center text-center transition-all group-hover:border-primary group-hover:bg-primary/5">
+<div class="size-20 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-6">
+<span class="material-symbols-outlined text-5xl">cloud_upload</span>
+</div>
+<h3 class="text-xl font-bold mb-2">Upload your 2D Floor Plan</h3>
+<p class="text-slate-500 dark:text-slate-400 max-w-sm mb-8">Drag and drop your files here, or click to browse. Supports PDF, JPG, PNG, and CAD files.</p>
+<button class="bg-primary hover:bg-primary/90 text-white font-bold py-3 px-10 rounded-xl transition-all shadow-lg shadow-primary/20 flex items-center gap-2">
+<span>Browse Files</span>
+</button>
+<div class="mt-8 flex gap-4 text-xs font-medium text-slate-400">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">verified</span> Max size: 50MB</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">verified</span> High Resolution</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Summary & Action -->
+<div class="border-t border-slate-200 dark:border-slate-800 pt-8 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="flex -space-x-3">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white text-xs border-2 border-white dark:border-slate-900">
+<span class="material-symbols-outlined text-sm">architecture</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xs border-2 border-white dark:border-slate-900 font-bold">
+                                    M
+                                </div>
+</div>
+<div>
+<p class="text-sm font-bold">Draft: Modern Floor Plan</p>
+<p class="text-xs text-slate-500">Ready to upload assets</p>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="px-6 py-3 font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors">
+                                Save Draft
+                            </button>
+<button class="px-8 py-3 bg-primary/20 text-primary font-bold rounded-xl opacity-50 cursor-not-allowed">
+                                Start Rendering
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-20 border-t border-slate-200 dark:border-slate-800 py-10 px-6 lg:px-40 bg-white dark:bg-slate-900/50">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">layers</span>
+<span class="font-bold text-slate-900 dark:text-slate-100">Floo3D</span>
+<span class="text-slate-400 text-sm ml-2">© 2024 Floo3D Premium Rendering</span>
+</div>
+<div class="flex gap-8 text-sm font-medium text-slate-500">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors" href="#">Help Center</a>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</body></html>
