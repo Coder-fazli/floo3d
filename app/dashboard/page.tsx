@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { getProjects, getCredits } from "@/lib/actions";
-import { Calendar, Eye, ArrowUpRight, FileText, Wallet, X, CreditCard, Rocket, LayoutTemplate, Camera, TreePine } from "lucide-react";
+import { Calendar, Eye, ArrowUpRight, FileText, Wallet, X, CreditCard, Rocket, CheckCircle } from "lucide-react";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -135,34 +135,41 @@ export default function Dashboard() {
         ) : (
           <div className="nr-flow">
 
-            {/* Steps 1 + 2 combined */}
+            {/* Step 1 — Input Type */}
             <section className="nr-section">
               <div className="nr-section-head">
                 <div className="nr-step-num">1</div>
-                <h2 className="nr-section-title">Input Type</h2>
+                <h2 className="nr-section-title">Select Input Type</h2>
               </div>
-              <div className="nr-type-seg">
+              <div className="nr-type-grid">
                 {[
-                  { id: "floor-plan", icon: <LayoutTemplate size={15} />, label: "2D Floor Plan" },
-                  { id: "room-photo", icon: <Camera size={15} />, label: "Room Photo" },
-                  { id: "outdoor", icon: <TreePine size={15} />, label: "Outdoor / Garden" },
+                  { id: "floor-plan", icon: "/icon-floorplan.png", label: "2D Floor Plan", desc: "Architectural drawing" },
+                  { id: "room-photo", icon: "/icon-room.png", label: "Room Photo", desc: "Existing room image" },
+                  { id: "outdoor", icon: "/icon-outdoor.png", label: "Outdoor / Garden", desc: "Exterior & garden design" },
                 ].map((t) => (
                   <div
                     key={t.id}
-                    className={`nr-type-seg-item${inputType === t.id ? " nr-type-seg-item-active" : ""}`}
+                    className={`nr-type-card${inputType === t.id ? " nr-type-card-active" : ""}`}
                     onClick={() => setInputType(t.id as any)}
                   >
-                    {t.icon}
-                    <span>{t.label}</span>
+                    <div className={`nr-type-icon${inputType === t.id ? " nr-type-icon-active" : ""}`}>
+                      <img src={t.icon} alt={t.label} width={24} height={24} style={{ objectFit: "contain" }} />
+                    </div>
+                    <div className="nr-type-card-text">
+                      <h3 className="nr-type-label">{t.label}</h3>
+                      <p className="nr-type-desc">{t.desc}</p>
+                    </div>
+                    {inputType === t.id && <CheckCircle size={18} className="nr-type-check" />}
                   </div>
                 ))}
               </div>
+            </section>
 
-              <div className="nr-divider" />
-
-              <div className="nr-section-head" style={{ marginBottom: "0.6rem" }}>
+            {/* Step 2 — Style */}
+            <section className="nr-section">
+              <div className="nr-section-head">
                 <div className="nr-step-num">2</div>
-                <h2 className="nr-section-title">Style</h2>
+                <h2 className="nr-section-title">Design Style</h2>
               </div>
               <div className="nr-styles">
                 {["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"].map((s) => (
