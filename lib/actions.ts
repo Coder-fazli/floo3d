@@ -3,7 +3,7 @@ import { connectDb } from "./db";
 import Project from "./models/Project";
 import { uploadImage } from "./cloudinary";
 import User from "./models/User";
-
+import SiteSettings from "./models/SiteSettings";
 
 export async function getProjects(userId: string) {
     await connectDb();
@@ -71,3 +71,22 @@ export async function deleteUSer(clerkId: string) {
     await User.findOneAndDelete({ clerkId });
 }
 
+// Reads the Homre page Seo settings from DB, if nothing saved yet, returrns the defaults
+
+export async function getSiteSettings(){
+    await connectDb();
+    const settings = await SiteSettings.findOne({ key: "home" });
+    return settings ? JSON.parse(JSON.stringify(settings)): null
+}
+
+export async function saveSiteSettings(metaTitle: string, metaDescription: string) {
+    await connectDb();
+    await SiteSettings.findOneAndUpdate(
+        { key: "home" },
+         // find by key "home"
+        { metaTitle, metaDescription },
+       // update these fields
+        { upsert: true, new: true }
+        // create if doesn't exist yet
+    );
+}

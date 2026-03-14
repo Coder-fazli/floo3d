@@ -28,7 +28,7 @@ export default function AdminSidebar() {
     <aside className="adm-sidebar">
       <div className="adm-sidebar-brand">
         <div className="adm-sidebar-logo">
-          <Image src="/logo.png" alt="Floo3D" width={18} height={18} />
+          <Image src="/logo.png" alt="Floo3D" width={32} height={32} />
         </div>
         <div>
           <p className="adm-sidebar-brand-name">Floo3D Admin</p>
