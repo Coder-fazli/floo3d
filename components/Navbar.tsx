@@ -28,17 +28,17 @@ const Navbar = () => {
         {/* Brand */}
         <div className="navbar-brand">
           <div className="navbar-logo-icon">
-            <Image src="/logo.png" alt="Floo3D" width={20} height={20} />
+            <Image src="/logo.png" alt="Floo3D" width={26} height={26} />
           </div>
           <span className="navbar-name">Floo<span className="navbar-name-accent">3D</span></span>
         </div>
 
         {/* Links */}
         <ul className="navbar-links">
-          <li><a href="">Product</a></li>
-          <li><a href="">Features</a></li>
-          <li><a href="">Pricing</a></li>
-          <li><a href="">Gallery</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#magic">Magic</a></li>
+          <li><a href="#reviews">Love</a></li>
+          <li><a href="#journal">Journal</a></li>
         </ul>
 
         {/* Actions */}
@@ -73,10 +73,10 @@ const Navbar = () => {
       {menuOpen && (
         <div className="navbar-mobile">
           <ul>
-            <li><a href="" onClick={() => setMenuOpen(false)}>Product</a></li>
-            <li><a href="" onClick={() => setMenuOpen(false)}>Features</a></li>
-            <li><a href="" onClick={() => setMenuOpen(false)}>Pricing</a></li>
-            <li><a href="" onClick={() => setMenuOpen(false)}>Gallery</a></li>
+            <li><a href="#gallery" onClick={() => setMenuOpen(false)}>Gallery</a></li>
+            <li><a href="#magic" onClick={() => setMenuOpen(false)}>Magic</a></li>
+            <li><a href="#reviews" onClick={() => setMenuOpen(false)}>Love</a></li>
+            <li><a href="#journal" onClick={() => setMenuOpen(false)}>Journal</a></li>
             {isSignedIn ? (
               <>
                 <li><a href="/dashboard/profile" onClick={() => setMenuOpen(false)}>Profile</a></li>

@@ -28,7 +28,7 @@ export default function Blog() {
   useScrollReveal();
 
   return (
-    <section className="blg-section">
+    <section className="blg-section" id="journal">
       {/* Background orbs */}
       <div className="blg-orb blg-orb-tr" />
       <div className="blg-orb blg-orb-bl" />

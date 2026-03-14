@@ -4,13 +4,13 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import HowItWorks from "@/components/HowItWorks";
 import Blog from "@/components/Blog";
+import RecentProjects from "@/components/RecentProjects";
 import Footer from "@/components/Footer";
-import { ArrowRight, Clock } from "lucide-react";
 import { Marquee } from "@/components/ui/marquee";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "@clerk/nextjs";
-import { getProjects, getProject } from "@/lib/actions";
+import { getProject } from "@/lib/actions";
 
 const reviews = [
   { name: "Sarah M.", handle: "@sarahm", avatar: "SM", color: "bg-violet-500", text: "I rendered my entire apartment floor plan in under 2 minutes. The 3D output is stunning, clients love it." },
@@ -27,19 +27,12 @@ export default function Home() {
   const router = useRouter();
   
   const { user } = useUser();
-  const [projects, setProjects] = useState<any[]>([]);
   const [demoProject, setDemoProject] = useState<any>(null);
   const isUploading = useRef(false);
 
   useEffect(() => {
     getProject("69b01aef967226f4752324b2").then(setDemoProject);
   }, []);
-
-  useEffect(() => {
-    if (user) {
-      getProjects(user.id).then(setProjects);
-    }
-  }, [user]);
   
   const handleUploadComplete = async (base64Image: string) => {
     if (!user || isUploading.current) return;
@@ -64,6 +57,8 @@ export default function Home() {
         demoOriginal={demoProject?.originalImageUrl}
         demoRender={demoProject?.renderedImageUrl}
       />
+
+      <RecentProjects />
 
       <HowItWorks />
 
@@ -106,46 +101,6 @@ export default function Home() {
       </section>
 
       <Blog />
-
-      <section className="projects">
-        <div className="section-inner">
-          <div className="section-head">
-            <div className="copy">
-              <h2>Projects</h2>
-              <p>Your latest work and shared community projects, all in one place</p>
-            </div>
-          </div>
-
-          <div className="projects-grid">
-            {projects.length === 0 ? (
-              <div className="empty">No projects yet. Upload a floor plan to get started.</div>
-            ) : (
-              projects.map(({ _id, name, renderedImageUrl, originalImageUrl, createdAt }) => (
-                <div key={_id} className="project-card group" onClick={() => router.push(`/visualizer/${_id}`)}>
-                  <div className="preview">
-                    <img src={renderedImageUrl || originalImageUrl} alt={name || "Project"} />
-                    <div className="badge">
-                      <span>My Project</span>
-                    </div>
-                  </div>
-                  <div className="card-body">
-                    <div>
-                      <h3>{name}</h3>
-                      <div className="meta">
-                        <Clock size={12} />
-                        <span>{new Date(createdAt).toLocaleDateString()}</span>
-                      </div>
-                    </div>
-                    <div className="arrow">
-                      <ArrowRight size={18} />
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      </section>
 
       <Footer />
     </div>

@@ -1,4 +1,12 @@
 @import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
@@ -280,7 +288,7 @@
     }
 
     .home {
-        @apply min-h-screen bg-background relative overflow-x-hidden text-foreground;
+        @apply min-h-screen bg-background relative text-foreground;
 
 
         .marquee-section {

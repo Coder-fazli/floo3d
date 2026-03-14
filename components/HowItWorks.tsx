@@ -65,7 +65,7 @@ export default function HowItWorks() {
   useScrollReveal();
 
   return (
-    <main className="hiw-main">
+    <main className="hiw-main" id="magic">
 
       {/* Section header */}
       <div className="hiw-header">
