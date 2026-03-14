@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Floo3D - How It Works</title>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<!-- Navigation Header -->
+<header class="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="bg-primary p-1.5 rounded-lg text-white">
+<span class="material-symbols-outlined block text-2xl">architecture</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Floo3D</h1>
+</div>
+<nav class="hidden md:flex items-center gap-10">
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Solutions</a>
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Pricing</a>
+<a class="text-sm font-semibold text-primary transition-colors" href="#">How It Works</a>
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Contact</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="hidden sm:block text-sm font-bold px-4 py-2 hover:text-primary transition-colors">Login</button>
+<button class="bg-primary text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-transform">Get Started</button>
+</div>
+</div>
+</header>
+<main class="relative overflow-hidden">
+<!-- Background Elements -->
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none overflow-hidden opacity-20 dark:opacity-10">
+<div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/30 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px]"></div>
+</div>
+<!-- Hero Intro -->
+<section class="relative pt-24 pb-16 px-6">
+<div class="max-w-4xl mx-auto text-center">
+<span class="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-6">Our Process</span>
+<h2 class="text-4xl md:text-6xl font-extrabold text-slate-900 dark:text-white mb-6 leading-tight">
+                    From 2D Blueprints to <br/><span class="text-primary">Stunning 3D Renders</span>
+</h2>
+<p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                    Our AI-powered engine bridges the gap between static sketches and immersive spatial experiences. See how we transform your vision in three simple steps.
+                </p>
+</div>
+</section>
+<!-- How It Works Section -->
+<section class="relative py-20 px-6">
+<div class="max-w-6xl mx-auto">
+<!-- Steps Container with Connector Line -->
+<div class="relative flex flex-col gap-32">
+<!-- Vertical Connector Line (Desktop Only) -->
+<div class="hidden lg:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-200 dark:bg-slate-800 -translate-x-1/2">
+<div class="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-background-light dark:from-background-dark to-transparent"></div>
+<div class="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-background-light dark:from-background-dark to-transparent"></div>
+</div>
+<!-- Step 1: Upload -->
+<div class="relative flex flex-col lg:flex-row items-center gap-12 lg:gap-24 group">
+<div class="flex-1 lg:text-right order-2 lg:order-1">
+<div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 text-primary mb-6 lg:ml-auto">
+<span class="material-symbols-outlined text-3xl">cloud_upload</span>
+</div>
+<h3 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4">1. Upload Floor Plan</h3>
+<p class="text-slate-600 dark:text-slate-400 text-lg leading-relaxed">
+                                Simply drag and drop your 2D blueprints, PDF sketches, or even hand-drawn images. Our system supports all major formats with high-fidelity parsing for unmatched accuracy.
+                            </p>
+<div class="mt-6 flex flex-wrap gap-3 justify-start lg:justify-end">
+<span class="px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-medium">PNG/JPG</span>
+<span class="px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-medium">PDF</span>
+<span class="px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-medium">AutoCAD</span>
+</div>
+</div>
+<div class="relative flex-none w-16 h-16 rounded-full bg-primary text-white flex items-center justify-center font-bold text-2xl z-10 border-4 border-background-light dark:border-background-dark shadow-xl order-1 lg:order-2">
+                            01
+                        </div>
+<div class="flex-1 order-3 w-full">
+<div class="relative aspect-video rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-4">
+<img class="w-full h-full object-cover rounded-2xl opacity-80 group-hover:opacity-100 transition-opacity" data-alt="Technical 2D floor plan blueprint drawing" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_xi8r8nBtXqawhpIG57tMWouq7LS6Fdv1R3JqRL8MBCK-aSCRiF6nF0xiXeZhcuUhOOmzzZmE7mpQljjV_wJfYNTCmPIH0LI4YlA9VpJ9nOGH-h9Lzni0SAn5gskZOPORDMv_ARttkqs7HFOxeP-7fodrdRNJxdyf2e7JzLfDB2hpK_Z6HeuZPR-TWb6FxAB_5KCEret400nZ3DIs7Yy097zMbwGISJ9mxKGM-VK2HrwjgbmgawropYR345kaNAsy6kb-nS1aEu9x"/>
+<div class="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent pointer-events-none"></div>
+</div>
+</div>
+</div>
+<!-- Step 2: AI Processing -->
+<div class="relative flex flex-col lg:flex-row items-center gap-12 lg:gap-24 group">
+<div class="flex-1 order-3 lg:order-1 w-full">
+<div class="relative aspect-video rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-4">
+<div class="absolute inset-0 flex items-center justify-center overflow-hidden">
+<div class="w-full h-full bg-gradient-to-r from-primary/5 via-primary/20 to-primary/5 animate-pulse"></div>
+<div class="absolute flex flex-col items-center gap-4">
+<span class="material-symbols-outlined text-6xl text-primary animate-bounce">psychology</span>
+<div class="h-1.5 w-48 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-2/3 rounded-full"></div>
+</div>
+</div>
+</div>
+<img class="w-full h-full object-cover rounded-2xl mix-blend-overlay opacity-40" data-alt="Network of light dots representing AI processing" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxIcbw8h0JaqqTF-RnbeYJt8ORd1X3PtKLntT5pPhgb0p10aRHXqLHELyMTcW2toNqTy0VN7A3ySODVqb3OYuQm7CKtJrtj5soaRyz-d24PBrr0PKQzDEJo0sOYVCh0P0Pa8YJZkfh7kuOjQPlSY1vYuxzTkaLa8oHmTyS4JYkoSD9pK9np_I1m4ywPm6faDKEUxCwXZY4REl82bpvdnvJSFsrpLoInzQ_5fyae764VuiW8ot2qDm74wvZYLxiQg-8VVmpnpmS9nUy"/>
+</div>
+</div>
+<div class="relative flex-none w-16 h-16 rounded-full bg-primary text-white flex items-center justify-center font-bold text-2xl z-10 border-4 border-background-light dark:border-background-dark shadow-xl order-1 lg:order-2">
+                            02
+                        </div>
+<div class="flex-1 order-2 lg:order-3">
+<div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 text-primary mb-6">
+<span class="material-symbols-outlined text-3xl">memory</span>
+</div>
+<h3 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4">2. AI Neural Processing</h3>
+<p class="text-slate-600 dark:text-slate-400 text-lg leading-relaxed">
+                                Our proprietary neural networks analyze every structural element. It automatically identifies walls, window placements, doors, and room types to build a geometrically perfect 3D skeleton in seconds.
+                            </p>
+<div class="mt-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">speed</span>
+<span class="text-sm font-bold text-primary">Processing in under 60 seconds</span>
+</div>
+</div>
+</div>
+<!-- Step 3: Instant 3D Render -->
+<div class="relative flex flex-col lg:flex-row items-center gap-12 lg:gap-24 group">
+<div class="flex-1 lg:text-right order-2 lg:order-1">
+<div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 text-primary mb-6 lg:ml-auto">
+<span class="material-symbols-outlined text-3xl">vrpano</span>
+</div>
+<h3 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4">3. Instant 3D Render</h3>
+<p class="text-slate-600 dark:text-slate-400 text-lg leading-relaxed">
+                                Receive a hyper-realistic, interactive 3D environment. Explore the space, change lighting, and swap materials in real-time. Ready for virtual tours, marketing presentations, or client approvals.
+                            </p>
+<div class="mt-6 flex flex-wrap gap-4 justify-start lg:justify-end">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+<span class="text-sm font-medium">4K Resolution</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+<span class="text-sm font-medium">Interactive Walkthrough</span>
+</div>
+</div>
+</div>
+<div class="relative flex-none w-16 h-16 rounded-full bg-primary text-white flex items-center justify-center font-bold text-2xl z-10 border-4 border-background-light dark:border-background-dark shadow-xl order-1 lg:order-2">
+                            03
+                        </div>
+<div class="flex-1 order-3 w-full">
+<div class="relative aspect-video rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-4">
+<img class="w-full h-full object-cover rounded-2xl shadow-inner group-hover:scale-105 transition-transform duration-700" data-alt="Modern high-end living room interior 3D render" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADHAul7oBcMF6xX-ArUwnf8nqOTKUms25BE8r0hS8VHrd8nhTS_nUIUjxRSDm4WnJa05FEOw0ZZ8AUIBdYcCbRpPvVKM3fEtW5O2pNcwZZqN0WBqxLtXE6Ogd1G9i-fIg7OLR98jE-Hs4n5GAdFCLLIgI-5o4SftNyeWgBx8Z_CgiTa3jJitCkHk4XFQ3Ml3M5BXFaC2HXNz_auhrY2w2mSQrVVllmfDJsqrtuHC2lz_Ta3EFl4DHmIU7n5N80o9h43vDqNlxOqvHu"/>
+<div class="absolute top-8 right-8 bg-white/90 dark:bg-black/80 backdrop-blur px-3 py-1 rounded-lg shadow text-[10px] font-bold uppercase tracking-widest border border-slate-200 dark:border-slate-700">Final Render</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Feature Grid (Stats) -->
+<section class="py-20 px-6">
+<div class="max-w-6xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="bg-white dark:bg-slate-900 p-10 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none hover:-translate-y-2 transition-transform">
+<div class="text-primary font-bold text-4xl mb-4">&lt; 60s</div>
+<h4 class="text-xl font-bold mb-2">Blazing Fast</h4>
+<p class="text-slate-500 dark:text-slate-400">From upload to full render in less than a minute. Save hours of manual 3D modeling work.</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-10 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none hover:-translate-y-2 transition-transform">
+<div class="text-primary font-bold text-4xl mb-4">99.9%</div>
+<h4 class="text-xl font-bold mb-2">High Accuracy</h4>
+<p class="text-slate-500 dark:text-slate-400">Proprietary AI ensures dimensions are captured with precision for professional-grade results.</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-10 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none hover:-translate-y-2 transition-transform">
+<div class="text-primary font-bold text-4xl mb-4">1-Click</div>
+<h4 class="text-xl font-bold mb-2">Zero Effort</h4>
+<p class="text-slate-500 dark:text-slate-400">No complex software to learn. If you can upload a file, you can create a 3D masterpiece.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="pb-32 px-6">
+<div class="max-w-5xl mx-auto bg-primary rounded-[3rem] p-12 text-center text-white relative overflow-hidden shadow-2xl shadow-primary/30">
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/20 to-transparent"></div>
+<div class="relative z-10">
+<h2 class="text-3xl md:text-5xl font-extrabold mb-6 leading-tight">Ready to transform your floors?</h2>
+<p class="text-white/80 text-lg mb-10 max-w-xl mx-auto">Join 10,000+ architects, real estate agents, and interior designers who are scaling their workflow with Floo3D.</p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+<button class="w-full sm:w-auto px-10 py-4 bg-white text-primary font-bold rounded-2xl text-lg hover:bg-slate-100 transition-colors">Start Free Trial</button>
+<button class="w-full sm:w-auto px-10 py-4 bg-primary/20 backdrop-blur-md border border-white/30 text-white font-bold rounded-2xl text-lg hover:bg-white/10 transition-colors">View Samples</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 py-16 px-6">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
+<div class="flex items-center gap-2">
+<div class="bg-primary p-1 rounded-lg text-white">
+<span class="material-symbols-outlined block text-lg">architecture</span>
+</div>
+<span class="text-lg font-bold">Floo3D</span>
+</div>
+<div class="flex gap-8 text-sm font-medium text-slate-500 dark:text-slate-400">
+<a class="hover:text-primary" href="#">Privacy Policy</a>
+<a class="hover:text-primary" href="#">Terms of Service</a>
+<a class="hover:text-primary" href="#">Resources</a>
+<a class="hover:text-primary" href="#">Help Center</a>
+</div>
+<div class="text-sm text-slate-500 dark:text-slate-400">
+                © 2024 Floo3D Inc. All rights reserved.
+            </div>
+</div>
+</footer>
+</body></html>

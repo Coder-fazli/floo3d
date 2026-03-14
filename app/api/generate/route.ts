@@ -8,6 +8,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export const maxDuration = 60;
 
+
 export async function POST(request: Request) {
   try {
     const { projectId, imageUrl, userId } = await request.json();

@@ -348,7 +348,7 @@ body {
             }
 
             .review-avatar {
-                @apply w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0;
+                @apply w-9 h-9 rounded-full flex-shrink-0 object-cover;
             }
 
             .review-name {

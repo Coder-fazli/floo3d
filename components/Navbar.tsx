@@ -39,6 +39,7 @@ const Navbar = () => {
           <li><a href="#magic">Magic</a></li>
           <li><a href="#reviews">Love</a></li>
           <li><a href="#journal">Journal</a></li>
+          <li><a href="#answers">Answers</a></li>
         </ul>
 
         {/* Actions */}
@@ -77,6 +78,7 @@ const Navbar = () => {
             <li><a href="#magic" onClick={() => setMenuOpen(false)}>Magic</a></li>
             <li><a href="#reviews" onClick={() => setMenuOpen(false)}>Love</a></li>
             <li><a href="#journal" onClick={() => setMenuOpen(false)}>Journal</a></li>
+            <li><a href="#answers" onClick={() => setMenuOpen(false)}>Answers</a></li>
             {isSignedIn ? (
               <>
                 <li><a href="/dashboard/profile" onClick={() => setMenuOpen(false)}>Profile</a></li>
