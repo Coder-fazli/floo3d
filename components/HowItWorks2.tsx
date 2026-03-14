@@ -93,15 +93,6 @@ export default function HowItWorks2() {
                 </div>
               </div>
               <div className="hiw2-num">02</div>
-              <div className="hiw2-ai-card">
-                <div className="hiw2-ai-pulse" />
-                <div className="hiw2-ai-inner">
-                  <span className="material-symbols-outlined hiw2-ai-icon">psychology</span>
-                  <div className="hiw2-progress-bar">
-                    <div className="hiw2-progress-fill" />
-                  </div>
-                </div>
-              </div>
             </motion.div>
 
             {/* Step 3 — Instant 3D Render */}

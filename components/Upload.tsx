@@ -5,11 +5,15 @@ import { useUser } from '@clerk/nextjs';
 import { CheckCircle2, ImageIcon, Upload as UploadIcon } from 'lucide-react';
 import { PROGRESS_INTERVAL_MS, PROGRESS_STEP, REDIRECT_DELAY_MS } from '@/lib/constants';
 
+const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
+const ALLOWED_TYPES = ["image/jpeg", "image/png"];
+
 interface UploadProps {
   onComplete?: (base64: string) => void;
+  onError?: (message: string) => void;
 }
 
-const Upload = ({ onComplete }: UploadProps) => {
+const Upload = ({ onComplete, onError }: UploadProps) => {
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -30,6 +34,17 @@ const Upload = ({ onComplete }: UploadProps) => {
 
   const processFile = (selectedFile: File) => {
     if (!isSignedIn) return;
+
+    if (!ALLOWED_TYPES.includes(selectedFile.type)) {
+      onError?.(`"${selectedFile.name}" is not supported. Please upload a JPG or PNG image.`);
+      return;
+    }
+
+    if (selectedFile.size > MAX_BYTES) {
+      const sizeMB = (selectedFile.size / 1024 / 1024).toFixed(1);
+      onError?.(`File is too large (${sizeMB} MB). Maximum allowed size is 10 MB.`);
+      return;
+    }
 
     setFile(selectedFile);
     setProgress(0);
@@ -106,7 +121,7 @@ const Upload = ({ onComplete }: UploadProps) => {
               "Sign in to upload your floor plan"
             )}</p>
             <p className="help">
-              Maximum file size 50MB.
+              JPG, PNG only · Max 10 MB
             </p>
           </div>
         </div>

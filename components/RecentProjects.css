@@ -381,5 +381,8 @@
     flex: 0 0 80vw;
     max-width: 320px;
     scroll-snap-align: start;
+    /* Kill Framer Motion fade-in — off-screen cards stay invisible otherwise */
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

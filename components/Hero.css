@@ -400,6 +400,15 @@ img.sh-avatar { object-fit: cover; display: block; }
         font-size: 2rem !important;
     }
 
+    .sh-card-footer {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .sh-card-footer p {
+        max-width: 100%;
+    }
+
     .sh-trusted {
         justify-content: center;
         text-align: center;

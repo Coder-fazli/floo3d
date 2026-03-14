@@ -17,6 +17,7 @@ export default function Dashboard() {
   const [visible, setVisible] = useState(8);
   const [credits, setCredits] = useState<number | null>(null);
   const [showBanner, setShowBanner] = useState(false);
+  const [fileError, setFileError] = useState<string | null>(null);
   const isUploading = useRef(false);
 
   const noCredits = credits !== null && credits === 0;
@@ -139,7 +140,7 @@ export default function Dashboard() {
               Drag and drop your 2D plans (JPG, PNG) here to start the 3D conversion.{" "}
               <strong>Max file size: 10MB.</strong>
             </p>
-            <Upload onComplete={handleUploadComplete} />
+            <Upload onComplete={handleUploadComplete} onError={setFileError} />
           </div>
         )}
 
@@ -202,6 +203,27 @@ export default function Dashboard() {
         </section>
 
       </main>
+
+      {fileError && (
+        <div className="viz-modal-backdrop">
+          <div className="viz-modal">
+            <div className="viz-modal-body">
+              <div className="viz-modal-icon">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+              </div>
+              <h3 className="viz-modal-title">Upload Failed</h3>
+              <p className="viz-modal-text">{fileError}</p>
+            </div>
+            <div className="viz-modal-actions">
+              <button className="viz-modal-btn-primary" onClick={() => setFileError(null)}>
+                Try Again
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -596,3 +596,74 @@
     .db-grid { grid-template-columns: 1fr; }
     .db-welcome-actions { flex-wrap: wrap; }
 }
+
+/* ── Upload error modal (reused from viz-modal) ── */
+.viz-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+}
+.viz-modal {
+  background: #ffffff;
+  width: 100%;
+  max-width: 28rem;
+  border-radius: 1.25rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+.viz-modal-body {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.viz-modal-icon {
+  width: 4rem;
+  height: 4rem;
+  background: #fff1f2;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ef4444;
+  margin-bottom: 1.5rem;
+}
+.viz-modal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.75rem;
+}
+.viz-modal-text {
+  font-size: 0.9rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
+}
+.viz-modal-actions {
+  padding: 1.25rem 1.5rem;
+  background: #f8fafc;
+  display: flex;
+  gap: 0.75rem;
+}
+.viz-modal-btn-primary {
+  flex: 1;
+  padding: 0.75rem;
+  background: #ec5b13;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.viz-modal-btn-primary:hover { opacity: 0.9; }

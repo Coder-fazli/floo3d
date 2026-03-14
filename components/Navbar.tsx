@@ -53,6 +53,7 @@ const Navbar = () => {
               <a href="/dashboard/profile" className="navbar-profile" title="Profile">
                 <User className="w-4 h-4" />
               </a>
+              <a href="/dashboard" className="navbar-btn-primary">Dashboard</a>
               <button className="navbar-btn-ghost" onClick={handleSignOut}>Log Out</button>
             </>
           ) : (
@@ -81,6 +82,7 @@ const Navbar = () => {
             <li><a href="#answers" onClick={() => setMenuOpen(false)}>Answers</a></li>
             {isSignedIn ? (
               <>
+                <li><a href="/dashboard" onClick={() => setMenuOpen(false)} className="navbar-mobile-dashboard">Dashboard</a></li>
                 <li><a href="/dashboard/profile" onClick={() => setMenuOpen(false)}>Profile</a></li>
                 <li><a href="#" onClick={() => { handleSignOut(); setMenuOpen(false); }}>Log Out</a></li>
               </>
