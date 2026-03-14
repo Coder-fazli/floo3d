@@ -121,11 +121,11 @@ export default function HowItWorks2() {
                 <p className="hiw2-step-desc">Receive a photorealistic top-down 3D render of your floor plan in seconds. Download in HD, share with clients via a single link, and impress with studio-quality detail — no 3D software needed.</p>
                 <div className="hiw2-checks">
                   <div className="hiw2-check">
-                    <span className="material-symbols-outlined hiw2-check-icon">check_circle</span>
+                    <svg className="hiw2-check-icon" width="20" height="20" viewBox="0 0 24 24" fill="#22c55e"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm4.71 7.71-5.5 5.5a1 1 0 0 1-1.42 0l-2.5-2.5a1 1 0 1 1 1.42-1.42L10.5 13.09l4.79-4.8a1 1 0 0 1 1.42 1.42z"/></svg>
                     HD PNG Export
                   </div>
                   <div className="hiw2-check">
-                    <span className="material-symbols-outlined hiw2-check-icon">check_circle</span>
+                    <svg className="hiw2-check-icon" width="20" height="20" viewBox="0 0 24 24" fill="#22c55e"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm4.71 7.71-5.5 5.5a1 1 0 0 1-1.42 0l-2.5-2.5a1 1 0 1 1 1.42-1.42L10.5 13.09l4.79-4.8a1 1 0 0 1 1.42 1.42z"/></svg>
                     Instant Share Link
                   </div>
                 </div>
@@ -169,7 +169,7 @@ export default function HowItWorks2() {
             >
               <p className="hiw2-stat-num">99.9%</p>
               <h4 className="hiw2-stat-title">High Accuracy</h4>
-              <p className="hiw2-stat-desc">Proprietary AI ensures dimensions are captured with precision for professional-grade results.</p>
+              <p className="hiw2-stat-desc">Proprietary AI captures every dimension with precision. Expect professional-grade results every time.</p>
             </motion.div>
             <motion.div
               className="hiw2-stat-card"

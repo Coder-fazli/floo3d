@@ -19,7 +19,7 @@ const FAQS = [
   },
   {
     q: "Is there a free trial available?",
-    a: "Yes! Every new user gets 3 free Starter Renders to experience the power of Floo3D. No credit card required to begin your first project.",
+    a: "Yes! Every new user gets 10 free Starter Renders to experience the power of Floo3D. No credit card required to begin your first project.",
   },
 ];
 
@@ -40,48 +40,37 @@ export default function FAQ() {
 
           <div className="faq-list">
             {FAQS.map((faq, i) => (
-              <button
+              <div
                 key={i}
-                className={`faq-trigger${active === i ? " faq-trigger-active" : ""}`}
-                onClick={() => setActive(active === i ? null : i)}
+                className={`faq-item${active === i ? " faq-item-open" : ""}`}
               >
-                <span className="faq-q">{faq.q}</span>
-                <span className={`faq-arrow${active === i ? " faq-arrow-active" : ""}`}>
-                  <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                  </svg>
-                </span>
-              </button>
+                <button
+                  className="faq-trigger"
+                  onClick={() => setActive(active === i ? null : i)}
+                >
+                  <span className="faq-q">{faq.q}</span>
+                  <span className={`faq-arrow${active === i ? " faq-arrow-active" : ""}`}>
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                    </svg>
+                  </span>
+                </button>
+                <AnimatePresence initial={false}>
+                  {active === i && (
+                    <motion.div
+                      className="faq-answer-body"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+                      style={{ overflow: "hidden" }}
+                    >
+                      <p className="faq-answer-text">{faq.a}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             ))}
-          </div>
-
-          <div className="faq-answer-area">
-            <AnimatePresence mode="wait">
-              {active === null ? (
-                <motion.p
-                  key="placeholder"
-                  className="faq-placeholder"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  Click a question above to see the magic...
-                </motion.p>
-              ) : (
-                <motion.div
-                  key={active}
-                  className="faq-answer-card"
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -12 }}
-                  transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-                >
-                  <div className="faq-answer-deco" />
-                  <p className="faq-answer-text">{FAQS[active].a}</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
         </div>
 

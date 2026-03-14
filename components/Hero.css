@@ -328,7 +328,7 @@
     align-items: center;
 }
 
-.sh-avatar {
+.sh-avatar, img.sh-avatar {
     width: 2rem;
     height: 2rem;
     border-radius: 9999px;
@@ -338,8 +338,7 @@
 
 .sh-avatar:first-child { margin-left: 0; }
 
-.sh-av1 { background: #94a3b8; }
-.sh-av2 { background: #f59e0b; }
+img.sh-avatar { object-fit: cover; display: block; }
 
 .sh-av-count {
     background: #ec5b13;
@@ -393,6 +392,9 @@
     .sh-grid {
         grid-template-columns: 1fr;
     }
+
+    .sh-card:first-child { order: 2; }
+    .sh-card:last-child  { order: 1; }
 
     .sh-title {
         font-size: 2rem !important;

@@ -348,5 +348,38 @@
 }
 
 @media (max-width: 640px) {
-  .rp-grid { grid-template-columns: 1fr; }
+  .rp-section {
+    padding: 3rem 0 0;
+  }
+
+  .rp-inner {
+    padding: 0;
+  }
+
+  .rp-header {
+    padding: 0 1.5rem;
+  }
+
+  .rp-grid {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 1rem;
+    padding: 0 1.5rem 1.5rem;
+    grid-template-columns: unset;
+    justify-content: unset;
+    scrollbar-width: none;
+  }
+
+  .rp-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .rp-card {
+    flex: 0 0 80vw;
+    max-width: 320px;
+    scroll-snap-align: start;
+  }
 }

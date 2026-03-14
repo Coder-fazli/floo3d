@@ -272,8 +272,10 @@ export default function Hero({ onUploadComplete, demoOriginal, demoRender }: Her
             <div className="sh-card-footer">
               <p>Slide to see the magic: From flat blueprints to immersive 3D environments in seconds.</p>
               <div className="sh-avatars">
-                <div className="sh-avatar sh-av1" />
-                <div className="sh-avatar sh-av2" />
+                <img src="/avatars/female1.jpg" className="sh-avatar" alt="user" />
+                <img src="/avatars/female2.jpg" className="sh-avatar" alt="user" />
+                <img src="/avatars/av4.jpg" className="sh-avatar" alt="user" />
+                <img src="/avatars/av7.jpg" className="sh-avatar" alt="user" />
                 <div className="sh-avatar sh-av-count">+12k</div>
               </div>
             </div>

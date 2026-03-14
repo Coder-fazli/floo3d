@@ -58,7 +58,7 @@
 
 /* Vertical connector line */
 .hiw2-line {
-  display: none;
+  display: block;
   position: absolute;
   left: 50%;
   top: 0;
@@ -196,9 +196,7 @@
 }
 
 .hiw2-check-icon {
-  font-size: 1.25rem;
-  font-variation-settings: 'FILL' 1;
-  color: #22c55e;
+  flex-shrink: 0;
 }
 
 /* Image card */
@@ -365,8 +363,6 @@
 
 /* Responsive */
 @media (min-width: 1024px) {
-  .hiw2-line { display: block; }
-
   .hiw2-step-row {
     flex-direction: row;
     gap: 4rem;
@@ -393,7 +389,79 @@
 }
 
 @media (max-width: 768px) {
+  .hiw2-section {
+    padding: 3rem 1rem 0;
+  }
+
+  .hiw2-header {
+    margin: 0 auto 3rem;
+  }
+
+  .hiw2-steps {
+    gap: 3.5rem;
+  }
+
+  .hiw2-step-row {
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .hiw2-step-content {
+    width: 100%;
+    text-align: center;
+  }
+
+  .hiw2-icon-box {
+    margin: 0 auto 1rem;
+  }
+
+  .hiw2-tags,
+  .hiw2-checks,
+  .hiw2-speed {
+    justify-content: center;
+  }
+
+  .hiw2-img-card,
+  .hiw2-ai-card {
+    width: 100%;
+    aspect-ratio: 4/3;
+  }
+
+  .hiw2-num {
+    width: 3.25rem;
+    height: 3.25rem;
+    font-size: 1.25rem;
+  }
+
+  .hiw2-stats {
+    padding: 3rem 0.75rem;
+  }
+
   .hiw2-stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .hiw2-stat-card:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .hiw2-stat-card {
+    padding: 1.25rem;
+  }
+
+
+  .hiw2-stat-num {
+    font-size: 1.75rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .hiw2-stat-title {
+    font-size: 0.95rem;
+    margin: 0 0 0.35rem;
+  }
+
+  .hiw2-stat-desc {
+    font-size: 0.8rem;
   }
 }
