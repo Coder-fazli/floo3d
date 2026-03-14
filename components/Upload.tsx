@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useUser } from '@clerk/nextjs';
-import { CheckCircle2, ImageIcon, Upload as UploadIcon } from 'lucide-react';
+import { CheckCircle2, ImageIcon, CloudUpload, CheckCircle } from 'lucide-react';
 import { PROGRESS_INTERVAL_MS, PROGRESS_STEP, REDIRECT_DELAY_MS } from '@/lib/constants';
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
@@ -113,16 +113,24 @@ const Upload = ({ onComplete, onError }: UploadProps) => {
 
           <div className="drop-content">
             <div className="drop-icon">
-              <UploadIcon size={20} />
+              <CloudUpload size={36} />
             </div>
-            <p>{isSignedIn ? (
-              "Click to upload or just drag and drop"
-            ) : (
-              "Sign in to upload your floor plan"
-            )}</p>
+            <p>{isSignedIn ? "Drag & drop your file here" : "Sign in to upload"}</p>
             <p className="help">
-              JPG, PNG only · Max 10 MB
+              {isSignedIn
+                ? "Drag and drop your file (JPG, PNG) here. Max file size: 10MB."
+                : "You need to be signed in to upload files."}
             </p>
+            {isSignedIn && (
+              <>
+                <div className="drop-browse">Browse Files</div>
+                <div className="drop-badges">
+                  <span className="drop-badge"><CheckCircle size={11} /> JPG</span>
+                  <span className="drop-badge"><CheckCircle size={11} /> PNG</span>
+                  <span className="drop-badge"><CheckCircle size={11} /> Max 10MB</span>
+                </div>
+              </>
+            )}
           </div>
         </div>
       ) : (

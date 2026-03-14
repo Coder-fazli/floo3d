@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { getProjects, getCredits } from "@/lib/actions";
-import { CloudUpload, Calendar, Eye, ArrowUpRight, FileText, Wallet, X, CreditCard, Rocket, LayoutTemplate, Camera, Box } from "lucide-react";
+import { Calendar, Eye, ArrowUpRight, FileText, Wallet, X, CreditCard, Rocket, LayoutTemplate, Camera, TreePine } from "lucide-react";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -18,7 +18,7 @@ export default function Dashboard() {
   const [credits, setCredits] = useState<number | null>(null);
   const [showBanner, setShowBanner] = useState(false);
   const [fileError, setFileError] = useState<string | null>(null);
-  const [inputType, setInputType] = useState<"floor-plan" | "room-photo" | "existing-render">("floor-plan");
+  const [inputType, setInputType] = useState<"floor-plan" | "room-photo" | "outdoor">("floor-plan");
   const [renderStyle, setRenderStyle] = useState("Modern");
   const isUploading = useRef(false);
 
@@ -135,39 +135,34 @@ export default function Dashboard() {
         ) : (
           <div className="nr-flow">
 
-            {/* Step 1 — Input Type */}
+            {/* Steps 1 + 2 combined */}
             <section className="nr-section">
               <div className="nr-section-head">
                 <div className="nr-step-num">1</div>
-                <h2 className="nr-section-title">Select Input Type</h2>
-                <svg className="nr-check-done" width="22" height="22" viewBox="0 0 24 24" fill="#ec5b13"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm4.71 7.71-5.5 5.5a1 1 0 0 1-1.42 0l-2.5-2.5a1 1 0 1 1 1.42-1.42L10.5 13.09l4.79-4.8a1 1 0 0 1 1.42 1.42z"/></svg>
+                <h2 className="nr-section-title">Input Type</h2>
               </div>
-              <div className="nr-type-grid">
+              <div className="nr-type-seg">
                 {[
-                  { id: "floor-plan", icon: <LayoutTemplate size={32} />, label: "2D Floor Plan", desc: "Top-down architectural drawing" },
-                  { id: "room-photo", icon: <Camera size={32} />, label: "Room Photo", desc: "Photo of an existing room" },
-                  { id: "existing-render", icon: <Box size={32} />, label: "Existing Render", desc: "Already rendered 3D image" },
+                  { id: "floor-plan", icon: <LayoutTemplate size={15} />, label: "2D Floor Plan" },
+                  { id: "room-photo", icon: <Camera size={15} />, label: "Room Photo" },
+                  { id: "outdoor", icon: <TreePine size={15} />, label: "Outdoor / Garden" },
                 ].map((t) => (
                   <div
                     key={t.id}
-                    className={`nr-type-card${inputType === t.id ? " nr-type-card-active" : ""}`}
+                    className={`nr-type-seg-item${inputType === t.id ? " nr-type-seg-item-active" : ""}`}
                     onClick={() => setInputType(t.id as any)}
                   >
-                    <div className={`nr-type-icon${inputType === t.id ? " nr-type-icon-active" : ""}`}>
-                      {t.icon}
-                    </div>
-                    <h3 className="nr-type-label">{t.label}</h3>
-                    <p className="nr-type-desc">{t.desc}</p>
+                    {t.icon}
+                    <span>{t.label}</span>
                   </div>
                 ))}
               </div>
-            </section>
 
-            {/* Step 2 — Style */}
-            <section className="nr-section">
-              <div className="nr-section-head">
+              <div className="nr-divider" />
+
+              <div className="nr-section-head" style={{ marginBottom: "0.6rem" }}>
                 <div className="nr-step-num">2</div>
-                <h2 className="nr-section-title">Style Selector</h2>
+                <h2 className="nr-section-title">Style</h2>
               </div>
               <div className="nr-styles">
                 {["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"].map((s) => (
@@ -186,20 +181,11 @@ export default function Dashboard() {
             <section className="nr-section">
               <div className="nr-section-head">
                 <div className="nr-step-num">3</div>
-                <h2 className="nr-section-title">Upload Asset</h2>
+                <h2 className="nr-section-title">
+                  Upload your {inputType === "floor-plan" ? "2D Floor Plan" : inputType === "room-photo" ? "Room Photo" : "Outdoor Photo"}
+                </h2>
               </div>
-              <div className="db-upload-zone">
-                <div className="db-upload-icon-wrap">
-                  <CloudUpload size={36} className="db-upload-icon" />
-                </div>
-                <h3 className="db-upload-title">
-                  Upload your {inputType === "floor-plan" ? "2D Floor Plan" : inputType === "room-photo" ? "Room Photo" : "Existing Render"}
-                </h3>
-                <p className="db-upload-desc">
-                  Drag and drop your file (JPG, PNG) here. <strong>Max file size: 10MB.</strong>
-                </p>
-                <Upload onComplete={handleUploadComplete} onError={setFileError} />
-              </div>
+              <Upload onComplete={handleUploadComplete} onError={setFileError} />
             </section>
 
           </div>

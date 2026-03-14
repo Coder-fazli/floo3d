@@ -103,14 +103,20 @@ body {
         @apply w-full;
 
         .dropzone {
-            @apply relative h-48 rounded-xl border-2 border-dashed transition-all duration-300 flex flex-col items-center justify-center cursor-pointer bg-zinc-50 border-zinc-200 hover:border-zinc-300 hover:bg-zinc-100;
+            @apply relative rounded-2xl border-2 border-dashed transition-all duration-300 flex flex-col items-center justify-center cursor-pointer bg-white border-slate-300;
+            padding: 3rem 2rem;
+            text-align: center;
+
+            &:hover {
+                border-color: #ec5b13;
+                background: rgba(236, 91, 19, 0.03);
+                .drop-icon { transform: scale(1.06); }
+            }
 
             &.is-dragging {
-                @apply border-primary bg-orange-50;
-
-                .drop-icon {
-                    @apply bg-orange-100 text-primary;
-                }
+                border-color: #ec5b13;
+                background: rgba(236, 91, 19, 0.05);
+                .drop-icon { background: rgba(236, 91, 19, 0.18); transform: scale(1.06); }
             }
 
             .drop-input {
@@ -121,20 +127,57 @@ body {
                 @apply flex flex-col items-center pointer-events-none;
 
                 .drop-icon {
-                    @apply w-12 h-12 rounded-full flex items-center justify-center mb-4 transition-colors bg-zinc-200 text-zinc-500;
+                    width: 5rem;
+                    height: 5rem;
+                    border-radius: 9999px;
+                    background: rgba(236, 91, 19, 0.1);
+                    color: #ec5b13;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-bottom: 1.25rem;
+                    transition: background 0.2s, transform 0.2s;
                 }
 
                 p {
-                    @apply text-zinc-900 font-bold text-sm mb-1;
+                    @apply text-slate-900 font-bold text-base mb-1;
                 }
 
                 .help {
-                    @apply text-zinc-500 text-xs;
+                    color: #64748b;
+                    font-size: 0.85rem;
+                    max-width: 22rem;
+                    line-height: 1.5;
+                    margin: 0 0 1.5rem;
                 }
-            }
 
-            &:not(.is-dragging):hover .drop-icon {
-                @apply bg-zinc-300 text-black;
+                .drop-browse {
+                    background: #ec5b13;
+                    color: #ffffff;
+                    font-weight: 700;
+                    font-size: 0.875rem;
+                    padding: 0.7rem 2.25rem;
+                    border-radius: 0.75rem;
+                    margin-bottom: 1.25rem;
+                    box-shadow: 0 4px 14px rgba(236, 91, 19, 0.25);
+                    pointer-events: none;
+                }
+
+                .drop-badges {
+                    display: flex;
+                    gap: 0.75rem;
+                    align-items: center;
+
+                    .drop-badge {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.3rem;
+                        font-size: 0.72rem;
+                        font-weight: 700;
+                        color: #94a3b8;
+                        letter-spacing: 0.04em;
+                    }
+                }
             }
         }
 
