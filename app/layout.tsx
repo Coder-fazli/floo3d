@@ -10,12 +10,12 @@ const instrumentSerif = Instrument_Serif({ subsets: ["latin"], weight: "400", va
 
 export async function generateMetadata() {
   const s = await getSiteSettings();
-  const title = s?.metaTitle ?? "Floo3D – AI 2D to 3D Floor Plan Renderer";
-  const description = s?.metaDescription ?? "Transform any 2D floor plan into a stunning 3D render in seconds.";
+  const title = s?.metaTitle ?? "Floo3D – Convert 2D Floor Plans to 3D Renders with AI";
+  const description = s?.metaDescription ?? "Upload any 2D floor plan and get a photorealistic 3D render in under 60 seconds. Free to start. No 3D software needed. Used by architects, designers & real estate pros.";
   return {
     title,
     description,
-    robots: { index: false, follow: false },
+    robots: { index: true, follow: true },
     icons: {
       icon: "/favicon.png",
       shortcut: "/favicon.png",
