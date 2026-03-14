@@ -11,7 +11,7 @@ import "yet-another-react-lightbox/styles.css";
 import SocialButton from "@/components/kokonutui/social-button";
 import Image from "next/image";
 import Link from "next/link";
-import { Download, RefreshCcw, Maximize2, ZoomIn, Clock, ChevronRight } from "lucide-react";
+import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, Clock, ChevronRight } from "lucide-react";
 
 export default function VisualizerClient() {
   const router = useRouter();
@@ -25,7 +25,8 @@ export default function VisualizerClient() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [modalType, setModalType] = useState<"error" | "credits" | null>(null);
   const [zoomLevel, setZoomLevel] = useState(1);
-  const cycleZoom = () => setZoomLevel(z => z >= 2 ? 1 : parseFloat((z + 0.5).toFixed(1)));
+  const zoomIn  = () => setZoomLevel(z => parseFloat(Math.min(z + 0.25, 3).toFixed(2)));
+  const zoomOut = () => setZoomLevel(z => parseFloat(Math.max(z - 0.25, 0.5).toFixed(2)));
 
   useEffect(() => {
     if (id) getProject(id as string).then(setProject);
@@ -239,9 +240,12 @@ export default function VisualizerClient() {
             <button className="viz-toolbar-btn" onClick={() => setLightboxOpen(true)} title="Fullscreen">
               <Maximize2 size={16} />
             </button>
-            <button className="viz-toolbar-btn" title={`Zoom ${zoomLevel}x`} onClick={cycleZoom}>
+            <button className="viz-toolbar-btn" title="Zoom out" onClick={zoomOut} disabled={zoomLevel <= 0.5}>
+              <ZoomOut size={16} />
+            </button>
+            <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "#64748b", minWidth: "2.5rem", textAlign: "center" }}>{Math.round(zoomLevel * 100)}%</span>
+            <button className="viz-toolbar-btn" title="Zoom in" onClick={zoomIn} disabled={zoomLevel >= 3}>
               <ZoomIn size={16} />
-              {zoomLevel > 1 && <span style={{ fontSize: "0.6rem", fontWeight: 700, marginLeft: 2 }}>{zoomLevel}x</span>}
             </button>
           </div>
 

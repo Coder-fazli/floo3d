@@ -90,7 +90,7 @@ export default function Dashboard() {
         {/* Welcome header */}
         <div className="db-welcome">
           <div>
-            <h2 className="db-welcome-title">Welcome back, {user.firstName ?? "there"} 👋</h2>
+            <h2 className="db-welcome-title">Welcome back, {user.username ?? "there"} 👋</h2>
             <p className="db-welcome-sub">Ready to transform another floor plan today?</p>
           </div>
           <div className="db-welcome-actions">

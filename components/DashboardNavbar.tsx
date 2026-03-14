@@ -64,7 +64,7 @@ export default function DashboardNavbar() {
 
           <button className="dbnav-user" onClick={() => openUserProfile()}>
             <div className="dbnav-user-info">
-              <p className="dbnav-user-name">{user?.firstName ?? "User"}</p>
+              <p className="dbnav-user-name">{user?.username ?? "User"}</p>
               <p className="dbnav-user-plan">Pro Plan</p>
             </div>
             <div className="dbnav-avatar">
@@ -72,7 +72,7 @@ export default function DashboardNavbar() {
                 <img src={user.imageUrl} alt="avatar" className="dbnav-avatar-img" />
               ) : (
                 <span className="dbnav-avatar-fallback">
-                  {user?.firstName?.[0] ?? "U"}
+                  {user?.username?.[0]?.toUpperCase() ?? "U"}
                 </span>
               )}
             </div>
