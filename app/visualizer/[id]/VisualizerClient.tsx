@@ -274,14 +274,6 @@ export default function VisualizerClient() {
                 <span className="viz-insights-key">Rendered</span>
                 <span className="viz-insights-val">{project?.updatedAt ? new Date(project.updatedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—"}</span>
               </div>
-              <div className="viz-insights-row">
-                <span className="viz-insights-key">Output Format</span>
-                <span className="viz-insights-val">PNG (HD)</span>
-              </div>
-              <div className="viz-insights-row">
-                <span className="viz-insights-key">Powered by</span>
-                <span className="viz-insights-val">Gemini AI</span>
-              </div>
             </div>
             <hr className="viz-insights-divider" />
             <button className="viz-history-btn" onClick={() => router.push("/dashboard")}>
