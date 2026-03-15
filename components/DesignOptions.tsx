@@ -3,6 +3,7 @@
 import "./DesignOptions.css";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
+import { ReactCompareSlider, ReactCompareSliderHandle, ReactCompareSliderImage } from "react-compare-slider";
 
 function useFadeIn() {
   const ref = useRef<HTMLDivElement>(null);
@@ -22,9 +23,23 @@ function useFadeIn() {
 function ImgCard({ before, after, badge }: { before: string; after: string; badge?: string }) {
   return (
     <div className="do-img-card">
-      <div className="do-layer do-layer-before" style={{ backgroundImage: `url(${before})` }} />
-      <div className="do-layer do-layer-after"  style={{ backgroundImage: `url(${after})` }} />
-      <div className="do-scanner-line" />
+      <ReactCompareSlider
+        defaultValue={60}
+        style={{ width: "100%", height: "100%" }}
+        handle={
+          <ReactCompareSliderHandle
+            buttonStyle={{
+              background: "#fff",
+              border: "none",
+              boxShadow: "0 2px 16px rgba(0,0,0,0.25)",
+              color: "#ec5b13",
+            }}
+            linesStyle={{ background: "#fff", width: 2, opacity: 0.7 }}
+          />
+        }
+        itemOne={<ReactCompareSliderImage src={before} alt="Before" style={{ objectFit: "cover" }} />}
+        itemTwo={<ReactCompareSliderImage src={after}  alt="After"  style={{ objectFit: "cover" }} />}
+      />
       <span className="do-label do-label-before">Before</span>
       <span className="do-label do-label-after">After</span>
       {badge && <div className="do-img-badge">{badge}</div>}
@@ -131,7 +146,7 @@ export default function DesignOptions() {
         <div className="do-item do-fade" ref={ref04}>
           <div className="do-flex-row-rev">
             <div className="do-flex-img-60">
-              <ImgCard before="/card-outdoor-before.webp" after="/card-outdoor-after.webp" />
+              <ImgCard before="/card-outdoor-before.avif" after="/card-outdoor-after.avif" />
             </div>
             <div className="do-flex-text-40">
               <span className="do-eyebrow-sm">Final Chapter</span>

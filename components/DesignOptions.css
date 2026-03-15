@@ -160,57 +160,10 @@
   pointer-events: none;
 }
 
-/* Clip-path reveal layers */
-.do-layer {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  transition: clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s ease;
-}
-
-.do-layer-after {
-  z-index: 1;
-  clip-path: inset(0 100% 0 0);
-}
-
-.do-layer-before {
-  z-index: 2;
-  clip-path: inset(0 0 0 0);
-}
-
-.do-img-card:hover .do-layer-before {
-  clip-path: inset(0 0 0 100%);
-  transform: scale(1.04);
-}
-
-.do-img-card:hover .do-layer-after {
-  clip-path: inset(0 0% 0 0);
-  transform: scale(1.04);
-}
-
-/* ── Scanner line (same as FAQ) ── */
-.do-scanner-line {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: #ec5b13;
-  box-shadow: 0 0 16px rgba(236, 91, 19, 0.8);
-  z-index: 20;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
-  animation: doScan 2.5s ease-in-out infinite;
-}
-
-.do-img-card:hover .do-scanner-line {
-  opacity: 1;
-}
-
-@keyframes doScan {
-  0%, 100% { top: 0%; }
-  50%       { top: 100%; }
+/* ReactCompareSlider fills the card */
+.do-img-card > div[data-rcs="root"] {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 /* ── Before/After labels (same style as FAQ) ── */
@@ -229,26 +182,16 @@
 
 .do-label-before {
   left: 0.875rem;
-  background: rgba(26, 26, 26, 0.08);
-  color: #1a1a1a;
-  border: 1px solid rgba(26, 26, 26, 0.06);
-  transition: opacity 0.4s;
-}
-
-.do-img-card:hover .do-label-before {
-  opacity: 0;
+  background: rgba(255, 255, 255, 0.85);
+  color: #0f172a;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(4px);
 }
 
 .do-label-after {
   right: 0.875rem;
   background: #ec5b13;
   color: #ffffff;
-  opacity: 0;
-  transition: opacity 0.4s;
-}
-
-.do-img-card:hover .do-label-after {
-  opacity: 1;
 }
 
 /* Image badge */

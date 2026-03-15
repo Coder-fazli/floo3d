@@ -157,7 +157,7 @@ export default function Dashboard() {
                 {[
                   { id: "floor-plan", imgBefore: "/faq-3d.png", imgAfter: "/faq-2d.jpg", label: "2D Floor Plan to 3D", desc: "Blueprint to 3D architectural render" },
                   { id: "room-photo", imgBefore: "/card-room-after.webp", imgAfter: "/card-room-before.webp", label: "Room Style Transfer", desc: "Redesign any room with AI" },
-                  { id: "outdoor", imgBefore: "/card-outdoor-before.webp", imgAfter: "/card-outdoor-after.webp", label: "Outdoor / Garden", desc: "Exterior & garden design" },
+                  { id: "outdoor", imgBefore: "/card-outdoor-before.avif", imgAfter: "/card-outdoor-after.avif", label: "Outdoor / Garden", desc: "Exterior & garden design" },
                   { id: "empty-room", imgBefore: "/card-empty-after.webp", imgAfter: "/card-empty-before.webp", label: "Empty the Room", desc: "Clear furniture instantly to plan new layouts." },
                 ].map((t) => (
                   <div
