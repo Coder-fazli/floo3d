@@ -236,8 +236,18 @@ export default function VisualizerClient() {
             <NextImage src={project.originalImageUrl} alt="Original" fill style={{ objectFit: "cover" }} />
           ) : null}
 
-          <div className="viz-compare-label viz-label-left">Original 2D Plan</div>
-          <div className="viz-compare-label viz-label-right">AI 3D Render</div>
+          <div className="viz-compare-label viz-label-left">
+            {project?.inputType === "room-photo" ? "Original Room" :
+             project?.inputType === "outdoor"    ? "Original Outdoor" :
+             project?.inputType === "empty-room" ? "Furnished Room" :
+             "Original 2D Plan"}
+          </div>
+          <div className="viz-compare-label viz-label-right">
+            {project?.inputType === "room-photo" ? "AI Redesigned" :
+             project?.inputType === "outdoor"    ? "AI Outdoor Design" :
+             project?.inputType === "empty-room" ? "Emptied Room" :
+             "AI 3D Render"}
+          </div>
 
           <div className="viz-compare-toolbar">
             <button className="viz-toolbar-btn" onClick={() => setLightboxOpen(true)} title="Fullscreen">
@@ -263,25 +273,6 @@ export default function VisualizerClient() {
           )}
         </div>
 
-        {/* Toolbar row */}
-        <div className="viz-toolbar-row" style={{ justifyContent: "flex-end" }}>
-
-          {/* Insights card */}
-          <div className="viz-insights-card">
-            <h3 className="viz-insights-title">Project Insights</h3>
-            <div className="viz-insights-list">
-              <div className="viz-insights-row">
-                <span className="viz-insights-key">Rendered</span>
-                <span className="viz-insights-val">{project?.updatedAt ? new Date(project.updatedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—"}</span>
-              </div>
-            </div>
-            <hr className="viz-insights-divider" />
-            <button className="viz-history-btn" onClick={() => router.push("/dashboard")}>
-              <RefreshCcw size={14} /> Back to Dashboard
-            </button>
-          </div>
-
-        </div>
 
       </main>
 
