@@ -1,6 +1,6 @@
 "use client";
 
-import "./Hero.css";
+import "./Hero2DFloorTo3D.css";
 import NextImage from "next/image";
 import { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";

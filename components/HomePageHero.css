@@ -1,0 +1,417 @@
+/* ── HomePageHero (hph-) ── */
+
+.hph-section {
+  position: relative;
+  padding: 5rem 0 0;
+  overflow: hidden;
+  background: #fcfcfd;
+}
+
+/* Ambient blobs */
+.hph-blob-orange {
+  position: absolute;
+  top: -24rem;
+  right: -24rem;
+  width: 50rem;
+  height: 50rem;
+  background: rgba(251, 146, 60, 0.12);
+  border-radius: 9999px;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hph-blob-blue {
+  position: absolute;
+  bottom: -12rem;
+  left: -12rem;
+  width: 38rem;
+  height: 38rem;
+  background: rgba(219, 234, 254, 0.5);
+  border-radius: 9999px;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Main grid */
+.hph-grid {
+  position: relative;
+  z-index: 1;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .hph-grid {
+    grid-template-columns: 4fr 8fr;
+    gap: 4rem;
+  }
+}
+
+/* ── Left: Content ── */
+.hph-content {
+  animation: hphFadeDown 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes hphFadeDown {
+  from { opacity: 0; transform: translateY(-24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Live badge */
+.hph-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(209, 213, 219, 0.8);
+  padding: 0.4rem 1rem;
+  border-radius: 9999px;
+  margin-bottom: 2rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.hph-badge-dot-wrap {
+  position: relative;
+  width: 0.5rem;
+  height: 0.5rem;
+  flex-shrink: 0;
+}
+
+.hph-badge-ping {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: rgba(251, 146, 60, 0.75);
+  animation: hphPing 1.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes hphPing {
+  0%    { transform: scale(1);   opacity: 0.75; }
+  75%, 100% { transform: scale(2.2); opacity: 0; }
+}
+
+.hph-badge-dot {
+  position: relative;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: #ec5b13;
+}
+
+.hph-badge-text {
+  font-size: 0.625rem;
+  font-weight: 800;
+  color: rgba(15, 23, 42, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+/* Heading */
+.hph-heading {
+  font-size: clamp(2.75rem, 6vw, 5.25rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: #0f172a;
+  margin: 0 0 1.75rem;
+}
+
+.hph-heading-accent {
+  color: #ec5b13;
+}
+
+/* Subtext */
+.hph-sub {
+  font-size: 1.1rem;
+  color: #64748b;
+  line-height: 1.65;
+  max-width: 32rem;
+  font-weight: 500;
+  margin: 0 0 2.5rem;
+}
+
+/* CTA buttons */
+.hph-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+@media (min-width: 480px) {
+  .hph-btns { flex-direction: row; }
+}
+
+.hph-btn-primary {
+  padding: 1.1rem 2.25rem;
+  background: #ec5b13;
+  color: #ffffff;
+  border: none;
+  border-radius: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 20px 40px -8px rgba(236, 91, 19, 0.35);
+  transition: box-shadow 0.2s, transform 0.2s;
+  font-family: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hph-btn-primary:hover {
+  box-shadow: 0 24px 48px -8px rgba(236, 91, 19, 0.45);
+  transform: translateY(-2px);
+}
+
+.hph-btn-secondary {
+  padding: 1.1rem 2.25rem;
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  transition: border-color 0.2s, background 0.2s;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hph-btn-secondary:hover {
+  border-color: #ec5b13;
+  background: rgba(251, 146, 60, 0.04);
+}
+
+/* Social proof */
+.hph-social {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  border-top: 1px solid rgba(209, 213, 219, 0.5);
+  padding-top: 2rem;
+}
+
+.hph-avatars {
+  display: flex;
+  margin-right: 0.25rem;
+}
+
+.hph-avatar {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  border: 3px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  object-fit: cover;
+  margin-left: -0.75rem;
+}
+
+.hph-avatars .hph-avatar:first-child {
+  margin-left: 0;
+}
+
+.hph-social-text {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.2rem;
+}
+
+.hph-social-sub {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+
+/* ── Right: Slider ── */
+.hph-slider-wrap {
+  position: relative;
+}
+
+.hph-slider-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2rem;
+  aspect-ratio: 4/3;
+  border: 10px solid #ffffff;
+  box-shadow:
+    0 32px 64px -16px rgba(0,0,0,0.12),
+    0 0 0 1px rgba(209,213,219,0.5);
+}
+
+/* Floating glass card */
+.hph-float-card {
+  position: absolute;
+  bottom: -2rem;
+  left: -2.5rem;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  padding: 1.25rem 1.5rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 24px 48px -8px rgba(0,0,0,0.12);
+  z-index: 30;
+  max-width: 13rem;
+  display: none;
+  animation: hphFloat 6s ease-in-out infinite;
+}
+
+@keyframes hphFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+@media (min-width: 768px) {
+  .hph-float-card { display: block; }
+}
+
+.hph-float-row {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-bottom: 0.625rem;
+}
+
+.hph-float-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background: rgba(34, 197, 94, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hph-float-label {
+  font-size: 0.5625rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #0f172a;
+}
+
+.hph-float-bar-bg {
+  height: 0.5rem;
+  width: 100%;
+  background: #f1f5f9;
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.hph-float-bar-fill {
+  height: 100%;
+  width: 85%;
+  background: #ec5b13;
+  border-radius: 9999px;
+}
+
+.hph-float-sub {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Hover glow behind slider */
+.hph-slider-glow {
+  position: absolute;
+  inset: -1rem;
+  background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+  border-radius: 2.5rem;
+  filter: blur(1rem);
+  opacity: 0;
+  transition: opacity 0.7s;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.hph-slider-wrap:hover .hph-slider-glow {
+  opacity: 1;
+}
+
+/* ── Feature cards below ── */
+.hph-features {
+  position: relative;
+  z-index: 1;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 4rem 2rem 3rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .hph-features { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .hph-features { grid-template-columns: repeat(4, 1fr); }
+}
+
+.hph-feat-card {
+  background: #ffffff;
+  padding: 2.25rem;
+  border-radius: 2rem;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.hph-feat-card:hover {
+  border-color: #fbd5c0;
+  box-shadow: 0 20px 40px -8px rgba(236, 91, 19, 0.08);
+  transform: translateY(-4px);
+}
+
+.hph-feat-icon {
+  width: 3.25rem;
+  height: 3.25rem;
+  background: #f8fafc;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  transition: background 0.2s;
+  color: #ec5b13;
+}
+
+.hph-feat-card:hover .hph-feat-icon {
+  background: rgba(236, 91, 19, 0.08);
+}
+
+.hph-feat-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #0f172a;
+  margin: 0 0 0.625rem;
+}
+
+.hph-feat-desc {
+  font-size: 0.8125rem;
+  color: #64748b;
+  line-height: 1.65;
+  font-weight: 500;
+  margin: 0;
+}

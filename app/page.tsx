@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
+import HomePageHero from "@/components/HomePageHero";
 import DesignOptions from "@/components/DesignOptions";
 import HowItWorks2 from "@/components/HowItWorks2";
 import Blog from "@/components/Blog";
@@ -24,7 +24,7 @@ export default function Home() {
     <div className="home">
       <Navbar />
 
-      <Hero />
+      <HomePageHero />
 
       <DesignOptions />
 
