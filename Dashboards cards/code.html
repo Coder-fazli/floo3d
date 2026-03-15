@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Floo3D - Create New Render</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#1a1310",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Slider Reveal Effect */
+        .reveal-container {
+            position: relative;
+            overflow: hidden;
+        }
+        .reveal-before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            background-size: cover;
+            background-position: center;
+        }
+        .reveal-after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            background-size: cover;
+            background-position: center;
+        }
+        .reveal-container:hover .reveal-before {
+            transform: translateX(-100%);
+        }
+        .reveal-divider {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            z-index: 20;
+            left: 100%;
+            transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal-container:hover .reveal-divider {
+            left: 0;
+        }
+        .reveal-container::after {
+            content: 'VIEW AFTER';
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            font-size: 8px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            z-index: 25;
+            opacity: 0.8;
+            pointer-events: none;
+        }</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 lg:px-12 py-2.5 sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<div class="size-7 flex items-center justify-center bg-primary rounded text-white">
+<span class="material-symbols-outlined text-xl">layers</span>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-tight">Floo3D</h2>
+</div>
+<div class="flex flex-1 justify-end gap-5 items-center">
+<nav class="hidden md:flex gap-5">
+<a class="text-xs font-semibold hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-xs font-semibold text-primary" href="#">Projects</a>
+<a class="text-xs font-semibold hover:text-primary transition-colors" href="#">Assets</a>
+</nav>
+<div class="flex gap-1.5">
+<button class="flex items-center justify-center rounded-lg h-8 w-8 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 transition-colors">
+<span class="material-symbols-outlined text-lg">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-8 w-8 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 transition-colors">
+<span class="material-symbols-outlined text-lg">settings</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8 border border-primary/20" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBAmo9PlxCR0ZJLKc5Wmygp_IXOCAGzvr5pvm3ik_jjESl-dXbiPcSW5nRxc-nddbRoSQWsyM1jDR-gyPG8c0lGJSDdr7KWcCf-MNGJIsVAnJpBpgT5Cm1tnZdPfPLTZ4b0OtT29HGxqGLX1JerQeLA20SjLxTAI0yILFktDSMvmf_vUeBaj6mnMXv9DBEINXEx9g3J-1qXpKbB7g5u43WFZl6M_sRVianVyDf0dK3cWslP7MsltJSO0-iXHktQx6TTLoJdh420_VaT");'></div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 w-full max-w-5xl mx-auto px-6 py-8">
+<!-- Header Section -->
+<div class="mb-8">
+<nav class="flex items-center gap-1.5 text-xs font-medium text-slate-400 dark:text-slate-500 mb-2">
+<a class="hover:text-primary transition-colors" href="#">Projects</a>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<span class="text-slate-900 dark:text-slate-100">New Render</span>
+</nav>
+<h1 class="text-3xl font-extrabold tracking-tight">Create New Render</h1>
+</div>
+<div class="space-y-6">
+<!-- STEP 1: Input Type Selector (Redesigned with Slider Visuals) -->
+<section class="bg-white dark:bg-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 mb-6">
+<div class="size-6 rounded-full bg-primary flex items-center justify-center text-white font-bold text-[10px]">1</div>
+<h2 class="text-sm font-bold uppercase tracking-wider text-slate-500">Select Input Type</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- 2D Floor Plan Card (Selected) -->
+<div class="group cursor-pointer flex flex-col gap-3">
+<div class="reveal-container aspect-[4/3] rounded-xl bg-slate-100 dark:bg-slate-800 border-2 border-primary overflow-hidden relative shadow-sm">
+<div class="reveal-before bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCCEgdQUmqQzMAFQIkrzkySh2wmd5MnPjEhC44PmtQwu8qsR8GnsOPr1NU7TdfqooW0kwDwWLbdlbj8E3PV7-i8iyVK-m9Z5LaiJUzr4NKshM71dMWrNbdIQiSa1BbcdbjegPuOh97DY0LXThag5nFKCmB2T_S4RtzGlkNOYf2CxeuleyOygx_0y5TEJ2Oz-QuVm0HfviI_zP2ydVuFznu5nblCI7fvXMYe37k8HVK-vQHz4bUy_YTXniG2ctpBWFxsnUuPDbb_c1js');">
+<div class="absolute inset-0 bg-black/10"></div>
+</div>
+<div class="reveal-after bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAZqiHfvyXJRAfRsdPejCTEqYT79kUBeayjwLugSokHbJg0fNKS_pKmy1qnOSeERWyj4NteAd93yV9HtaPdVah-vRzg42ATdLyfMBNLgJfDIrXHqMQwnuePTwu86hnWAa0b9PAEZ_kBlEx_RtYHC0_of6jr8KgfOtCTzYasWvBb21WpkSCUexQcgVOFhsYkacj70r2sGjSGs0Is0a7Pw-SsQRQcDRkapG-Juwi2W2Xmafg26xdPmompH66c8vfFuzhA7mSDLIcs6G0W');"></div>
+<div class="reveal-divider"></div>
+<!-- Selection Badge -->
+<div class="absolute top-3 right-3 z-30 bg-primary text-white size-6 rounded-full flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-sm font-bold">check</span>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-900 dark:text-slate-100 flex items-center justify-between">
+        2D Floor Plan
+    </h3>
+<p class="text-[11px] text-slate-500 dark:text-slate-400">Blueprint to 3D architectural render</p>
+</div>
+</div>
+<!-- Room Photo Card -->
+<div class="group cursor-pointer flex flex-col gap-3">
+<div class="reveal-container aspect-[4/3] rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-primary/40 overflow-hidden relative transition-all shadow-sm">
+<div class="reveal-before" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA_Eb1TljXCE62wDXlDiQ-YIko_poMb2Q_wDYaSKUHQ8H5mvoyhoCGXBvEpvnTpHUdlVJjWQO9HAljE2x43hP0NvuBBd881gAst-CBTe_iTUnj73fLvETigReroE1msWfceVf3G0nMeRjR_BaugJRTFkMaBtFxmJWzkOiKR0_5BHWVgPX-3ZPhKKvFmIXCXflpNvSc70mp4C4k7TEibDwm4eCX3W6kCgaQA1n-y_rUUz41ow66-quARfC80rpxYeXhF7eCBEX_uMA7f');">
+<div class="absolute inset-0 bg-black/5"></div>
+</div>
+<div class="reveal-after" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAuuchcMCS5oox9LePRV-D9Q9S1MAHsfPDtEyDFbrKmSFAcPSpCjCUd_LtjK2CZelfUU8rMbhEFMkF5Lvk1zCge2YVPRkxxZhN7IZjE9dEHsVjLeEqo0dUxuRYfocvGYpcv6n6mmhFfDQ_r7iQpUpYVkvezQbEzQID_COZuwwt1kLI-j4N7xcXhNKsPGyXYSVo95AwdiHo7oimfDFZpcfbGt-ExIhzO4z_Th3jbL5GAZ0R9H0oJipAhfEQmDwr7vwj42o0Yf9qMVxIv');"></div>
+<div class="reveal-divider"></div>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-900 dark:text-slate-100">Room Photo</h3>
+<p class="text-[11px] text-slate-500 dark:text-slate-400">Real photo to stylized visualization</p>
+</div>
+</div>
+<!-- Existing Render Card -->
+<div class="group cursor-pointer flex flex-col gap-3">
+<div class="reveal-container aspect-[4/3] rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-primary/40 overflow-hidden relative transition-all shadow-sm">
+<div class="reveal-before" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDobNG_7SeZn8bIk2nIK99oj_vO68vrsgSJD2TkzLYE5uVsYUVJmIeiNdZSk4gp-VfGcc_sHAI6tD299imrverb3jGtS-dMwAYG9WGLuNNpSb2SU-E2juveXFUb13_muUB9Iuz2PHgq0q9AlIurctdA6acMwxMS81zBWnh3YnRKKqqomZLOVwsfhBV9bWPd62SK9R3NV_38frMBbUEviR0buE-OO1CoS7-tKMbmK74QZneXobXXZQZPQFiYQfCZJfvpmR95FFqZRSyK'); filter: grayscale(1) contrast(1.1); opacity: 0.8;">
+<div class="absolute inset-0 bg-black/10"></div>
+</div>
+<div class="reveal-after" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCVK5Lc8RRX2ahF2edKMsPYWYQPw1TFsyhSiMmBm9JweY06ZF5r4oJxmpnwkhxZxNuOzzubgoknzRwwh1Xl7g7DPY7c9Q8vaHhDJkeGDGWKcP-nIWARS7i5vcUpEb6U7-YJv9MAqym5hCz8jstyjD7iAfy5hZVlz5HH7RRErucUhAqwCgI0SiNyHarOpmVY9ZudWuv4BVH8I36RVJF9Fz90_RXlmN3-IF-2gJWINpZYumkh9SFpuF7BU1Kp8FMTua_1hDPkW548jxvO');"></div>
+<div class="reveal-divider"></div>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-900 dark:text-slate-100">Existing Render</h3>
+<p class="text-[11px] text-slate-500 dark:text-slate-400">Wireframe to full 3D production</p>
+</div>
+</div>
+</div>
+</section>
+<!-- STEP 2: Style Selector -->
+<section class="bg-white dark:bg-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 mb-4">
+<div class="size-6 rounded-full bg-primary flex items-center justify-center text-white font-bold text-[10px]">2</div>
+<h2 class="text-sm font-bold uppercase tracking-wider text-slate-500">Design Style</h2>
+</div>
+<div class="flex flex-nowrap overflow-x-auto pb-1 gap-2 no-scrollbar">
+<button class="flex-shrink-0 px-5 py-2 rounded-lg bg-primary text-white font-bold text-xs transition-all border border-primary">
+                            Modern
+                        </button>
+<button class="flex-shrink-0 px-5 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-all">
+                            Scandinavian
+                        </button>
+<button class="flex-shrink-0 px-5 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-all">
+                            Industrial
+                        </button>
+<button class="flex-shrink-0 px-5 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-all">
+                            Rustic
+                        </button>
+<button class="flex-shrink-0 px-5 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-all">
+                            Luxury
+                        </button>
+<button class="flex-shrink-0 px-5 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-all">
+                            Minimalist
+                        </button>
+</div>
+</section>
+<!-- STEP 3: Upload Zone -->
+<section class="bg-white dark:bg-slate-900/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 transition-all">
+<div class="flex items-center gap-3 mb-4">
+<div class="size-6 rounded-full bg-primary flex items-center justify-center text-white font-bold text-[10px]">3</div>
+<h2 class="text-sm font-bold uppercase tracking-wider text-slate-500">Upload Assets</h2>
+</div>
+<div class="border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50/50 dark:bg-slate-900/50 p-8 flex flex-col items-center justify-center text-center transition-all hover:border-primary/50 hover:bg-primary/5 group cursor-pointer">
+<div class="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">upload_file</span>
+</div>
+<h3 class="text-base font-bold mb-1">Upload floor plan</h3>
+<p class="text-[11px] text-slate-500 dark:text-slate-400 mb-6">PDF, CAD, or high-res JPG/PNG</p>
+<button class="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-8 rounded-lg text-xs transition-all shadow-md shadow-primary/10">
+                            Browse Files
+                        </button>
+</div>
+</section>
+</div>
+<!-- Footer Action Bar -->
+<div class="mt-8 pt-6 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-[10px] ring-2 ring-white dark:ring-slate-900">
+<span class="material-symbols-outlined text-sm">architecture</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center text-[10px] ring-2 ring-white dark:ring-slate-900 font-bold">
+                            M
+                        </div>
+</div>
+<div class="hidden sm:block">
+<p class="text-xs font-bold leading-none mb-0.5">Modern Floor Plan</p>
+<p class="text-[10px] text-slate-400 uppercase tracking-tighter">Draft Configuration</p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors px-4">
+                        Save Draft
+                    </button>
+<button class="px-6 py-2.5 bg-primary/20 text-primary font-bold rounded-lg text-xs opacity-50 cursor-not-allowed">
+                        Start Rendering
+                    </button>
+</div>
+</div>
+</main>
+<!-- Global Footer -->
+<footer class="mt-12 border-t border-slate-200 dark:border-slate-800 py-6 px-6 bg-white dark:bg-slate-900/30">
+<div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">layers</span>
+<span class="text-[11px] font-bold text-slate-400">Floo3D © 2024</span>
+</div>
+<div class="flex gap-6 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
+<a class="hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms</a>
+<a class="hover:text-primary transition-colors" href="#">Help</a>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</body></html>

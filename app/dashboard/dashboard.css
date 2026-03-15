@@ -48,74 +48,97 @@
 .nr-type-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .nr-type-card {
   cursor: pointer;
-  padding: 0.75rem 1rem;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.75rem;
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Reveal image container */
+.nr-reveal-container {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border-radius: 0.75rem;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
   transition: border-color 0.2s;
 }
 
-.nr-type-card:hover {
+.nr-type-card:hover .nr-reveal-container {
   border-color: rgba(236, 91, 19, 0.4);
 }
 
-.nr-type-card-active {
-  border: 2px solid #ec5b13;
+.nr-reveal-container-active {
+  border: 2px solid #ec5b13 !important;
 }
 
-.nr-type-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 0.5rem;
-  background: #f8fafc;
-  color: #94a3b8;
+.nr-reveal-before {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background-size: cover;
+  background-position: center;
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nr-reveal-before-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.nr-reveal-container:hover .nr-reveal-before {
+  clip-path: inset(0 0 0 100%);
+}
+
+.nr-reveal-after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-size: cover;
+  background-position: center;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nr-reveal-container:hover .nr-reveal-after {
+  clip-path: inset(0 0% 0 0);
+}
+
+.nr-reveal-badge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 30;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 9999px;
+  background: #ec5b13;
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  transition: background 0.2s, color 0.2s;
-}
-
-.nr-type-icon-active {
-  background: rgba(236, 91, 19, 0.1);
-  color: #ec5b13;
-}
-
-.nr-type-card-text {
-  flex: 1;
-  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(236, 91, 19, 0.4);
 }
 
 .nr-type-label {
   font-size: 0.875rem;
   font-weight: 700;
   color: #0f172a;
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  margin: 0 0 0.125rem;
 }
 
 .nr-type-desc {
   font-size: 0.6875rem;
   color: #64748b;
   margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.nr-type-check {
-  color: #ec5b13;
-  flex-shrink: 0;
 }
 
 /* Style pills — horizontal scrollable row */
@@ -160,6 +183,9 @@
 @media (max-width: 768px) {
   .nr-type-grid {
     grid-template-columns: 1fr;
+  }
+  .nr-reveal-container {
+    aspect-ratio: 16 / 9;
   }
 }
 

@@ -154,23 +154,30 @@ export default function Dashboard() {
               </div>
               <div className="nr-type-grid">
                 {[
-                  { id: "floor-plan", icon: "/icon-floorplan.png", label: "2D Floor Plan to 3D", desc: "2D Floor Plan" },
-                  { id: "room-photo", icon: "/icon-room.png", label: "Room Photo", desc: "Existing room image" },
-                  { id: "outdoor", icon: "/icon-outdoor.png", label: "Outdoor / Garden", desc: "Exterior & garden design" },
+                  { id: "floor-plan", imgBefore: "/faq-3d.png", imgAfter: "/faq-2d.jpg", label: "2D Floor Plan to 3D", desc: "Blueprint to 3D architectural render" },
+                  { id: "room-photo", imgBefore: "/card-room-after.webp", imgAfter: "/card-room-before.webp", label: "Room Photo", desc: "Real photo to stylized visualization" },
+                  { id: "outdoor", imgBefore: "/card-outdoor-before.webp", imgAfter: "/card-outdoor-after.webp", label: "Outdoor / Garden", desc: "Exterior & garden design" },
                 ].map((t) => (
                   <div
                     key={t.id}
-                    className={`nr-type-card${inputType === t.id ? " nr-type-card-active" : ""}`}
+                    className="nr-type-card"
                     onClick={() => handleInputTypeChange(t.id as any)}
                   >
-                    <div className={`nr-type-icon${inputType === t.id ? " nr-type-icon-active" : ""}`}>
-                      <img src={t.icon} alt={t.label} width={24} height={24} style={{ objectFit: "contain" }} />
+                    <div className={`nr-reveal-container${inputType === t.id ? " nr-reveal-container-active" : ""}`}>
+                      <div className="nr-reveal-before" style={{ backgroundImage: `url(${t.imgBefore})` }}>
+                        <div className="nr-reveal-before-overlay" />
+                      </div>
+                      <div className="nr-reveal-after" style={{ backgroundImage: `url(${t.imgAfter})` }} />
+                      {inputType === t.id && (
+                        <div className="nr-reveal-badge">
+                          <CheckCircle size={12} />
+                        </div>
+                      )}
                     </div>
-                    <div className="nr-type-card-text">
+                    <div>
                       <h3 className="nr-type-label">{t.label}</h3>
                       <p className="nr-type-desc">{t.desc}</p>
                     </div>
-                    {inputType === t.id && <CheckCircle size={18} className="nr-type-check" />}
                   </div>
                 ))}
               </div>
