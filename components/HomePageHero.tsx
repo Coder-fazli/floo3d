@@ -8,8 +8,8 @@ import { ReactCompareSlider, ReactCompareSliderHandle, ReactCompareSliderImage }
 
 const features = [
   {
-    title: "2D Floor Plans",
-    desc: "Turn rough architectural sketches into high-fidelity 3D layouts with precision.",
+    title: "2D Floor Plan to 3D",
+    desc: "Upload any blueprint and get a photorealistic 3D render — no modelling skills needed.",
     icon: (
       <svg width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
         <path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5z"/>
@@ -19,7 +19,7 @@ const features = [
   },
   {
     title: "Room Style Transfer",
-    desc: "Swap aesthetics, materials, and luxury furniture instantly in any captured space.",
+    desc: "Redesign any room with a new style, materials, and furniture — keeping the same layout.",
     icon: (
       <svg width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
         <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
@@ -28,7 +28,7 @@ const features = [
   },
   {
     title: "Empty the Room",
-    desc: "Clear any space instantly — perfect for planning fresh layouts and new ideas.",
+    desc: "Remove all furniture and decor with one click — ideal for staging or fresh planning.",
     icon: (
       <svg width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
         <path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
@@ -37,7 +37,7 @@ const features = [
   },
   {
     title: "Outdoor & Garden",
-    desc: "Capture environmental lighting for stunning, realistic outdoor architectural photography.",
+    desc: "Visualize gardens, terraces, and exteriors with realistic landscaping and lighting.",
     icon: (
       <svg width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
         <path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
@@ -102,25 +102,25 @@ export default function HomePageHero() {
               <span className="hph-badge-ping" />
               <span className="hph-badge-dot" />
             </span>
-            <span className="hph-badge-text">Unified AI Visualization Platform</span>
+            <span className="hph-badge-text">4 AI Tools · One Platform</span>
           </div>
 
           {/* Heading */}
           <h1 className="hph-heading">
-            Architectural<br />
-            <span className="hph-heading-accent">Visualization</span><br />
-            for Every Space.
+            AI-Powered<br />
+            <span className="hph-heading-accent">Interior Styler</span><br />
+            for Any Space.
           </h1>
 
           {/* Sub */}
           <p className="hph-sub">
-            From basic 2D blueprints to hyper-realistic designer interiors. Floo3D transforms architectural concepts into professional assets instantly.
+            Floor plans to 3D renders. Room redesigns. Empty interiors. Outdoor landscapes. Floo3D turns any space into a professional visual — in seconds.
           </p>
 
           {/* CTAs */}
           <div className="hph-btns">
-            <Link href="/dashboard" className="hph-btn-primary">Start Transformation</Link>
-            <Link href="/#reviews" className="hph-btn-secondary">Watch Showcase</Link>
+            <Link href="/dashboard" className="hph-btn-primary">Try It Free</Link>
+            <Link href="/#reviews" className="hph-btn-secondary">See Examples</Link>
           </div>
 
           {/* Social proof */}

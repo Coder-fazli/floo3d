@@ -49,7 +49,7 @@
 
 @media (min-width: 1024px) {
   .hph-grid {
-    grid-template-columns: 4fr 8fr;
+    grid-template-columns: 5fr 7fr;
     gap: 4rem;
   }
 }
@@ -116,12 +116,14 @@
 
 /* Heading */
 .hph-heading {
-  font-size: clamp(2.75rem, 6vw, 5.25rem);
+  font-size: clamp(2.5rem, 4.5vw, 4.75rem);
   font-weight: 900;
   line-height: 0.95;
   letter-spacing: -0.03em;
   color: #0f172a;
   margin: 0 0 1.75rem;
+  hyphens: none;
+  overflow-wrap: normal;
 }
 
 .hph-heading-accent {

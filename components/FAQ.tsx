@@ -7,20 +7,20 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const FAQS = [
   {
-    q: "How fast is the 2D to 3D conversion?",
-    a: "Our proprietary AI engine converts standard 2D blueprints into high-fidelity 3D models in under 60 seconds. It's built for speed without sacrificing precision.",
+    q: "Is Floo3D an AI home design tool — and is it free?",
+    a: "Yes. Floo3D is an AI home design platform that covers floor plan rendering, room design AI, style transfer, and outdoor visuals. Every new account gets 5 free credits — no credit card needed. It's the easiest way to try AI interior design free.",
   },
   {
-    q: "Do I need specialized hardware to run Floo3D?",
-    a: "Not at all. Floo3D is entirely cloud-based. If you have a modern web browser and a stable internet connection, you can render complex structures effortlessly.",
+    q: "Can I use it as a room planner or AI interior styler?",
+    a: "Absolutely. Floo3D acts as a full room planner and AI interior styler in one. Upload a room photo and choose a style — the AI redesigns the space with new furniture, materials, and lighting while keeping your layout intact.",
   },
   {
-    q: "Can I download or share my renders?",
-    a: "Yes! You can download your finished render as a high-quality PNG file, or share it instantly with clients via a shareable link — perfect for presentations, emails, and social media.",
+    q: "What makes Floo3D different from other Room Design AI tools?",
+    a: "Most room design AI tools only handle one task. Floo3D is a unified Home AI that covers 2D floor plans → 3D renders, room style transfer, empty-room clearing, and outdoor/garden design — all from a single upload.",
   },
   {
-    q: "Is there a free trial available?",
-    a: "Yes! Every new user gets 10 free Starter Renders to experience the power of Floo3D. No credit card required to begin your first project.",
+    q: "Can I download or share my results?",
+    a: "Yes! Download your finished visual as a high-quality PNG, or share it instantly with clients via a shareable link — perfect for presentations, emails, and social media.",
   },
 ];
 

@@ -26,7 +26,7 @@ export default function Footer() {
               <span className="ftr-logo-name">Floo3D</span>
             </div>
             <p className="ftr-brand-desc">
-              Empowering the next generation of digital creators through sophisticated 3D workflows and AI-driven precision. Professional grade tools for the modern visionary.
+              AI-powered space visualization for architects, designers, and real estate professionals. Floor plans, room redesigns, empty interiors, outdoor renders — all in one platform.
             </p>
             <div className="ftr-badges">
               <span className="ftr-badge-pill">Built with Passion</span>

@@ -29,8 +29,8 @@ export default function HowItWorks2() {
             custom={0}
           >
             <p className="hiw2-eyebrow">Workflow Efficiency</p>
-            <h2 className="hiw2-title">From 2D Blueprints to<br />Stunning 3D Renders</h2>
-            <p className="hiw2-sub">Our AI-powered engine bridges the gap between static sketches and immersive spatial experiences. See how we transform your vision in three simple steps.</p>
+            <h2 className="hiw2-title">Upload Any Space.<br />Get a Pro Visual.</h2>
+            <p className="hiw2-sub">Whether it's a 2D floor plan, a room photo, an empty interior, or an outdoor area — Floo3D transforms it into a professional render in three simple steps.</p>
           </motion.div>
 
           {/* Steps */}
@@ -54,12 +54,12 @@ export default function HowItWorks2() {
                 <div className="hiw2-icon-box">
                   <span className="material-symbols-outlined hiw2-icon">cloud_upload</span>
                 </div>
-                <h3 className="hiw2-step-title">1. Upload Floor Plan</h3>
-                <p className="hiw2-step-desc">Simply drag and drop your 2D blueprints, PDF sketches, or even hand-drawn images. Our system supports all major formats with high-fidelity parsing for unmatched accuracy.</p>
+                <h3 className="hiw2-step-title">1. Upload Your Image</h3>
+                <p className="hiw2-step-desc">Drag and drop a floor plan, room photo, empty interior, or outdoor space. Any image works — blueprints, hand-drawn sketches, or real photos.</p>
                 <div className="hiw2-tags">
-                  <span className="hiw2-tag">PNG/JPG</span>
-                  <span className="hiw2-tag">PDF</span>
-                  <span className="hiw2-tag">Hand-drawn</span>
+                  <span className="hiw2-tag">Floor Plan</span>
+                  <span className="hiw2-tag">Room Photo</span>
+                  <span className="hiw2-tag">Outdoor</span>
                 </div>
               </div>
               <div className="hiw2-num">01</div>
@@ -86,7 +86,7 @@ export default function HowItWorks2() {
                   <span className="material-symbols-outlined hiw2-icon">memory</span>
                 </div>
                 <h3 className="hiw2-step-title">2. AI Neural Processing</h3>
-                <p className="hiw2-step-desc">Our proprietary neural networks analyze every structural element. It automatically identifies walls, window placements, doors, and room types to build a geometrically perfect 3D skeleton in seconds.</p>
+                <p className="hiw2-step-desc">Our AI reads your image, identifies the space type, and applies the right transformation — 3D rendering, style transfer, room clearing, or outdoor design — with precision.</p>
                 <div className="hiw2-speed">
                   <span className="material-symbols-outlined hiw2-speed-icon">speed</span>
                   Processing in under 60 seconds
@@ -108,8 +108,8 @@ export default function HowItWorks2() {
                 <div className="hiw2-icon-box">
                   <span className="material-symbols-outlined hiw2-icon">vrpano</span>
                 </div>
-                <h3 className="hiw2-step-title">3. Instant 3D Render</h3>
-                <p className="hiw2-step-desc">Receive a photorealistic top-down 3D render of your floor plan in seconds. Download in HD, share with clients via a single link, and impress with studio-quality detail — no 3D software needed.</p>
+                <h3 className="hiw2-step-title">3. Download Your Visual</h3>
+                <p className="hiw2-step-desc">Get a photorealistic result in seconds. Download in HD, share with clients via a single link, and impress with studio-quality output — no design software needed.</p>
                 <div className="hiw2-checks">
                   <div className="hiw2-check">
                     <svg className="hiw2-check-icon" width="20" height="20" viewBox="0 0 24 24" fill="#22c55e"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm4.71 7.71-5.5 5.5a1 1 0 0 1-1.42 0l-2.5-2.5a1 1 0 1 1 1.42-1.42L10.5 13.09l4.79-4.8a1 1 0 0 1 1.42 1.42z"/></svg>
@@ -148,7 +148,7 @@ export default function HowItWorks2() {
             >
               <p className="hiw2-stat-num">&lt; 60s</p>
               <h4 className="hiw2-stat-title">Blazing Fast</h4>
-              <p className="hiw2-stat-desc">From upload to full render in less than a minute. Save hours of manual 3D modeling work.</p>
+              <p className="hiw2-stat-desc">From upload to finished visual in less than a minute. Save hours of manual design work.</p>
             </motion.div>
             <motion.div
               className="hiw2-stat-card"
