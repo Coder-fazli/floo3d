@@ -44,8 +44,8 @@ const PROJECTS = [
     role: "Rising Creator",
     avatar: "/avatars/female2.jpg",
     avatarInitials: null,
-    resultImage: "/result2.png",
-    thumbImage: "/thumb2.jpg",
+    resultImage: "/hero-after.jpg",
+    thumbImage: "/hero-before.jpg",
     peekIcon: "map",
     peekLabel: "View Source Plan",
     peekArrow: true,
@@ -62,8 +62,8 @@ const PROJECTS = [
     role: "Real Estate Visionary",
     avatar: "/avatars/female3.jpg",
     avatarInitials: null,
-    resultImage: "/result3.png",
-    thumbImage: "/thumb3.webp",
+    resultImage: "/card-outdoor-after.avif",
+    thumbImage: "/hero-before.jpg",
     peekIcon: "architecture",
     peekLabel: "Blueprint Snapshot",
     peekArrow: false,
@@ -127,7 +127,7 @@ export default function RecentProjects() {
 
                 {/* Image */}
                 <div className="rp-img-wrap">
-                  <Image src={p.resultImage} alt={p.title} className="rp-img" width={340} height={340} />
+                  <Image src={p.resultImage} alt={p.title} className="rp-img" width={340} height={340} unoptimized={p.resultImage.endsWith(".avif")} />
 
                   {/* Badge */}
                   <div className="rp-badge">
