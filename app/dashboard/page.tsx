@@ -18,16 +18,17 @@ export default function Dashboard() {
   const [credits, setCredits] = useState<number | null>(null);
   const [showBanner, setShowBanner] = useState(false);
   const [fileError, setFileError] = useState<string | null>(null);
-  const [inputType, setInputType] = useState<"floor-plan" | "room-photo" | "outdoor">("floor-plan");
+  const [inputType, setInputType] = useState<"floor-plan" | "room-photo" | "outdoor" | "empty-room">("floor-plan");
   const [renderStyle, setRenderStyle] = useState("Modern");
 
   const STYLES: Record<string, string[]> = {
     "floor-plan": ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
     "room-photo": ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
     "outdoor":    ["Mediterranean", "Japanese", "Tropical", "Cottage", "Modern", "Desert"],
+    "empty-room": ["Clean"],
   };
 
-  const handleInputTypeChange = (type: "floor-plan" | "room-photo" | "outdoor") => {
+  const handleInputTypeChange = (type: "floor-plan" | "room-photo" | "outdoor" | "empty-room") => {
     setInputType(type);
     setRenderStyle(STYLES[type][0]);
   };
@@ -155,8 +156,9 @@ export default function Dashboard() {
               <div className="nr-type-grid">
                 {[
                   { id: "floor-plan", imgBefore: "/faq-3d.png", imgAfter: "/faq-2d.jpg", label: "2D Floor Plan to 3D", desc: "Blueprint to 3D architectural render" },
-                  { id: "room-photo", imgBefore: "/card-room-after.webp", imgAfter: "/card-room-before.webp", label: "Room Photo", desc: "Real photo to stylized visualization" },
+                  { id: "room-photo", imgBefore: "/card-room-after.webp", imgAfter: "/card-room-before.webp", label: "Room Style Transfer", desc: "Redesign any room with AI" },
                   { id: "outdoor", imgBefore: "/card-outdoor-before.webp", imgAfter: "/card-outdoor-after.webp", label: "Outdoor / Garden", desc: "Exterior & garden design" },
+                  { id: "empty-room", imgBefore: "/card-empty-after.webp", imgAfter: "/card-empty-before.webp", label: "Empty the Room", desc: "Clear furniture instantly to plan new layouts." },
                 ].map((t) => (
                   <div
                     key={t.id}
@@ -184,30 +186,32 @@ export default function Dashboard() {
             </section>
 
             {/* Step 2 — Style */}
-            <section className="nr-section">
-              <div className="nr-section-head">
-                <div className="nr-step-num">2</div>
-                <h2 className="nr-section-title">Design Style</h2>
-              </div>
-              <div className="nr-styles">
-                {STYLES[inputType].map((s) => (
-                  <button
-                    key={s}
-                    className={`nr-style-pill${renderStyle === s ? " nr-style-pill-active" : ""}`}
-                    onClick={() => setRenderStyle(s)}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-            </section>
+            {inputType !== "empty-room" && (
+              <section className="nr-section">
+                <div className="nr-section-head">
+                  <div className="nr-step-num">2</div>
+                  <h2 className="nr-section-title">Design Style</h2>
+                </div>
+                <div className="nr-styles">
+                  {STYLES[inputType].map((s) => (
+                    <button
+                      key={s}
+                      className={`nr-style-pill${renderStyle === s ? " nr-style-pill-active" : ""}`}
+                      onClick={() => setRenderStyle(s)}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </section>
+            )}
 
             {/* Step 3 — Upload */}
             <section className="nr-section">
               <div className="nr-section-head">
-                <div className="nr-step-num">3</div>
+                <div className="nr-step-num">{inputType === "empty-room" ? "2" : "3"}</div>
                 <h2 className="nr-section-title">
-                  Upload your {inputType === "floor-plan" ? "2D Floor Plan" : inputType === "room-photo" ? "Room Photo" : "Outdoor Photo"}
+                  Upload your {inputType === "floor-plan" ? "2D Floor Plan" : inputType === "room-photo" ? "Room Photo" : inputType === "outdoor" ? "Outdoor Photo" : "Room Photo"}
                 </h2>
               </div>
               <Upload onComplete={handleUploadComplete} onError={setFileError} />

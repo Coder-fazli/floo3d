@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import DesignOptions from "@/components/DesignOptions";
 import HowItWorks2 from "@/components/HowItWorks2";
 import Blog from "@/components/Blog";
 import RecentProjects from "@/components/RecentProjects";
@@ -24,6 +25,8 @@ export default function Home() {
       <Navbar />
 
       <Hero />
+
+      <DesignOptions />
 
       <HowItWorks2 />
 
