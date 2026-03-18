@@ -30,7 +30,7 @@ export default function HowItWorks2() {
           >
             <p className="hiw2-eyebrow">Workflow Efficiency</p>
             <h2 className="hiw2-title">Upload Any Space.<br />Get a Pro Visual.</h2>
-            <p className="hiw2-sub">Whether it's a 2D floor plan, a room photo, an empty interior, or an outdoor area — Floo3D transforms it into a professional render in three simple steps.</p>
+            <p className="hiw2-sub">Whether it's a 2D floor plan, a room photo, an empty interior, or an outdoor area — MyHomeStyler transforms it into a professional render in three simple steps.</p>
           </motion.div>
 
           {/* Steps */}

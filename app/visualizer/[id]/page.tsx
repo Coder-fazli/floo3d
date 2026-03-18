@@ -10,11 +10,12 @@
 
 
     return {
-        title: project?.name || "Floo3D Render",
-        description: "View this 3D floor plan render on Floo3D",
+        title: project?.name || "MyHomeStyler Render",
+        description: "View this 3D floor plan render on MyHomeStyler",
+        robots: { index: false, follow: false },
         openGraph: {
-        title: project?.name || "Floo3D Render",
-        description: "View this 3D floor plan render on Floo3D",
+        title: project?.name || "MyHomeStyler Render",
+        description: "View this 3D floor plan render on MyHomeStyler",
         images: project?.renderedImageUrl ?
            [project.renderedImageUrl] : [],
     },

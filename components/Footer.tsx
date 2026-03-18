@@ -23,7 +23,7 @@ export default function Footer() {
               <div className="ftr-logo-icon">
                 <Box size={20} color="#fff" />
               </div>
-              <span className="ftr-logo-name">Floo3D</span>
+              <span className="ftr-logo-name">MyHomeStyler</span>
             </div>
             <p className="ftr-brand-desc">
               AI-powered space visualization for architects, designers, and real estate professionals. Floor plans, room redesigns, empty interiors, outdoor renders — all in one platform.
@@ -98,7 +98,7 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="ftr-bottom">
-          <p className="ftr-copy">© 2026 Floo3D Systems Inc. All rights reserved.</p>
+          <p className="ftr-copy">© 2026 MyHomeStyler Systems Inc. All rights reserved.</p>
 
           {/* Socials */}
           <div className="ftr-socials">

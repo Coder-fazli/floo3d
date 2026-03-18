@@ -29,9 +29,9 @@ export default function DashboardNavbar() {
         <div className="dbnav-left">
           <Link href="/" className="dbnav-brand">
             <div className="dbnav-logo-icon">
-              <Image src="/logo.png" alt="Floo3D" width={20} height={20} />
+              <Image src="/logo.png" alt="MyHomeStyler" width={20} height={20} />
             </div>
-            <span className="dbnav-logo-name">Floo<span className="dbnav-logo-accent">3D</span></span>
+            <span className="dbnav-logo-name">MyHome<span className="dbnav-logo-accent">Styler</span></span>
           </Link>
           <nav className="dbnav-links">
             <a href="/dashboard" className="dbnav-link dbnav-link-active">Projects</a>

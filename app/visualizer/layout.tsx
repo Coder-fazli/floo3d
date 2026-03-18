@@ -1,0 +1,9 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
+
+export default function VisualizerLayout({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
+}

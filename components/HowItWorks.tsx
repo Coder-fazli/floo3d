@@ -74,7 +74,7 @@ export default function HowItWorks() {
           From Sketch to Reality <br /> in Four Simple Steps
         </h3>
         <p className="hiw-subtitle">
-          Floo3D streamlines the architectural visualization process. Our AI-driven engine handles the heavy lifting, allowing you to focus on design.
+          MyHomeStyler streamlines the architectural visualization process. Our AI-driven engine handles the heavy lifting, allowing you to focus on design.
         </p>
       </div>
 

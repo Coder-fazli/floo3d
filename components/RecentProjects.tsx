@@ -35,7 +35,7 @@ const PROJECTS = [
     badge: "Real Result",
     likes: "1,204",
     caption: "This transformation is insane! From a dusty warehouse plan to a premium high-end loft.",
-    tags: "#Floo3DMagic #InteriorDesign",
+    tags: "#MyHomeStylerMagic #InteriorDesign",
     time: "2 hours ago",
   },
   {
@@ -53,7 +53,7 @@ const PROJECTS = [
     badge: "Epic Result",
     likes: "892",
     caption: "Uploaded my hand-drawn sketch and got a photorealistic 3D render in seconds. Mind blown.",
-    tags: "#CoastalDesign #Floo3D",
+    tags: "#CoastalDesign #MyHomeStyler",
     time: "4 hours ago",
   },
   {
@@ -70,7 +70,7 @@ const PROJECTS = [
     title: "Skyline Office Lounge",
     badge: "Trending Now",
     likes: "2,451",
-    caption: "Our entire sales team now uses Floo3D to pitch properties. Conversion rate is through the roof.",
+    caption: "Our entire sales team now uses MyHomeStyler to pitch properties. Conversion rate is through the roof.",
     tags: "#RealEstate #3DRender",
     time: "1 day ago",
   },
@@ -92,7 +92,7 @@ export default function RecentProjects() {
           >
             <p className="rp-label">Community Showcase</p>
             <h2 className="rp-title">Real Results from Real Users</h2>
-            <p className="rp-sub">See how architects and designers are transforming floor plans with Floo3D</p>
+            <p className="rp-sub">See how architects and designers are transforming floor plans with MyHomeStyler</p>
           </motion.div>
 
           <div className="rp-grid">

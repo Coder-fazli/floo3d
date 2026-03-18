@@ -7,16 +7,16 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const FAQS = [
   {
-    q: "Is Floo3D an AI home design tool — and is it free?",
-    a: "Yes. Floo3D is an AI home design platform that covers floor plan rendering, room design AI, style transfer, and outdoor visuals. Every new account gets 5 free credits — no credit card needed. It's the easiest way to try AI interior design free.",
+    q: "Is MyHomeStyler an AI home design tool — and is it free?",
+    a: "Yes. MyHomeStyler is an AI home design platform that covers floor plan rendering, room design AI, style transfer, and outdoor visuals. Every new account gets 5 free credits — no credit card needed. It's the easiest way to try AI interior design free.",
   },
   {
     q: "Can I use it as a room planner or AI interior styler?",
-    a: "Absolutely. Floo3D acts as a full room planner and AI interior styler in one. Upload a room photo and choose a style — the AI redesigns the space with new furniture, materials, and lighting while keeping your layout intact.",
+    a: "Absolutely. MyHomeStyler acts as a full room planner and AI interior styler in one. Upload a room photo and choose a style — the AI redesigns the space with new furniture, materials, and lighting while keeping your layout intact.",
   },
   {
-    q: "What makes Floo3D different from other Room Design AI tools?",
-    a: "Most room design AI tools only handle one task. Floo3D is a unified Home AI that covers 2D floor plans → 3D renders, room style transfer, empty-room clearing, and outdoor/garden design — all from a single upload.",
+    q: "What makes MyHomeStyler different from other Room Design AI tools?",
+    a: "Most room design AI tools only handle one task. MyHomeStyler is a unified Home AI that covers 2D floor plans → 3D renders, room style transfer, empty-room clearing, and outdoor/garden design — all from a single upload.",
   },
   {
     q: "Can I download or share my results?",
@@ -36,7 +36,7 @@ export default function FAQ() {
           <header className="faq-header">
             <span className="faq-eyebrow">Help Center</span>
             <h2 className="faq-title">Got Questions?<br />We've Got Answers.</h2>
-            <p className="faq-sub">Select a card to explore how Floo3D transforms your architectural workflow.</p>
+            <p className="faq-sub">Select a card to explore how MyHomeStyler transforms your architectural workflow.</p>
           </header>
 
           <div className="faq-list">
@@ -77,7 +77,7 @@ export default function FAQ() {
 
         {/* Right — Visual Showcase */}
         <div className="faq-right">
-          <div className="faq-right-label">The Magic of Floo3D</div>
+          <div className="faq-right-label">The Magic of MyHomeStyler</div>
 
           <div className="faq-visual-wrap">
             {/* Floating cards */}

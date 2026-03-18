@@ -10,12 +10,18 @@ const instrumentSerif = Instrument_Serif({ subsets: ["latin"], weight: "400", va
 
 export async function generateMetadata() {
   const s = await getSiteSettings();
-  const title = s?.metaTitle ?? "Floo3D – Convert 2D Floor Plans to 3D Renders with AI";
-  const description = s?.metaDescription ?? "Upload any 2D floor plan and get a photorealistic 3D render in under 60 seconds. Free to start. No 3D software needed. Used by architects, designers & real estate pros.";
+  const title = s?.metaTitle ?? "MyHomeStyler – Free Home Design AI Tool | 2D to 3D in Seconds";
+  const description = s?.metaDescription ?? "Free home design AI tool. Transform any floor plan into a stunning 3D render in seconds. No software needed — used by architects, designers & homeowners.";
   return {
     title,
     description,
     robots: { index: true, follow: true },
+    verification: {
+      google: "VQWIPVTjBUsZ0y8muOavx22CA_-t8Ld0bNR78zDxEWM",
+    },
+    alternates: {
+      canonical: "https://myhomestyler.com",
+    },
     icons: {
       icon: "/favicon.png",
       shortcut: "/favicon.png",
@@ -24,16 +30,16 @@ export async function generateMetadata() {
     openGraph: {
       title,
       description,
-      url: "https://floo3d.com",
-      siteName: "Floo3D",
-      images: [{ url: "https://floo3d.com/og-image.png", width: 512, height: 512, alt: "Floo3D" }],
+      url: "https://myhomestyler.com",
+      siteName: "MyHomeStyler",
+      images: [{ url: "https://myhomestyler.com/og-image.png", width: 512, height: 512, alt: "MyHomeStyler" }],
       type: "website",
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title,
       description,
-      images: ["https://floo3d.com/og-image.png"],
+      images: ["https://myhomestyler.com/og-image.png"],
     },
   };
 }
@@ -46,18 +52,40 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "SoftwareApplication",
-                name: "Floo3D",
-                applicationCategory: "DesignApplication",
-                operatingSystem: "Web",
-                url: "https://floo3d.com",
-                description: "AI-powered tool that transforms 2D floor plans into photorealistic 3D renders in seconds.",
-                offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-                aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "1200" },
-                author: { "@type": "Organization", name: "Floo3D", url: "https://floo3d.com" },
-              }),
+              __html: JSON.stringify([
+                {
+                  "@context": "https://schema.org",
+                  "@type": "SoftwareApplication",
+                  name: "MyHomeStyler",
+                  applicationCategory: "DesignApplication",
+                  operatingSystem: "Web",
+                  url: "https://myhomestyler.com",
+                  description: "Free home design AI tool. Transform any floor plan into a stunning 3D render in seconds.",
+                  offers: { "@type": "Offer", price: "0", priceCurrency: "USD", availability: "https://schema.org/InStock" },
+                  aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "1200", bestRating: "5", worstRating: "1" },
+                  author: { "@type": "Organization", name: "MyHomeStyler", url: "https://myhomestyler.com" },
+                  screenshot: "https://myhomestyler.com/og-image.png",
+                },
+                {
+                  "@context": "https://schema.org",
+                  "@type": "WebSite",
+                  name: "MyHomeStyler",
+                  url: "https://myhomestyler.com",
+                  potentialAction: {
+                    "@type": "SearchAction",
+                    target: "https://myhomestyler.com/?q={search_term_string}",
+                    "query-input": "required name=search_term_string",
+                  },
+                },
+                {
+                  "@context": "https://schema.org",
+                  "@type": "Organization",
+                  name: "MyHomeStyler",
+                  url: "https://myhomestyler.com",
+                  logo: "https://myhomestyler.com/favicon.png",
+                  sameAs: [],
+                },
+              ]),
             }}
           />
           {children}

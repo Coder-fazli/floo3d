@@ -38,7 +38,7 @@ export default function Home() {
           <h2 className="marquee-title">
             Loved by <em className="marquee-accent">Thousands</em> of Professionals
           </h2>
-          <p className="marquee-subtitle">Architects, interior designers, real estate agents, and homeowners — all transforming spaces with Floo3D.</p>
+          <p className="marquee-subtitle">Architects, interior designers, real estate agents, and homeowners — all transforming spaces with MyHomeStyler.</p>
         </div>
         <Marquee pauseOnHover repeat={3} className="marquee-strip">
           {reviews.slice(0, 4).map((r) => (

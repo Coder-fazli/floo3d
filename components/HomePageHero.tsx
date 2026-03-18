@@ -114,7 +114,7 @@ export default function HomePageHero() {
 
           {/* Sub */}
           <p className="hph-sub">
-            Floor plans to 3D renders. Room redesigns. Empty interiors. Outdoor landscapes. Floo3D turns any space into a professional visual — in seconds.
+            Floor plans to 3D renders. Room redesigns. Empty interiors. Outdoor landscapes. MyHomeStyler turns any space into a professional visual — in seconds.
           </p>
 
           {/* CTAs */}
