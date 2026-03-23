@@ -79,7 +79,7 @@ export default function DesignOptions() {
           <span className="do-ghost-num" style={{ top: "-1.5rem", left: "-0.5rem" }}>01</span>
           <div className="do-grid">
             <div className="do-col-img-left">
-              <ImgCard before="/faq-3d.png" after="/faq-2d.jpg" badge="Rendering Phase: Final Polish" />
+              <ImgCard before="/real-3d-render.jpg" after="/real-2d-plan.jpg" badge="Rendering Phase: Final Polish" />
             </div>
             <div className="do-col-text-right">
               <div className="do-text-card">
