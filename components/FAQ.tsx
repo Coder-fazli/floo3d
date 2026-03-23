@@ -7,20 +7,20 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const FAQS = [
   {
-    q: "Is MyHomeStyler an AI home design tool — and is it free?",
-    a: "Yes. MyHomeStyler is an AI home design platform that covers floor plan rendering, room design AI, style transfer, and outdoor visuals. Every new account gets 5 free credits — no credit card needed. It's the easiest way to try AI interior design free.",
+    q: "Is this the best free AI interior design app?",
+    a: "MyHomeStyler is among the best AI interior design tools available — and it's free to start. Every new account gets 5 free credits covering all 4 tools: AI interior design, free AI floor plan generator, virtual staging AI, and AI landscape design. No credit card required.",
   },
   {
-    q: "Can I use it as a room planner or AI interior styler?",
-    a: "Absolutely. MyHomeStyler acts as a full room planner and AI interior styler in one. Upload a room photo and choose a style — the AI redesigns the space with new furniture, materials, and lighting while keeping your layout intact.",
+    q: "Can I use it as a free AI room design and room planner?",
+    a: "Yes. MyHomeStyler is a full AI room planner and AI interior styler in one. Upload a room photo, pick a style, and the AI interior design generator redesigns the space with new furniture, materials, and lighting — keeping your original layout intact.",
   },
   {
-    q: "What makes MyHomeStyler different from other Room Design AI tools?",
-    a: "Most room design AI tools only handle one task. MyHomeStyler is a unified Home AI that covers 2D floor plans → 3D renders, room style transfer, empty-room clearing, and outdoor/garden design — all from a single upload.",
+    q: "Does it support AI landscape design and AI backyard design free?",
+    a: "Absolutely. The Outdoor tool supports free AI landscape design, AI backyard design, AI garden design, and home exterior design. Upload any outdoor photo and get a photorealistic redesign with realistic plants, materials, and lighting.",
   },
   {
-    q: "Can I download or share my results?",
-    a: "Yes! Download your finished visual as a high-quality PNG, or share it instantly with clients via a shareable link — perfect for presentations, emails, and social media.",
+    q: "Can I convert a 2D floor plan to 3D online free?",
+    a: "Yes — MyHomeStyler is a free AI floor plan generator that converts 2D floor plans to 3D renders online, no software or account setup needed. Upload a blueprint or hand-drawn sketch and get a photorealistic 3D result in under 60 seconds.",
   },
 ];
 

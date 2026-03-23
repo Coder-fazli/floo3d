@@ -37,7 +37,7 @@ export default function Footer() {
           <div className="ftr-newsletter">
             <div className="ftr-newsletter-card">
               <h3 className="ftr-newsletter-title">Stay ahead of the curve</h3>
-              <p className="ftr-newsletter-sub">Get weekly insights into the 3D industry and exclusive beta access.</p>
+              <p className="ftr-newsletter-sub">Get weekly tips on AI interior design, free AI landscape design tools, and new features.</p>
               <form className="ftr-form" onSubmit={(e) => e.preventDefault()}>
                 <input
                   className="ftr-input"

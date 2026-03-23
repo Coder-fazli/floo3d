@@ -67,7 +67,7 @@ export default function DesignOptions() {
           </h2>
         </div>
         <p className="do-header-desc">
-          Witness the evolution of space. From blueprints to sanctuaries — we bridge the gap between imagination and reality.
+          The best AI interior design tools in one place — from free AI floor plan generators to AI landscape design, room redesign, and virtual staging.
         </p>
       </div>
 
@@ -85,7 +85,7 @@ export default function DesignOptions() {
               <div className="do-text-card">
                 <h3 className="do-item-title">2D Floor Plan to 3D</h3>
                 <p className="do-item-desc">
-                  We translate flat technical blueprints into dimensional experiences. Understand depth, scale, and flow with precision-engineered 3D spatial models.
+                  The easiest way to convert 2D floor plans to 3D online — free AI floor plan generator with no software needed. Upload a blueprint, get a photorealistic render instantly.
                 </p>
                 <Link href="/dashboard" className="do-item-link">
                   <span className="do-item-link-text">Explore Now</span>
@@ -106,7 +106,7 @@ export default function DesignOptions() {
               <div className="do-text-card">
                 <h3 className="do-item-title">Room Style Transfer</h3>
                 <p className="do-item-desc">
-                  Breathing new life into existing rooms. We reimagine interior aesthetics, lighting, and materiality to reflect your personal style — instantly.
+                  The best AI interior design tool for room redesign. Upload any room photo, pick a style, and our AI interior design generator reimagines the space with new furniture, materials, and lighting.
                 </p>
                 <Link href="/dashboard" className="do-item-link">
                   <span className="do-item-link-text">View Concepts</span>
@@ -135,7 +135,7 @@ export default function DesignOptions() {
               <span className="do-num-large">03</span>
               <h3 className="do-item-title">Empty the Room</h3>
               <p className="do-item-desc">
-                Clear any space instantly. Our AI removes all furniture and decor to reveal the bare room — perfect for planning fresh layouts and new ideas.
+                AI virtual staging made simple — remove all furniture and decor instantly to reveal a clean, empty space. Perfect for real estate listings and planning fresh layouts.
               </p>
               <Link href="/dashboard" className="do-cta-btn">Try It Now</Link>
             </div>
@@ -152,7 +152,7 @@ export default function DesignOptions() {
               <span className="do-eyebrow-sm">Final Chapter</span>
               <h3 className="do-title-italic">OUTDOOR<br />VISUALS</h3>
               <p className="do-item-desc">
-                Transform any outdoor space. From gardens to terraces, we visualize your dream exterior with realistic materials, lighting, and landscaping.
+                Free AI landscape design for any outdoor space. AI backyard design, garden design, and home exterior design — visualize your dream outdoor space with realistic materials and lighting.
               </p>
               <div className="do-stats">
                 <div className="do-stat-row">

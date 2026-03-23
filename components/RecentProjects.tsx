@@ -92,7 +92,7 @@ export default function RecentProjects() {
           >
             <p className="rp-label">Community Showcase</p>
             <h2 className="rp-title">Real Results from Real Users</h2>
-            <p className="rp-sub">See how architects and designers are transforming floor plans with MyHomeStyler</p>
+            <p className="rp-sub">See how architects, interior designers, and homeowners use the best AI interior design tools — from virtual staging AI to free AI landscape design.</p>
           </motion.div>
 
           <div className="rp-grid">

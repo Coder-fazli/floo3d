@@ -28,9 +28,9 @@ export default function HowItWorks2() {
             variants={fadeUp}
             custom={0}
           >
-            <p className="hiw2-eyebrow">Workflow Efficiency</p>
+            <p className="hiw2-eyebrow">Best AI Interior Design Tools · Free to Use</p>
             <h2 className="hiw2-title">Upload Any Space.<br />Get a Pro Visual.</h2>
-            <p className="hiw2-sub">Whether it's a 2D floor plan, a room photo, an empty interior, or an outdoor area — MyHomeStyler transforms it into a professional render in three simple steps.</p>
+            <p className="hiw2-sub">The best AI app for interior design, floor plan rendering, virtual staging, and AI landscape design — all in three simple steps.</p>
           </motion.div>
 
           {/* Steps */}
@@ -55,11 +55,11 @@ export default function HowItWorks2() {
                   <span className="material-symbols-outlined hiw2-icon">cloud_upload</span>
                 </div>
                 <h3 className="hiw2-step-title">1. Upload Your Image</h3>
-                <p className="hiw2-step-desc">Drag and drop a floor plan, room photo, empty interior, or outdoor space. Any image works — blueprints, hand-drawn sketches, or real photos.</p>
+                <p className="hiw2-step-desc">Upload a floor plan to create a 3D render, a room photo for AI interior design, or an outdoor photo for free AI landscape design. Any format works.</p>
                 <div className="hiw2-tags">
                   <span className="hiw2-tag">Floor Plan</span>
                   <span className="hiw2-tag">Room Photo</span>
-                  <span className="hiw2-tag">Outdoor</span>
+                  <span className="hiw2-tag">Backyard / Garden</span>
                 </div>
               </div>
               <div className="hiw2-num">01</div>
@@ -86,7 +86,7 @@ export default function HowItWorks2() {
                   <span className="material-symbols-outlined hiw2-icon">memory</span>
                 </div>
                 <h3 className="hiw2-step-title">2. AI Neural Processing</h3>
-                <p className="hiw2-step-desc">Our AI reads your image, identifies the space type, and applies the right transformation — 3D rendering, style transfer, room clearing, or outdoor design — with precision.</p>
+                <p className="hiw2-step-desc">Our AI interior design tool identifies your space and applies the right transformation — 3D rendering, style transfer, virtual staging, or AI backyard design — with precision.</p>
                 <div className="hiw2-speed">
                   <span className="material-symbols-outlined hiw2-speed-icon">speed</span>
                   Processing in under 60 seconds
