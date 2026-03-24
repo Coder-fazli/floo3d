@@ -2,10 +2,11 @@
   import VisualizerClient from "./VisualizerClient";
   import { getProject } from "@/lib/actions";
 
-  export async function generateMetadata({ params }: 
+  export async function generateMetadata({ params }:
     {params: Promise<{ id: string }>})
   {
     const { id } = await params;
+    if (id === "new") return { title: "New Project — MyHomeStyler" };
     const project = await getProject(id);
 
 

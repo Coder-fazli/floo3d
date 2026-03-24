@@ -12,12 +12,38 @@ import "yet-another-react-lightbox/styles.css";
 import SocialButton from "@/components/kokonutui/social-button";
 import Image from "next/image";
 import Link from "next/link";
-import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, Clock, ChevronRight } from "lucide-react";
+import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, Clock, ChevronRight, Upload as UploadIcon, Home, Zap } from "lucide-react";
+
+const STYLES: Record<string, string[]> = {
+  "floor-plan": ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
+  "room-photo": ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
+  "outdoor":    ["Mediterranean", "Japanese", "Tropical", "Cottage", "Modern", "Desert"],
+  "empty-room": ["Clean"],
+};
+
+const STYLE_IMAGES: Record<string, string> = {
+  "Modern":        "/card-room-after.webp",
+  "Scandinavian":  "/hero-after.jpg",
+  "Industrial":    "/real-3d-render.jpg",
+  "Rustic":        "/card-empty-after.webp",
+  "Luxury":        "/real-3d-render.jpg",
+  "Minimalist":    "/card-room-before.webp",
+  "Mediterranean": "/card-outdoor-after.webp",
+  "Japanese":      "/card-room-after.webp",
+  "Tropical":      "/card-outdoor-before.avif",
+  "Cottage":       "/card-empty-before.webp",
+  "Desert":        "/hero-before.jpg",
+  "Clean":         "/card-empty-after.webp",
+};
+
+const ROOM_TYPES = ["Living Room", "Bedroom", "Kitchen", "Bathroom", "Office", "Dining Room", "Studio", "Hallway"];
 
 export default function VisualizerClient() {
   const router = useRouter();
   const { id } = useParams();
   const { user } = useUser();
+
+  const isNewMode = id === "new";
 
   const hasInitialGenerated = useRef(false);
   const [project, setProject] = useState<any>(null);
@@ -26,50 +52,62 @@ export default function VisualizerClient() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [modalType, setModalType] = useState<"error" | "credits" | null>(null);
   const [zoomLevel, setZoomLevel] = useState(1);
+
+  // Sidebar state
+  const [renderStyle, setRenderStyle] = useState("Modern");
+  const [roomType, setRoomType] = useState("Living Room");
+  const [inputTypeNew, setInputTypeNew] = useState("floor-plan");
+  const [isCreating, setIsCreating] = useState(false);
+
   const zoomIn  = () => setZoomLevel(z => parseFloat(Math.min(z + 0.25, 3).toFixed(2)));
   const zoomOut = () => setZoomLevel(z => parseFloat(Math.max(z - 0.25, 0.5).toFixed(2)));
 
+  // Read type from URL for new mode
   useEffect(() => {
-    if (id) getProject(id as string).then(setProject);
-  }, [id]);
- 
+    if (isNewMode) {
+      const params = new URLSearchParams(window.location.search);
+      const t = params.get("type") ?? "floor-plan";
+      setInputTypeNew(t);
+      setRenderStyle(STYLES[t]?.[0] ?? "Modern");
+    }
+  }, [isNewMode]);
+
+  // Sync local renderStyle when project loads
+  useEffect(() => {
+    if (project?.renderStyle) setRenderStyle(project.renderStyle);
+  }, [project?.renderStyle]);
+
+  useEffect(() => {
+    if (!isNewMode && id) getProject(id as string).then(setProject);
+  }, [id, isNewMode]);
 
   const runGeneration = async () => {
     if (isProcessing) return;
     if (!project) return;
     if (!project?._id || !project?.originalImageUrl || !user?.id) {
       console.error("Missing required data");
-    return;
+      return;
     }
-   
+
     let res: Response | null = null;
-    
     try {
       setIsProcessing(true);
       res = await fetch("/api/generate", {
         method: "POST",
-        headers: {
-         "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           projectId: project._id,
           imageUrl: project.originalImageUrl,
           userId: user?.id,
           inputType: project.inputType ?? "floor-plan",
-          renderStyle: project.renderStyle ?? "Modern",
+          renderStyle,
         }),
       });
-       
-       if (!res.ok) {
-        throw new Error (`Request failed with status ${res.status}`);
-       }
-       
+
+      if (!res.ok) throw new Error(`Request failed with status ${res.status}`);
       const data = await res.json();
-         if (!data?.renderedImageUrl) {
-          throw new Error("Invalid response from API");
-         }
+      if (!data?.renderedImageUrl) throw new Error("Invalid response from API");
       setCurrentImage(data.renderedImageUrl);
-   
     } catch (error: any) {
       if (res?.status === 403) {
         setModalType("credits");
@@ -92,6 +130,32 @@ export default function VisualizerClient() {
     }
   }, [project, user]);
 
+  // Handle upload in sidebar
+  const sidebarFileRef = useRef<HTMLInputElement>(null);
+
+  const handleSidebarFile = async (file: File) => {
+    if (!user || isCreating) return;
+    const MAX_BYTES = 10 * 1024 * 1024;
+    if (!["image/jpeg", "image/png"].includes(file.type)) return;
+    if (file.size > MAX_BYTES) return;
+
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const base64 = reader.result as string;
+      setIsCreating(true);
+      const name = prompt("Enter a name for your project:") ?? "Untitled";
+      const inputType = isNewMode ? inputTypeNew : (project?.inputType ?? "floor-plan");
+      const res = await fetch("/api/projects", {
+        method: "POST",
+        body: JSON.stringify({ name, userId: user.id, base64Image: base64, inputType, renderStyle }),
+      });
+      const newProject = await res.json();
+      setIsCreating(false);
+      router.push(`/visualizer/${newProject._id}`);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleExport = async () => {
     if (!currentImage) return;
     const response = await fetch(currentImage);
@@ -99,7 +163,7 @@ export default function VisualizerClient() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${project?.name || "floo3d-render"}.png`;
+    link.download = `${project?.name || "render"}.png`;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -111,6 +175,9 @@ export default function VisualizerClient() {
   };
 
   const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/visualizer/${id}` : "";
+
+  const activeInputType = isNewMode ? inputTypeNew : (project?.inputType ?? "floor-plan");
+  const styleList = STYLES[activeInputType] ?? STYLES["floor-plan"];
 
   return (
     <div className="viz-page">
@@ -128,7 +195,7 @@ export default function VisualizerClient() {
             <nav className="viz-breadcrumb">
               <Link href="/dashboard" className="viz-breadcrumb-link">Dashboard</Link>
               <ChevronRight size={14} className="viz-breadcrumb-sep" />
-              <span className="viz-breadcrumb-current">{project?.name || "Project"}</span>
+              <span className="viz-breadcrumb-current">{isNewMode ? "New Project" : (project?.name || "Project")}</span>
             </nav>
           </div>
 
@@ -151,13 +218,15 @@ export default function VisualizerClient() {
           <div>
             <div className="viz-project-meta">
               <span className={`viz-status-badge ${!currentImage ? "viz-status-badge-processing" : ""}`}>
-                {currentImage ? "3D Render Ready" : isProcessing ? "Processing" : "Pending"}
+                {isNewMode ? "New Project" : currentImage ? "3D Render Ready" : isProcessing ? "Processing" : "Pending"}
               </span>
-              <span className="viz-project-date">
-                Created {project?.createdAt ? new Date(project.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—"}
-              </span>
+              {!isNewMode && (
+                <span className="viz-project-date">
+                  Created {project?.createdAt ? new Date(project.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—"}
+                </span>
+              )}
             </div>
-            <h2 className="viz-project-title">{project?.name || "Untitled Project"}</h2>
+            <h2 className="viz-project-title">{isNewMode ? "New Project" : (project?.name || "Untitled Project")}</h2>
             <p className="viz-project-sub">Created by {user?.fullName ?? "You"}</p>
           </div>
 
@@ -199,81 +268,197 @@ export default function VisualizerClient() {
           </div>
         </div>
 
-        {/* Comparison slider */}
-        <div className="viz-compare-wrap" style={{ overflow: "hidden" }}>
-          {project?.originalImageUrl && currentImage ? (
-            <ReactCompareSlider
-              defaultValue={50}
-              style={{ width: "100%", height: "100%", transform: `scale(${zoomLevel})`, transformOrigin: "center", transition: "transform 0.3s ease" }}
-              handle={
-                <ReactCompareSliderHandle
-                  buttonStyle={{
-                    background: "#fff",
-                    border: "none",
-                    boxShadow: "0 2px 16px rgba(0,0,0,0.25)",
-                    color: "#ec5b13",
-                  }}
-                  linesStyle={{ background: "#ec5b13", width: 3, opacity: 0.9 }}
-                />
-              }
-              itemOne={
-                <ReactCompareSliderImage
-                  src={project.originalImageUrl}
-                  alt="2D Floor Plan"
-                  style={{ objectFit: "cover" }}
-                />
-              }
-              itemTwo={
-                <ReactCompareSliderImage
-                  src={currentImage}
-                  alt="3D Render"
-                  style={{ objectFit: "cover", cursor: "zoom-in" }}
-                  onClick={() => setLightboxOpen(true)}
-                />
-              }
-            />
-          ) : project?.originalImageUrl ? (
-            <NextImage src={project.originalImageUrl} alt="Original" fill style={{ objectFit: "cover" }} />
-          ) : null}
+        {/* Workspace: sidebar + output */}
+        <div className="viz-workspace">
 
-          <div className="viz-compare-label viz-label-left">
-            {project?.inputType === "room-photo" ? "Original Room" :
-             project?.inputType === "outdoor"    ? "Original Outdoor" :
-             project?.inputType === "empty-room" ? "Furnished Room" :
-             "Original 2D Plan"}
-          </div>
-          <div className="viz-compare-label viz-label-right">
-            {project?.inputType === "room-photo" ? "AI Redesigned" :
-             project?.inputType === "outdoor"    ? "AI Outdoor Design" :
-             project?.inputType === "empty-room" ? "Emptied Room" :
-             "AI 3D Render"}
-          </div>
+          {/* Sidebar */}
+          <aside className="viz-sidebar">
 
-          <div className="viz-compare-toolbar">
-            <button className="viz-toolbar-btn" onClick={() => setLightboxOpen(true)} title="Fullscreen">
-              <Maximize2 size={16} />
-            </button>
-            <button className="viz-toolbar-btn" title="Zoom out" onClick={zoomOut} disabled={zoomLevel <= 0.5}>
-              <ZoomOut size={16} />
-            </button>
-            <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "#64748b", minWidth: "2.5rem", textAlign: "center" }}>{Math.round(zoomLevel * 100)}%</span>
-            <button className="viz-toolbar-btn" title="Zoom in" onClick={zoomIn} disabled={zoomLevel >= 3}>
-              <ZoomIn size={16} />
-            </button>
-          </div>
-
-          {isProcessing && (
-            <div className="viz-processing">
-              <div className="viz-processing-card">
-                <RefreshCcw size={28} className="viz-spinner" />
-                <p className="viz-processing-title">Generating your 3D render...</p>
-                <p className="viz-processing-sub">This usually takes under a minute</p>
+            {/* Upload */}
+            <div className="viz-sb-section">
+              <div className="viz-sb-section-title">
+                <UploadIcon size={13} strokeWidth={2.5} style={{ color: "#ec5b13" }} />
+                Upload Your Image
+              </div>
+              <div
+                className="viz-sb-upload"
+                onClick={() => sidebarFileRef.current?.click()}
+              >
+                <input
+                  ref={sidebarFileRef}
+                  type="file"
+                  accept=".jpg,.png"
+                  style={{ display: "none" }}
+                  onChange={(e) => { const f = e.target.files?.[0]; if (f) handleSidebarFile(f); e.target.value = ""; }}
+                />
+                <UploadIcon size={24} style={{ color: "#ec5b13", strokeWidth: 1.5 }} />
+                <span className="viz-sb-upload-title">
+                  {isCreating ? "Creating project…" : "Click to upload or drag & drop"}
+                </span>
+                <span className="viz-sb-upload-sub">PNG, JPG · Max 10MB</span>
               </div>
             </div>
-          )}
+
+            {/* Room Type */}
+            <div className="viz-sb-section">
+              <div className="viz-sb-section-title">
+                <Home size={13} strokeWidth={2.5} style={{ color: "#ec5b13" }} />
+                Room Type
+              </div>
+              <select
+                className="viz-room-select"
+                value={roomType}
+                onChange={(e) => setRoomType(e.target.value)}
+              >
+                {ROOM_TYPES.map((rt) => (
+                  <option key={rt} value={rt}>{rt}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Design Style */}
+            <div className="viz-sb-section viz-sb-section-grow">
+              <div className="viz-sb-section-title">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ec5b13" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                Design Style
+              </div>
+              <div className="viz-style-scroll">
+                <div className="viz-style-grid">
+                  {styleList.map((s) => (
+                    <div
+                      key={s}
+                      className={`viz-style-card${renderStyle === s ? " viz-style-card-active" : ""}`}
+                      onClick={() => setRenderStyle(s)}
+                    >
+                      <div className="viz-style-card-img">
+                        <img src={STYLE_IMAGES[s] ?? "/card-room-after.webp"} alt={s} />
+                        {renderStyle === s && (
+                          <div className="viz-style-card-check">
+                            <svg width="8" height="8" viewBox="0 0 12 12" fill="none" stroke="#fff" strokeWidth="2.5"><polyline points="2,6 5,9 10,3"/></svg>
+                          </div>
+                        )}
+                      </div>
+                      <div className="viz-style-card-label">{s}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Generate */}
+            <div className="viz-generate-wrap">
+              <button
+                className="viz-generate-btn"
+                onClick={runGeneration}
+                disabled={isProcessing || isNewMode || !project}
+              >
+                <Zap size={15} strokeWidth={2.5} />
+                {isProcessing ? "Generating…" : "Generate"}
+              </button>
+              <div className="viz-credit-note">
+                ⚡ Uses <span>3 credits</span> per generation
+              </div>
+            </div>
+
+          </aside>
+
+          {/* Output card */}
+          <div className="viz-output-card">
+            <div className="viz-output-head">
+              <span className="viz-output-title">Preview</span>
+              <div className="viz-output-actions">
+                <button className="viz-icon-btn" onClick={handleExport} disabled={!currentImage} title="Download">
+                  <Download size={13} />
+                </button>
+                <button className="viz-icon-btn" onClick={() => setLightboxOpen(true)} disabled={!currentImage} title="Fullscreen">
+                  <Maximize2 size={13} />
+                </button>
+                <button className="viz-icon-btn" title="Zoom out" onClick={zoomOut} disabled={zoomLevel <= 0.5}>
+                  <ZoomOut size={13} />
+                </button>
+                <span className="viz-zoom-label">{Math.round(zoomLevel * 100)}%</span>
+                <button className="viz-icon-btn" title="Zoom in" onClick={zoomIn} disabled={zoomLevel >= 3}>
+                  <ZoomIn size={13} />
+                </button>
+              </div>
+            </div>
+
+            {/* Comparison slider */}
+            <div className="viz-compare-wrap" style={{ overflow: "hidden" }}>
+              {project?.originalImageUrl && currentImage ? (
+                <ReactCompareSlider
+                  defaultValue={50}
+                  style={{ width: "100%", height: "100%", transform: `scale(${zoomLevel})`, transformOrigin: "center", transition: "transform 0.3s ease" }}
+                  handle={
+                    <ReactCompareSliderHandle
+                      buttonStyle={{
+                        background: "#fff",
+                        border: "none",
+                        boxShadow: "0 2px 16px rgba(0,0,0,0.25)",
+                        color: "#ec5b13",
+                      }}
+                      linesStyle={{ background: "#ec5b13", width: 3, opacity: 0.9 }}
+                    />
+                  }
+                  itemOne={
+                    <ReactCompareSliderImage
+                      src={project.originalImageUrl}
+                      alt="Original"
+                      style={{ objectFit: "cover" }}
+                    />
+                  }
+                  itemTwo={
+                    <ReactCompareSliderImage
+                      src={currentImage}
+                      alt="Result"
+                      style={{ objectFit: "cover", cursor: "zoom-in" }}
+                      onClick={() => setLightboxOpen(true)}
+                    />
+                  }
+                />
+              ) : project?.originalImageUrl ? (
+                <NextImage src={project.originalImageUrl} alt="Original" fill style={{ objectFit: "cover" }} />
+              ) : (
+                <div className="viz-fallback">
+                  <div className="viz-fallback-icon">
+                    <UploadIcon size={28} style={{ strokeWidth: 1.5, color: "#ec5b13" }} />
+                  </div>
+                  <p className="viz-fallback-title">Upload an image to get started</p>
+                  <p className="viz-fallback-sub">Choose your style on the left, upload your image, and hit Generate.</p>
+                </div>
+              )}
+
+              {/* Labels */}
+              {currentImage && project?.originalImageUrl && (
+                <>
+                  <div className="viz-compare-label viz-label-left">
+                    {project?.inputType === "room-photo" ? "Original Room" :
+                     project?.inputType === "outdoor"    ? "Original Outdoor" :
+                     project?.inputType === "empty-room" ? "Furnished Room" :
+                     "Original 2D Plan"}
+                  </div>
+                  <div className="viz-compare-label viz-label-right">
+                    {project?.inputType === "room-photo" ? "AI Redesigned" :
+                     project?.inputType === "outdoor"    ? "AI Outdoor Design" :
+                     project?.inputType === "empty-room" ? "Emptied Room" :
+                     "AI 3D Render"}
+                  </div>
+                </>
+              )}
+
+              {isProcessing && (
+                <div className="viz-processing">
+                  <div className="viz-processing-card">
+                    <RefreshCcw size={28} className="viz-spinner" />
+                    <p className="viz-processing-title">Generating your render...</p>
+                    <p className="viz-processing-sub">This usually takes under a minute</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
         </div>
-
-
       </main>
 
       {modalType && (
@@ -297,7 +482,7 @@ export default function VisualizerClient() {
               <p className="viz-modal-text">
                 {modalType === "credits"
                   ? "You have reached your limit of 3D renders. Upgrade your plan to continue transforming floor plans."
-                  : "Something went wrong while processing your 3D render. Please try again or contact support if the problem persists."}
+                  : "Something went wrong while processing your render. Please try again or contact support if the problem persists."}
               </p>
             </div>
             <div className="viz-modal-actions">

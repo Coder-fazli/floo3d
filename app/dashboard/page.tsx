@@ -2,12 +2,18 @@
 
 import "./dashboard.css";
 import DashboardNavbar from "@/components/DashboardNavbar";
-import Upload from "@/components/Upload";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { getProjects, getCredits } from "@/lib/actions";
 import { Calendar, Eye, ArrowUpRight, FileText, Wallet, X, CreditCard, Rocket, CheckCircle } from "lucide-react";
+
+const INPUT_TYPES = [
+  { id: "floor-plan",  imgBefore: "/faq-3d.png",            imgAfter: "/faq-2d.jpg",              label: "2D Floor Plan to 3D",  desc: "Blueprint to 3D architectural render" },
+  { id: "room-photo",  imgBefore: "/card-room-after.webp",  imgAfter: "/card-room-before.webp",   label: "Room Style Transfer",  desc: "Redesign any room with AI" },
+  { id: "outdoor",     imgBefore: "/card-outdoor-before.avif", imgAfter: "/card-outdoor-after.avif", label: "Outdoor / Garden",  desc: "Exterior & garden design" },
+  { id: "empty-room",  imgBefore: "/card-empty-after.webp", imgAfter: "/card-empty-before.webp",  label: "Empty the Room",       desc: "Clear furniture instantly to plan new layouts." },
+];
 
 export default function Dashboard() {
   const router = useRouter();
@@ -17,22 +23,6 @@ export default function Dashboard() {
   const [visible, setVisible] = useState(8);
   const [credits, setCredits] = useState<number | null>(null);
   const [showBanner, setShowBanner] = useState(false);
-  const [fileError, setFileError] = useState<string | null>(null);
-  const [inputType, setInputType] = useState<"floor-plan" | "room-photo" | "outdoor" | "empty-room">("floor-plan");
-  const [renderStyle, setRenderStyle] = useState("Modern");
-
-  const STYLES: Record<string, string[]> = {
-    "floor-plan": ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
-    "room-photo": ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
-    "outdoor":    ["Mediterranean", "Japanese", "Tropical", "Cottage", "Modern", "Desert"],
-    "empty-room": ["Clean"],
-  };
-
-  const handleInputTypeChange = (type: "floor-plan" | "room-photo" | "outdoor" | "empty-room") => {
-    setInputType(type);
-    setRenderStyle(STYLES[type][0]);
-  };
-  const isUploading = useRef(false);
 
   const noCredits = credits !== null && credits === 0;
 
@@ -51,20 +41,6 @@ export default function Dashboard() {
   }, [isLoaded, user]);
 
   if (!isLoaded || !user) return null;
-
-  const handleUploadComplete = async (base64Image: string) => {
-    if (!user || isUploading.current) return;
-    isUploading.current = true;
-    const name = prompt("Enter a name for your project:");
-    if (!name) { isUploading.current = false; return; }
-    const res = await fetch("/api/projects", {
-      method: "POST",
-      body: JSON.stringify({ name, userId: user.id, base64Image, inputType, renderStyle }),
-    });
-    const project = await res.json();
-    isUploading.current = false;
-    router.push(`/visualizer/${project._id}`);
-  };
 
   const sorted = filter === "recent"
     ? [...projects].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -106,7 +82,7 @@ export default function Dashboard() {
         <div className="db-welcome">
           <div>
             <h2 className="db-welcome-title">Welcome back, {user.username ?? "there"} 👋</h2>
-            <p className="db-welcome-sub">Ready to transform another floor plan today?</p>
+            <p className="db-welcome-sub">Ready to transform another space today?</p>
           </div>
           <div className="db-welcome-actions">
             <button className="db-btn-ghost">
@@ -120,7 +96,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* New Render Flow */}
+        {/* Input Type Selection */}
         {noCredits ? (
           <div className="db-upload-error">
             <div className="db-upload-error-bar" />
@@ -145,79 +121,32 @@ export default function Dashboard() {
             </div>
           </div>
         ) : (
-          <div className="nr-flow">
-
-            {/* Step 1 — Input Type */}
-            <section className="nr-section">
-              <div className="nr-section-head">
-                <div className="nr-step-num">1</div>
-                <h2 className="nr-section-title">Select Input Type</h2>
-              </div>
-              <div className="nr-type-grid">
-                {[
-                  { id: "floor-plan", imgBefore: "/faq-3d.png", imgAfter: "/faq-2d.jpg", label: "2D Floor Plan to 3D", desc: "Blueprint to 3D architectural render" },
-                  { id: "room-photo", imgBefore: "/card-room-after.webp", imgAfter: "/card-room-before.webp", label: "Room Style Transfer", desc: "Redesign any room with AI" },
-                  { id: "outdoor", imgBefore: "/card-outdoor-before.avif", imgAfter: "/card-outdoor-after.avif", label: "Outdoor / Garden", desc: "Exterior & garden design" },
-                  { id: "empty-room", imgBefore: "/card-empty-after.webp", imgAfter: "/card-empty-before.webp", label: "Empty the Room", desc: "Clear furniture instantly to plan new layouts." },
-                ].map((t) => (
-                  <div
-                    key={t.id}
-                    className="nr-type-card"
-                    onClick={() => handleInputTypeChange(t.id as any)}
-                  >
-                    <div className={`nr-reveal-container${inputType === t.id ? " nr-reveal-container-active" : ""}`}>
-                      <div className="nr-reveal-before" style={{ backgroundImage: `url(${t.imgBefore})` }}>
-                        <div className="nr-reveal-before-overlay" />
-                      </div>
-                      <div className="nr-reveal-after" style={{ backgroundImage: `url(${t.imgAfter})` }} />
-                      {inputType === t.id && (
-                        <div className="nr-reveal-badge">
-                          <CheckCircle size={12} />
-                        </div>
-                      )}
+          <section className="nr-section">
+            <div className="nr-section-head">
+              <div className="nr-step-num">→</div>
+              <h2 className="nr-section-title">Choose a transformation</h2>
+            </div>
+            <div className="nr-type-grid">
+              {INPUT_TYPES.map((t) => (
+                <div
+                  key={t.id}
+                  className="nr-type-card"
+                  onClick={() => router.push(`/visualizer/new?type=${t.id}`)}
+                >
+                  <div className="nr-reveal-container">
+                    <div className="nr-reveal-before" style={{ backgroundImage: `url(${t.imgBefore})` }}>
+                      <div className="nr-reveal-before-overlay" />
                     </div>
-                    <div>
-                      <h3 className="nr-type-label">{t.label}</h3>
-                      <p className="nr-type-desc">{t.desc}</p>
-                    </div>
+                    <div className="nr-reveal-after" style={{ backgroundImage: `url(${t.imgAfter})` }} />
                   </div>
-                ))}
-              </div>
-            </section>
-
-            {/* Step 2 — Style */}
-            {inputType !== "empty-room" && (
-              <section className="nr-section">
-                <div className="nr-section-head">
-                  <div className="nr-step-num">2</div>
-                  <h2 className="nr-section-title">Design Style</h2>
+                  <div>
+                    <h3 className="nr-type-label">{t.label}</h3>
+                    <p className="nr-type-desc">{t.desc}</p>
+                  </div>
                 </div>
-                <div className="nr-styles">
-                  {STYLES[inputType].map((s) => (
-                    <button
-                      key={s}
-                      className={`nr-style-pill${renderStyle === s ? " nr-style-pill-active" : ""}`}
-                      onClick={() => setRenderStyle(s)}
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Step 3 — Upload */}
-            <section className="nr-section">
-              <div className="nr-section-head">
-                <div className="nr-step-num">{inputType === "empty-room" ? "2" : "3"}</div>
-                <h2 className="nr-section-title">
-                  Upload your {inputType === "floor-plan" ? "2D Floor Plan" : inputType === "room-photo" ? "Room Photo" : inputType === "outdoor" ? "Outdoor Photo" : "Room Photo"}
-                </h2>
-              </div>
-              <Upload onComplete={handleUploadComplete} onError={setFileError} />
-            </section>
-
-          </div>
+              ))}
+            </div>
+          </section>
         )}
 
         {/* Projects section */}
@@ -237,7 +166,7 @@ export default function Dashboard() {
           </div>
 
           {displayed.length === 0 ? (
-            <div className="db-empty">No projects yet. Upload a floor plan above to get started.</div>
+            <div className="db-empty">No projects yet. Choose a transformation above to get started.</div>
           ) : (
             <div className="db-grid">
               {displayed.map(({ _id, name, renderedImageUrl, originalImageUrl, createdAt }) => (
@@ -279,27 +208,6 @@ export default function Dashboard() {
         </section>
 
       </main>
-
-      {fileError && (
-        <div className="viz-modal-backdrop">
-          <div className="viz-modal">
-            <div className="viz-modal-body">
-              <div className="viz-modal-icon">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-                </svg>
-              </div>
-              <h3 className="viz-modal-title">Upload Failed</h3>
-              <p className="viz-modal-text">{fileError}</p>
-            </div>
-            <div className="viz-modal-actions">
-              <button className="viz-modal-btn-primary" onClick={() => setFileError(null)}>
-                Try Again
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
