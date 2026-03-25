@@ -2,7 +2,8 @@
 
 import "./visualizer.css";
 import NextImage from "next/image";
-import { useUser } from "@clerk/nextjs";
+import { useUser, useClerk } from "@clerk/nextjs";
+import { getCredits } from "@/lib/actions";
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { getProject } from "@/lib/actions";
@@ -12,9 +13,10 @@ import "yet-another-react-lightbox/styles.css";
 import SocialButton from "@/components/kokonutui/social-button";
 import Image from "next/image";
 import Link from "next/link";
-import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, Clock, ChevronRight, Upload as UploadIcon, Home, Zap, Sparkles } from "lucide-react";
+import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, Clock, ChevronRight, Upload as UploadIcon, Home, Zap, Sparkles, Bell } from "lucide-react";
 import NameProjectModal from "@/components/NameProjectModal";
 import { BubbleBackground } from "@/components/animate-ui/components/backgrounds/bubble";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 
 const STYLES: Record<string, string[]> = {
   "floor-plan":      ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
@@ -33,25 +35,27 @@ const FALLBACK_IMAGES: Record<string, { before: string; after: string; labelBefo
 const STYLE_IMAGES: Record<string, string> = {
   "Modern":        "/card-room-after.webp",
   "Scandinavian":  "/hero-after.jpg",
-  "Industrial":    "/real-3d-render.jpg",
-  "Rustic":        "/card-empty-after.webp",
-  "Luxury":        "/real-3d-render.jpg",
-  "Minimalist":    "/card-room-before.webp",
+  "Industrial":    "/result1.png",
+  "Rustic":        "/result2.png",
+  "Luxury":        "/result3.png",
+  "Minimalist":    "/card-empty-after.webp",
   "Mediterranean": "/card-outdoor-after.webp",
-  "Japanese":      "/card-room-after.webp",
+  "Japanese":      "/card-outdoor-after.avif",
   "Tropical":      "/card-outdoor-before.avif",
-  "Cottage":       "/card-empty-before.webp",
-  "Desert":        "/hero-before.jpg",
-  "Clean":         "/card-empty-after.webp",
+  "Cottage":       "/card-outdoor-before.webp",
+  "Desert":        "/thumb2.jpg",
+  "Clean":         "/card-empty-before.webp",
 };
 
-const ROOM_TYPES = ["Living Room", "Bedroom", "Kitchen", "Bathroom", "Office", "Dining Room", "Studio", "Hallway"];
+const ROOM_TYPES = ["Living Room", "Bedroom", "Kitchen", "Bathroom", "Office", "Dining Room", "Studio", "Hallway", "Kids Room"];
 
 export default function VisualizerClient() {
   const router = useRouter();
   const params = useParams();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
   const { user } = useUser();
+  const { openUserProfile } = useClerk();
+  const [credits, setCredits] = useState<number | null>(null);
 
   const isNewMode = id === "new";
 
@@ -92,6 +96,10 @@ export default function VisualizerClient() {
   useEffect(() => {
     if (!isNewMode && id) getProject(id as string).then(setProject);
   }, [id, isNewMode]);
+
+  useEffect(() => {
+    if (user) getCredits(user.id).then(setCredits);
+  }, [user]);
 
   const runGeneration = async () => {
     if (isProcessing) return;
@@ -225,13 +233,31 @@ export default function VisualizerClient() {
           </div>
 
           <div className="viz-nav-right">
-            <div className="viz-nav-avatar">
-              {user?.imageUrl ? (
-                <NextImage src={user.imageUrl} alt="avatar" width={32} height={32} />
-              ) : (
-                <span className="viz-nav-avatar-fallback">{user?.firstName?.[0] ?? "U"}</span>
-              )}
+            <button className="viz-nav-bell">
+              <Bell size={17} />
+              <span className="viz-nav-bell-dot" />
+            </button>
+
+            <div className="viz-nav-credits">
+              <Zap size={13} />
+              <span>{credits ?? "—"} Credits</span>
             </div>
+
+            <div className="viz-nav-divider" />
+
+            <button className="viz-nav-user" onClick={() => openUserProfile()}>
+              <div className="viz-nav-user-info">
+                <p className="viz-nav-user-name">{user?.username ?? user?.firstName ?? "User"}</p>
+                <p className="viz-nav-user-plan">Pro Plan</p>
+              </div>
+              <div className="viz-nav-avatar">
+                {user?.imageUrl ? (
+                  <NextImage src={user.imageUrl} alt="avatar" width={32} height={32} />
+                ) : (
+                  <span className="viz-nav-avatar-fallback">{user?.firstName?.[0] ?? "U"}</span>
+                )}
+              </div>
+            </button>
           </div>
         </div>
       </header>
@@ -270,26 +296,11 @@ export default function VisualizerClient() {
                 </button>
                 <SocialButton shareUrl={shareUrl} />
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <p className="viz-stat-label" style={{ margin: 0 }}>Share:</p>
-                <a href="#" className="viz-share-icon" onClick={handleShare} title="Copy link">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                </a>
-                <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`} target="_blank" className="viz-share-icon" title="Share on X">
-                  <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                </a>
-                <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`} target="_blank" className="viz-share-icon" title="Share on LinkedIn">
-                  <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                </a>
-              </div>
             </div>
-            <div className="viz-stat-card">
-              <div className="viz-stat-icon"><Clock size={18} /></div>
-              <div>
-                <p className="viz-stat-label">AI Model</p>
-                <p className="viz-stat-value">Floo3D v2</p>
-              </div>
-            </div>
+            <RainbowButton variant="outline" className="viz-homegen-btn">
+              <Sparkles size={14} />
+              HomeGen™ Engine
+            </RainbowButton>
           </div>
         </div>
 

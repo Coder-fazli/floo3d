@@ -1,0 +1,149 @@
+.np-page {
+  min-height: 100vh;
+  background: #f8f6f6;
+  font-family: var(--font-sans), "Public Sans", sans-serif;
+}
+
+.np-main {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.np-header {
+  margin-bottom: 2.5rem;
+}
+
+.np-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 1.25rem;
+  transition: color 0.2s;
+}
+
+.np-back:hover { color: #ec5b13; }
+
+.np-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.4rem;
+  letter-spacing: -0.02em;
+}
+
+.np-sub {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.np-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 640px) {
+  .np-grid { grid-template-columns: 1fr; }
+}
+
+.np-card {
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.np-card:hover {
+  border-color: #ec5b13;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(236, 91, 19, 0.12);
+}
+
+.np-card-images {
+  position: relative;
+  height: 200px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+}
+
+.np-img {
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+}
+
+.np-img-before { filter: brightness(0.92); }
+
+.np-img-badge {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+.np-card-body {
+  padding: 1.1rem 1.25rem 1.25rem;
+  flex: 1;
+}
+
+.np-card-label {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.3rem;
+}
+
+.np-card-desc {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.np-card-arrow {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2rem;
+  height: 2rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.np-card:hover .np-card-arrow {
+  background: #ec5b13;
+  border-color: #ec5b13;
+  color: #fff;
+}

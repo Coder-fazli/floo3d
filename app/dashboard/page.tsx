@@ -5,15 +5,8 @@ import DashboardNavbar from "@/components/DashboardNavbar";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
-import { getProjects, getCredits } from "@/lib/actions";
-import { Calendar, Eye, ArrowUpRight, FileText, Wallet, X, CreditCard, Rocket, CheckCircle } from "lucide-react";
-
-const INPUT_TYPES = [
-  { id: "floor-plan",  imgBefore: "/faq-3d.png",            imgAfter: "/faq-2d.jpg",              label: "2D Floor Plan to 3D",  desc: "Blueprint to 3D architectural render" },
-  { id: "interior-design",  imgBefore: "/card-room-after.webp",  imgAfter: "/card-room-before.webp",   label: "Interior Design",  desc: "Redesign any room with AI" },
-  { id: "outdoor",     imgBefore: "/card-outdoor-before.avif", imgAfter: "/card-outdoor-after.avif", label: "Outdoor / Garden",  desc: "Exterior & garden design" },
-  { id: "empty-room",  imgBefore: "/card-empty-after.webp", imgAfter: "/card-empty-before.webp",  label: "Empty the Room",       desc: "Clear furniture instantly to plan new layouts." },
-];
+import { getProjects } from "@/lib/actions";
+import { Calendar, Eye, ArrowUpRight, FileText, Wallet, X } from "lucide-react";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -21,18 +14,11 @@ export default function Dashboard() {
   const [projects, setProjects] = useState<any[]>([]);
   const [filter, setFilter] = useState<"all" | "recent">("all");
   const [visible, setVisible] = useState(8);
-  const [credits, setCredits] = useState<number | null>(null);
   const [showBanner, setShowBanner] = useState(false);
-
-  const noCredits = credits !== null && credits === 0;
 
   useEffect(() => {
     if (user) {
       getProjects(user.id).then(setProjects);
-      getCredits(user.id).then((c) => {
-        setCredits(c);
-        if (c === 0) setShowBanner(true);
-      });
     }
   }, [user]);
 
@@ -89,65 +75,12 @@ export default function Dashboard() {
               <FileText size={16} />
               Documentation
             </button>
-            <button className="db-btn-primary">
+            <button className="db-btn-primary" onClick={() => router.push("/new")}>
               <ArrowUpRight size={16} />
-              Upgrade Account
+              New Render
             </button>
           </div>
         </div>
-
-        {/* Input Type Selection */}
-        {noCredits ? (
-          <div className="db-upload-error">
-            <div className="db-upload-error-bar" />
-            <div className="db-upload-error-inner">
-              <div className="db-upload-error-icon">
-                <CreditCard size={40} />
-              </div>
-              <h3 className="db-upload-error-title">Insufficient Credits</h3>
-              <p className="db-upload-error-desc">
-                You've reached your credit limit. Please{" "}
-                <span className="db-upload-error-link">upgrade your plan</span>{" "}
-                to continue transforming floor plans.
-              </p>
-              <div className="db-upload-error-btns">
-                <button className="db-upload-error-btn-primary">
-                  <Rocket size={16} /> Upgrade Now
-                </button>
-                <button className="db-upload-error-btn-secondary">
-                  View Pricing
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <section className="nr-section">
-            <div className="nr-section-head">
-              <div className="nr-step-num">→</div>
-              <h2 className="nr-section-title">Choose a transformation</h2>
-            </div>
-            <div className="nr-type-grid">
-              {INPUT_TYPES.map((t) => (
-                <div
-                  key={t.id}
-                  className="nr-type-card"
-                  onClick={() => router.push(`/visualizer/new?type=${t.id}`)}
-                >
-                  <div className="nr-reveal-container">
-                    <div className="nr-reveal-before" style={{ backgroundImage: `url(${t.imgBefore})` }}>
-                      <div className="nr-reveal-before-overlay" />
-                    </div>
-                    <div className="nr-reveal-after" style={{ backgroundImage: `url(${t.imgAfter})` }} />
-                  </div>
-                  <div>
-                    <h3 className="nr-type-label">{t.label}</h3>
-                    <p className="nr-type-desc">{t.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
 
         {/* Projects section */}
         <section className="db-projects">
