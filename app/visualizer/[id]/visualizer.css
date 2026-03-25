@@ -1,5 +1,30 @@
 /* All classes prefixed viz- */
 
+/* ── Page Preloader ── */
+.viz-preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #0f0f0f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.viz-preloader-text {
+    color: #ffffff !important;
+    font-size: clamp(3rem, 10vw, 7rem) !important;
+    height: clamp(4rem, 12vw, 9rem) !important;
+    max-width: 90vw !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.03em;
+}
+
+.viz-preloader-text span {
+    color: #ffffff !important;
+    font-weight: 900 !important;
+}
+
 .viz-page {
     min-height: 100vh;
     background: #f8f6f6;

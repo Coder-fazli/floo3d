@@ -55,7 +55,7 @@ export default function VisualizerClient() {
   const router = useRouter();
   const params = useParams();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const { openUserProfile } = useClerk();
   const [credits, setCredits] = useState<number | null>(null);
 
@@ -215,6 +215,15 @@ export default function VisualizerClient() {
 
   const activeInputType = isNewMode ? inputTypeNew : (project?.inputType ?? "floor-plan");
   const styleList = STYLES[activeInputType] ?? STYLES["floor-plan"];
+
+  if (!isLoaded) return (
+    <div className="viz-preloader">
+      <MorphingText
+        className="viz-preloader-text"
+        texts={["MyHomeStyler", "AI Design", "Your Vision", "Reimagined", "3D Renders", "Instantly"]}
+      />
+    </div>
+  );
 
   return (
     <div className="viz-page">
@@ -546,20 +555,8 @@ export default function VisualizerClient() {
                     <div className="viz-processing-icon">
                       <Sparkles size={28} />
                     </div>
-                    <MorphingText
-                      className="viz-processing-morph"
-                      texts={[
-                        "Bribing the pixels…",
-                        "Teaching AI taste…",
-                        "Robot redecorating…",
-                        "Mixing virtual paint…",
-                        "Consulting the AI…",
-                        "Almost there…",
-                        "Your room's glowing up…",
-                        "Waking the genius…",
-                      ]}
-                    />
-                    <p className="viz-processing-sub">Hang tight — usually under a minute ✦</p>
+                    <p className="viz-processing-title">Generating your render…</p>
+                    <p className="viz-processing-sub">This usually takes under a minute</p>
                     <div className="viz-processing-dots">
                       <span /><span /><span />
                     </div>
