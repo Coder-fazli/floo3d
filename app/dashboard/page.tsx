@@ -6,12 +6,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { ArrowUpRight, FileText, FolderOpen } from "lucide-react";
+import { ReactCompareSlider, ReactCompareSliderImage } from "react-compare-slider";
 
 const INPUT_TYPES = [
-  { id: "floor-plan",      imgBefore: "/faq-3d.png",              imgAfter: "/faq-2d.jpg",              label: "2D Floor Plan to 3D",  desc: "Blueprint to 3D architectural render" },
-  { id: "interior-design", imgBefore: "/card-room-after.webp",    imgAfter: "/card-room-before.webp",   label: "Interior Design",      desc: "Redesign any room with AI" },
-  { id: "outdoor",         imgBefore: "/card-outdoor-before.avif", imgAfter: "/card-outdoor-after.avif", label: "Outdoor / Garden",     desc: "Exterior & garden design" },
-  { id: "empty-room",      imgBefore: "/card-empty-after.webp",   imgAfter: "/card-empty-before.webp",  label: "Empty the Room",       desc: "Clear furniture instantly to plan new layouts." },
+  { id: "floor-plan",      imgBefore: "/faq-3d.png",              imgAfter: "/faq-2d.jpg",              label: "2D Floor Plan → 3D",        desc: "Turn blueprints into photorealistic 3D renders" },
+  { id: "interior-design", imgBefore: "/card-room-before.webp",   imgAfter: "/card-room-after.webp",    label: "Interior Redesign",          desc: "Reimagine any room with AI-powered styling" },
+  { id: "outdoor",         imgBefore: "/card-outdoor-before.avif", imgAfter: "/card-outdoor-after.avif", label: "Outdoor & Garden",           desc: "Transform your exterior with stunning landscape AI" },
+  { id: "empty-room",      imgBefore: "/card-empty-before.webp",  imgAfter: "/card-empty-after.webp",   label: "Virtual Staging",            desc: "Stage empty spaces with beautiful AI furniture" },
 ];
 
 export default function Dashboard() {
@@ -61,15 +62,19 @@ export default function Dashboard() {
                 className="nr-type-card"
                 onClick={() => router.push(`/visualizer/new?type=${t.id}`)}
               >
-                <div className="nr-reveal-container">
-                  <div className="nr-reveal-before" style={{ backgroundImage: `url(${t.imgBefore})` }}>
-                    <div className="nr-reveal-before-overlay" />
-                  </div>
-                  <div className="nr-reveal-after" style={{ backgroundImage: `url(${t.imgAfter})` }} />
+                <div className="nr-reveal-container" onClick={(e) => e.stopPropagation()}>
+                  <ReactCompareSlider
+                    itemOne={<ReactCompareSliderImage src={t.imgBefore} alt="Before" style={{ objectFit: "cover" }} />}
+                    itemTwo={<ReactCompareSliderImage src={t.imgAfter} alt="After" style={{ objectFit: "cover" }} />}
+                    style={{ width: "100%", height: "100%" }}
+                  />
                 </div>
-                <div>
-                  <h3 className="nr-type-label">{t.label}</h3>
-                  <p className="nr-type-desc">{t.desc}</p>
+                <div className="nr-type-info">
+                  <div>
+                    <h3 className="nr-type-label">{t.label}</h3>
+                    <p className="nr-type-desc">{t.desc}</p>
+                  </div>
+                  <span className="nr-type-cta">Try it →</span>
                 </div>
               </div>
             ))}

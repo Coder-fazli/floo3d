@@ -57,7 +57,7 @@ export default function VisualizerClient() {
   const { openUserProfile } = useClerk();
   const [credits, setCredits] = useState<number | null>(null);
 
-  const isNewMode = id === "new";
+  const [isNewMode, setIsNewMode] = useState(id === "new");
 
   const hasInitialGenerated = useRef(false);
   const [project, setProject] = useState<any>(null);
@@ -129,6 +129,7 @@ export default function VisualizerClient() {
       const data = await res.json();
       if (!data?.renderedImageUrl) throw new Error("Invalid response from API");
       setCurrentImage(data.renderedImageUrl);
+      if (user) getCredits(user.id).then(setCredits);
     } catch (error: any) {
       if (res?.status === 403) {
         setModalType("credits");
@@ -180,6 +181,7 @@ export default function VisualizerClient() {
     setIsCreating(false);
     pendingFileBase64Ref.current = null;
     setProject(newProject);
+    setIsNewMode(false);
     hasInitialGenerated.current = false;
     window.history.replaceState(null, "", `/visualizer/${newProject._id}`);
   };
@@ -221,9 +223,9 @@ export default function VisualizerClient() {
           <div className="viz-nav-left">
             <Link href="/dashboard" className="viz-brand">
               <div className="viz-brand-icon">
-                <Image src="/logo.png" alt="Floo3D" width={20} height={20} />
+                <Image src="/logo.png" alt="MyHomeStyler" width={20} height={20} />
               </div>
-              <span className="viz-brand-name">Floo<span className="viz-brand-accent">3D</span></span>
+              <span className="viz-brand-name">MyHome<span className="viz-brand-accent">Styler</span></span>
             </Link>
             <nav className="viz-breadcrumb">
               <Link href="/dashboard" className="viz-breadcrumb-link">Dashboard</Link>

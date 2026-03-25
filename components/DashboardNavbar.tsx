@@ -34,10 +34,7 @@ export default function DashboardNavbar() {
             <span className="dbnav-logo-name">MyHome<span className="dbnav-logo-accent">Styler</span></span>
           </Link>
           <nav className="dbnav-links">
-            <a href="/dashboard" className="dbnav-link dbnav-link-active">Projects</a>
             <a href="#" className="dbnav-link">Gallery</a>
-            <a href="#" className="dbnav-link">Pricing</a>
-            <a href="#" className="dbnav-link">Support</a>
           </nav>
         </div>
 
