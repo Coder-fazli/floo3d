@@ -23,7 +23,7 @@ export default function PagePreloader() {
     <div className={`preloader ${fading ? "preloader-fade" : ""}`}>
       <MorphingText
         className="preloader-text"
-        texts={["MyHomeStyler", "AI Design", "Your Vision", "Reimagined"]}
+        texts={["MyHome", "Styler"]}
       />
     </div>
   );

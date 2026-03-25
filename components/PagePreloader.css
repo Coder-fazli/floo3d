@@ -2,7 +2,7 @@
     position: fixed;
     inset: 0;
     z-index: 99999;
-    background: #0f0f0f;
+    background: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -15,15 +15,15 @@
 }
 
 .preloader-text {
-    color: #ffffff !important;
-    font-size: clamp(3rem, 10vw, 7rem) !important;
-    height: clamp(4rem, 12vw, 9rem) !important;
+    color: #ec5b13 !important;
+    font-size: clamp(3rem, 12vw, 8rem) !important;
+    height: clamp(4rem, 14vw, 10rem) !important;
     max-width: 90vw !important;
     font-weight: 900 !important;
-    letter-spacing: -0.03em !important;
+    letter-spacing: -0.04em !important;
 }
 
 .preloader-text span {
-    color: #ffffff !important;
+    color: #ec5b13 !important;
     font-weight: 900 !important;
 }

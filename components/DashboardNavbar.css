@@ -40,10 +40,12 @@
     width: 2.5rem;
     height: 2.5rem;
     background: transparent;
-    border-radius: 0.5rem;
+    border-radius: 9999px;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
 }
 
 .dbnav-logo-name {
