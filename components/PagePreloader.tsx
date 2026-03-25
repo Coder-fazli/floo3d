@@ -10,8 +10,8 @@ export default function PagePreloader() {
   const [fading, setFading] = useState(false);
 
   useEffect(() => {
-    const fadeTimer = setTimeout(() => setFading(true), 3200);
-    const hideTimer = setTimeout(() => setVisible(false), 3800);
+    const fadeTimer = setTimeout(() => setFading(true), 3000);
+    const hideTimer = setTimeout(() => setVisible(false), 3600);
     return () => {
       clearTimeout(fadeTimer);
       clearTimeout(hideTimer);
