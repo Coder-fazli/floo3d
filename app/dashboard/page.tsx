@@ -10,7 +10,7 @@ import { Calendar, Eye, ArrowUpRight, FileText, Wallet, X, CreditCard, Rocket, C
 
 const INPUT_TYPES = [
   { id: "floor-plan",  imgBefore: "/faq-3d.png",            imgAfter: "/faq-2d.jpg",              label: "2D Floor Plan to 3D",  desc: "Blueprint to 3D architectural render" },
-  { id: "interior-design",  imgBefore: "/card-room-after.webp",  imgAfter: "/card-room-before.webp",   label: "Interiour Design",  desc: "Redesign any room with AI" },
+  { id: "interior-design",  imgBefore: "/card-room-after.webp",  imgAfter: "/card-room-before.webp",   label: "Interior Design",  desc: "Redesign any room with AI" },
   { id: "outdoor",     imgBefore: "/card-outdoor-before.avif", imgAfter: "/card-outdoor-after.avif", label: "Outdoor / Garden",  desc: "Exterior & garden design" },
   { id: "empty-room",  imgBefore: "/card-empty-after.webp", imgAfter: "/card-empty-before.webp",  label: "Empty the Room",       desc: "Clear furniture instantly to plan new layouts." },
 ];

@@ -740,7 +740,7 @@
 .viz-style-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.6rem;
+    gap: 0.4rem;
 }
 
 .viz-style-card {
@@ -760,7 +760,7 @@
 }
 
 .viz-style-card-img {
-    aspect-ratio: 4 / 3;
+    height: 56px;
     position: relative;
     overflow: hidden;
 }
