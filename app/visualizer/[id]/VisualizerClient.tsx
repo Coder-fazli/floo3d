@@ -18,6 +18,7 @@ import NameProjectModal from "@/components/NameProjectModal";
 import { BubbleBackground } from "@/components/animate-ui/components/backgrounds/bubble";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { SparklesText } from "@/components/ui/sparkles-text";
+import { MorphingText } from "@/components/ui/morphing-text";
 
 const STYLES: Record<string, string[]> = {
   "floor-plan":      ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
@@ -266,6 +267,19 @@ export default function VisualizerClient() {
       </header>
 
       <main className="viz-main">
+
+        {/* Low credits banner */}
+        {credits !== null && credits < 3 && (
+          <div className="viz-credits-banner">
+            <span className="viz-credits-banner-icon">⚡</span>
+            <span className="viz-credits-banner-text">
+              {credits === 0
+                ? "You're out of credits — upgrade to keep generating."
+                : `Only ${credits} credit${credits === 1 ? "" : "s"} left — upgrade to avoid interruption.`}
+            </span>
+            <button className="viz-credits-banner-btn">Upgrade Now</button>
+          </div>
+        )}
 
         {/* Project header */}
         <div className="viz-project-head">
@@ -532,8 +546,20 @@ export default function VisualizerClient() {
                     <div className="viz-processing-icon">
                       <Sparkles size={28} />
                     </div>
-                    <p className="viz-processing-title">Generating your render…</p>
-                    <p className="viz-processing-sub">This usually takes under a minute</p>
+                    <MorphingText
+                      className="viz-processing-morph"
+                      texts={[
+                        "Bribing the pixels…",
+                        "Teaching AI taste…",
+                        "Robot redecorating…",
+                        "Mixing virtual paint…",
+                        "Consulting the AI…",
+                        "Almost there…",
+                        "Your room's glowing up…",
+                        "Waking the genius…",
+                      ]}
+                    />
+                    <p className="viz-processing-sub">Hang tight — usually under a minute ✦</p>
                     <div className="viz-processing-dots">
                       <span /><span /><span />
                     </div>
