@@ -17,6 +17,7 @@ import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, Clock, ChevronRight, 
 import NameProjectModal from "@/components/NameProjectModal";
 import { BubbleBackground } from "@/components/animate-ui/components/backgrounds/bubble";
 import { RainbowButton } from "@/components/ui/rainbow-button";
+import { SparklesText } from "@/components/ui/sparkles-text";
 
 const STYLES: Record<string, string[]> = {
   "floor-plan":      ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
@@ -390,8 +391,20 @@ export default function VisualizerClient() {
                 onClick={runGeneration}
                 disabled={isProcessing || isNewMode || !project || (!!currentImage && renderStyle === project?.renderStyle)}
               >
-                <Zap size={15} strokeWidth={2.5} />
-                {isProcessing ? "Generating…" : currentImage ? "Regenerate" : "Generate"}
+                {isProcessing ? (
+                  <>
+                    <Zap size={15} strokeWidth={2.5} />
+                    Generating…
+                  </>
+                ) : (
+                  <SparklesText
+                    className="text-sm font-bold leading-none"
+                    sparklesCount={6}
+                    colors={{ first: "#fff176", second: "#ffd54f" }}
+                  >
+                    {currentImage ? "✦ Regenerate" : "✦ Generate"}
+                  </SparklesText>
+                )}
               </button>
               <div className="viz-credit-note">
                 ⚡ Uses <span>3 credits</span> per generation

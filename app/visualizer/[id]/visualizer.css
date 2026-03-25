@@ -1020,6 +1020,16 @@
     animation: none;
 }
 
+/* SparklesText inside generate button — override default huge size */
+.viz-generate-btn > div {
+    font-size: 0.88rem !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    color: #fff !important;
+    display: flex;
+    align-items: center;
+}
+
 .viz-credit-note {
     display: flex;
     align-items: center;
