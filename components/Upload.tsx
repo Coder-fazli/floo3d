@@ -3,7 +3,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { CheckCircle2, ImageIcon, CloudUpload, CheckCircle } from 'lucide-react';
-import { PROGRESS_INTERVAL_MS, PROGRESS_STEP, REDIRECT_DELAY_MS } from '@/lib/constants';
+const PROGRESS_INTERVAL_MS = 30;
+const PROGRESS_STEP = 2;
+const REDIRECT_DELAY_MS = 400;
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
 const ALLOWED_TYPES = ["image/jpeg", "image/png"];

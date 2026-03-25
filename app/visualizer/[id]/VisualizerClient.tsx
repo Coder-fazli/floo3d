@@ -13,12 +13,20 @@ import SocialButton from "@/components/kokonutui/social-button";
 import Image from "next/image";
 import Link from "next/link";
 import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, Clock, ChevronRight, Upload as UploadIcon, Home, Zap } from "lucide-react";
+import NameProjectModal from "@/components/NameProjectModal";
 
 const STYLES: Record<string, string[]> = {
-  "floor-plan": ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
-  "room-photo": ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
-  "outdoor":    ["Mediterranean", "Japanese", "Tropical", "Cottage", "Modern", "Desert"],
-  "empty-room": ["Clean"],
+  "floor-plan":      ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
+  "interior-design": ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
+  "outdoor":         ["Mediterranean", "Japanese", "Tropical", "Cottage", "Modern", "Desert"],
+  "empty-room":      ["Clean"],
+};
+
+const FALLBACK_IMAGES: Record<string, { before: string; after: string; labelBefore: string; labelAfter: string }> = {
+  "floor-plan":      { before: "/real-2d-plan.jpg",         after: "/real-3d-render.jpg",      labelBefore: "Original 2D Plan", labelAfter: "AI 3D Render" },
+  "interior-design": { before: "/card-room-before.webp",    after: "/card-room-after.webp",    labelBefore: "Original Room",    labelAfter: "AI Redesigned" },
+  "outdoor":         { before: "/card-outdoor-before.avif", after: "/card-outdoor-after.avif", labelBefore: "Original Outdoor", labelAfter: "AI Outdoor Design" },
+  "empty-room":      { before: "/card-empty-before.webp",   after: "/card-empty-after.webp",   labelBefore: "Furnished Room",   labelAfter: "Emptied Room" },
 };
 
 const STYLE_IMAGES: Record<string, string> = {
@@ -40,7 +48,8 @@ const ROOM_TYPES = ["Living Room", "Bedroom", "Kitchen", "Bathroom", "Office", "
 
 export default function VisualizerClient() {
   const router = useRouter();
-  const { id } = useParams();
+  const params = useParams();
+  const id = Array.isArray(params.id) ? params.id[0] : params.id;
   const { user } = useUser();
 
   const isNewMode = id === "new";
@@ -58,6 +67,8 @@ export default function VisualizerClient() {
   const [roomType, setRoomType] = useState("Living Room");
   const [inputTypeNew, setInputTypeNew] = useState("floor-plan");
   const [isCreating, setIsCreating] = useState(false);
+  const [nameModalOpen, setNameModalOpen] = useState(false);
+  const pendingFileBase64Ref = useRef<string | null>(null);
 
   const zoomIn  = () => setZoomLevel(z => parseFloat(Math.min(z + 0.25, 3).toFixed(2)));
   const zoomOut = () => setZoomLevel(z => parseFloat(Math.max(z - 0.25, 0.5).toFixed(2)));
@@ -101,6 +112,7 @@ export default function VisualizerClient() {
           userId: user?.id,
           inputType: project.inputType ?? "floor-plan",
           renderStyle,
+          roomType,
         }),
       });
 
@@ -121,39 +133,51 @@ export default function VisualizerClient() {
   };
 
   useEffect(() => {
-    if (!project || !user || hasInitialGenerated.current) return;
+    if (!project || hasInitialGenerated.current) return;
     hasInitialGenerated.current = true;
     if (project.renderedImageUrl) {
       setCurrentImage(project.renderedImageUrl);
-    } else {
-      runGeneration();
     }
-  }, [project, user]);
+  }, [project]);
 
   // Handle upload in sidebar
   const sidebarFileRef = useRef<HTMLInputElement>(null);
 
-  const handleSidebarFile = async (file: File) => {
+  const handleSidebarFile = (file: File) => {
     if (!user || isCreating) return;
     const MAX_BYTES = 10 * 1024 * 1024;
     if (!["image/jpeg", "image/png"].includes(file.type)) return;
     if (file.size > MAX_BYTES) return;
 
     const reader = new FileReader();
-    reader.onload = async () => {
-      const base64 = reader.result as string;
-      setIsCreating(true);
-      const name = prompt("Enter a name for your project:") ?? "Untitled";
-      const inputType = isNewMode ? inputTypeNew : (project?.inputType ?? "floor-plan");
-      const res = await fetch("/api/projects", {
-        method: "POST",
-        body: JSON.stringify({ name, userId: user.id, base64Image: base64, inputType, renderStyle }),
-      });
-      const newProject = await res.json();
-      setIsCreating(false);
-      router.push(`/visualizer/${newProject._id}`);
+    reader.onload = () => {
+      pendingFileBase64Ref.current = reader.result as string;
+      setNameModalOpen(true);
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleNameConfirm = async (name: string) => {
+    setNameModalOpen(false);
+    const base64 = pendingFileBase64Ref.current;
+    if (!base64 || !user) return;
+    setIsCreating(true);
+    const inputType = isNewMode ? inputTypeNew : (project?.inputType ?? "floor-plan");
+    const res = await fetch("/api/projects", {
+      method: "POST",
+      body: JSON.stringify({ name, userId: user.id, base64Image: base64, inputType, renderStyle }),
+    });
+    const newProject = await res.json();
+    setIsCreating(false);
+    pendingFileBase64Ref.current = null;
+    setProject(newProject);
+    hasInitialGenerated.current = false;
+    window.history.replaceState(null, "", `/visualizer/${newProject._id}`);
+  };
+
+  const handleNameCancel = () => {
+    setNameModalOpen(false);
+    pendingFileBase64Ref.current = null;
   };
 
   const handleExport = async () => {
@@ -350,10 +374,10 @@ export default function VisualizerClient() {
               <button
                 className="viz-generate-btn"
                 onClick={runGeneration}
-                disabled={isProcessing || isNewMode || !project}
+                disabled={isProcessing || isNewMode || !project || (!!currentImage && renderStyle === project?.renderStyle)}
               >
                 <Zap size={15} strokeWidth={2.5} />
-                {isProcessing ? "Generating…" : "Generate"}
+                {isProcessing ? "Generating…" : currentImage ? "Regenerate" : "Generate"}
               </button>
               <div className="viz-credit-note">
                 ⚡ Uses <span>3 credits</span> per generation
@@ -418,29 +442,45 @@ export default function VisualizerClient() {
                 />
               ) : project?.originalImageUrl ? (
                 <NextImage src={project.originalImageUrl} alt="Original" fill style={{ objectFit: "cover" }} />
-              ) : (
-                <div className="viz-fallback">
-                  <div className="viz-fallback-icon">
-                    <UploadIcon size={28} style={{ strokeWidth: 1.5, color: "#ec5b13" }} />
-                  </div>
-                  <p className="viz-fallback-title">Upload an image to get started</p>
-                  <p className="viz-fallback-sub">Choose your style on the left, upload your image, and hit Generate.</p>
-                </div>
-              )}
+              ) : (() => {
+                const fb = FALLBACK_IMAGES[activeInputType] ?? FALLBACK_IMAGES["floor-plan"];
+                return (
+                  <>
+                    <ReactCompareSlider
+                      defaultValue={50}
+                      style={{ width: "100%", height: "100%" }}
+                      handle={
+                        <ReactCompareSliderHandle
+                          buttonStyle={{ background: "#fff", border: "none", boxShadow: "0 2px 16px rgba(0,0,0,0.25)", color: "#ec5b13" }}
+                          linesStyle={{ background: "#ec5b13", width: 3, opacity: 0.9 }}
+                        />
+                      }
+                      itemOne={<ReactCompareSliderImage src={fb.before} alt="Before" style={{ objectFit: "cover" }} />}
+                      itemTwo={<ReactCompareSliderImage src={fb.after}  alt="After"  style={{ objectFit: "cover" }} />}
+                    />
+                    <div className="viz-compare-label viz-label-left">{fb.labelBefore}</div>
+                    <div className="viz-compare-label viz-label-right">{fb.labelAfter}</div>
+                    <div className="viz-fallback-hint">
+                      <UploadIcon size={14} style={{ color: "#ec5b13" }} />
+                      Upload your image to replace this example
+                    </div>
+                  </>
+                );
+              })()}
 
               {/* Labels */}
               {currentImage && project?.originalImageUrl && (
                 <>
                   <div className="viz-compare-label viz-label-left">
-                    {project?.inputType === "room-photo" ? "Original Room" :
-                     project?.inputType === "outdoor"    ? "Original Outdoor" :
-                     project?.inputType === "empty-room" ? "Furnished Room" :
+                    {project?.inputType === "interior-design" ? "Original Room" :
+                     project?.inputType === "outdoor"         ? "Original Outdoor" :
+                     project?.inputType === "empty-room"      ? "Furnished Room" :
                      "Original 2D Plan"}
                   </div>
                   <div className="viz-compare-label viz-label-right">
-                    {project?.inputType === "room-photo" ? "AI Redesigned" :
-                     project?.inputType === "outdoor"    ? "AI Outdoor Design" :
-                     project?.inputType === "empty-room" ? "Emptied Room" :
+                    {project?.inputType === "interior-design" ? "AI Redesigned" :
+                     project?.inputType === "outdoor"         ? "AI Outdoor Design" :
+                     project?.inputType === "empty-room"      ? "Emptied Room" :
                      "AI 3D Render"}
                   </div>
                 </>
@@ -517,6 +557,12 @@ export default function VisualizerClient() {
           slides={[{ src: currentImage }]}
         />
       )}
+
+      <NameProjectModal
+        open={nameModalOpen}
+        onConfirm={handleNameConfirm}
+        onCancel={handleNameCancel}
+      />
     </div>
   );
 }

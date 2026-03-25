@@ -7,8 +7,12 @@ import { useRouter } from "next/navigation";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { ReactCompareSlider, ReactCompareSliderImage, ReactCompareSliderHandle } from "react-compare-slider";
 import { FileUp, Box } from "lucide-react";
-import { PROGRESS_INTERVAL_MS, PROGRESS_STEP, REDIRECT_DELAY_MS } from "@/lib/constants";
 import { getProject } from "@/lib/actions";
+import NameProjectModal from "@/components/NameProjectModal";
+
+const PROGRESS_INTERVAL_MS = 30;
+const PROGRESS_STEP = 2;
+const REDIRECT_DELAY_MS = 400;
 
 const FULL = "Turn 2D floor plans into 3D renders instantly";
 const ACCENT_START = "Turn 2D floor plans into ".length;
@@ -122,6 +126,8 @@ export default function Hero() {
   const [progress, setProgress] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [nameModalOpen, setNameModalOpen] = useState(false);
+  const pendingBase64Ref = useRef<string | null>(null);
 
   useEffect(() => {
     return () => {
@@ -129,6 +135,25 @@ export default function Hero() {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, []);
+
+  const handleNameConfirm = async (name: string) => {
+    setNameModalOpen(false);
+    const base64 = pendingBase64Ref.current;
+    if (!base64 || !user) return;
+    const res = await fetch("/api/projects", {
+      method: "POST",
+      body: JSON.stringify({ name, userId: user.id, base64Image: base64 }),
+    });
+    const project = await res.json();
+    isUploading.current = false;
+    router.push(`/visualizer/${project._id}`);
+  };
+
+  const handleNameCancel = () => {
+    setNameModalOpen(false);
+    pendingBase64Ref.current = null;
+    isUploading.current = false;
+  };
 
   const processFile = (f: File) => {
     if (!isSignedIn) return;
@@ -143,18 +168,11 @@ export default function Hero() {
           if (next >= 100) {
             clearInterval(intervalRef.current!);
             intervalRef.current = null;
-            timeoutRef.current = setTimeout(async () => {
+            timeoutRef.current = setTimeout(() => {
               if (!user || isUploading.current) return;
               isUploading.current = true;
-              const name = prompt("Enter a name for your project:");
-              if (!name) { isUploading.current = false; return; }
-              const res = await fetch("/api/projects", {
-                method: "POST",
-                body: JSON.stringify({ name, userId: user.id, base64Image: base64 }),
-              });
-              const project = await res.json();
-              isUploading.current = false;
-              router.push(`/visualizer/${project._id}`);
+              pendingBase64Ref.current = base64;
+              setNameModalOpen(true);
             }, REDIRECT_DELAY_MS);
             return 100;
           }
@@ -166,6 +184,7 @@ export default function Hero() {
   };
 
   return (
+    <>
     <div className="sh-bg">
       <div className="sh-container">
 
@@ -320,5 +339,12 @@ export default function Hero() {
 
       </div>
     </div>
+
+    <NameProjectModal
+      open={nameModalOpen}
+      onConfirm={handleNameConfirm}
+      onCancel={handleNameCancel}
+    />
+    </>
   );
 }
