@@ -12,8 +12,9 @@ import "yet-another-react-lightbox/styles.css";
 import SocialButton from "@/components/kokonutui/social-button";
 import Image from "next/image";
 import Link from "next/link";
-import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, Clock, ChevronRight, Upload as UploadIcon, Home, Zap } from "lucide-react";
+import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, Clock, ChevronRight, Upload as UploadIcon, Home, Zap, Sparkles } from "lucide-react";
 import NameProjectModal from "@/components/NameProjectModal";
+import { BubbleBackground } from "@/components/animate-ui/components/backgrounds/bubble";
 
 const STYLES: Record<string, string[]> = {
   "floor-plan":      ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
@@ -391,8 +392,10 @@ export default function VisualizerClient() {
             <div className="viz-output-head">
               <span className="viz-output-title">Preview</span>
               <div className="viz-output-actions">
-                <button className="viz-icon-btn" onClick={handleExport} disabled={!currentImage} title="Download">
-                  <Download size={13} />
+                <button className="viz-download-btn" onClick={handleExport} disabled={!currentImage}>
+                  <Download size={12} strokeWidth={2.5} />
+                  <span>Download Ultra HD</span>
+                  <div className="viz-download-shimmer" />
                 </button>
                 <button className="viz-icon-btn" onClick={() => setLightboxOpen(true)} disabled={!currentImage} title="Fullscreen">
                   <Maximize2 size={13} />
@@ -488,10 +491,26 @@ export default function VisualizerClient() {
 
               {isProcessing && (
                 <div className="viz-processing">
+                  <BubbleBackground
+                    className="absolute inset-0"
+                    colors={{
+                      first:  "236,91,19",
+                      second: "180,40,0",
+                      third:  "255,140,60",
+                      fourth: "120,20,0",
+                      fifth:  "255,100,30",
+                      sixth:  "200,60,10",
+                    }}
+                  />
                   <div className="viz-processing-card">
-                    <RefreshCcw size={28} className="viz-spinner" />
-                    <p className="viz-processing-title">Generating your render...</p>
+                    <div className="viz-processing-icon">
+                      <Sparkles size={28} />
+                    </div>
+                    <p className="viz-processing-title">Generating your render…</p>
                     <p className="viz-processing-sub">This usually takes under a minute</p>
+                    <div className="viz-processing-dots">
+                      <span /><span /><span />
+                    </div>
                   </div>
                 </div>
               )}
