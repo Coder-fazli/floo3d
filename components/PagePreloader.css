@@ -1,0 +1,29 @@
+.preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: #0f0f0f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s ease;
+}
+
+.preloader-fade {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.preloader-text {
+    color: #ffffff !important;
+    font-size: clamp(3rem, 10vw, 7rem) !important;
+    height: clamp(4rem, 12vw, 9rem) !important;
+    max-width: 90vw !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.03em !important;
+}
+
+.preloader-text span {
+    color: #ffffff !important;
+    font-weight: 900 !important;
+}

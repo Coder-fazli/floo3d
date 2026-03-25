@@ -18,7 +18,6 @@ import NameProjectModal from "@/components/NameProjectModal";
 import { BubbleBackground } from "@/components/animate-ui/components/backgrounds/bubble";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { SparklesText } from "@/components/ui/sparkles-text";
-import { MorphingText } from "@/components/ui/morphing-text";
 
 const STYLES: Record<string, string[]> = {
   "floor-plan":      ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
@@ -55,7 +54,7 @@ export default function VisualizerClient() {
   const router = useRouter();
   const params = useParams();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
-  const { user, isLoaded } = useUser();
+  const { user } = useUser();
   const { openUserProfile } = useClerk();
   const [credits, setCredits] = useState<number | null>(null);
 
@@ -215,15 +214,6 @@ export default function VisualizerClient() {
 
   const activeInputType = isNewMode ? inputTypeNew : (project?.inputType ?? "floor-plan");
   const styleList = STYLES[activeInputType] ?? STYLES["floor-plan"];
-
-  if (!isLoaded) return (
-    <div className="viz-preloader">
-      <MorphingText
-        className="viz-preloader-text"
-        texts={["MyHomeStyler", "AI Design", "Your Vision", "Reimagined", "3D Renders", "Instantly"]}
-      />
-    </div>
-  );
 
   return (
     <div className="viz-page">

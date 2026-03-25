@@ -3,6 +3,7 @@ import { Inter, Instrument_Serif, Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { getSiteSettings } from "@/lib/actions";
+import PagePreloader from "@/components/PagePreloader";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -88,6 +89,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               ]),
             }}
           />
+          <PagePreloader />
           {children}
         </body>
       </html>
