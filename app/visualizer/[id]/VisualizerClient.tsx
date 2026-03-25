@@ -224,7 +224,7 @@ export default function VisualizerClient() {
           <div className="viz-nav-left">
             <Link href="/dashboard" className="viz-brand">
               <div className="viz-brand-icon">
-                <Image src="/logo.png" alt="MyHomeStyler" width={20} height={20} />
+                <Image src="/favicon.png" alt="MyHomeStyler" width={20} height={20} />
               </div>
               <span className="viz-brand-name">MyHome<span className="viz-brand-accent">Styler</span></span>
             </Link>

@@ -29,7 +29,7 @@ export default function DashboardNavbar() {
         <div className="dbnav-left">
           <Link href="/" className="dbnav-brand">
             <div className="dbnav-logo-icon">
-              <Image src="/logo.png" alt="MyHomeStyler" width={40} height={40} />
+              <Image src="/favicon.png" alt="MyHomeStyler" width={40} height={40} />
             </div>
             <span className="dbnav-logo-name">MyHome<span className="dbnav-logo-accent">Styler</span></span>
           </Link>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { MorphingText } from "@/components/ui/morphing-text";
+import Image from "next/image";
 import "./PagePreloader.css";
 
 export default function PagePreloader() {
@@ -9,8 +10,8 @@ export default function PagePreloader() {
   const [fading, setFading] = useState(false);
 
   useEffect(() => {
-    const fadeTimer = setTimeout(() => setFading(true), 1800);
-    const hideTimer = setTimeout(() => setVisible(false), 2300);
+    const fadeTimer = setTimeout(() => setFading(true), 4500);
+    const hideTimer = setTimeout(() => setVisible(false), 5100);
     return () => {
       clearTimeout(fadeTimer);
       clearTimeout(hideTimer);
@@ -21,10 +22,15 @@ export default function PagePreloader() {
 
   return (
     <div className={`preloader ${fading ? "preloader-fade" : ""}`}>
-      <MorphingText
-        className="preloader-text"
-        texts={["MyHome", "Styler"]}
-      />
+      <div className="preloader-inner">
+        <div className="preloader-logo">
+          <Image src="/favicon.png" alt="MyHomeStyler" width={90} height={90} priority />
+        </div>
+        <MorphingText
+          className="preloader-text"
+          texts={["MyHome", "Styler"]}
+        />
+      </div>
     </div>
   );
 }
