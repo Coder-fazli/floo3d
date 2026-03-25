@@ -34,11 +34,11 @@ const FALLBACK_IMAGES: Record<string, { before: string; after: string; labelBefo
 
 const STYLE_IMAGES: Record<string, string> = {
   "Modern":        "/card-room-after.webp",
-  "Scandinavian":  "/hero-after.jpg",
-  "Industrial":    "/result1.png",
-  "Rustic":        "/result2.png",
-  "Luxury":        "/result3.png",
-  "Minimalist":    "/card-empty-after.webp",
+  "Scandinavian":  "/style-scandinavian.jpg",
+  "Industrial":    "/style-industrial.jpg",
+  "Rustic":        "/style-rustic.webp",
+  "Luxury":        "/style-luxury.jpg",
+  "Minimalist":    "/style-minimalist.jpg",
   "Mediterranean": "/card-outdoor-after.webp",
   "Japanese":      "/card-outdoor-after.avif",
   "Tropical":      "/card-outdoor-before.avif",
