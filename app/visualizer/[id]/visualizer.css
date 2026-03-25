@@ -631,9 +631,7 @@
     display: grid;
     grid-template-columns: 340px 1fr;
     gap: 1.25rem;
-    align-items: stretch;
-    height: calc(100vh - 18rem);
-    min-height: 400px;
+    align-items: start;
 }
 
 /* ── Sidebar ── */
@@ -892,7 +890,6 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    height: 100%;
 }
 
 .viz-output-head {
@@ -952,13 +949,11 @@
 
 /* Compare wrap fills output card */
 .viz-output-card .viz-compare-wrap {
-    flex: 1;
-    min-height: 0;
     border-radius: 0;
     border: none;
     box-shadow: none;
-    aspect-ratio: unset;
-    height: 100%;
+    aspect-ratio: 4 / 3;
+    width: 100%;
 }
 
 /* Fallback state */
