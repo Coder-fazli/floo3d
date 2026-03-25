@@ -952,8 +952,9 @@
     border-radius: 0;
     border: none;
     box-shadow: none;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 9;
     width: 100%;
+    max-height: calc(100vh - 260px);
 }
 
 /* Fallback state */
