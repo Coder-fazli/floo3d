@@ -1,57 +1,52 @@
+import Link from "next/link";
 import { Eye } from "lucide-react";
+import { getAllProjects } from "@/lib/actions";
 
-const MOCK_PROJECTS = [
-  { id: "1", name: "Luxury Apartment A", owner: "Jordan Smith", status: "completed", date: "2023-11-05" },
-  { id: "2", name: "Modern Kitchen 2D", owner: "Alex Johnson", status: "completed", date: "2023-11-04" },
-  { id: "3", name: "Main Office Floorplan", owner: "Sarah Miller", status: "processing", date: "2023-11-03" },
-  { id: "4", name: "Urban Loft Apartment", owner: "David Chen", status: "processing", date: "2023-11-02" },
-];
+export default async function AdminProjects() {
+  const projects = await getAllProjects();
 
-export default function AdminProjects() {
   return (
     <div className="adm-content">
       <h1 className="adm-topbar-title" style={{ marginBottom: "1.5rem" }}>Projects</h1>
-
-      <div className="adm-filter-tabs">
-        <button className="adm-filter-tab adm-filter-tab-active">All Projects</button>
-        <button className="adm-filter-tab">Processing</button>
-        <button className="adm-filter-tab">Completed</button>
-      </div>
 
       <div className="adm-card" style={{ overflow: "hidden" }}>
         <table className="adm-table">
           <thead>
             <tr>
               <th>Project</th>
-              <th>Owner</th>
               <th>Status</th>
               <th>Created</th>
               <th className="right">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {MOCK_PROJECTS.map((p) => (
-              <tr key={p.id}>
-                <td>
-                  <div className="adm-project-cell">
-                    <div className="adm-thumb" />
-                    <span style={{ fontWeight: 500 }}>{p.name}</span>
-                  </div>
-                </td>
-                <td style={{ color: "#64748b" }}>{p.owner}</td>
-                <td>
-                  <span className={`adm-badge ${p.status === "completed" ? "adm-badge-green" : "adm-badge-orange"}`}>
-                    {p.status}
-                  </span>
-                </td>
-                <td style={{ color: "#94a3b8" }}>{p.date}</td>
-                <td className="right">
-                  <button className="adm-action-link" style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
-                    <Eye size={14} /> View
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {projects.length === 0 ? (
+              <tr><td colSpan={4} style={{ color: "#94a3b8", textAlign: "center" }}>No projects yet</td></tr>
+            ) : (
+              projects.map((p: any) => (
+                <tr key={p._id}>
+                  <td>
+                    <div className="adm-project-cell">
+                      <div className="adm-thumb" style={{ width: "2.5rem", height: "2.5rem" }}>
+                        {p.originalImageUrl && <img src={p.originalImageUrl} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "0.375rem" }} />}
+                      </div>
+                      <span style={{ fontWeight: 500 }}>{p.name || "Untitled"}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span className={`adm-badge ${p.renderedImageUrl ? "adm-badge-green" : "adm-badge-orange"}`}>
+                      {p.renderedImageUrl ? "Completed" : "Processing"}
+                    </span>
+                  </td>
+                  <td style={{ color: "#94a3b8" }}>{new Date(p.createdAt).toLocaleDateString()}</td>
+                  <td className="right">
+                    <Link href={`/visualizer/${p._id}`} className="adm-action-link" style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
+                      <Eye size={14} /> View
+                    </Link>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

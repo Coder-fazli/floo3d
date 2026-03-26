@@ -16,7 +16,7 @@ export default function DashboardNavbar() {
   useEffect(() => {
     if (user) getCredits(
       user.id,
-      user.fullName ?? "",
+      user.fullName ?? user.firstName ?? user.username ?? "",
       user.emailAddresses[0]?.emailAddress ?? ""
     ).then(setCredits);
   }, [user]);

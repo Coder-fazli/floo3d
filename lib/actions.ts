@@ -48,7 +48,10 @@ export async function getCredits(userId: string, name?:
     await connectDb();
     const user = await User.findOneAndUpdate(
         { clerkId: userId },
-        { $setOnInsert: { credits: 10, name: name ?? "", email: email ?? "" } },
+        {
+            $setOnInsert: { credits: 10 },
+            $set: { name: name ?? "", email: email ?? "" }
+        },
         { upsert: true, new: true }
     );
     return user.credits;
@@ -60,6 +63,12 @@ export async function deductCredit(userId:string) {
         { clerkId: userId },
         { $inc: { credits: -2 } }
     );
+}
+
+export async function getAllProjects() {
+    await connectDb();
+    const projects = await Project.find({}).sort("-createdAt");
+    return JSON.parse(JSON.stringify(projects));
 }
 
 // Ф
