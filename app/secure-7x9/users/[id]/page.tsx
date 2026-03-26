@@ -3,11 +3,12 @@ import { redirect } from "next/navigation";
 import { Calendar, Lock, RotateCcw, Trash2, ChevronLeft } from "lucide-react";
 import { getUserByClerkId, getProjects, updateUserCredits, deleteUSer } from "@/lib/actions";
 
-export default async function AdminUserDetail({ params }: { params: { id: string } }) {
-  const user = await getUserByClerkId(params.id);
-  const projects = await getProjects(params.id);
+export default async function AdminUserDetail({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const user = await getUserByClerkId(id);
+  const projects = await getProjects(id);
 
-  if (!user) return <div className="adm-content">User not found: {params.id}</div>;
+  if (!user) return <div className="adm-content">User not found: {id}</div>;
 
   const totalProjects = projects.length;
   const rendersCompleted = projects.filter((p: any) => p.renderedImageUrl).length;
@@ -16,13 +17,13 @@ export default async function AdminUserDetail({ params }: { params: { id: string
   async function saveCredits(formData: FormData) {
     "use server";
     const val = Number(formData.get("credits"));
-    await updateUserCredits(params.id, val);
-    redirect(`/secure-7x9/users/${params.id}`);
+    await updateUserCredits(id, val);
+    redirect(`/secure-7x9/users/${id}`);
   }
 
   async function handleDelete() {
     "use server";
-    await deleteUSer(params.id);
+    await deleteUSer(id);
     redirect("/secure-7x9/users");
   }
 
