@@ -5,6 +5,14 @@ import { uploadImage } from "./cloudinary";
 import User from "./models/User";
 import SiteSettings from "./models/SiteSettings";
 
+
+export async function getUserByClerkId(clerkId: string)
+{
+    await connectDb();
+    const user = await User.findOne({ clerkId });   
+    return user ? JSON.parse(JSON.stringify(user)) : null;
+}
+
 export async function getProjects(userId: string) {
     await connectDb();
     const projects = await Project.find({ userId }).sort("-createdAt");

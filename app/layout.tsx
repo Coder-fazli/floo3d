@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { getSiteSettings } from "@/lib/actions";
 import PagePreloader from "@/components/PagePreloader";
+import CrispChat from "@/components/CrispChat";
 import Script from "next/script";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
@@ -109,6 +110,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <noscript>
             <img src="https://mc.yandex.ru/watch/108254799" style={{ position: "absolute", left: -9999 }} alt="" />
           </noscript>
+          <CrispChat />
           <PagePreloader />
           {children}
         </body>
