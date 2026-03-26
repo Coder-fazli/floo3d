@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { ReactCompareSlider, ReactCompareSliderHandle, ReactCompareSliderImage } from "react-compare-slider";
+import { useClerk, useUser } from "@clerk/nextjs";
 
 const features = [
   {
@@ -47,6 +48,8 @@ const features = [
 ];
 
 export default function HomePageHero() {
+  const { isSignedIn } = useUser();
+  const { openSignUp } = useClerk();
   const [sliderPos, setSliderPos] = useState(40);
   const rafRef = useRef<number | null>(null);
   const isDragging = useRef(false);
@@ -119,7 +122,10 @@ export default function HomePageHero() {
 
           {/* CTAs */}
           <div className="hph-btns">
-            <Link href="/dashboard" className="hph-btn-primary">Try It Free</Link>
+            {isSignedIn
+              ? <Link href="/dashboard" className="hph-btn-primary">Try It Free</Link>
+              : <button className="hph-btn-primary" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>Try It Free</button>
+            }
             <Link href="/#reviews" className="hph-btn-secondary">See Examples</Link>
           </div>
 

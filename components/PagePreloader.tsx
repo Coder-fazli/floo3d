@@ -6,12 +6,15 @@ import Image from "next/image";
 import "./PagePreloader.css";
 
 export default function PagePreloader() {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [fading, setFading] = useState(false);
 
   useEffect(() => {
-    const fadeTimer = setTimeout(() => setFading(true), 3000);
-    const hideTimer = setTimeout(() => setVisible(false), 3600);
+    if (sessionStorage.getItem("preloader_shown")) return;
+    sessionStorage.setItem("preloader_shown", "1");
+    setVisible(true);
+    const fadeTimer = setTimeout(() => setFading(true), 2000);
+    const hideTimer = setTimeout(() => setVisible(false), 2600);
     return () => {
       clearTimeout(fadeTimer);
       clearTimeout(hideTimer);

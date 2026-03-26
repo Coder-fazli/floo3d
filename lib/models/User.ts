@@ -5,8 +5,8 @@ const UserSchema = new Schema({
     credits: { type: Number, default:10 },
     role: { type: String, enum: ["user", "admin"], default: "user" },
     name: { type: String, default: "" },
-    email: { type: String, default: "" }, 
-});
+    email: { type: String, default: "" },
+}, { timestamps: true });
 
 const User = models.User || model("User", UserSchema);
 

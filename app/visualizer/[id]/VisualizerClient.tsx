@@ -15,7 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, Clock, ChevronRight, Upload as UploadIcon, Home, Zap, Sparkles, Bell } from "lucide-react";
 import NameProjectModal from "@/components/NameProjectModal";
-import { BubbleBackground } from "@/components/animate-ui/components/backgrounds/bubble";
+import { HoleBackground } from "@/components/animate-ui/components/backgrounds/hole";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { SparklesText } from "@/components/ui/sparkles-text";
 
@@ -530,17 +530,7 @@ export default function VisualizerClient() {
 
               {isProcessing && (
                 <div className="viz-processing">
-                  <BubbleBackground
-                    className="absolute inset-0"
-                    colors={{
-                      first:  "236,91,19",
-                      second: "180,40,0",
-                      third:  "255,140,60",
-                      fourth: "120,20,0",
-                      fifth:  "255,100,30",
-                      sixth:  "200,60,10",
-                    }}
-                  />
+                  <HoleBackground className="absolute inset-0" />
                   <div className="viz-processing-card">
                     <div className="viz-processing-icon">
                       <Sparkles size={28} />
