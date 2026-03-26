@@ -7,7 +7,7 @@ export default async function AdminUserDetail({ params }: { params: { id: string
   const user = await getUserByClerkId(params.id);
   const projects = await getProjects(params.id);
 
-  if (!user) return <div className="adm-content">User not found.</div>;
+  if (!user) return <div className="adm-content">User not found: {params.id}</div>;
 
   const totalProjects = projects.length;
   const rendersCompleted = projects.filter((p: any) => p.renderedImageUrl).length;
