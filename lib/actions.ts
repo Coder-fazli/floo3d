@@ -104,3 +104,12 @@ export async function saveSiteSettings(metaTitle: string, metaDescription: strin
         { upsert: true, new: true }
     );
 }
+
+export async function saveFloorPlanSettings(floorPlanMetaTitle: string, floorPlanMetaDescription: string) {
+    await connectDb();
+    await SiteSettings.findOneAndUpdate(
+        { key: "home" },
+        { floorPlanMetaTitle, floorPlanMetaDescription },
+        { upsert: true, new: true }
+    );
+}

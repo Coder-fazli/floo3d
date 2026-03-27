@@ -8,19 +8,26 @@ import RecentProjects from "@/components/RecentProjects";
 import Footer from "@/components/Footer";
 import FAQ from "@/components/FAQ";
 import { Marquee } from "@/components/ui/marquee";
+import { getSiteSettings } from "@/lib/actions";
 
-export const metadata: Metadata = {
-  title: "2D Floor Plan to 3D Render Converter — Free AI Tool | MyHomeStyler",
-  description: "Convert any 2D floor plan to a photorealistic 3D render in seconds. Works with hand-drawn sketches, CAD files, and scanned blueprints. Free to start — no 3D software needed.",
-  alternates: {
-    canonical: "/2d-to-3d-floor-plan-converter",
-  },
-  openGraph: {
-    title: "2D Floor Plan to 3D Render Converter — Free AI Tool",
-    description: "Upload any 2D floor plan and get a stunning 3D render in under 60 seconds. Used by architects, designers & real estate pros.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
-  },
-};
+const DEFAULT_TITLE = "2D to 3D Floor Plan Converter — Convert 2D Floor Plan to 3D Model Free Online";
+const DEFAULT_DESC = "Convert 2D floor plans to 3D models free online — no credit card, no login required. Works with blueprints, house plans & hand-drawn sketches. Results in seconds.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const s = await getSiteSettings();
+  const title = s?.floorPlanMetaTitle || DEFAULT_TITLE;
+  const description = s?.floorPlanMetaDescription || DEFAULT_DESC;
+  return {
+    title,
+    description,
+    alternates: { canonical: "/2d-to-3d-floor-plan-converter" },
+    openGraph: {
+      title,
+      description,
+      images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+    },
+  };
+}
 
 const reviews = [
   { name: "David M.", handle: "@davidm", avatar: "/avatars/av1.jpg", text: "I rendered my entire apartment floor plan in under 2 minutes. The 3D output is stunning, clients love it." },
@@ -52,7 +59,7 @@ export default function FloorPlanConverterPage() {
           <h2 className="marquee-title">
             Loved by <em className="marquee-accent">Thousands</em> of Professionals
           </h2>
-          <p className="marquee-subtitle">Architects, interior designers, real estate agents, and homeowners — all transforming floor plans with MyHomeStyler.</p>
+          <p className="marquee-subtitle">Architects, interior designers, real estate agents, and homeowners — all converting 2D floor plans to 3D models free online with MyHomeStyler.</p>
         </div>
         <Marquee pauseOnHover repeat={3} className="marquee-strip">
           {reviews.slice(0, 4).map((r) => (

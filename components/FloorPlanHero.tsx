@@ -9,8 +9,8 @@ import { useClerk, useUser } from "@clerk/nextjs";
 
 const features = [
   {
-    title: "Instant 3D Renders",
-    desc: "Upload any 2D floor plan and get a photorealistic 3D render in under 60 seconds.",
+    title: "Convert Blueprint to 3D Model",
+    desc: "Upload any scanned blueprint or CAD export — AI reads the spatial data and converts it to a detailed 3D model instantly.",
     icon: (
       <svg width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
         <path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5z"/>
@@ -19,26 +19,26 @@ const features = [
     ),
   },
   {
-    title: "All Plan Types",
-    desc: "Works with hand-drawn sketches, CAD exports, scanned blueprints, and digital floor plans.",
+    title: "2D Drawing to 3D Model",
+    desc: "Hand-drawn sketch or digital drawing? Upload it and watch our AI transform your 2D drawing into a photorealistic 3D render.",
     icon: (
       <svg width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-        <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        <path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
       </svg>
     ),
   },
   {
-    title: "Multiple Styles",
-    desc: "Render your floor plan in modern, minimalist, luxury, Scandinavian, or industrial style.",
+    title: "Convert House Plans to 3D",
+    desc: "Turn your house plans into stunning 3D visuals online — completely free. No 3D software, no architect, no waiting.",
     icon: (
       <svg width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-        <path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
       </svg>
     ),
   },
   {
-    title: "No 3D Software Needed",
-    desc: "Skip SketchUp, Blender, or Revit — AI does the heavy lifting. Free to start.",
+    title: "2D Image to 3D Model AI",
+    desc: "Our AI engine reads any 2D image — floor plan, sketch, or photo — and generates a realistic 3D model in under 60 seconds.",
     icon: (
       <svg width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
         <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
@@ -105,26 +105,26 @@ export default function FloorPlanHero() {
               <span className="hph-badge-ping" />
               <span className="hph-badge-dot" />
             </span>
-            <span className="hph-badge-text">AI Floor Plan Renderer · Free to Start</span>
+            <span className="hph-badge-text">Free 2D to 3D Floor Plan Converter · No Login Required</span>
           </div>
 
           {/* Heading */}
           <h1 className="hph-heading">
-            Convert 2D Floor<br />
-            <span className="hph-heading-accent">Plans to 3D</span><br />
-            Renders with AI.
+            2D to 3D Floor<br />
+            <span className="hph-heading-accent">Plan Converter</span><br />
+            Free. Online. Instant.
           </h1>
 
           {/* Sub */}
           <p className="hph-sub">
-            Upload any 2D floor plan — hand-drawn, CAD, or scanned — and get a stunning photorealistic 3D render in seconds. No 3D software needed.
+            Convert any 2D floor plan, blueprint, or house plan to a stunning 3D model free online — no credit card, no login, no 3D software. Just upload your 2D drawing and AI does the rest in seconds.
           </p>
 
           {/* CTAs */}
           <div className="hph-btns">
             {isSignedIn
-              ? <Link href="/dashboard" className="hph-btn-primary">Try It Free</Link>
-              : <button className="hph-btn-primary" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>Try It Free</button>
+              ? <Link href="/dashboard" className="hph-btn-primary">Convert Free — No Login</Link>
+              : <button className="hph-btn-primary" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>Convert Free — No Login</button>
             }
             <Link href="#how-it-works" className="hph-btn-secondary">See How It Works</Link>
           </div>
