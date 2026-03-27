@@ -100,10 +100,7 @@ export async function saveSiteSettings(metaTitle: string, metaDescription: strin
     await connectDb();
     await SiteSettings.findOneAndUpdate(
         { key: "home" },
-         // find by key "home"
         { metaTitle, metaDescription },
-       // update these fields
         { upsert: true, new: true }
-        // create if doesn't exist yet
     );
 }
