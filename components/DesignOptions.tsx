@@ -79,7 +79,7 @@ export default function DesignOptions() {
           <span className="do-ghost-num" style={{ top: "-1.5rem", left: "-0.5rem" }}>01</span>
           <div className="do-grid">
             <div className="do-col-img-left">
-              <ImgCard before="/real-3d-render.jpg" after="/real-2d-plan.jpg" badge="Rendering Phase: Final Polish" />
+              <ImgCard before="/real-2d-plan.jpg" after="/real-3d-render.jpg" badge="Rendering Phase: Final Polish" />
             </div>
             <div className="do-col-text-right">
               <div className="do-text-card">
@@ -117,7 +117,7 @@ export default function DesignOptions() {
               </div>
             </div>
             <div className="do-col-img-right">
-              <ImgCard before="/card-room-after.webp" after="/card-room-before.webp" />
+              <ImgCard before="/fp-before-1.png" after="/fp-after-1.jpg" />
             </div>
           </div>
         </div>
@@ -126,9 +126,9 @@ export default function DesignOptions() {
         <div className="do-item do-fade" ref={ref03}>
           <div className="do-flex-row">
             <div className="do-flex-img">
-              <ImgCard before="/card-empty-before.webp" after="/card-empty-after.webp" />
+              <ImgCard before="/fp-before-2.png" after="/fp-after-2.jpg" />
               <div className="do-corner-thumb">
-                <img src="/card-empty-after.webp" alt="Empty room" />
+                <img src="/fp-after-2.jpg" alt="3D render" />
               </div>
             </div>
             <div className="do-flex-text">
