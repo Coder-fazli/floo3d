@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const FAQS = [
+const DEFAULT_FAQS = [
   {
     q: "Is this the best free AI interior design app?",
     a: "MyHomeStyler is among the best AI interior design tools available — and it's free to start. Every new account gets 5 free credits covering all 4 tools: AI interior design, free AI floor plan generator, virtual staging AI, and AI landscape design. No credit card required.",
@@ -24,8 +24,9 @@ const FAQS = [
   },
 ];
 
-export default function FAQ() {
+export default function FAQ({ faqs }: { faqs?: { q: string; a: string }[] } = {}) {
   const [active, setActive] = useState<number | null>(null);
+  const FAQS = faqs ?? DEFAULT_FAQS;
 
   return (
     <section className="faq-section" id="answers">

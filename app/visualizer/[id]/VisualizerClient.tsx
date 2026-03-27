@@ -60,6 +60,13 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
 
   const [isNewMode, setIsNewMode] = useState(id === "new");
 
+  // Guest mode (embedded pages, no login)
+  const GUEST_CREDITS_KEY = "guest_credits";
+  const GUEST_CREDITS_DEFAULT = 6;
+  const [guestBase64, setGuestBase64] = useState<string | null>(null);
+  const [guestResult, setGuestResult] = useState<string | null>(null);
+  const [guestCredits, setGuestCredits] = useState(GUEST_CREDITS_DEFAULT);
+
   const hasInitialGenerated = useRef(false);
   const [project, setProject] = useState<any>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -102,8 +109,38 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
     if (user) getCredits(user.id).then(setCredits);
   }, [user]);
 
+  useEffect(() => {
+    if (!embeddedId) return;
+    const stored = localStorage.getItem(GUEST_CREDITS_KEY);
+    if (stored === null) localStorage.setItem(GUEST_CREDITS_KEY, String(GUEST_CREDITS_DEFAULT));
+    else setGuestCredits(Math.max(0, parseInt(stored) || 0));
+  }, [embeddedId]);
+
   const runGeneration = async () => {
     if (isProcessing) return;
+
+    // Guest mode — no login, no project, direct generation
+    if (embeddedId && !user) {
+      if (!guestBase64) return;
+      if (guestCredits <= 0) { openSignUp({ fallbackRedirectUrl: "/dashboard" }); return; }
+      setIsProcessing(true);
+      try {
+        const res = await fetch("/api/guest-generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ base64Image: guestBase64, renderStyle, roomType, inputType: "floor-plan" }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Generation failed");
+        setGuestResult(data.renderedBase64);
+        const next = Math.max(0, guestCredits - 1);
+        setGuestCredits(next);
+        localStorage.setItem(GUEST_CREDITS_KEY, String(next));
+      } catch (e: any) { console.error(e); }
+      finally { setIsProcessing(false); }
+      return;
+    }
+
     if (!project) return;
     if (!project?._id || !project?.originalImageUrl || !user?.id) {
       console.error("Missing required data");
@@ -155,7 +192,19 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
   const sidebarFileRef = useRef<HTMLInputElement>(null);
 
   const handleSidebarFile = (file: File) => {
-    if (!user) { openSignUp({ fallbackRedirectUrl: "/dashboard" }); return; }
+    if (!["image/jpeg", "image/png"].includes(file.type)) return;
+    if (file.size > 10 * 1024 * 1024) return;
+    if (!user) {
+      if (embeddedId) {
+        // Guest mode — store locally, no project creation
+        const reader = new FileReader();
+        reader.onload = () => { setGuestBase64(reader.result as string); setGuestResult(null); };
+        reader.readAsDataURL(file);
+      } else {
+        openSignUp({ fallbackRedirectUrl: "/dashboard" });
+      }
+      return;
+    }
     if (isCreating) return;
     const MAX_BYTES = 10 * 1024 * 1024;
     if (!["image/jpeg", "image/png"].includes(file.type)) return;
@@ -183,6 +232,7 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
     setIsCreating(false);
     pendingFileBase64Ref.current = null;
     setProject(newProject);
+    setCurrentImage(null);
     setIsNewMode(false);
     hasInitialGenerated.current = false;
     window.history.replaceState(null, "", `/visualizer/${newProject._id}`);
@@ -291,9 +341,9 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
               </span>
             ) : (
               <span className="viz-embed-bar-text">
-                Try for free — <strong>no credit card needed.</strong>{" "}
+                <strong>{guestCredits} free generation{guestCredits !== 1 ? "s" : ""}</strong> remaining — no sign up needed.{" "}
                 <button className="viz-embed-bar-link" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>
-                  Sign up free → get 10 credits
+                  Sign up free → get 10 more
                 </button>
               </span>
             )}
@@ -373,8 +423,8 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
               </div>
             </div>
 
-            {/* Room Type */}
-            <div className="viz-sb-section">
+            {/* Room Type — hidden for floor-plan embedded pages */}
+            {!embeddedId && <div className="viz-sb-section">
               <div className="viz-sb-section-title">
                 <Home size={13} strokeWidth={2.5} style={{ color: "#ec5b13" }} />
                 Room Type
@@ -388,7 +438,7 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
                   <option key={rt} value={rt}>{rt}</option>
                 ))}
               </select>
-            </div>
+            </div>}
 
             {/* Design Style */}
             <div className="viz-sb-section viz-sb-section-grow">
@@ -424,7 +474,7 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
               <button
                 className="viz-generate-btn"
                 onClick={runGeneration}
-                disabled={isProcessing || isNewMode || !project || (!!currentImage && renderStyle === project?.renderStyle)}
+                disabled={isProcessing || (embeddedId && !user ? !guestBase64 : (isNewMode || !project || (!!currentImage && renderStyle === project?.renderStyle)))}
               >
                 {isProcessing ? (
                   <>
@@ -437,7 +487,7 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
                     sparklesCount={6}
                     colors={{ first: "#fff176", second: "#ffd54f" }}
                   >
-                    {currentImage ? "✦ Regenerate" : "✦ Generate"}
+                    {(embeddedId && !user) ? (guestResult ? "✦ Regenerate" : "✦ Generate") : (currentImage ? "✦ Regenerate" : "✦ Generate")}
                   </SparklesText>
                 )}
               </button>
@@ -453,7 +503,7 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
             <div className="viz-output-head">
               <span className="viz-output-title">Preview</span>
               <div className="viz-output-actions">
-                <button className="viz-download-btn" onClick={handleExport} disabled={!currentImage}>
+                <button className="viz-download-btn" onClick={guestResult ? () => { const a = document.createElement("a"); a.href = guestResult; a.download = "3d-render.png"; a.click(); } : handleExport} disabled={!currentImage && !guestResult}>
                   <Download size={12} strokeWidth={2.5} />
                   <span>Download Ultra HD</span>
                   <div className="viz-download-shimmer" />
@@ -473,7 +523,18 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
 
             {/* Comparison slider */}
             <div className="viz-compare-wrap">
-              {project?.originalImageUrl && currentImage ? (
+              {/* Guest mode result */}
+              {embeddedId && !user && guestResult && guestBase64 ? (
+                <ReactCompareSlider
+                  defaultValue={50}
+                  style={{ width: "100%", height: "100%", transform: `scale(${zoomLevel})`, transformOrigin: "center", transition: "transform 0.3s ease" }}
+                  handle={<ReactCompareSliderHandle buttonStyle={{ background: "#fff", border: "none", boxShadow: "0 2px 16px rgba(0,0,0,0.25)", color: "#ec5b13" }} linesStyle={{ background: "#ec5b13", width: 3, opacity: 0.9 }} />}
+                  itemOne={<ReactCompareSliderImage src={guestBase64} alt="Original" style={{ objectFit: "contain", background: "#f1f5f9" }} />}
+                  itemTwo={<ReactCompareSliderImage src={guestResult} alt="Result" style={{ objectFit: "contain", background: "#f1f5f9", cursor: "zoom-in" }} onClick={() => setLightboxOpen(true)} />}
+                />
+              ) : embeddedId && !user && guestBase64 ? (
+                <img src={guestBase64} alt="Uploaded" style={{ width: "100%", height: "100%", objectFit: "contain", background: "#f1f5f9" }} />
+              ) : project?.originalImageUrl && currentImage ? (
                 <ReactCompareSlider
                   defaultValue={50}
                   style={{ width: "100%", height: "100%", transform: `scale(${zoomLevel})`, transformOrigin: "center", transition: "transform 0.3s ease" }}

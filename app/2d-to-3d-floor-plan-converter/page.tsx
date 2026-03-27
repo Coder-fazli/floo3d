@@ -96,7 +96,40 @@ export default function FloorPlanConverterPage() {
         </Marquee>
       </section>
 
-      <FAQ />
+      <FAQ faqs={[
+        {
+          q: "Do I need to sign up or create an account?",
+          a: "No. You can convert your first floor plans completely free without signing up. You get 6 free generations right here on the page — no account, no email, nothing. Sign up only when you want more.",
+        },
+        {
+          q: "Is it really free? Do you need a credit card?",
+          a: "100% free to start — no credit card required, ever. We don't ask for payment details to try the tool. You get 6 free generations as a guest. Sign up free and get 10 more credits instantly, still no credit card needed.",
+        },
+        {
+          q: "How many free conversions do I get?",
+          a: "As a guest you get 6 free 2D to 3D conversions right on this page. Create a free account and get 10 more credits added to your balance immediately. No credit card, no subscription required.",
+        },
+        {
+          q: "What happens when I run out of free credits?",
+          a: "When your free credits run out you'll see a prompt to sign up. Creating a free account gives you 10 fresh credits instantly. After that, you can purchase more credit packs — still no subscription, pay only for what you use.",
+        },
+        {
+          q: "What types of floor plans does it accept?",
+          a: "It works with any 2D floor plan image — hand-drawn sketches, scanned blueprints, CAD exports (PNG/JPG), architectural drawings, or any 2D house plan image. As long as it's a PNG or JPG under 10MB, the AI can process it.",
+        },
+        {
+          q: "How long does the 3D conversion take?",
+          a: "Most 2D floor plans are converted to a 3D render in 15–30 seconds. Complex plans with many rooms may take up to 60 seconds. You'll see a live progress indicator while the AI is working.",
+        },
+        {
+          q: "Can I download the 3D render?",
+          a: "Yes. Once your 3D render is ready, click the Download button to save it as a high-resolution PNG. Signed-in users get access to Ultra HD downloads and can save all renders to their project dashboard.",
+        },
+        {
+          q: "What design styles are available?",
+          a: "You can choose from 6 styles: Modern, Scandinavian, Industrial, Rustic, Luxury, and Minimalist. Each style applies different materials, furniture, lighting, and finishes to your floor plan render.",
+        },
+      ]} />
 
       <Footer />
     </div>
