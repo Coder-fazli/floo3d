@@ -219,7 +219,7 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
     <div className="viz-page">
 
       {/* Navbar */}
-      <header className="viz-nav">
+      {!embeddedId && <header className="viz-nav">
         <div className="viz-nav-inner">
           <div className="viz-nav-left">
             <Link href="/dashboard" className="viz-brand">
@@ -263,12 +263,12 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
             </button>
           </div>
         </div>
-      </header>
+      </header>}
 
       <main className="viz-main">
 
         {/* Low credits banner */}
-        {credits !== null && credits < 3 && (
+        {!embeddedId && credits !== null && credits < 3 && (
           <div className="viz-credits-banner">
             <span className="viz-credits-banner-icon">⚡</span>
             <span className="viz-credits-banner-text">
@@ -281,7 +281,7 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
         )}
 
         {/* Project header */}
-        <div className="viz-project-head">
+        {!embeddedId && <div className="viz-project-head">
           <div>
             <div className="viz-project-meta">
               <span className={`viz-status-badge ${!currentImage ? "viz-status-badge-processing" : ""}`}>
@@ -318,7 +318,7 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
               HomeGen™ Engine
             </RainbowButton>
           </div>
-        </div>
+        </div>}
 
         {/* Workspace: sidebar + output */}
         <div className="viz-workspace">
