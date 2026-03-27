@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import FloorPlanHero from "@/components/FloorPlanHero";
+import FloorPlanTrySection from "@/components/FloorPlanTrySection";
 import DesignOptions from "@/components/DesignOptions";
 import HowItWorks2 from "@/components/HowItWorks2";
 import RecentProjects from "@/components/RecentProjects";
@@ -47,9 +48,11 @@ export default function FloorPlanConverterPage() {
 
       <FloorPlanHero />
 
-      <DesignOptions />
-
       <HowItWorks2 />
+
+      <FloorPlanTrySection />
+
+      <DesignOptions />
 
       <RecentProjects />
 

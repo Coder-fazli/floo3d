@@ -122,10 +122,7 @@ export default function FloorPlanHero() {
 
           {/* CTAs */}
           <div className="hph-btns">
-            {isSignedIn
-              ? <Link href="/dashboard" className="hph-btn-primary">Convert Free — No Login</Link>
-              : <button className="hph-btn-primary" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>Convert Free — No Login</button>
-            }
+            <a href="#try-converter" className="hph-btn-primary">Convert Free</a>
             <Link href="#how-it-works" className="hph-btn-secondary">See How It Works</Link>
           </div>
 

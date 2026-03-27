@@ -9,10 +9,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 1,
         },
         {
-            url: "https://myhomestyler.com/sign-up",
+            url: "https://myhomestyler.com/2d-to-3d-floor-plan-converter",
             lastModified: new Date(),
-            changeFrequency: "monthly",
-            priority: 0.5,
+            changeFrequency: "weekly",
+            priority: 0.9,
         },
     ]
 }
