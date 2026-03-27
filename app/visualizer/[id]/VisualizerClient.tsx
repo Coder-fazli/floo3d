@@ -55,7 +55,7 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
   const params = useParams();
   const id = embeddedId ?? (Array.isArray(params.id) ? params.id[0] : params.id);
   const { user } = useUser();
-  const { openUserProfile } = useClerk();
+  const { openUserProfile, openSignUp } = useClerk();
   const [credits, setCredits] = useState<number | null>(null);
 
   const [isNewMode, setIsNewMode] = useState(id === "new");
@@ -155,7 +155,8 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
   const sidebarFileRef = useRef<HTMLInputElement>(null);
 
   const handleSidebarFile = (file: File) => {
-    if (!user || isCreating) return;
+    if (!user) { openSignUp({ fallbackRedirectUrl: "/dashboard" }); return; }
+    if (isCreating) return;
     const MAX_BYTES = 10 * 1024 * 1024;
     if (!["image/jpeg", "image/png"].includes(file.type)) return;
     if (file.size > MAX_BYTES) return;
@@ -267,7 +268,7 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
 
       <main className="viz-main">
 
-        {/* Low credits banner */}
+        {/* Low credits banner — full visualizer */}
         {!embeddedId && credits !== null && credits < 3 && (
           <div className="viz-credits-banner">
             <span className="viz-credits-banner-icon">⚡</span>
@@ -277,6 +278,25 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
                 : `Only ${credits} credit${credits === 1 ? "" : "s"} left — upgrade to avoid interruption.`}
             </span>
             <button className="viz-credits-banner-btn">Upgrade Now</button>
+          </div>
+        )}
+
+        {/* Embedded info bar */}
+        {embeddedId && (
+          <div className="viz-embed-bar">
+            <span className="viz-embed-bar-icon">⚡</span>
+            {user ? (
+              <span className="viz-embed-bar-text">
+                You have <strong>{credits ?? "—"} credits</strong> remaining.
+              </span>
+            ) : (
+              <span className="viz-embed-bar-text">
+                Try for free — <strong>no credit card needed.</strong>{" "}
+                <button className="viz-embed-bar-link" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>
+                  Sign up free → get 10 credits
+                </button>
+              </span>
+            )}
           </div>
         )}
 
@@ -334,7 +354,9 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
               </div>
               <div
                 className="viz-sb-upload"
-                onClick={() => sidebarFileRef.current?.click()}
+                onClick={() => user ? sidebarFileRef.current?.click() : openSignUp({ fallbackRedirectUrl: "/dashboard" })}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) handleSidebarFile(f); }}
               >
                 <input
                   ref={sidebarFileRef}
@@ -450,7 +472,7 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
             </div>
 
             {/* Comparison slider */}
-            <div className="viz-compare-wrap" style={{ overflow: "hidden" }}>
+            <div className="viz-compare-wrap">
               {project?.originalImageUrl && currentImage ? (
                 <ReactCompareSlider
                   defaultValue={50}
@@ -470,20 +492,20 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
                     <ReactCompareSliderImage
                       src={project.originalImageUrl}
                       alt="Original"
-                      style={{ objectFit: "cover" }}
+                      style={{ objectFit: "contain", background: "#f1f5f9" }}
                     />
                   }
                   itemTwo={
                     <ReactCompareSliderImage
                       src={currentImage}
                       alt="Result"
-                      style={{ objectFit: "cover", cursor: "zoom-in" }}
+                      style={{ objectFit: "contain", background: "#f1f5f9", cursor: "zoom-in" }}
                       onClick={() => setLightboxOpen(true)}
                     />
                   }
                 />
               ) : project?.originalImageUrl ? (
-                <NextImage src={project.originalImageUrl} alt="Original" fill style={{ objectFit: "cover" }} />
+                <NextImage src={project.originalImageUrl} alt="Original" fill style={{ objectFit: "contain", background: "#f1f5f9" }} />
               ) : (() => {
                 const fb = FALLBACK_IMAGES[activeInputType] ?? FALLBACK_IMAGES["floor-plan"];
                 return (

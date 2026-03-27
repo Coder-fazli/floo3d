@@ -434,12 +434,15 @@
 .viz-compare-wrap {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 9;
+    min-height: 400px;
     border-radius: 1.25rem;
     overflow: hidden;
     box-shadow: 0 20px 50px rgba(0,0,0,0.12);
     border: 1px solid #e2e8f0;
-    background: #e2e8f0;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .viz-compare-label {
@@ -1355,4 +1358,49 @@
 
 #try-converter .viz-output-card {
     min-height: 420px;
+}
+
+/* Embedded info bar */
+.viz-embed-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(236, 91, 19, 0.07);
+    border: 1px solid rgba(236, 91, 19, 0.18);
+    border-radius: 0.625rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.82rem;
+    color: #64748b;
+    margin-bottom: 0.25rem;
+}
+
+.viz-embed-bar-icon { font-size: 0.95rem; line-height: 1; }
+
+.viz-embed-bar-text strong { color: #0f172a; }
+
+.viz-embed-bar-link {
+    background: none;
+    border: none;
+    color: #ec5b13;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0;
+    font-size: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+/* Embedded section container */
+#try-converter {
+    background: #f8f6f6;
+    padding: 3rem 1.5rem;
+}
+
+#try-converter .viz-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
 }
