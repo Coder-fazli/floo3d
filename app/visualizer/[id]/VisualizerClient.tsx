@@ -50,10 +50,10 @@ const STYLE_IMAGES: Record<string, string> = {
 
 const ROOM_TYPES = ["Living Room", "Bedroom", "Kitchen", "Bathroom", "Office", "Dining Room", "Studio", "Hallway", "Kids Room"];
 
-export default function VisualizerClient() {
+export default function VisualizerClient({ embeddedId }: { embeddedId?: string } = {}) {
   const router = useRouter();
   const params = useParams();
-  const id = Array.isArray(params.id) ? params.id[0] : params.id;
+  const id = embeddedId ?? (Array.isArray(params.id) ? params.id[0] : params.id);
   const { user } = useUser();
   const { openUserProfile } = useClerk();
   const [credits, setCredits] = useState<number | null>(null);
