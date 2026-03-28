@@ -41,9 +41,94 @@ const reviews = [
   { name: "Dev P.", handle: "@devp", avatar: "/avatars/av8.jpg", text: "Best AI tool I've used this year. The export quality is perfect for client presentations." },
 ];
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "MyHomeStyler 2D to 3D Floor Plan Converter",
+      "applicationCategory": "DesignApplication",
+      "operatingSystem": "Web",
+      "url": "https://myhomestyler.com/2d-to-3d-floor-plan-converter",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "6 free conversions — no credit card required",
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "2547",
+        "bestRating": "5",
+        "worstRating": "1",
+      },
+      "review": reviews.map((r) => ({
+        "@type": "Review",
+        "author": { "@type": "Person", "name": r.name },
+        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+        "reviewBody": r.text,
+      })),
+      "description": DEFAULT_DESC,
+      "screenshot": "https://myhomestyler.com/og-image.png",
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Do I need to sign up or create an account?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. You can convert your first floor plans completely free without signing up. You get 6 free generations right here on the page — no account, no email, nothing. Sign up only when you want more." },
+        },
+        {
+          "@type": "Question",
+          "name": "Is it really free? Do you need a credit card?",
+          "acceptedAnswer": { "@type": "Answer", "text": "100% free to start — no credit card required, ever. We don't ask for payment details to try the tool. You get 6 free generations as a guest. Sign up free and get 10 more credits instantly, still no credit card needed." },
+        },
+        {
+          "@type": "Question",
+          "name": "How many free conversions do I get?",
+          "acceptedAnswer": { "@type": "Answer", "text": "As a guest you get 6 free 2D to 3D conversions right on this page. Create a free account and get 10 more credits added to your balance immediately. No credit card, no subscription required." },
+        },
+        {
+          "@type": "Question",
+          "name": "What types of floor plans does it accept?",
+          "acceptedAnswer": { "@type": "Answer", "text": "It works with any 2D floor plan image — hand-drawn sketches, scanned blueprints, CAD exports (PNG/JPG), architectural drawings, or any 2D house plan image. As long as it's a PNG or JPG under 10MB, the AI can process it." },
+        },
+        {
+          "@type": "Question",
+          "name": "How long does the 3D conversion take?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Most 2D floor plans are converted to a 3D render in 15–30 seconds. Complex plans with many rooms may take up to 60 seconds. You'll see a live progress indicator while the AI is working." },
+        },
+        {
+          "@type": "Question",
+          "name": "Can I download the 3D render?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Once your 3D render is ready, click the Download button to save it as a high-resolution PNG. Signed-in users get access to Ultra HD downloads and can save all renders to their project dashboard." },
+        },
+        {
+          "@type": "Question",
+          "name": "What design styles are available?",
+          "acceptedAnswer": { "@type": "Answer", "text": "You can choose from 6 styles: Modern, Scandinavian, Industrial, Rustic, Luxury, and Minimalist. Each style applies different materials, furniture, lighting, and finishes to your floor plan render." },
+        },
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://myhomestyler.com" },
+        { "@type": "ListItem", "position": 2, "name": "2D to 3D Floor Plan Converter", "item": "https://myhomestyler.com/2d-to-3d-floor-plan-converter" },
+      ],
+    },
+  ],
+};
+
 export default function FloorPlanConverterPage() {
   return (
     <div className="home">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar />
 
       <FloorPlanHero />

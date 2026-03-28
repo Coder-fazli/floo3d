@@ -404,7 +404,7 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
               </div>
               <div
                 className="viz-sb-upload"
-                onClick={() => user ? sidebarFileRef.current?.click() : openSignUp({ fallbackRedirectUrl: "/dashboard" })}
+                onClick={() => (user || embeddedId) ? sidebarFileRef.current?.click() : openSignUp({ fallbackRedirectUrl: "/dashboard" })}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) handleSidebarFile(f); }}
               >
