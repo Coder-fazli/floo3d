@@ -26,12 +26,12 @@ const Navbar = () => {
       <nav className="navbar-inner">
 
         {/* Brand */}
-        <div className="navbar-brand">
+        <a href="/" className="navbar-brand">
           <div className="navbar-logo-icon">
             <Image src="/favicon.png" alt="MyHomeStyler" width={40} height={40} />
           </div>
           <span className="navbar-name">MyHome<span className="navbar-name-accent">Styler</span></span>
-        </div>
+        </a>
 
         {/* Links */}
         <ul className="navbar-links">

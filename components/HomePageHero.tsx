@@ -6,6 +6,8 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { ReactCompareSlider, ReactCompareSliderHandle, ReactCompareSliderImage } from "react-compare-slider";
 import { useClerk, useUser } from "@clerk/nextjs";
+import { Star } from "lucide-react";
+import { CountUp } from "@/components/ui/count-up";
 
 const features = [
   {
@@ -129,16 +131,35 @@ export default function HomePageHero() {
             <Link href="/#reviews" className="hph-btn-secondary">See Examples</Link>
           </div>
 
-          {/* Social proof */}
-          <div className="hph-social">
-            <div className="hph-avatars">
-              <Image src="/avatars/female1.jpg" alt="user" width={44} height={44} className="hph-avatar" />
-              <Image src="/avatars/female2.jpg" alt="user" width={44} height={44} className="hph-avatar" />
-              <Image src="/avatars/av4.jpg"     alt="user" width={44} height={44} className="hph-avatar" />
+          {/* Trusted users */}
+          <div style={{ display: "flex", alignItems: "center", gap: "0.875rem", marginTop: "0.25rem" }}>
+            <div style={{ display: "flex" }}>
+              {["/avatars/female1.jpg", "/avatars/female3.jpg", "/avatars/av2.jpg", "/avatars/female2.jpg", "/avatars/av5.jpg"].map((src, i) => (
+                <div key={i} style={{
+                  width: 38, height: 38, borderRadius: "9999px", overflow: "hidden",
+                  border: "2px solid #ffffff",
+                  marginLeft: i === 0 ? 0 : -10,
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.12)",
+                  position: "relative", zIndex: 5 - i,
+                }}>
+                  <Image src={src} alt="user" width={38} height={38} style={{ objectFit: "cover", width: "100%", height: "100%" }} />
+                </div>
+              ))}
             </div>
-            <div>
-              <p className="hph-social-text">2,500+ Architecture Firms</p>
-              <p className="hph-social-sub">Trusted Global Partnerships</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+              <div style={{ display: "flex", gap: "0.2rem" }}>
+                {[1,2,3,4,5].map((s) => (
+                  <Star key={s} size={13} fill="#ec5b13" stroke="none" />
+                ))}
+              </div>
+              <p style={{ fontSize: "0.78rem", color: "#475569", margin: 0, fontWeight: 500 }}>
+                Trusted by{" "}
+                <CountUp value={2500} duration={2} separator="," suffix="+" colorScheme="gradient" className="font-bold" />
+                {" "}architects &{" "}
+                <a href="/#reviews" style={{ color: "#ec5b13", fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "2px" }}>
+                  happy users
+                </a>
+              </p>
             </div>
           </div>
         </div>

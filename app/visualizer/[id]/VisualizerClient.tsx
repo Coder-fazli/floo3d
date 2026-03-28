@@ -345,6 +345,7 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
                 <button className="viz-embed-bar-link" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>
                   Sign up free → get 10 more
                 </button>
+                {" "}· no credit card needed
               </span>
             )}
           </div>
