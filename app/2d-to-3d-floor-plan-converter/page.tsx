@@ -9,7 +9,7 @@ import Footer from "@/components/Footer";
 import VisualizerClient from "@/app/visualizer/[id]/VisualizerClient";
 import FAQ from "@/components/FAQ";
 import { Marquee } from "@/components/ui/marquee";
-import { getSiteSettings } from "@/lib/actions";
+import { getSiteSettings, getAppFrames } from "@/lib/actions";
 
 const DEFAULT_TITLE = "2D to 3D Floor Plan Converter — Convert 2D Floor Plan to 3D Model Free Online";
 const DEFAULT_DESC = "Convert 2D floor plans to 3D models free online — no credit card, no login required. Works with blueprints, house plans & hand-drawn sketches. Results in seconds.";
@@ -122,7 +122,8 @@ const jsonLd = {
   ],
 };
 
-export default function FloorPlanConverterPage() {
+export default async function FloorPlanConverterPage() {
+  const frames = await getAppFrames();
   return (
     <div className="home">
       <script
@@ -136,7 +137,7 @@ export default function FloorPlanConverterPage() {
       <HowItWorks2 />
 
       <section id="try-converter">
-        <VisualizerClient embeddedId="new" />
+        <VisualizerClient embeddedId="new" frames={frames} />
       </section>
 
       <DesignOptions />

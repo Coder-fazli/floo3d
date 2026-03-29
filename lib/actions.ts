@@ -4,6 +4,12 @@ import Project from "./models/Project";
 import { uploadImage } from "./cloudinary";
 import User from "./models/User";
 import SiteSettings from "./models/SiteSettings";
+import AppFrames from "./models/AppFrames";
+
+export type FramesData = {
+  fallbacks: Record<string, { before?: string; after?: string }>;
+  styles: Record<string, string>;
+};
 
 
 export async function getUserByClerkId(clerkId: string)
@@ -103,6 +109,32 @@ export async function saveSiteSettings(metaTitle: string, metaDescription: strin
         { metaTitle, metaDescription },
         { upsert: true, new: true }
     );
+}
+
+export async function getAppFrames(): Promise<FramesData> {
+  await connectDb();
+  const doc = await AppFrames.findOne({ key: "main" });
+  return {
+    fallbacks: doc?.fallbacks ?? {},
+    styles:    doc?.styles    ?? {},
+  };
+}
+
+export async function saveFrameImage(
+  category: "fallback" | "style",
+  key: string,
+  slot: "before" | "after" | null,
+  base64: string
+): Promise<string> {
+  const url = await uploadImage(base64, "frames");
+  await connectDb();
+  const field = category === "fallback" ? `fallbacks.${key}.${slot}` : `styles.${key}`;
+  await AppFrames.findOneAndUpdate(
+    { key: "main" },
+    { $set: { [field]: url } },
+    { upsert: true, new: true }
+  );
+  return url;
 }
 
 export async function saveFloorPlanSettings(floorPlanMetaTitle: string, floorPlanMetaDescription: string) {

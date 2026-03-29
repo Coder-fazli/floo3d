@@ -4,13 +4,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
-import { LayoutDashboard, Users, Building2, FileText, Settings } from "lucide-react";
+import { LayoutDashboard, Users, Building2, FileText, Settings, ImageIcon } from "lucide-react";
 
 const links = [
   { href: "/secure-7x9", label: "Overview", icon: LayoutDashboard },
   { href: "/secure-7x9/users", label: "Users", icon: Users },
   { href: "/secure-7x9/projects", label: "Projects", icon: Building2 },
   { href: "/secure-7x9/posts", label: "Posts", icon: FileText },
+  { href: "/secure-7x9/frames", label: "Frames", icon: ImageIcon },
 ];
 
 const systemLinks = [

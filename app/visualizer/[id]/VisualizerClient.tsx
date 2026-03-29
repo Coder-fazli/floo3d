@@ -18,6 +18,8 @@ import NameProjectModal from "@/components/NameProjectModal";
 import { HoleBackground } from "@/components/animate-ui/components/backgrounds/hole";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { SparklesText } from "@/components/ui/sparkles-text";
+import { type FramesData } from "@/lib/actions";
+import { DEFAULT_FALLBACKS, DEFAULT_STYLES } from "@/lib/frameDefaults";
 
 const STYLES: Record<string, string[]> = {
   "floor-plan":      ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
@@ -26,31 +28,14 @@ const STYLES: Record<string, string[]> = {
   "empty-room":      ["Clean"],
 };
 
-const FALLBACK_IMAGES: Record<string, { before: string; after: string; labelBefore: string; labelAfter: string }> = {
-  "floor-plan":      { before: "/real-2d-plan.jpg",         after: "/real-3d-render.jpg",      labelBefore: "Original 2D Plan", labelAfter: "AI 3D Render" },
-  "interior-design": { before: "/card-room-before.webp",    after: "/card-room-after.webp",    labelBefore: "Original Room",    labelAfter: "AI Redesigned" },
-  "outdoor":         { before: "/card-outdoor-before.avif", after: "/card-outdoor-after.avif", labelBefore: "Original Outdoor", labelAfter: "AI Outdoor Design" },
-  "empty-room":      { before: "/card-empty-before.webp",   after: "/card-empty-after.webp",   labelBefore: "Furnished Room",   labelAfter: "Emptied Room" },
-};
-
-const STYLE_IMAGES: Record<string, string> = {
-  "Modern":        "/card-room-after.webp",
-  "Scandinavian":  "/style-scandinavian.jpg",
-  "Industrial":    "/style-industrial.jpg",
-  "Rustic":        "/style-rustic.webp",
-  "Luxury":        "/style-luxury.jpg",
-  "Minimalist":    "/style-minimalist.jpg",
-  "Mediterranean": "/card-outdoor-after.webp",
-  "Japanese":      "/card-outdoor-after.avif",
-  "Tropical":      "/card-outdoor-before.avif",
-  "Cottage":       "/card-outdoor-before.webp",
-  "Desert":        "/thumb2.jpg",
-  "Clean":         "/card-empty-before.webp",
-};
 
 const ROOM_TYPES = ["Living Room", "Bedroom", "Kitchen", "Bathroom", "Office", "Dining Room", "Studio", "Hallway", "Kids Room"];
 
-export default function VisualizerClient({ embeddedId }: { embeddedId?: string } = {}) {
+export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: string; frames?: FramesData } = {}) {
+  const FALLBACK_IMAGES = Object.fromEntries(
+    Object.entries(DEFAULT_FALLBACKS).map(([k, v]) => [k, { ...v, ...(frames?.fallbacks?.[k] ?? {}) }])
+  );
+  const STYLE_IMAGES = { ...DEFAULT_STYLES, ...(frames?.styles ?? {}) };
   const router = useRouter();
   const params = useParams();
   const id = embeddedId ?? (Array.isArray(params.id) ? params.id[0] : params.id);

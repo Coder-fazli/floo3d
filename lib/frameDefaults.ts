@@ -1,0 +1,28 @@
+export const DEFAULT_FALLBACKS: Record<string, { before: string; after: string; labelBefore: string; labelAfter: string }> = {
+  "floor-plan":      { before: "/real-2d-plan.jpg",         after: "/real-3d-render.jpg",      labelBefore: "Original 2D Plan",  labelAfter: "AI 3D Render" },
+  "interior-design": { before: "/card-room-before.webp",    after: "/card-room-after.webp",    labelBefore: "Original Room",     labelAfter: "AI Redesigned" },
+  "outdoor":         { before: "/card-outdoor-before.avif", after: "/card-outdoor-after.avif", labelBefore: "Original Outdoor",  labelAfter: "AI Outdoor Design" },
+  "empty-room":      { before: "/card-empty-before.webp",   after: "/card-empty-after.webp",   labelBefore: "Furnished Room",    labelAfter: "Emptied Room" },
+};
+
+export const DEFAULT_STYLES: Record<string, string> = {
+  "Modern":        "/card-room-after.webp",
+  "Scandinavian":  "/style-scandinavian.jpg",
+  "Industrial":    "/style-industrial.jpg",
+  "Rustic":        "/style-rustic.webp",
+  "Luxury":        "/style-luxury.jpg",
+  "Minimalist":    "/style-minimalist.jpg",
+  "Mediterranean": "/card-outdoor-after.webp",
+  "Japanese":      "/card-outdoor-after.avif",
+  "Tropical":      "/card-outdoor-before.avif",
+  "Cottage":       "/card-outdoor-before.webp",
+  "Desert":        "/thumb2.jpg",
+  "Clean":         "/card-empty-before.webp",
+};
+
+export const INPUT_TYPE_LABELS: Record<string, string> = {
+  "floor-plan":      "Floor Plan",
+  "interior-design": "Interior Design",
+  "outdoor":         "Outdoor",
+  "empty-room":      "Empty Room",
+};
