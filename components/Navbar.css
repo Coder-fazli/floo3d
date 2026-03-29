@@ -218,16 +218,13 @@
 }
 
 @media (max-width: 768px) {
-    .navbar-links {
-        display: none;
-    }
+    .navbar-links { display: none; }
+    .navbar-burger { display: block; }
 
+    /* Hide all action items — everything lives in the mobile dropdown */
     .navbar-btn-ghost,
-    .navbar-btn-primary {
-        display: none;
-    }
-
-    .navbar-burger {
-        display: block;
-    }
+    .navbar-btn-primary,
+    .navbar-btn-primary[href],
+    .navbar-credits,
+    .navbar-profile { display: none !important; }
 }
