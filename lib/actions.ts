@@ -1,4 +1,5 @@
 "use server"
+import { revalidatePath } from "next/cache";
 import { connectDb } from "./db";
 import Project from "./models/Project";
 import { uploadImage } from "./cloudinary";
@@ -128,12 +129,32 @@ export async function saveFrameImage(
 ): Promise<string> {
   const url = await uploadImage(base64, "frames");
   await connectDb();
-  const field = category === "fallback" ? `fallbacks.${key}.${slot}` : `styles.${key}`;
-  await AppFrames.findOneAndUpdate(
-    { key: "main" },
-    { $set: { [field]: url } },
-    { upsert: true, new: true }
-  );
+
+  // Fetch or create the single document
+  let doc = await AppFrames.findOne({ key: "main" });
+  if (!doc) doc = await AppFrames.create({ key: "main", fallbacks: {}, styles: {} });
+
+  if (category === "fallback") {
+    // Spread into a new object so Mongoose detects the change on the Mixed field
+    const fallbacks = { ...(doc.fallbacks ?? {}) };
+    fallbacks[key] = { ...(fallbacks[key] ?? {}), [slot!]: url };
+    doc.fallbacks = fallbacks;
+    doc.markModified("fallbacks");
+  } else {
+    const styles = { ...(doc.styles ?? {}) };
+    styles[key] = url;
+    doc.styles = styles;
+    doc.markModified("styles");
+  }
+
+  await doc.save();
+
+  // Invalidate all pages that display frames
+  revalidatePath("/secure-7x9/frames");
+  revalidatePath("/dashboard");
+  revalidatePath("/visualizer/[id]", "page");
+  revalidatePath("/2d-to-3d-floor-plan-converter");
+
   return url;
 }
 
