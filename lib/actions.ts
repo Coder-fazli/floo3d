@@ -43,15 +43,15 @@ export async function updateProject(id: string, renderedImageUrl: string) {
 
 // Credit managment for users(Ai generation costs credits)
 
-export async function getCredits(userId: string, name?: 
-  string, email?: string) {
+export async function getCredits(userId: string, name?: string, email?: string) {
     await connectDb();
+    const update: any = { $setOnInsert: { credits: 10 } };
+    if (name || email) {
+        update.$set = { name: name ?? "", email: email ?? "" };
+    }
     const user = await User.findOneAndUpdate(
         { clerkId: userId },
-        {
-            $setOnInsert: { credits: 10 },
-            $set: { name: name ?? "", email: email ?? "" }
-        },
+        update,
         { upsert: true, new: true }
     );
     return user.credits;

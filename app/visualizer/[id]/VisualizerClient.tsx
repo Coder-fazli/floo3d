@@ -106,7 +106,11 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
   }, [id, isNewMode]);
 
   useEffect(() => {
-    if (user) getCredits(user.id).then(setCredits);
+    if (user) getCredits(
+      user.id,
+      user.fullName ?? user.firstName ?? "",
+      user.emailAddresses?.[0]?.emailAddress ?? ""
+    ).then(setCredits);
   }, [user]);
 
   useEffect(() => {
@@ -167,7 +171,11 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
       const data = await res.json();
       if (!data?.renderedImageUrl) throw new Error("Invalid response from API");
       setCurrentImage(data.renderedImageUrl);
-      if (user) getCredits(user.id).then(setCredits);
+      if (user) getCredits(
+        user.id,
+        user.fullName ?? user.firstName ?? "",
+        user.emailAddresses?.[0]?.emailAddress ?? ""
+      ).then(setCredits);
     } catch (error: any) {
       if (res?.status === 403) {
         setModalType("credits");
