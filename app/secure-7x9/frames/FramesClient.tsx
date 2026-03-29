@@ -77,12 +77,15 @@ export default function FramesClient({ initialFrames }: Props) {
     } finally { setUpl(uk, false); }
   };
 
-  const handleStyle = async (style: string, file: File) => {
-    const uk = `s:${style}`;
+  const handleStyle = async (inputType: string, style: string, file: File) => {
+    const uk = `s:${inputType}:${style}`;
     setUpl(uk, true);
     try {
-      const url = await saveFrameImage("style", style, null, await toBase64(file));
-      setFrames((f) => ({ ...f, styles: { ...f.styles, [style]: url } }));
+      const url = await saveFrameImage("style", inputType, style, await toBase64(file));
+      setFrames((f) => ({
+        ...f,
+        styles: { ...f.styles, [inputType]: { ...(f.styles[inputType] ?? {}), [style]: url } },
+      }));
     } finally { setUpl(uk, false); }
   };
 
@@ -118,26 +121,30 @@ export default function FramesClient({ initialFrames }: Props) {
         </div>
       </div>
 
-      {/* Style Thumbnails */}
-      <div className="adm-card" style={{ padding: "1.75rem" }}>
-        <h3 className="adm-settings-title" style={{ marginBottom: "0.375rem" }}>Style Thumbnails</h3>
-        <p style={{ fontSize: "0.8rem", color: "#94a3b8", marginBottom: "1.5rem" }}>
-          Preview images shown for each design style in the sidebar style picker.
-        </p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: "1rem" }}>
-          {Object.keys(DEFAULT_STYLES).map((style) => (
-            <div key={style}>
-              <ImageSlot
-                src={frames.styles[style] ?? DEFAULT_STYLES[style]}
-                uploading={!!uploading[`s:${style}`]}
-                square
-                onPick={(f) => handleStyle(style, f)}
-              />
-              <p style={{ fontSize: "0.72rem", fontWeight: 600, color: "#475569", textAlign: "center", marginTop: "0.375rem" }}>{style}</p>
-            </div>
-          ))}
+      {/* Style Thumbnails — grouped by input type */}
+      {Object.entries(DEFAULT_STYLES).map(([inputType, styleMap]) => (
+        <div key={inputType} className="adm-card" style={{ padding: "1.75rem", marginBottom: "1.5rem" }}>
+          <h3 className="adm-settings-title" style={{ marginBottom: "0.375rem" }}>
+            {INPUT_TYPE_LABELS[inputType]} — Style Thumbnails
+          </h3>
+          <p style={{ fontSize: "0.8rem", color: "#94a3b8", marginBottom: "1.5rem" }}>
+            Preview images shown in the sidebar style picker for {INPUT_TYPE_LABELS[inputType].toLowerCase()} projects.
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: "1rem" }}>
+            {Object.keys(styleMap).map((style) => (
+              <div key={style}>
+                <ImageSlot
+                  src={frames.styles[inputType]?.[style] ?? styleMap[style]}
+                  uploading={!!uploading[`s:${inputType}:${style}`]}
+                  square
+                  onPick={(f) => handleStyle(inputType, style, f)}
+                />
+                <p style={{ fontSize: "0.72rem", fontWeight: 600, color: "#475569", textAlign: "center", marginTop: "0.375rem" }}>{style}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      ))}
     </div>
   );
 }

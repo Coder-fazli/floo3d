@@ -5,19 +5,35 @@ export const DEFAULT_FALLBACKS: Record<string, { before: string; after: string; 
   "empty-room":      { before: "/card-empty-before.webp",   after: "/card-empty-after.webp",   labelBefore: "Furnished Room",    labelAfter: "Emptied Room" },
 };
 
-export const DEFAULT_STYLES: Record<string, string> = {
-  "Modern":        "/card-room-after.webp",
-  "Scandinavian":  "/style-scandinavian.jpg",
-  "Industrial":    "/style-industrial.jpg",
-  "Rustic":        "/style-rustic.webp",
-  "Luxury":        "/style-luxury.jpg",
-  "Minimalist":    "/style-minimalist.jpg",
-  "Mediterranean": "/card-outdoor-after.webp",
-  "Japanese":      "/card-outdoor-after.avif",
-  "Tropical":      "/card-outdoor-before.avif",
-  "Cottage":       "/card-outdoor-before.webp",
-  "Desert":        "/thumb2.jpg",
-  "Clean":         "/card-empty-before.webp",
+// Keyed by inputType → styleName → default image path
+export const DEFAULT_STYLES: Record<string, Record<string, string>> = {
+  "floor-plan": {
+    "Modern":       "/card-room-after.webp",
+    "Scandinavian": "/style-scandinavian.jpg",
+    "Industrial":   "/style-industrial.jpg",
+    "Rustic":       "/style-rustic.webp",
+    "Luxury":       "/style-luxury.jpg",
+    "Minimalist":   "/style-minimalist.jpg",
+  },
+  "interior-design": {
+    "Modern":       "/card-room-after.webp",
+    "Scandinavian": "/style-scandinavian.jpg",
+    "Industrial":   "/style-industrial.jpg",
+    "Rustic":       "/style-rustic.webp",
+    "Luxury":       "/style-luxury.jpg",
+    "Minimalist":   "/style-minimalist.jpg",
+  },
+  "outdoor": {
+    "Mediterranean": "/card-outdoor-after.webp",
+    "Japanese":      "/card-outdoor-after.avif",
+    "Tropical":      "/card-outdoor-before.avif",
+    "Cottage":       "/card-outdoor-before.webp",
+    "Modern":        "/thumb2.jpg",
+    "Desert":        "/thumb2.jpg",
+  },
+  "empty-room": {
+    "Clean": "/card-empty-before.webp",
+  },
 };
 
 export const INPUT_TYPE_LABELS: Record<string, string> = {

@@ -35,7 +35,9 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
   const FALLBACK_IMAGES = Object.fromEntries(
     Object.entries(DEFAULT_FALLBACKS).map(([k, v]) => [k, { ...v, ...(frames?.fallbacks?.[k] ?? {}) }])
   );
-  const STYLE_IMAGES = { ...DEFAULT_STYLES, ...(frames?.styles ?? {}) };
+  // Resolved per active input type at render time (see usage below)
+  const getStyleImage = (inputType: string, style: string) =>
+    frames?.styles?.[inputType]?.[style] ?? DEFAULT_STYLES[inputType]?.[style] ?? "/card-room-after.webp";
   const router = useRouter();
   const params = useParams();
   const id = embeddedId ?? (Array.isArray(params.id) ? params.id[0] : params.id);
@@ -449,7 +451,7 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
                       onClick={() => setRenderStyle(s)}
                     >
                       <div className="viz-style-card-img">
-                        <img src={STYLE_IMAGES[s] ?? "/card-room-after.webp"} alt={s} />
+                        <img src={getStyleImage(activeInputType, s)} alt={s} />
                         {renderStyle === s && (
                           <div className="viz-style-card-check">
                             <svg width="8" height="8" viewBox="0 0 12 12" fill="none" stroke="#fff" strokeWidth="2.5"><polyline points="2,6 5,9 10,3"/></svg>

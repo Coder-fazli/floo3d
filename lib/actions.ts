@@ -9,7 +9,7 @@ import AppFrames from "./models/AppFrames";
 
 export type FramesData = {
   fallbacks: Record<string, { before?: string; after?: string }>;
-  styles: Record<string, string>;
+  styles: Record<string, Record<string, string>>; // inputType → styleName → url
 };
 
 
@@ -121,35 +121,34 @@ export async function getAppFrames(): Promise<FramesData> {
   };
 }
 
+// key = inputType, slot = "before"/"after" for fallbacks OR styleName for styles
 export async function saveFrameImage(
   category: "fallback" | "style",
   key: string,
-  slot: "before" | "after" | null,
+  slot: string,
   base64: string
 ): Promise<string> {
   const url = await uploadImage(base64, "frames");
   await connectDb();
 
-  // Fetch or create the single document
   let doc = await AppFrames.findOne({ key: "main" });
   if (!doc) doc = await AppFrames.create({ key: "main", fallbacks: {}, styles: {} });
 
   if (category === "fallback") {
-    // Spread into a new object so Mongoose detects the change on the Mixed field
     const fallbacks = { ...(doc.fallbacks ?? {}) };
-    fallbacks[key] = { ...(fallbacks[key] ?? {}), [slot!]: url };
+    fallbacks[key] = { ...(fallbacks[key] ?? {}), [slot]: url };
     doc.fallbacks = fallbacks;
     doc.markModified("fallbacks");
   } else {
+    // styles[inputType][styleName] = url
     const styles = { ...(doc.styles ?? {}) };
-    styles[key] = url;
+    styles[key] = { ...(styles[key] ?? {}), [slot]: url };
     doc.styles = styles;
     doc.markModified("styles");
   }
 
   await doc.save();
 
-  // Invalidate all pages that display frames
   revalidatePath("/secure-7x9/frames");
   revalidatePath("/dashboard");
   revalidatePath("/visualizer/[id]", "page");
