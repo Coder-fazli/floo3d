@@ -8,6 +8,7 @@ const isPublicRoute = createRouteMatcher([
   "/visualizer(.*)",
   "/2d-to-3d-floor-plan-converter(.*)",
   "/api/guest-generate(.*)",
+  "/api/webhooks(.*)", 
 ]);
 
 const isAdminRoute = createRouteMatcher(["/secure-7x9(.*)"]);
