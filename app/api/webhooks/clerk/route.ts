@@ -41,8 +41,8 @@
   }
 
         if (evt.type === "user.created") {
-            const { id, first_name, last_name, email_addresses } = evt.data;
-            const name = [first_name, last_name].filter(Boolean).join(" ");
+            const { id, first_name, last_name, username, email_addresses } = evt.data;
+            const name = [first_name, last_name].filter(Boolean).join(" ") || username || "";
             const email = email_addresses?.[0]?.email_address?? "";
 
             await connectDb();
