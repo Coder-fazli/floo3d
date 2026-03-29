@@ -52,6 +52,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <ClerkProvider>
       <html lang="en" className={cn("font-sans", geist.variable)}>
         <body className={`${inter.variable} ${instrumentSerif.variable}`}>
+          {/* Hide page until preloader is ready — prevents flash of content */}
+          <script dangerouslySetInnerHTML={{ __html: `try{if(!sessionStorage.getItem('preloader_shown'))document.documentElement.style.visibility='hidden'}catch(e){}` }} />
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{

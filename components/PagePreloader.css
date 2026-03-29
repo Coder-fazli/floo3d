@@ -34,19 +34,31 @@
     50%       { transform: scale(1.08);  box-shadow: 0 0 0 16px rgba(236, 91, 19, 0); }
 }
 
-/* MorphingText — fade in so first word animates in too */
+/* Text container */
 .preloader-text {
-    color: #ec5b13 !important;
-    font-size: clamp(4rem, 16vw, 10rem) !important;
-    height: clamp(5rem, 18vw, 12rem) !important;
-    width: 100% !important;
-    max-width: 90vw !important;
-    font-weight: 900 !important;
-    letter-spacing: -0.04em !important;
-    text-align: center !important;
+    height: clamp(4rem, 12vw, 8rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+    max-width: 90vw;
 }
 
-.preloader-text span {
-    color: #ec5b13 !important;
-    font-weight: 900 !important;
+/* Each word slides up and fades in — no blur */
+.preloader-word {
+    display: block;
+    color: #ec5b13;
+    font-size: clamp(3rem, 12vw, 8rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    text-align: center;
+    white-space: nowrap;
+    animation: preloader-word-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+    line-height: 1;
+}
+
+@keyframes preloader-word-in {
+    from { opacity: 0; transform: translateY(40%); }
+    to   { opacity: 1; transform: translateY(0); }
 }

@@ -432,8 +432,8 @@ export default function VisualizerClient({ embeddedId }: { embeddedId?: string }
               </div>
             </div>
 
-            {/* Room Type — hidden for floor-plan embedded pages */}
-            {!embeddedId && <div className="viz-sb-section">
+            {/* Room Type — only for interior-design and empty-room */}
+            {!embeddedId && activeInputType !== "floor-plan" && activeInputType !== "outdoor" && <div className="viz-sb-section">
               <div className="viz-sb-section-title">
                 <Home size={13} strokeWidth={2.5} style={{ color: "#ec5b13" }} />
                 Room Type
