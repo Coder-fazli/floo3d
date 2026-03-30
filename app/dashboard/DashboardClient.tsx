@@ -72,9 +72,8 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
                 >
                   <div className="nr-reveal-container">
                     <AutoCompareSlider before={imgBefore} after={imgAfter} />
-                    {/* Gradient overlay */}
+                    {/* Mobile only: gradient + overlaid text */}
                     <div className="nr-card-gradient" />
-                    {/* Overlaid info */}
                     <div className="nr-card-overlay-info">
                       <div>
                         <h3 className="nr-type-label">{label}</h3>
@@ -82,6 +81,14 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
                       </div>
                       <span className="nr-type-cta">Try Now</span>
                     </div>
+                  </div>
+                  {/* Desktop only: text below */}
+                  <div className="nr-type-info">
+                    <div>
+                      <h3 className="nr-type-label">{label}</h3>
+                      <p className="nr-type-desc">{desc}</p>
+                    </div>
+                    <span className="nr-type-cta">Try it →</span>
                   </div>
                 </div>
               );

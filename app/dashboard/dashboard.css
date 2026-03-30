@@ -55,23 +55,23 @@
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  gap: 0.75rem;
 }
 
 /* Reveal image container */
 .nr-reveal-container {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 3 / 4;
-  border-radius: 1rem;
+  aspect-ratio: 4 / 3;
+  border-radius: 0.75rem;
   background: #f1f5f9;
   border: 1px solid #e2e8f0;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-  transition: box-shadow 0.3s, transform 0.3s;
+  transition: border-color 0.2s;
 }
 
 .nr-type-card:hover .nr-reveal-container {
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
-  transform: translateY(-3px);
+  border-color: rgba(236, 91, 19, 0.4);
 }
 
 .nr-reveal-container-active {
@@ -100,61 +100,45 @@
   box-shadow: 0 2px 8px rgba(236, 91, 19, 0.4);
 }
 
-/* Dark gradient overlay at bottom of card */
+/* Mobile overlay — hidden on desktop */
 .nr-card-gradient {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.18) 55%, transparent 100%);
-  pointer-events: none;
-  z-index: 5;
+  display: none;
 }
 
-/* Text overlay positioned at bottom */
 .nr-card-overlay-info {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 10;
-  padding: 1rem 1rem 1rem;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 0.5rem;
-  pointer-events: none;
+  display: none;
 }
 
+/* Desktop text below card */
 .nr-type-label {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 800;
-  color: #ffffff;
-  margin: 0 0 0.2rem;
+  color: #0f172a;
+  margin: 0 0 0.25rem;
   letter-spacing: -0.01em;
   line-height: 1.2;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
 }
 
 .nr-type-desc {
-  font-size: 0.7rem;
-  color: rgba(255,255,255,0.8);
+  font-size: 0.75rem;
+  color: #64748b;
   margin: 0;
   line-height: 1.4;
 }
 
+.nr-type-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
 .nr-type-cta {
-  flex-shrink: 0;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  color: #ffffff;
+  color: #ec5b13;
   white-space: nowrap;
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,0.3);
-  border-radius: 9999px;
-  padding: 0.35rem 0.85rem;
-  align-self: flex-end;
-  margin-bottom: 0.15rem;
+  flex-shrink: 0;
 }
 
 /* Style pills — horizontal scrollable row */
@@ -204,10 +188,58 @@
 
 @media (max-width: 640px) {
   .nr-type-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
+  }
+  .nr-type-card {
+    gap: 0;
   }
   .nr-reveal-container {
     aspect-ratio: 3 / 4;
+    border-radius: 1rem;
+  }
+  /* Show overlay on mobile */
+  .nr-card-gradient {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.18) 55%, transparent 100%);
+    pointer-events: none;
+    z-index: 5;
+  }
+  .nr-card-overlay-info {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    padding: 1rem;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.5rem;
+    pointer-events: none;
+  }
+  .nr-card-overlay-info .nr-type-label {
+    color: #ffffff;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  }
+  .nr-card-overlay-info .nr-type-desc {
+    color: rgba(255,255,255,0.8);
+    font-size: 0.7rem;
+  }
+  .nr-card-overlay-info .nr-type-cta {
+    color: #ffffff;
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 9999px;
+    padding: 0.35rem 0.85rem;
+    align-self: flex-end;
+  }
+  /* Hide desktop text below on mobile */
+  .nr-type-info {
+    display: none;
   }
 }
 
