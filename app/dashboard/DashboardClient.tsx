@@ -13,7 +13,7 @@ import { DEFAULT_FALLBACKS } from "@/lib/frameDefaults";
 const INPUT_TYPE_META: Record<string, { label: string; desc: string }> = {
   "floor-plan":      { label: "2D Floor Plan → 3D",  desc: "Turn blueprints into photorealistic 3D renders" },
   "interior-design": { label: "Interior Redesign",    desc: "Reimagine any room with AI-powered styling" },
-  "outdoor":         { label: "Outdoor & Garden",     desc: "Transform your exterior with stunning landscape AI" },
+  "outdoor":         { label: "Garden & Yard Design", desc: "Transform your exterior with stunning landscape AI" },
   "empty-room":      { label: "Virtual Staging",      desc: "Stage empty spaces with beautiful AI furniture" },
 };
 

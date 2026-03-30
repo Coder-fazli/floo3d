@@ -39,6 +39,6 @@ export const DEFAULT_STYLES: Record<string, Record<string, string>> = {
 export const INPUT_TYPE_LABELS: Record<string, string> = {
   "floor-plan":      "Floor Plan",
   "interior-design": "Interior Design",
-  "outdoor":         "Outdoor",
+  "outdoor":         "Garden & Yard Design",
   "empty-room":      "Empty Room",
 };

@@ -89,7 +89,7 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
   }, [project?.renderStyle]);
 
   useEffect(() => {
-    if (!isNewMode && id) getProject(id as string).then(setProject);
+    if (!isNewMode && id && id !== "new") getProject(id as string).then(setProject);
   }, [id, isNewMode]);
 
   useEffect(() => {

@@ -10,7 +10,7 @@ const INPUT_TABS = [
   { key: "all", label: "All" },
   { key: "floor-plan", label: "Floor Plan" },
   { key: "interior", label: "Interior" },
-  { key: "outdoor", label: "Outdoor" },
+  { key: "outdoor", label: "Garden & Yard" },
   { key: "empty-room", label: "Empty Room" },
 ];
 
