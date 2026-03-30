@@ -67,15 +67,25 @@ export async function deductCredit(userId:string) {
     await connectDb();
     await User.findOneAndUpdate(
         { clerkId: userId },
-        { $inc: { credits: -2 } }
+        { $inc: { credits: -3 } }
     );
 }
 
 export async function getAllProjects() {
     noStore();
     await connectDb();
-    const projects = await Project.find({}).sort("-createdAt");
-    return JSON.parse(JSON.stringify(projects));
+    const [projects, users] = await Promise.all([
+        Project.find({}).sort("-createdAt"),
+        User.find({}, { clerkId: 1, name: 1, email: 1 }),
+    ]);
+    const userMap: Record<string, { name: string; email: string }> = {};
+    for (const u of users) userMap[u.clerkId] = { name: u.name, email: u.email };
+    const result = projects.map((p: any) => ({
+        ...p.toObject(),
+        userName: userMap[p.userId]?.name || "",
+        userEmail: userMap[p.userId]?.email || "",
+    }));
+    return JSON.parse(JSON.stringify(result));
 }
 
 // Ф

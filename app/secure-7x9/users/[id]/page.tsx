@@ -14,6 +14,14 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
   const rendersCompleted = projects.filter((p: any) => p.renderedImageUrl).length;
   const recentProjects = projects.slice(0, 5);
 
+  // Tracking Generations Count
+  const totalGenerations = projects.reduce((sum: number, p: any) => sum + (p.generationCount ?? 0), 0);
+ // Tracking Downloads Count
+ const totalDownloads = projects.filter((p: any) => 
+ p.downloadedAt).length;
+
+
+
   async function saveCredits(formData: FormData) {
     "use server";
     const val = Number(formData.get("credits"));
@@ -67,6 +75,18 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
         <div className="adm-user-stat">
           <p className="adm-user-stat-label">Renders Completed</p>
           <p className="adm-user-stat-value">{rendersCompleted}</p>
+        </div>
+        <div className="adm-user-stat">
+          <p className="adm-user-stat-label">Total Generations</p>
+          <p className="adm-user-stat-value">{totalGenerations}</p>
+        </div>
+        <div className="adm-user-stat">
+          <p className="adm-user-stat-label">Credits Used</p>
+          <p className="adm-user-stat-value">{totalGenerations * 3}</p>
+        </div>
+        <div className="adm-user-stat">
+          <p className="adm-user-stat-label">Downloads</p>
+          <p className="adm-user-stat-value">{totalDownloads}</p>
         </div>
         <div className="adm-user-stat">
           <p className="adm-user-stat-label">Member Since</p>

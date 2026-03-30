@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { uploadImage } from "@/lib/cloudinary";
 import { updateProject, getCredits, deductCredit} from "@/lib/actions";
 import { buildPrompt } from "@/lib/prompts";
+import Project from "@/lib/models/Project";
+import { connectDb } from "@/lib/db";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
@@ -10,8 +12,11 @@ export const maxDuration = 60;
 
 
 export async function POST(request: Request) {
+  let projectId: string | null = null;
   try {
-    const { projectId, imageUrl, userId, inputType = "floor-plan", renderStyle = "Modern", roomType } = await request.json();
+    const body = await request.json();
+    projectId = body.projectId;
+    const { imageUrl, userId, inputType = "interior", renderStyle = "Modern", roomType } = body;
 
     const credits = await getCredits(userId);
     if (credits <= 0) {
@@ -46,12 +51,25 @@ export async function POST(request: Request) {
 
     const renderedBase64 = `data:image/png;base64,${imagePart.inlineData!.data}`;
     const renderedImageUrl = await uploadImage(renderedBase64, "floo3d/renders");
-    await updateProject(projectId, renderedImageUrl);
+    await updateProject(projectId!, renderedImageUrl);
+    await connectDb();
+    await Project.findByIdAndUpdate(projectId, { $inc: {
+      generationCount: 1
+    } });
 
     return NextResponse.json({ renderedImageUrl });
 
   } catch (error: any) {
     console.error("Generate error:", error?.message || error);
+    if (projectId) {
+      try {
+        await connectDb();
+        await Project.findByIdAndUpdate(projectId, {
+          status: "error",
+          errorMessage: error?.message || "Generation failed",
+        });
+      } catch {}
+    }
     return NextResponse.json({ error: error?.message || "Generation failed" }, { status: 500 });
   }
 }

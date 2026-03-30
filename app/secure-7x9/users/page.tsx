@@ -1,10 +1,14 @@
 import { Search } from "lucide-react";
 import Link from "next/link";
-import { getAllUSers } from "@/lib/actions";
+import { getAllUSers, getAllProjects } from "@/lib/actions";
 
 
 export default async function AdminUsers() {
-  const users = await getAllUSers();
+  const [users, projects] = await Promise.all([getAllUSers(), getAllProjects()]);
+  const projectCountByUser: Record<string, number> = {};
+  for (const p of projects) {
+    projectCountByUser[p.userId] = (projectCountByUser[p.userId] ?? 0) + 1;
+  }
   return (
     <div className="adm-content">
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem" }}>
@@ -46,7 +50,7 @@ export default async function AdminUsers() {
                   <td>
                     <input className="adm-credits-input" type="number" defaultValue={u.credits} />
                   </td>
-                  <td>0</td>
+                  <td>{projectCountByUser[u.clerkId] ?? 0}</td>
                   <td style={{ color: "#94a3b8" }}>{u.createdAt}</td>
                   <td className="right" style={{ display: "flex", gap: "1rem", justifyContent: "flex-end" }}>
                     <Link href={`/secure-7x9/users/${u.clerkId}`} className="adm-action-link">View</Link>

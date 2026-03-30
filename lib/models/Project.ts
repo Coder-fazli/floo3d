@@ -8,6 +8,9 @@ const ProjectSchema = new Schema({
     inputType: { type: String, default: "floor-plan" },
     renderStyle: { type: String, default: "Modern" },
     status: { type: String, default: "pending" },
+    errorMessage: { type: String, default: null },
+    generationCount: { type: Number, default: 0 },
+    downloadedAt: { type: Date, default: null },
     createdAt: { type: Date, default: Date.now },
   });
 

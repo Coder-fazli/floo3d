@@ -248,6 +248,14 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
     link.download = `${project?.name || "render"}.png`;
     link.click();
     URL.revokeObjectURL(url);
+     
+    if(project?._id) {
+      fetch("/api/track-download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectId: project._id }),
+      });
+    }
   };
 
   const handleShare = async () => {
