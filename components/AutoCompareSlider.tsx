@@ -52,8 +52,8 @@ function SparkBurst({ xPct }: { xPct: number }) {
 export default function AutoCompareSlider({ before, after }: Props) {
   const posRef  = useRef(8);
   const dirRef  = useRef(1);
-  const rafRef  = useRef<number>();
-  const lastRef = useRef<number>();
+  const rafRef  = useRef<number>(0);
+  const lastRef = useRef<number>(0);
 
   const [pos, setPos]         = useState(8);
   const [burstKey, setBurstKey] = useState<number | null>(null);
