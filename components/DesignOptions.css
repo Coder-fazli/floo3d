@@ -132,8 +132,9 @@
   position: relative;
   overflow: hidden;
   border-radius: 1rem;
-  aspect-ratio: 16 / 9;
   width: 100%;
+  height: 0;
+  padding-top: 56.25%; /* 16:9 */
   background: #e2e8f0;
   box-shadow:
     0 4px 6px rgba(0, 0, 0, 0.04),
@@ -163,6 +164,8 @@
 
 /* AutoCompareSlider fills the card */
 .do-img-card > div {
+  position: absolute !important;
+  inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
 }
