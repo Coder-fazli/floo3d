@@ -1,7 +1,7 @@
 export const DEFAULT_FALLBACKS: Record<string, { before: string; after: string; labelBefore: string; labelAfter: string }> = {
   "floor-plan":      { before: "/real-2d-plan.jpg",         after: "/real-3d-render.jpg",      labelBefore: "Original 2D Plan",  labelAfter: "AI 3D Render" },
   "interior-design": { before: "/card-room-before.webp",    after: "/card-room-after.webp",    labelBefore: "Original Room",     labelAfter: "AI Redesigned" },
-  "outdoor":         { before: "/card-outdoor-before.avif", after: "/card-outdoor-after.avif", labelBefore: "Original Outdoor",  labelAfter: "AI Outdoor Design" },
+  "outdoor":         { before: "/card-outdoor-before.webp", after: "/card-outdoor-after.webp", labelBefore: "Original Outdoor",  labelAfter: "AI Outdoor Design" },
   "empty-room":      { before: "/card-empty-before.webp",   after: "/card-empty-after.webp",   labelBefore: "Furnished Room",    labelAfter: "Emptied Room" },
 };
 
@@ -25,8 +25,8 @@ export const DEFAULT_STYLES: Record<string, Record<string, string>> = {
   },
   "outdoor": {
     "Mediterranean": "/card-outdoor-after.webp",
-    "Japanese":      "/card-outdoor-after.avif",
-    "Tropical":      "/card-outdoor-before.avif",
+    "Japanese":      "/card-outdoor-after.webp",
+    "Tropical":      "/card-outdoor-before.webp",
     "Cottage":       "/card-outdoor-before.webp",
     "Modern":        "/thumb2.jpg",
     "Desert":        "/thumb2.jpg",
