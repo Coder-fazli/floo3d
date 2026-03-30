@@ -40,15 +40,19 @@
     });
   }
 
-        if (evt.type === "user.created") {
+        if (evt.type === "user.created" || evt.type === "user.updated") {
             const { id, first_name, last_name, username, email_addresses } = evt.data;
             const name = [first_name, last_name].filter(Boolean).join(" ") || username || "";
-            const email = email_addresses?.[0]?.email_address?? "";
+            const email = email_addresses?.[0]?.email_address ?? "";
 
             await connectDb();
+
             await User.findOneAndUpdate(
                 { clerkId: id },
-                { $setOnInsert: { clerkId: id, name, email, credits: 10} },
+                {
+                    $set: { ...(name && { name }), ...(email && { email }) },
+                    $setOnInsert: { clerkId: id, credits: 10 },
+                },
                 { upsert: true, new: true }
             );
         }

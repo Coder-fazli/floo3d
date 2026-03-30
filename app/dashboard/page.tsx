@@ -8,5 +8,7 @@ export default async function DashboardPage() {
     getAppFrames(),
     userId ? getUserByClerkId(userId) : null,
   ]);
-  return <DashboardClient frames={frames} displayName={dbUser?.name || null} />;
+  const emailPrefix = dbUser?.email ? dbUser.email.split("@")[0] : null;
+  const displayName = dbUser?.name || emailPrefix || null;
+  return <DashboardClient frames={frames} displayName={displayName} />;
 }
