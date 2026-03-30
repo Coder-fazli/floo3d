@@ -22,7 +22,8 @@ FLOOR & WALLS:
 
 LIGHTING:
 - Maintain natural light entering through windows. Preserve the time-of-day and light direction from the original photo.
-- Remove all portable lighting. Keep ceiling-mounted or recessed fixtures only if they were visible in the original photo.
+- REMOVE: all pendant lights, chandeliers, floor lamps, table lamps, and any hanging or portable lighting fixtures.
+- KEEP: only flush-mounted or fully recessed ceiling lights that sit flat against the ceiling.
 
 FINISH: The result should look like a professionally photographed empty room — freshly cleared, bright and photorealistic, ready for new furniture planning. No watermarks.
 `.trim();
