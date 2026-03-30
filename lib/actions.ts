@@ -53,9 +53,8 @@ export async function updateProject(id: string, renderedImageUrl: string) {
 export async function getCredits(userId: string, name?: string, email?: string) {
     await connectDb();
     const update: any = { $setOnInsert: { credits: 10 } };
-    if (name || email) {
-        update.$set = { name: name ?? "", email: email ?? "" };
-    }
+    if (name) update.$set = { ...(update.$set ?? {}), name };
+    if (email) update.$set = { ...(update.$set ?? {}), email };
     const user = await User.findOneAndUpdate(
         { clerkId: userId },
         update,
