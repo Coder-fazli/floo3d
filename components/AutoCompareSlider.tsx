@@ -12,40 +12,37 @@ const STAR_PATH = "M9.82531 0.843845C10.0553 0.215178 10.9446 0.215178 11.1746 0
 
 const SPARK_COLORS = ["#ec5b13", "#ffd54f", "#ec5b13", "#fff176"];
 
-const SPARK_OFFSETS = [
-  { dx: -18, dy: -22 },
-  { dx:  18, dy: -18 },
-  { dx: -14, dy:  20 },
-  { dx:  16, dy:  18 },
-];
+// Spread sparks randomly across the image; positions are seeded per burst so they vary
+const SPARK_COUNT = 8;
 
-function SparkBurst({ xPct }: { xPct: number }) {
+function SparkBurst({ burstSeed }: { burstSeed: number }) {
+  // Deterministic pseudo-random positions based on seed so each burst looks different
+  const sparks = Array.from({ length: SPARK_COUNT }, (_, i) => {
+    const s = burstSeed + i * 137;
+    const x = 5 + ((s * 9301 + 49297) % 233280) / 233280 * 90; // 5–95%
+    const y = 5 + ((s * 3571 + 71831) % 233280) / 233280 * 90; // 5–95%
+    const color = SPARK_COLORS[i % SPARK_COLORS.length];
+    const delay = (i * 0.06) % 0.4;
+    return { x, y, color, delay };
+  });
+
   return (
-    <div
-      style={{
-        position: "absolute",
-        top: "50%",
-        left: `${xPct}%`,
-        transform: "translate(-50%, -50%)",
-        pointerEvents: "none",
-        zIndex: 20,
-      }}
-    >
-      {SPARK_OFFSETS.map((offset, i) => (
+    <>
+      {sparks.map(({ x, y, color, delay }, i) => (
         <motion.svg
           key={i}
-          style={{ position: "absolute", left: offset.dx, top: offset.dy }}
+          style={{ position: "absolute", left: `${x}%`, top: `${y}%`, pointerEvents: "none", zIndex: 20 }}
           initial={{ opacity: 0, scale: 0, rotate: 0 }}
-          animate={{ opacity: [0, 1, 0], scale: [0, 0.9, 0], rotate: [0, 90, 180] }}
-          transition={{ duration: 0.55, delay: i * 0.05, ease: "easeOut" }}
+          animate={{ opacity: [0, 1, 0], scale: [0, 1, 0], rotate: [0, 120, 240] }}
+          transition={{ duration: 0.65, delay, ease: "easeOut" }}
           width="14"
           height="14"
           viewBox="0 0 21 21"
         >
-          <path d={STAR_PATH} fill={SPARK_COLORS[i]} />
+          <path d={STAR_PATH} fill={color} />
         </motion.svg>
       ))}
-    </div>
+    </>
   );
 }
 
@@ -57,17 +54,16 @@ export default function AutoCompareSlider({ before, after }: Props) {
 
   const [pos, setPos]         = useState(8);
   const [burstKey, setBurstKey] = useState<number | null>(null);
-  const [burstX, setBurstX]   = useState(8);
 
   useEffect(() => {
-    const SPEED = 0.022; // % per ms  →  ~3.8s per full sweep
+    const SPEED = 0.022; // % per ms  →  ~2.2s per full sweep
 
     const ease = (t: number) =>
       t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 
     // We drive raw linear time, apply ease per segment
     let segStart = 0;
-    const SEG = 3800; // ms per direction
+    const SEG = 2200; // ms per direction
 
     const loop = (now: number) => {
       if (!lastRef.current) lastRef.current = now;
@@ -85,8 +81,6 @@ export default function AutoCompareSlider({ before, after }: Props) {
       if (raw >= 1) {
         dirRef.current *= -1;
         segStart = now;
-        const edgeX = dirRef.current === 1 ? 8 : 92;
-        setBurstX(edgeX);
         setBurstKey(Date.now());
       }
 
@@ -130,10 +124,10 @@ export default function AutoCompareSlider({ before, after }: Props) {
         }}
       />
 
-      {/* Sparkle burst on reversal */}
+      {/* Sparkle burst on reversal — sparks scattered across full image */}
       <AnimatePresence>
         {burstKey !== null && (
-          <SparkBurst key={burstKey} xPct={burstX} />
+          <SparkBurst key={burstKey} burstSeed={burstKey} />
         )}
       </AnimatePresence>
     </div>

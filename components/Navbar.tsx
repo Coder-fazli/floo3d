@@ -1,6 +1,6 @@
 "use client";
 
-import { Zap, Menu, X, User, LogIn, LogOut } from "lucide-react";
+import { Zap, Menu, X, User, LogIn } from "lucide-react";
 import Image from "next/image";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
@@ -57,13 +57,10 @@ const Navbar = () => {
               <a href="/dashboard" className="navbar-btn-primary navbar-desktop-only">Dashboard</a>
               <button className="navbar-btn-ghost navbar-desktop-only" onClick={handleSignOut}>Log Out</button>
 
-              {/* Mobile only: dashboard icon + logout icon */}
+              {/* Mobile only: dashboard icon */}
               <a href="/dashboard" className="navbar-icon-btn navbar-mobile-only" title="Go to Dashboard">
                 <LogIn size={22} />
               </a>
-              <button className="navbar-icon-btn navbar-mobile-only" onClick={handleSignOut} title="Log Out">
-                <LogOut size={20} />
-              </button>
             </>
           ) : (
             <>

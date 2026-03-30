@@ -17,7 +17,7 @@ const INPUT_TYPE_META: Record<string, { label: string; desc: string }> = {
   "empty-room":      { label: "Virtual Staging",      desc: "Stage empty spaces with beautiful AI furniture" },
 };
 
-export default function DashboardClient({ frames }: { frames: FramesData }) {
+export default function DashboardClient({ frames, displayName }: { frames: FramesData; displayName: string | null }) {
   const router = useRouter();
   const { user, isLoaded } = useUser();
 
@@ -36,7 +36,7 @@ export default function DashboardClient({ frames }: { frames: FramesData }) {
         {/* Welcome header */}
         <div className="db-welcome">
           <div>
-            <h2 className="db-welcome-title">Welcome back, {user.username ?? "there"} 👋</h2>
+            <h2 className="db-welcome-title">Welcome back, {displayName ?? user.username ?? "there"} 👋</h2>
             <p className="db-welcome-sub">Ready to transform another space today?</p>
           </div>
           <div className="db-welcome-actions">
@@ -72,13 +72,16 @@ export default function DashboardClient({ frames }: { frames: FramesData }) {
                 >
                   <div className="nr-reveal-container">
                     <AutoCompareSlider before={imgBefore} after={imgAfter} />
-                  </div>
-                  <div className="nr-type-info">
-                    <div>
-                      <h3 className="nr-type-label">{label}</h3>
-                      <p className="nr-type-desc">{desc}</p>
+                    {/* Gradient overlay */}
+                    <div className="nr-card-gradient" />
+                    {/* Overlaid info */}
+                    <div className="nr-card-overlay-info">
+                      <div>
+                        <h3 className="nr-type-label">{label}</h3>
+                        <p className="nr-type-desc">{desc}</p>
+                      </div>
+                      <span className="nr-type-cta">Try Now</span>
                     </div>
-                    <span className="nr-type-cta">Try it →</span>
                   </div>
                 </div>
               );
