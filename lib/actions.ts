@@ -1,5 +1,5 @@
 "use server"
-import { revalidatePath } from "next/cache";
+import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import { connectDb } from "./db";
 import Project from "./models/Project";
 import { uploadImage } from "./cloudinary";
@@ -72,6 +72,7 @@ export async function deductCredit(userId:string) {
 }
 
 export async function getAllProjects() {
+    noStore();
     await connectDb();
     const projects = await Project.find({}).sort("-createdAt");
     return JSON.parse(JSON.stringify(projects));
@@ -79,6 +80,7 @@ export async function getAllProjects() {
 
 // Ф
 export async function getAllUSers() {
+    noStore();
     await connectDb();
     const users = await User.find({}).sort("-createdAt");
     return JSON.parse(JSON.stringify(users));
