@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { ArrowUpRight, FolderOpen } from "lucide-react";
-import { ReactCompareSlider, ReactCompareSliderImage } from "react-compare-slider";
+import AutoCompareSlider from "@/components/AutoCompareSlider";
 import { type FramesData } from "@/lib/actions";
 import { DEFAULT_FALLBACKS } from "@/lib/frameDefaults";
 
@@ -42,7 +42,7 @@ export default function DashboardClient({ frames }: { frames: FramesData }) {
           <div className="db-welcome-actions">
             <button className="db-btn-ghost" onClick={() => router.push("/projects")}>
               <FolderOpen size={16} />
-              My Projects
+              My Studio
             </button>
             <button className="db-btn-primary">
               <ArrowUpRight size={16} />
@@ -70,12 +70,8 @@ export default function DashboardClient({ frames }: { frames: FramesData }) {
                   className="nr-type-card"
                   onClick={() => router.push(`/visualizer/new?type=${id}`)}
                 >
-                  <div className="nr-reveal-container" onClick={(e) => e.stopPropagation()}>
-                    <ReactCompareSlider
-                      itemOne={<ReactCompareSliderImage src={imgBefore} alt="Before" style={{ objectFit: "cover" }} />}
-                      itemTwo={<ReactCompareSliderImage src={imgAfter}  alt="After"  style={{ objectFit: "cover" }} />}
-                      style={{ width: "100%", height: "100%" }}
-                    />
+                  <div className="nr-reveal-container">
+                    <AutoCompareSlider before={imgBefore} after={imgAfter} />
                   </div>
                   <div className="nr-type-info">
                     <div>

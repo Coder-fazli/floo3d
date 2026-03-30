@@ -41,7 +41,7 @@ export default function ProjectsPage() {
             <button className="db-btn-ghost" style={{ marginBottom: "0.5rem" }} onClick={() => router.push("/dashboard")}>
               <ArrowLeft size={16} /> Back to Dashboard
             </button>
-            <h2 className="db-welcome-title">My Projects</h2>
+            <h2 className="db-welcome-title">My Studio</h2>
             <p className="db-welcome-sub">{projects.length} project{projects.length !== 1 ? "s" : ""} total</p>
           </div>
         </div>
@@ -64,7 +64,7 @@ export default function ProjectsPage() {
           {displayed.length === 0 ? (
             <div className="db-empty">No projects yet. Go to the dashboard to start your first render.</div>
           ) : (
-            <div className="db-grid">
+            <div className="db-grid" style={{ gridTemplateColumns: "repeat(2, 1fr)" }}>
               {displayed.map(({ _id, name, renderedImageUrl, originalImageUrl, createdAt }) => (
                 <div key={_id} className="db-card" onClick={() => router.push(`/visualizer/${_id}`)}>
                   <div className="db-card-img-wrap">

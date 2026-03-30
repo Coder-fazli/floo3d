@@ -1,6 +1,6 @@
 "use client";
 
-import { Zap, Menu, X, User } from "lucide-react";
+import { Zap, Menu, X, User, LogIn, LogOut } from "lucide-react";
 import Image from "next/image";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
@@ -46,15 +46,24 @@ const Navbar = () => {
         <div className="navbar-actions">
           {isSignedIn ? (
             <>
-              <div className="navbar-credits">
+              {/* Desktop only */}
+              <div className="navbar-credits navbar-desktop-only">
                 <Zap className="credits-icon" />
                 <span>{credits ?? 10}</span>
               </div>
-              <a href="/dashboard/profile" className="navbar-profile" title="Profile">
+              <a href="/dashboard/profile" className="navbar-profile navbar-desktop-only" title="Profile">
                 <User className="w-4 h-4" />
               </a>
-              <a href="/dashboard" className="navbar-btn-primary">Dashboard</a>
-              <button className="navbar-btn-ghost" onClick={handleSignOut}>Log Out</button>
+              <a href="/dashboard" className="navbar-btn-primary navbar-desktop-only">Dashboard</a>
+              <button className="navbar-btn-ghost navbar-desktop-only" onClick={handleSignOut}>Log Out</button>
+
+              {/* Mobile only: dashboard icon + logout icon */}
+              <a href="/dashboard" className="navbar-icon-btn navbar-mobile-only" title="Go to Dashboard">
+                <LogIn size={22} />
+              </a>
+              <button className="navbar-icon-btn navbar-mobile-only" onClick={handleSignOut} title="Log Out">
+                <LogOut size={20} />
+              </button>
             </>
           ) : (
             <>
@@ -81,11 +90,7 @@ const Navbar = () => {
             <li><a href="#journal" onClick={() => setMenuOpen(false)}>Journal</a></li>
             <li><a href="#answers" onClick={() => setMenuOpen(false)}>Answers</a></li>
             {isSignedIn ? (
-              <>
-                <li><a href="/dashboard" onClick={() => setMenuOpen(false)} className="navbar-mobile-dashboard">Dashboard</a></li>
-                <li><a href="/dashboard/profile" onClick={() => setMenuOpen(false)}>Profile</a></li>
-                <li><a href="#" onClick={() => { handleSignOut(); setMenuOpen(false); }}>Log Out</a></li>
-              </>
+              <li><a href="/dashboard/profile" onClick={() => setMenuOpen(false)}>Profile</a></li>
             ) : (
               <li>
                 <a href="#" onClick={() => { openSignUp({ fallbackRedirectUrl: "/dashboard" }); setMenuOpen(false); }}>

@@ -160,6 +160,27 @@
     padding: 0.25rem;
 }
 
+/* Icon-only buttons shown on mobile for signed-in users */
+.navbar-icon-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.625rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ec5b13;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+.navbar-icon-btn:hover { background: #fff3ee; }
+
+.navbar-desktop-only { display: flex; }
+.navbar-mobile-only  { display: none; }
+
 /* Mobile */
 .navbar-mobile {
     border-top: 1px solid #e2e8f0;
@@ -218,13 +239,16 @@
 }
 
 @media (max-width: 768px) {
-    .navbar-links { display: none; }
+    .navbar-links  { display: none; }
     .navbar-burger { display: block; }
 
-    /* Hide all action items — everything lives in the mobile dropdown */
     .navbar-btn-ghost,
     .navbar-btn-primary,
     .navbar-btn-primary[href],
     .navbar-credits,
-    .navbar-profile { display: none !important; }
+    .navbar-profile,
+    .navbar-desktop-only { display: none !important; }
+
+    .navbar-mobile-only  { display: flex !important; }
+    .navbar-icon-btn     { display: flex; }
 }
