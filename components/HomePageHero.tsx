@@ -49,7 +49,9 @@ const features = [
   },
 ];
 
-export default function HomePageHero() {
+export default function HomePageHero({ heroBeforeUrl, heroAfterUrl }: { heroBeforeUrl?: string | null; heroAfterUrl?: string | null }) {
+  const heroBefore = heroBeforeUrl || "/hero-before.jpg";
+  const heroAfter  = heroAfterUrl  || "/hero-after.jpg";
   const { isSignedIn } = useUser();
   const { openSignUp } = useClerk();
   const [sliderPos, setSliderPos] = useState(40);
@@ -192,8 +194,8 @@ export default function HomePageHero() {
                   linesStyle={{ background: "rgba(255,255,255,0.3)", width: 1 }}
                 />
               }
-              itemOne={<ReactCompareSliderImage src="/hero-before.jpg" alt="Before" style={{ objectFit: "cover" }} />}
-              itemTwo={<ReactCompareSliderImage src="/hero-after.jpg"  alt="After"  style={{ objectFit: "cover" }} />}
+              itemOne={<ReactCompareSliderImage src={heroBefore} alt="Before" style={{ objectFit: "cover" }} />}
+              itemTwo={<ReactCompareSliderImage src={heroAfter}  alt="After"  style={{ objectFit: "cover" }} />}
             />
 
             {/* Labels */}

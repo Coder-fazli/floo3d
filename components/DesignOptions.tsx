@@ -47,12 +47,17 @@ function ImgCard({ before, after, badge }: { before: string; after: string; badg
   );
 }
 
-export default function DesignOptions() {
+type TransformImages = Record<string, { before?: string; after?: string }>;
+
+export default function DesignOptions({ transformImages = {} }: { transformImages?: TransformImages }) {
   const refHeader = useFadeIn();
   const ref01 = useFadeIn();
   const ref02 = useFadeIn();
   const ref03 = useFadeIn();
   const ref04 = useFadeIn();
+
+  const img = (section: string, side: "before" | "after", fallback: string) =>
+    transformImages[section]?.[side] || fallback;
 
   return (
     <section className="do-section">
@@ -79,7 +84,7 @@ export default function DesignOptions() {
           <span className="do-ghost-num" style={{ top: "-1.5rem", left: "-0.5rem" }}>01</span>
           <div className="do-grid">
             <div className="do-col-img-left">
-              <ImgCard before="/real-2d-plan.jpg" after="/real-3d-render.jpg" badge="Rendering Phase: Final Polish" />
+              <ImgCard before={img("01","before","/real-2d-plan.jpg")} after={img("01","after","/real-3d-render.jpg")} badge="Rendering Phase: Final Polish" />
             </div>
             <div className="do-col-text-right">
               <div className="do-text-card">
@@ -117,7 +122,7 @@ export default function DesignOptions() {
               </div>
             </div>
             <div className="do-col-img-right">
-              <ImgCard before="/fp-before-1.png" after="/fp-after-1.jpg" />
+              <ImgCard before={img("02","before","/fp-before-1.png")} after={img("02","after","/fp-after-1.jpg")} />
             </div>
           </div>
         </div>
@@ -126,9 +131,9 @@ export default function DesignOptions() {
         <div className="do-item do-fade" ref={ref03}>
           <div className="do-flex-row">
             <div className="do-flex-img">
-              <ImgCard before="/fp-before-2.png" after="/fp-after-2.jpg" />
+              <ImgCard before={img("03","before","/fp-before-2.png")} after={img("03","after","/fp-after-2.jpg")} />
               <div className="do-corner-thumb">
-                <img src="/fp-after-2.jpg" alt="3D render" />
+                <img src={img("03","after","/fp-after-2.jpg")} alt="3D render" />
               </div>
             </div>
             <div className="do-flex-text">
@@ -146,7 +151,7 @@ export default function DesignOptions() {
         <div className="do-item do-fade" ref={ref04}>
           <div className="do-flex-row-rev">
             <div className="do-flex-img-60">
-              <ImgCard before="/card-outdoor-before.avif" after="/card-outdoor-after.avif" />
+              <ImgCard before={img("04","before","/card-outdoor-before.avif")} after={img("04","after","/card-outdoor-after.avif")} />
             </div>
             <div className="do-flex-text-40">
               <span className="do-eyebrow-sm">Final Chapter</span>

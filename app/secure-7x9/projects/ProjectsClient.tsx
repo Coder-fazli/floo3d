@@ -9,21 +9,21 @@ const PAGE_SIZE = 20;
 const INPUT_TABS = [
   { key: "all", label: "All" },
   { key: "floor-plan", label: "Floor Plan" },
-  { key: "interior", label: "Interior Design" },
+  { key: "interior", label: "Interior" },
   { key: "outdoor", label: "Outdoor" },
   { key: "empty-room", label: "Empty Room" },
 ];
 
 const STATUS_OPTS = [
-  { key: "all", label: "All Status" },
-  { key: "done", label: "Completed" },
-  { key: "pending", label: "Processing" },
+  { key: "all", label: "All" },
+  { key: "done", label: "Done" },
+  { key: "pending", label: "Pending" },
   { key: "error", label: "Error" },
 ];
 
 const SORT_OPTS = [
-  { key: "newest", label: "Newest First" },
-  { key: "oldest", label: "Oldest First" },
+  { key: "newest", label: "Newest" },
+  { key: "oldest", label: "Oldest" },
 ];
 
 function StatusBadge({ project }: { project: any }) {
@@ -64,20 +64,12 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
 
   const filtered = useMemo(() => {
     let list = [...projects];
-
-    // Tab filter
-    if (activeTab !== "all") {
-      list = list.filter((p) => p.inputType === activeTab);
-    }
-
-    // Status filter
+    if (activeTab !== "all") list = list.filter((p) => p.inputType === activeTab);
     if (statusFilter !== "all") {
       if (statusFilter === "done") list = list.filter((p) => p.status === "done" && p.renderedImageUrl);
       else if (statusFilter === "error") list = list.filter((p) => p.status === "error");
       else list = list.filter((p) => p.status === "pending" || (!p.renderedImageUrl && p.status !== "error"));
     }
-
-    // Search
     if (search.trim()) {
       const q = search.toLowerCase();
       list = list.filter(
@@ -87,67 +79,48 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
           p.userEmail?.toLowerCase().includes(q)
       );
     }
-
-    // Sort
     list.sort((a, b) => {
       const da = new Date(a.createdAt).getTime();
       const db = new Date(b.createdAt).getTime();
       return sortOrder === "newest" ? db - da : da - db;
     });
-
     return list;
   }, [projects, activeTab, statusFilter, sortOrder, search]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  // Counts per tab
   const tabCounts = useMemo(() => {
     const counts: Record<string, number> = { all: projects.length };
-    for (const p of projects) {
-      counts[p.inputType] = (counts[p.inputType] ?? 0) + 1;
-    }
+    for (const p of projects) counts[p.inputType] = (counts[p.inputType] ?? 0) + 1;
     return counts;
   }, [projects]);
 
   const errorCount = projects.filter((p) => p.status === "error").length;
 
-  function handleTabChange(key: string) {
-    setActiveTab(key);
-    setPage(1);
-  }
-
-  function handleStatusChange(key: string) {
-    setStatusFilter(key);
-    setPage(1);
-  }
-
-  function handleSearch(v: string) {
-    setSearch(v);
-    setPage(1);
-  }
+  function handleTabChange(key: string) { setActiveTab(key); setPage(1); }
+  function handleStatusChange(key: string) { setStatusFilter(key); setPage(1); }
+  function handleSearch(v: string) { setSearch(v); setPage(1); }
 
   return (
-    <div className="adm-content">
+    <div className="adm-content" style={{ minWidth: 0 }}>
+
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem", flexWrap: "wrap", gap: "1rem" }}>
+      <div className="proj-header">
         <div>
           <h1 className="adm-topbar-title" style={{ marginBottom: "0.25rem" }}>Projects</h1>
           <p style={{ margin: 0, fontSize: "0.8rem", color: "#94a3b8" }}>
             {projects.length} total &nbsp;·&nbsp;
             <span style={{ color: "#16a34a", fontWeight: 600 }}>{projects.filter((p) => p.status === "done").length} completed</span>
             {errorCount > 0 && (
-              <>
-                &nbsp;·&nbsp;
-                <span style={{ color: "#dc2626", fontWeight: 600 }}>{errorCount} errors</span>
-              </>
+              <>&nbsp;·&nbsp;<span style={{ color: "#dc2626", fontWeight: 600 }}>{errorCount} errors</span></>
             )}
           </p>
         </div>
         <div className="adm-search-wrap">
           <Search size={15} className="adm-search-icon" />
           <input
-            className="adm-search-input"
+            className="adm-search-input proj-search"
             type="text"
             placeholder="Search project or user..."
             value={search}
@@ -157,12 +130,13 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
       </div>
 
       {/* Tabs */}
-      <div className="adm-filter-tabs">
+      <div className="adm-filter-tabs" style={{ overflowX: "auto", flexWrap: "nowrap" }}>
         {INPUT_TABS.map((tab) => (
           <button
             key={tab.key}
             className={`adm-filter-tab${activeTab === tab.key ? " adm-filter-tab-active" : ""}`}
             onClick={() => handleTabChange(tab.key)}
+            style={{ whiteSpace: "nowrap" }}
           >
             {tab.label}
             <span style={{
@@ -181,14 +155,14 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
       </div>
 
       {/* Filters row */}
-      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem", flexWrap: "wrap" }}>
+      <div className="proj-filters">
         <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
           {STATUS_OPTS.map((opt) => (
             <button
               key={opt.key}
               onClick={() => handleStatusChange(opt.key)}
               style={{
-                padding: "0.35rem 0.875rem",
+                padding: "0.3rem 0.75rem",
                 borderRadius: "9999px",
                 border: "1px solid",
                 borderColor: statusFilter === opt.key ? "#ec5b13" : "#e2e8f0",
@@ -199,37 +173,37 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
                 cursor: "pointer",
                 fontFamily: "inherit",
                 transition: "all 0.15s",
+                whiteSpace: "nowrap",
               }}
             >
               {opt.label}
             </button>
           ))}
         </div>
-        <div style={{ marginLeft: "auto" }}>
-          <select
-            value={sortOrder}
-            onChange={(e) => { setSortOrder(e.target.value); setPage(1); }}
-            style={{
-              padding: "0.4rem 0.75rem",
-              border: "1px solid #e2e8f0",
-              borderRadius: "0.625rem",
-              fontSize: "0.8rem",
-              fontFamily: "inherit",
-              color: "#334155",
-              background: "#f8fafc",
-              outline: "none",
-              cursor: "pointer",
-            }}
-          >
-            {SORT_OPTS.map((o) => <option key={o.key} value={o.key}>{o.label}</option>)}
-          </select>
-        </div>
+        <select
+          value={sortOrder}
+          onChange={(e) => { setSortOrder(e.target.value); setPage(1); }}
+          style={{
+            padding: "0.4rem 0.75rem",
+            border: "1px solid #e2e8f0",
+            borderRadius: "0.625rem",
+            fontSize: "0.8rem",
+            fontFamily: "inherit",
+            color: "#334155",
+            background: "#f8fafc",
+            outline: "none",
+            cursor: "pointer",
+            flexShrink: 0,
+          }}
+        >
+          {SORT_OPTS.map((o) => <option key={o.key} value={o.key}>{o.label}</option>)}
+        </select>
       </div>
 
       {/* Table */}
       <div className="adm-card" style={{ overflow: "hidden" }}>
-        <div style={{ overflowX: "auto" }}>
-          <table className="adm-table">
+        <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" } as any}>
+          <table className="adm-table" style={{ minWidth: "700px" }}>
             <thead>
               <tr>
                 <th>Project</th>
@@ -264,15 +238,13 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
                     <td>
                       <div className="adm-project-cell">
                         <div className="adm-thumb">
-                          {p.originalImageUrl && (
-                            <img src={p.originalImageUrl} alt="" />
-                          )}
+                          {p.originalImageUrl && <img src={p.originalImageUrl} alt="" />}
                         </div>
-                        <div>
-                          <p style={{ margin: 0, fontSize: "0.875rem", fontWeight: 600, color: "#0f172a", maxWidth: "14rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        <div style={{ minWidth: 0 }}>
+                          <p style={{ margin: 0, fontSize: "0.875rem", fontWeight: 600, color: "#0f172a", maxWidth: "10rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                             {p.name || "Untitled"}
                           </p>
-                          <p style={{ margin: 0, fontSize: "0.7rem", color: "#94a3b8" }}>{p._id}</p>
+                          <p style={{ margin: 0, fontSize: "0.65rem", color: "#cbd5e1", fontFamily: "monospace" }}>{p._id?.slice(-8)}</p>
                         </div>
                       </div>
                     </td>
@@ -280,19 +252,17 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
                     {/* User */}
                     <td>
                       <div className="adm-user-cell">
-                        <div className="adm-user-avatar">
-                          {p.userName?.[0]?.toUpperCase() ?? "?"}
-                        </div>
-                        <div>
-                          <p className="adm-user-name">{p.userName || "—"}</p>
-                          <p className="adm-user-email">{p.userEmail || "—"}</p>
+                        <div className="adm-user-avatar">{p.userName?.[0]?.toUpperCase() ?? "?"}</div>
+                        <div style={{ minWidth: 0 }}>
+                          <p className="adm-user-name" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "8rem" }}>{p.userName || "—"}</p>
+                          <p className="adm-user-email" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "8rem" }}>{p.userEmail || "—"}</p>
                         </div>
                       </div>
                     </td>
 
                     {/* Type / Style */}
                     <td>
-                      <p style={{ margin: 0, fontSize: "0.8rem", fontWeight: 600, color: "#334155" }}>{p.inputType || "—"}</p>
+                      <p style={{ margin: 0, fontSize: "0.8rem", fontWeight: 600, color: "#334155", whiteSpace: "nowrap" }}>{p.inputType || "—"}</p>
                       <p style={{ margin: 0, fontSize: "0.75rem", color: "#94a3b8" }}>{p.renderStyle || "—"}</p>
                     </td>
 
@@ -300,7 +270,7 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
                     <td>
                       <StatusBadge project={p} />
                       {p.status === "error" && p.errorMessage && (
-                        <p style={{ margin: "0.25rem 0 0", fontSize: "0.7rem", color: "#dc2626", maxWidth: "12rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={p.errorMessage}>
+                        <p style={{ margin: "0.25rem 0 0", fontSize: "0.7rem", color: "#dc2626", maxWidth: "10rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={p.errorMessage}>
                           {p.errorMessage}
                         </p>
                       )}
@@ -331,9 +301,7 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
 
                     {/* Action */}
                     <td className="right">
-                      <Link href={`/visualizer/${p._id}`} className="adm-action-link">
-                        View
-                      </Link>
+                      <Link href={`/visualizer/${p._id}`} className="adm-action-link">View</Link>
                     </td>
                   </tr>
                 ))
@@ -344,28 +312,16 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "1rem 1.5rem",
-            borderTop: "1px solid #e2e8f0",
-            fontSize: "0.8rem",
-            color: "#64748b",
-          }}>
-            <span>
-              Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length}
+          <div className="proj-pagination">
+            <span style={{ fontSize: "0.8rem", color: "#64748b" }}>
+              {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length}
             </span>
             <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                style={{
-                  width: "2rem", height: "2rem", display: "flex", alignItems: "center", justifyContent: "center",
-                  border: "1px solid #e2e8f0", borderRadius: "0.5rem", background: "#fff",
-                  cursor: page === 1 ? "not-allowed" : "pointer", color: page === 1 ? "#cbd5e1" : "#334155",
-                  fontFamily: "inherit",
-                }}
+                className="proj-page-btn"
+                style={{ opacity: page === 1 ? 0.4 : 1 }}
               >
                 <ChevronLeft size={14} />
               </button>
@@ -379,19 +335,17 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
                 }, [])
                 .map((n, idx) =>
                   n === "..." ? (
-                    <span key={`e-${idx}`} style={{ padding: "0 0.25rem", color: "#94a3b8" }}>…</span>
+                    <span key={`e-${idx}`} style={{ padding: "0 0.25rem", color: "#94a3b8", fontSize: "0.8rem" }}>…</span>
                   ) : (
                     <button
                       key={n}
                       onClick={() => setPage(n as number)}
+                      className="proj-page-btn"
                       style={{
-                        width: "2rem", height: "2rem", display: "flex", alignItems: "center", justifyContent: "center",
-                        border: "1px solid", borderColor: page === n ? "#ec5b13" : "#e2e8f0",
-                        borderRadius: "0.5rem",
+                        borderColor: page === n ? "#ec5b13" : "#e2e8f0",
                         background: page === n ? "rgba(236,91,19,0.08)" : "#fff",
                         color: page === n ? "#ec5b13" : "#334155",
                         fontWeight: page === n ? 700 : 500,
-                        cursor: "pointer", fontFamily: "inherit", fontSize: "0.8rem",
                       }}
                     >
                       {n}
@@ -402,12 +356,8 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
               <button
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
-                style={{
-                  width: "2rem", height: "2rem", display: "flex", alignItems: "center", justifyContent: "center",
-                  border: "1px solid #e2e8f0", borderRadius: "0.5rem", background: "#fff",
-                  cursor: page === totalPages ? "not-allowed" : "pointer", color: page === totalPages ? "#cbd5e1" : "#334155",
-                  fontFamily: "inherit",
-                }}
+                className="proj-page-btn"
+                style={{ opacity: page === totalPages ? 0.4 : 1 }}
               >
                 <ChevronRight size={14} />
               </button>

@@ -8,6 +8,7 @@ import RecentProjects from "@/components/RecentProjects";
 import Footer from "@/components/Footer";
 import FAQ from "@/components/FAQ";
 import { Marquee } from "@/components/ui/marquee";
+import { getHomeImages } from "@/lib/actions";
 const reviews = [
   { name: "David M.", handle: "@davidm", avatar: "/avatars/av1.jpg", text: "I rendered my entire apartment floor plan in under 2 minutes. The 3D output is stunning, clients love it." },
   { name: "Jessica K.", handle: "@jessicak", avatar: "/avatars/av2.jpg", text: "As an architect, this saves me hours. The AI understands spatial layout better than I expected." },
@@ -19,14 +20,15 @@ const reviews = [
   { name: "Dev P.", handle: "@devp", avatar: "/avatars/av8.jpg", text: "Best AI tool I've used this year. The export quality is perfect for client presentations." },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const homeImages = await getHomeImages();
   return (
     <div className="home">
       <Navbar />
 
-      <HomePageHero />
+      <HomePageHero heroBeforeUrl={homeImages.heroBeforeUrl} heroAfterUrl={homeImages.heroAfterUrl} />
 
-      <DesignOptions />
+      <DesignOptions transformImages={homeImages.transformImages} />
 
       <HowItWorks2 />
 

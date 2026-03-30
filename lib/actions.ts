@@ -168,6 +168,51 @@ export async function saveFrameImage(
   return url;
 }
 
+export type HomeImages = {
+  heroBeforeUrl: string | null;
+  heroAfterUrl: string | null;
+  transformImages: Record<string, { before?: string; after?: string }>;
+};
+
+export async function getHomeImages(): Promise<HomeImages> {
+  await connectDb();
+  const doc = await SiteSettings.findOne({ key: "home" });
+  return {
+    heroBeforeUrl: doc?.heroBeforeUrl ?? null,
+    heroAfterUrl: doc?.heroAfterUrl ?? null,
+    transformImages: doc?.transformImages ?? {},
+  };
+}
+
+export async function saveHomeImage(
+  slot: "hero-before" | "hero-after" | `transform-${string}-before` | `transform-${string}-after`,
+  base64: string
+): Promise<string> {
+  const url = await uploadImage(base64, "home-images");
+  await connectDb();
+
+  let doc = await SiteSettings.findOne({ key: "home" });
+  if (!doc) doc = await SiteSettings.create({ key: "home" });
+
+  if (slot === "hero-before") {
+    doc.heroBeforeUrl = url;
+  } else if (slot === "hero-after") {
+    doc.heroAfterUrl = url;
+  } else {
+    // transform-01-before, transform-02-after, etc.
+    const [, section, side] = slot.split("-");
+    const images = { ...(doc.transformImages ?? {}) };
+    images[section] = { ...(images[section] ?? {}), [side]: url };
+    doc.transformImages = images;
+    doc.markModified("transformImages");
+  }
+
+  await doc.save();
+  revalidatePath("/");
+  revalidatePath("/secure-7x9/home");
+  return url;
+}
+
 export async function saveFloorPlanSettings(floorPlanMetaTitle: string, floorPlanMetaDescription: string) {
     await connectDb();
     await SiteSettings.findOneAndUpdate(
