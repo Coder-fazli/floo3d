@@ -36,9 +36,10 @@ export async function getLatestRender() {
 }
 
 export async function getProject(id: string) {
+    if (!id || id === "new" || !/^[a-f\d]{24}$/i.test(id)) return null;
     await connectDb();
     const project = await Project.findById(id);
-    return JSON.parse(JSON.stringify(project));
+    return project ? JSON.parse(JSON.stringify(project)) : null;
 }
 
 export async function updateProject(id: string, renderedImageUrl: string) {
@@ -125,10 +126,10 @@ export async function saveSiteSettings(metaTitle: string, metaDescription: strin
 
 export async function getAppFrames(): Promise<FramesData> {
   await connectDb();
-  const doc = await AppFrames.findOne({ key: "main" });
+  const doc = await AppFrames.findOne({ key: "main" }).lean();
   return {
-    fallbacks: doc?.fallbacks ?? {},
-    styles:    doc?.styles    ?? {},
+    fallbacks: (doc as any)?.fallbacks ?? {},
+    styles:    (doc as any)?.styles    ?? {},
   };
 }
 

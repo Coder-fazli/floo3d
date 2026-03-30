@@ -16,13 +16,14 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     projectId = body.projectId;
-    const { imageUrl, userId, inputType = "interior", renderStyle = "Modern", roomType } = body;
+    const { imageUrl, userId, inputType = "interior-design", renderStyle = "Modern", roomType } = body;
 
     const credits = await getCredits(userId);
-    if (credits <= 0) {
+    const isUnlimited = credits >= 99999;
+    if (!isUnlimited && credits <= 0) {
       return NextResponse.json({ error: "No credits left" }, { status: 403 });
     }
-    await deductCredit(userId);
+    if (!isUnlimited) await deductCredit(userId);
 
     const imageResponse = await fetch(imageUrl);
     const buffer = await imageResponse.arrayBuffer();

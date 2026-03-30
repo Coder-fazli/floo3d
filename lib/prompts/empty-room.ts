@@ -12,7 +12,9 @@ GLOBAL RULES — DO NOT VIOLATE UNDER ANY CIRCUMSTANCES:
 TASK — EMPTY THE ROOM:
 Remove every piece of movable furniture and decor from the room:
 - REMOVE: sofas, chairs, tables, beds, desks, shelving units, floor lamps, table lamps, rugs, cushions, throws, curtains, blinds, artwork, wall art, plants, decorative objects, electronics, cables, and any other non-fixed items.
+- REMOVE: all items sitting on countertops, shelves, and surfaces — including vases, bowls, bottles, small appliances, utensils, and any decorative objects resting on surfaces. Leave surfaces completely bare.
 - KEEP: bare walls, bare floors, ceiling, windows (with natural light passing through), doors, and all permanently fixed architectural elements.
+- KEEP: permanently built-in appliances only (built-in oven, hob, extractor hood). Do NOT add any new furniture, plants, or decorative items.
 
 FLOOR & WALLS:
 - Where furniture or rugs covered the floor, reveal the continuous floor surface underneath in a matching material and texture.
