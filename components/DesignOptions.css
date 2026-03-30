@@ -160,8 +160,8 @@
   pointer-events: none;
 }
 
-/* ReactCompareSlider fills the card */
-.do-img-card > div[data-rcs="root"] {
+/* AutoCompareSlider fills the card */
+.do-img-card > div {
   width: 100% !important;
   height: 100% !important;
 }
