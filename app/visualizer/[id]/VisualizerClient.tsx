@@ -470,7 +470,7 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
               <button
                 className="viz-generate-btn"
                 onClick={runGeneration}
-                disabled={isProcessing || (embeddedId && !user ? !guestBase64 : (isNewMode || !project || (!!currentImage && renderStyle === project?.renderStyle)))}
+                disabled={isProcessing || (embeddedId && !user ? !guestBase64 : (isNewMode || !project))}
               >
                 {isProcessing ? (
                   <>
