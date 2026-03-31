@@ -1250,6 +1250,18 @@
     display: none;
 }
 
+.viz-download-sparkles-text {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #ffffff !important;
+    letter-spacing: 0.02em;
+    line-height: 1;
+}
+
+.viz-download-sparkles-text span {
+    color: #ffffff !important;
+}
+
 @keyframes viz-dl-sweep {
     0%   { background-position: 200% center; }
     100% { background-position: -200% center; }
@@ -1355,7 +1367,7 @@
     .viz-page { overflow-x: hidden; }
     /* Output actions: wrap on small screens */
     .viz-output-actions { flex-wrap: wrap; gap: 0.375rem; }
-    .viz-download-btn span { display: none; }
+    .viz-download-sparkles-text { display: none; }
     /* Sidebar: compact padding */
     .viz-sb-section { padding: 0.75rem 0.75rem; }
     .viz-generate-wrap { padding: 0.75rem; }

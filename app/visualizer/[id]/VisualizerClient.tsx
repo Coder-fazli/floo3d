@@ -383,9 +383,6 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
             </div>
             <div className="viz-stat-card" style={{ gap: "0.75rem" }}>
               <div style={{ display: "flex", gap: "0.5rem" }}>
-                <button className="viz-btn-primary" onClick={handleExport} disabled={!currentImage} style={{ fontSize: "0.8rem", padding: "0.4rem 0.9rem" }}>
-                  <Download size={14} /> Export
-                </button>
                 <SocialButton shareUrl={shareUrl} />
               </div>
             </div>
@@ -511,7 +508,13 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
               <div className="viz-output-actions">
                 <button className="viz-download-btn" onClick={guestResult ? () => { const a = document.createElement("a"); a.href = guestResult; a.download = "3d-render.png"; a.click(); } : handleExport} disabled={!currentImage && !guestResult}>
                   <Download size={12} strokeWidth={2.5} />
-                  <span>Download Ultra HD</span>
+                  <SparklesText
+                    className="viz-download-sparkles-text"
+                    sparklesCount={4}
+                    colors={{ first: "#ffffff", second: "#e2e8f0" }}
+                  >
+                    Download Ultra HD
+                  </SparklesText>
                   <div className="viz-download-shimmer" />
                 </button>
                 <button className="viz-icon-btn" onClick={() => setLightboxOpen(true)} disabled={!currentImage} title="Fullscreen">
