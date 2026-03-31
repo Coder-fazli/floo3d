@@ -256,7 +256,7 @@
     .dbnav-credits { display: none; }
     .dbnav-bell { display: none; }
     .dbnav-divider { display: none; }
-    .dbnav-signout { display: none; }
+    .dbnav-signout { display: flex; font-size: 0.75rem; padding: 0.3rem 0.5rem; }
     .dbnav { overflow: hidden; }
 }
 

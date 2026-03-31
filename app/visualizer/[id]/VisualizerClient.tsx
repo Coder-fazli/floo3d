@@ -42,7 +42,7 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
   const params = useParams();
   const id = embeddedId ?? (Array.isArray(params.id) ? params.id[0] : params.id);
   const { user } = useUser();
-  const { openUserProfile, openSignUp } = useClerk();
+  const { openUserProfile, openSignUp, signOut } = useClerk();
   const [credits, setCredits] = useState<number | null>(null);
 
   const [isNewMode, setIsNewMode] = useState(id === "new");
@@ -301,6 +301,8 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
             </div>
 
             <div className="viz-nav-divider" />
+
+            <button className="viz-nav-signout" onClick={() => signOut({ redirectUrl: "/" })}>Log Out</button>
 
             <button className="viz-nav-user" onClick={() => openUserProfile()}>
               <div className="viz-nav-user-info">
