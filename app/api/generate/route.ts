@@ -20,7 +20,7 @@ export async function POST(request: Request) {
 
     const credits = await getCredits(userId);
     const isUnlimited = credits >= 99999;
-    if (!isUnlimited && credits <= 0) {
+    if (!isUnlimited && credits < 3) {
       return NextResponse.json({ error: "No credits left" }, { status: 403 });
     }
     if (!isUnlimited) await deductCredit(userId);
