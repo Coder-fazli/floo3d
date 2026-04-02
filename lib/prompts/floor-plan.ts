@@ -45,11 +45,43 @@ No roof, no ceiling, no walls visible from the side. Only the floor, furniture t
 This must look like an architectural floor plan rendered in 3D — not a dollhouse, not isometric. Pure bird's-eye overhead.`,
 
   isometric: `
-OUTPUT STYLE — PROFESSIONAL 3D FLOOR PLAN RENDER:
-The output must look like a physical 3D architectural model placed on a white table and photographed from a corner at waist height. The building corner points directly toward the camera.
-Two exterior walls are clearly visible — one running to the left, one running to the right. The interior of all rooms is fully visible from this angle. No roof.
-The building sits on a flat light grey or white base with a soft drop shadow underneath. Pure white background behind the building.
-This is the standard style used by real estate agencies worldwide for 3D floor plan visualization. The camera is NOT above — it is in FRONT of the corner, looking slightly downward into the open-top building.`,
+CAMERA ANGLE — STRICT ISOMETRIC / FRONT CORNER DOLLHOUSE VIEW:
+
+CRITICAL CAMERA RULES:
+- Camera is positioned in front of one BUILDING CORNER, not above the center.
+- The chosen corner must point directly toward the camera.
+- Camera pitch is approximately 35 to 45 degrees downward only.
+- Camera yaw is approximately 45 degrees to the building, so TWO sides are equally visible.
+- Camera height is slightly above wall height, looking inward from the corner.
+- This is NOT a top-down view.
+- This is NOT an overhead plan view.
+- This is NOT a bird's-eye view.
+- This is NOT a drone shot.
+
+FRAMING RULES:
+- Show exactly two exterior wall faces: one on the left and one on the right.
+- The side faces of walls must be clearly visible.
+- Interior rooms must be visible because the roof is removed.
+- Floor surfaces must recede in perspective toward the back.
+- Vertical wall faces must remain visible in the final image.
+- The front corner of the building should sit near the lower center of the frame.
+
+VISUAL TARGET:
+- The result should look like a physical open-top dollhouse model or a professional real-estate 3D floor plan render.
+- Building placed on a white or light grey presentation base.
+- Pure white studio background.
+- Soft studio shadow under the model.
+
+NEGATIVE VIEW CONSTRAINTS:
+- Do not place camera directly overhead.
+- Do not flatten perspective.
+- Do not show only furniture tops.
+- Do not render as a 2D map-like floor plan.
+- Do not hide exterior wall faces.
+
+CAMERA ENFORCEMENT:
+The camera angle above is mandatory and overrides everything else.
+If the result starts to resemble a top-down or overhead plan view, correct it back to a front-corner isometric dollhouse perspective with visible exterior wall faces and perspective depth.`,
 
   exterior: `
 CAMERA ANGLE — EXTERIOR DRONE VIEW (OUTSIDE THE BUILDING):
