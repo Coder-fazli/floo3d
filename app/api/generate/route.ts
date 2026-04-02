@@ -31,7 +31,10 @@ export async function POST(request: Request) {
     const mimeType = imageUrl.endsWith(".png") ? "image/png" : "image/jpeg";
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-3.1-flash-image-preview",
+      model: viewAngle === "isometric"
+        ? "gemini-3-pro-image-preview"        // $0.134/image — better instruction following for isometric
+        : "gemini-3.1-flash-image-preview",   // $0.067/image
+      // : "gemini-2.5-flash-image",          // $0.039/image — activate when ready
       generationConfig: {
         responseModalities: ["IMAGE", "TEXT"],
       } as any,

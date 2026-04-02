@@ -23,7 +23,8 @@ export async function POST(request: Request) {
     const base64 = base64Image.replace(/^data:image\/[\w+]+;base64,/, "");
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-3.1-flash-image-preview",
+      model: "gemini-3.1-flash-image-preview", // $0.067/image
+      // model: "gemini-2.5-flash-image",       // $0.039/image — activate when ready
       generationConfig: { responseModalities: ["IMAGE", "TEXT"] } as any,
     });
 
