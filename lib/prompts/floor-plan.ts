@@ -45,43 +45,7 @@ No roof, no ceiling, no walls visible from the side. Only the floor, furniture t
 This must look like an architectural floor plan rendered in 3D — not a dollhouse, not isometric. Pure bird's-eye overhead.`,
 
   isometric: `
-CAMERA ANGLE — STRICT ISOMETRIC / FRONT CORNER DOLLHOUSE VIEW:
-
-CRITICAL CAMERA RULES:
-- Camera is positioned in front of one BUILDING CORNER, not above the center.
-- The chosen corner must point directly toward the camera.
-- Camera pitch is approximately 35 to 45 degrees downward only.
-- Camera yaw is approximately 45 degrees to the building, so TWO sides are equally visible.
-- Camera height is slightly above wall height, looking inward from the corner.
-- This is NOT a top-down view.
-- This is NOT an overhead plan view.
-- This is NOT a bird's-eye view.
-- This is NOT a drone shot.
-
-FRAMING RULES:
-- Show exactly two exterior wall faces: one on the left and one on the right.
-- The side faces of walls must be clearly visible.
-- Interior rooms must be visible because the roof is removed.
-- Floor surfaces must recede in perspective toward the back.
-- Vertical wall faces must remain visible in the final image.
-- The front corner of the building should sit near the lower center of the frame.
-
-VISUAL TARGET:
-- The result should look like a physical open-top dollhouse model or a professional real-estate 3D floor plan render.
-- Building placed on a white or light grey presentation base.
-- Pure white studio background.
-- Soft studio shadow under the model.
-
-NEGATIVE VIEW CONSTRAINTS:
-- Do not place camera directly overhead.
-- Do not flatten perspective.
-- Do not show only furniture tops.
-- Do not render as a 2D map-like floor plan.
-- Do not hide exterior wall faces.
-
-CAMERA ENFORCEMENT:
-The camera angle above is mandatory and overrides everything else.
-If the result starts to resemble a top-down or overhead plan view, correct it back to a front-corner isometric dollhouse perspective with visible exterior wall faces and perspective depth.`,
+Create a detailed 3D architectural dollhouse render based on the provided floor plan. Use a strictly isometric, three-quarter front-corner perspective. Position the camera looking downward at a roughly 45-degree angle towards the near-front corner of the building. This corner must be clearly visible and the lowest point of the frame, showing depth and both of the front exterior wall faces (left and right) in equal perspective. The roof is removed to reveal all interior rooms with their vertical wall faces. The resulting image must look like a physical open-top model with depth and perspective, not a flat, overhead 2D plan. Place the entire model on a clean white presentation base against a pure white studio background.`,
 
   exterior: `
 CAMERA ANGLE — EXTERIOR DRONE VIEW (OUTSIDE THE BUILDING):
@@ -94,6 +58,13 @@ CAMERA ANGLE — STREET VIEW (FRONT FACADE, GROUND LEVEL EXTERIOR):
 CRITICAL: Camera is at street level, standing on the pavement or path directly in front of the building, looking straight at the front facade.
 Show the full front face of the building: front door, windows, exterior wall materials, roof edge or roofline visible at the top.
 This is a straight-on exterior photo — like a real estate listing photo taken from the street. No interior visible. Show the front garden, path, or driveway in the foreground. Natural daylight, realistic outdoor environment.`,
+
+  crossSection: `
+CAMERA ANGLE — NIGHT VIEW (EXTERIOR AT NIGHT):
+CRITICAL: This is an exterior shot at night. Dark sky, artificial lighting only.
+Warm golden light glows from inside through all windows and doors. Exterior facade lit by outdoor wall lights or garden spotlights.
+Show the full exterior of the building from a 45-degree angle — roof, walls, windows, entrance, and surrounding garden or ground all visible.
+The contrast between the dark exterior and warm glowing interior light is the key visual. This must look like a real estate exterior photo taken at dusk or night — dramatic, warm, and atmospheric.`,
 
 };
 
