@@ -19,7 +19,7 @@ import { HoleBackground } from "@/components/animate-ui/components/backgrounds/h
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { SparklesText } from "@/components/ui/sparkles-text";
 import { type FramesData } from "@/lib/actions";
-import { DEFAULT_FALLBACKS, DEFAULT_STYLES } from "@/lib/frameDefaults";
+import { DEFAULT_FALLBACKS, DEFAULT_STYLES, DEFAULT_ANGLES, ANGLE_LABELS } from "@/lib/frameDefaults";
 
 const STYLES: Record<string, string[]> = {
   "floor-plan":      ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
@@ -35,6 +35,7 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
   const FALLBACK_IMAGES = Object.fromEntries(
     Object.entries(DEFAULT_FALLBACKS).map(([k, v]) => [k, { ...v, ...(frames?.fallbacks?.[k] ?? {}) }])
   );
+  const getAngleImage = (angle: string) => frames?.angles?.[angle] ?? DEFAULT_ANGLES[angle] ?? "/real-3d-render.jpg";
   // Resolved per active input type at render time (see usage below)
   const getStyleImage = (inputType: string, style: string) =>
     frames?.styles?.[inputType]?.[style] ?? DEFAULT_STYLES[inputType]?.[style] ?? "/card-room-after.webp";
@@ -65,6 +66,7 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
   // Sidebar state
   const [renderStyle, setRenderStyle] = useState("Modern");
   const [roomType, setRoomType] = useState("Living Room");
+  const [viewAngle, setViewAngle] = useState("topDown");
   const [inputTypeNew, setInputTypeNew] = useState("floor-plan");
   const [isCreating, setIsCreating] = useState(false);
   const [nameModalOpen, setNameModalOpen] = useState(false);
@@ -149,8 +151,9 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
           imageUrl: project.originalImageUrl,
           userId: user?.id,
           inputType: project.inputType ?? "floor-plan",
-          renderStyle,
+          style: renderStyle,
           roomType,
+          viewAngle,
         }),
       });
 
@@ -443,6 +446,37 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
               </select>
             </div>}
 
+            {/* View Angle — only for floor-plan */}
+            {activeInputType === "floor-plan" && (
+              <div className="viz-sb-section">
+                <div className="viz-sb-section-title">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ec5b13" strokeWidth="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                  View Angle
+                </div>
+                <div className="viz-style-scroll">
+                  <div className="viz-style-grid">
+                    {Object.keys(DEFAULT_ANGLES).map((angle) => (
+                      <div
+                        key={angle}
+                        className={`viz-style-card${viewAngle === angle ? " viz-style-card-active" : ""}`}
+                        onClick={() => setViewAngle(angle)}
+                      >
+                        <div className="viz-style-card-img">
+                          <img src={getAngleImage(angle)} alt={ANGLE_LABELS[angle]} />
+                          {viewAngle === angle && (
+                            <div className="viz-style-card-check">
+                              <svg width="8" height="8" viewBox="0 0 12 12" fill="none" stroke="#fff" strokeWidth="2.5"><polyline points="2,6 5,9 10,3"/></svg>
+                            </div>
+                          )}
+                        </div>
+                        <div className="viz-style-card-label">{ANGLE_LABELS[angle]}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Design Style */}
             <div className="viz-sb-section viz-sb-section-grow">
               <div className="viz-sb-section-title">
@@ -513,7 +547,7 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
                     sparklesCount={4}
                     colors={{ first: "#ffffff", second: "#e2e8f0" }}
                   >
-                    Download Ultra HD
+                    Export Ultra HD
                   </SparklesText>
                   <div className="viz-download-shimmer" />
                 </button>

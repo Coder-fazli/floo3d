@@ -10,6 +10,7 @@ import AppFrames from "./models/AppFrames";
 export type FramesData = {
   fallbacks: Record<string, { before?: string; after?: string }>;
   styles: Record<string, Record<string, string>>; // inputType → styleName → url
+  angles: Record<string, string>; // angleName → url
 };
 
 
@@ -130,12 +131,13 @@ export async function getAppFrames(): Promise<FramesData> {
   return {
     fallbacks: (doc as any)?.fallbacks ?? {},
     styles:    (doc as any)?.styles    ?? {},
+    angles:    (doc as any)?.angles    ?? {},
   };
 }
 
 // key = inputType, slot = "before"/"after" for fallbacks OR styleName for styles
 export async function saveFrameImage(
-  category: "fallback" | "style",
+  category: "fallback" | "style" | "angle",
   key: string,
   slot: string,
   base64: string
@@ -144,19 +146,22 @@ export async function saveFrameImage(
   await connectDb();
 
   let doc = await AppFrames.findOne({ key: "main" });
-  if (!doc) doc = await AppFrames.create({ key: "main", fallbacks: {}, styles: {} });
+  if (!doc) doc = await AppFrames.create({ key: "main", fallbacks: {}, styles: {}, angles: {} });
 
   if (category === "fallback") {
     const fallbacks = { ...(doc.fallbacks ?? {}) };
     fallbacks[key] = { ...(fallbacks[key] ?? {}), [slot]: url };
     doc.fallbacks = fallbacks;
     doc.markModified("fallbacks");
-  } else {
-    // styles[inputType][styleName] = url
+  } else if (category === "style") {
     const styles = { ...(doc.styles ?? {}) };
     styles[key] = { ...(styles[key] ?? {}), [slot]: url };
     doc.styles = styles;
     doc.markModified("styles");
+  } else if (category === "angle") {
+    const angles = { ...(doc.angles ?? {}), [key]: url };
+    doc.angles = angles;
+    doc.markModified("angles");
   }
 
   await doc.save();

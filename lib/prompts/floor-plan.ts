@@ -1,12 +1,11 @@
 const BASE_PROMPT = `
-TASK: Convert the input 2D floor plan into a photorealistic, top-down 3D architectural render.
+TASK: Convert the input 2D floor plan into a photorealistic 3D architectural render.
 
 STRICT REQUIREMENTS — DO NOT VIOLATE:
 1) REMOVE ALL TEXT: Do not render any letters, numbers, labels, dimensions, or annotations. Floors must be continuous where text used to be.
 2) GEOMETRY MUST MATCH: Walls, rooms, doors, and windows must follow the exact lines and positions in the plan. Do not shift or resize.
-3) TOP-DOWN ONLY: Orthographic top-down view. No perspective tilt.
-4) CLEAN, REALISTIC OUTPUT: Crisp edges, balanced lighting, and realistic materials. No sketch or hand-drawn look.
-5) NO EXTRA CONTENT: Do not add rooms, furniture, or objects that are not clearly indicated by the plan.
+3) CLEAN, REALISTIC OUTPUT: Crisp edges, balanced lighting, and realistic materials. No sketch or hand-drawn look.
+4) NO EXTRA CONTENT: Do not add rooms, furniture, or objects that are not clearly indicated by the plan.
 
 STRUCTURE & DETAILS:
 - Walls: Extrude precisely from the plan lines. Consistent wall height and thickness.
@@ -30,18 +29,49 @@ STYLE & LIGHTING:
 `.trim();
 
 const floorPlanStyles: Record<string, string> = {
-  Modern:       "large-format light grey or white polished concrete or stone floors, white smooth walls, sleek low-profile furniture with clean straight lines, recessed ceiling lighting, open-plan feel, neutral palette of white/grey/black with one warm accent",
+  Modern: "large-format light grey or white polished concrete or stone floors, white smooth walls, sleek low-profile furniture with clean straight lines, recessed ceiling lighting, open-plan feel, neutral palette of white/grey/black with one warm accent",
   Scandinavian: "light natural oak or pale birch wood floors, white walls, cosy wool rugs in muted tones, simple functional furniture with tapered legs, warm pendant lighting, soft textiles — linen cushions and throws, plants, understated and uncluttered",
-  Industrial:   "polished or raw concrete floors, exposed red brick or dark grey walls, black steel window frames, dark metal-frame furniture with reclaimed wood surfaces, Edison bulb pendant lighting, leather or canvas upholstery, raw and urban atmosphere",
-  Rustic:       "wide-plank reclaimed oak or pine wood floors, exposed stone or whitewashed walls, heavy wooden ceiling beams, chunky farmhouse furniture in natural wood, wrought-iron fixtures, earthy warm tones — terracotta, cream, brown, cosy and lived-in feel",
-  Luxury:       "large-format marble or travertine floors with subtle veining, high ceilings, wall panelling or textured wallpaper in deep jewel tones, statement chandelier lighting, rich upholstered furniture in velvet or leather, gold or brass accents on fixtures and handles, art on walls",
-  Minimalist:   "seamless light grey or white micro-cement or polished concrete floors, pure white walls with zero decoration, only essential furniture — one sofa, one coffee table, one bed — all in neutral white or greige, hidden storage, single pendant light, absolute calm and emptiness",
+  Industrial: "polished or raw concrete floors, exposed red brick or dark grey walls, black steel window frames, dark metal-frame furniture with reclaimed wood surfaces, Edison bulb pendant lighting, leather or canvas upholstery, raw and urban atmosphere",
+  Rustic: "wide-plank reclaimed oak or pine wood floors, exposed stone or whitewashed walls, heavy wooden ceiling beams, chunky farmhouse furniture in natural wood, wrought-iron fixtures, earthy warm tones — terracotta, cream, brown, cosy and lived-in feel",
+  Luxury: "large-format marble or travertine floors with subtle veining, high ceilings, wall panelling or textured wallpaper in deep jewel tones, statement chandelier lighting, rich upholstered furniture in velvet or leather, gold or brass accents on fixtures and handles, art on walls",
+  Minimalist: "seamless light grey or white micro-cement or polished concrete floors, pure white walls with zero decoration, only essential furniture — one sofa, one coffee table, one bed — all in neutral white or greige, hidden storage, single pendant light, absolute calm and emptiness",
 };
 
-export function buildFloorPlanPrompt(style: string): string {
+const anglePrompts: Record<string, string> = {
+  topDown: `
+CAMERA ANGLE — TOP-DOWN:
+Strict orthographic top-down view, camera directly above the plan. No perspective tilt.
+No roof. Flat overhead perspective. All rooms visible from above.`,
+
+  isometric: `
+CAMERA ANGLE — ISOMETRIC CUTAWAY:
+45-degree isometric angle, dollhouse style. No roof — fully open top.
+Show wall heights and room depth. All rooms visible from the angled view.
+Camera positioned at equal distance from all sides.`,
+exterior: `
+CAMERA ANGLE — AERIAL EXTERIOR:
+Show the full building from outside at a 45-degree drone angle.
+Include the roof, exterior walls, windows, doors and surrounding ground.
+Realistic exterior materials. Small garden or ground around the building.`,
+entrance: `
+CAMERA ANGLE — ENTRANCE VIEW:
+Ground-level first-person perspective. Camera standing at the front
+entrance door looking into the main living area.
+Show the interior depth, furniture and natural light from windows.`,
+crossSection: `
+CAMERA ANGLE — CROSS SECTION:
+Slice through the middle of the building, remove the front wall completely.
+Show all rooms visible from the side — furniture, ceiling height,
+floor layers and wall thickness all visible.`,
+};
+
+export function buildFloorPlanPrompt(style: string, viewAngle: string = "topDown"): string {
   const detail = floorPlanStyles[style] ?? `materials, colors and furniture typical of ${style} interior design`;
+  const angle = anglePrompts[viewAngle] ?? anglePrompts.topDown;
   return `
 ${BASE_PROMPT}
+
+${angle}
 
 DESIGN STYLE — ${style.toUpperCase()}:
 Apply the following specific aesthetic throughout the entire render: ${detail}.

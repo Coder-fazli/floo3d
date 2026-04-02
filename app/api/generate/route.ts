@@ -16,7 +16,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     projectId = body.projectId;
-    const { imageUrl, userId, inputType = "interior-design", renderStyle = "Modern", roomType } = body;
+    const { imageUrl, userId, inputType = "interior-design", style = "Modern", roomType, viewAngle } = body;
 
     const credits = await getCredits(userId);
     const isUnlimited = credits >= 99999;
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 
     const result = await model.generateContent([
       { inlineData: { data: base64, mimeType } },
-      buildPrompt({ inputType, style: renderStyle, roomType }),
+      buildPrompt({ inputType, style, roomType, viewAngle }),
     ]);
 
     const parts = result.response.candidates![0].content.parts;
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
     if (!imagePart) {
       console.error("Gemini returned no image part");
       return NextResponse.json({ error: "No image generated" }, { status: 500 });
-    }
+    } 
 
     const renderedBase64 = `data:image/png;base64,${imagePart.inlineData!.data}`;
     const renderedImageUrl = await uploadImage(renderedBase64, "floo3d/renders");

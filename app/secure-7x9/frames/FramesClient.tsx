@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { saveFrameImage, type FramesData } from "@/lib/actions";
-import { DEFAULT_FALLBACKS, DEFAULT_STYLES, INPUT_TYPE_LABELS } from "@/lib/frameDefaults";
+import { DEFAULT_FALLBACKS, DEFAULT_STYLES, DEFAULT_ANGLES, ANGLE_LABELS, INPUT_TYPE_LABELS } from "@/lib/frameDefaults";
 import { Upload } from "lucide-react";
 
 type Props = { initialFrames: FramesData };
@@ -77,6 +77,15 @@ export default function FramesClient({ initialFrames }: Props) {
     } finally { setUpl(uk, false); }
   };
 
+  const handleAngle = async (angle: string, file: File) => {
+    const uk = `a:${angle}`;
+    setUpl(uk, true);
+    try {
+      const url = await saveFrameImage("angle", angle, angle, await toBase64(file));
+      setFrames((f) => ({ ...f, angles: { ...f.angles, [angle]: url } }));
+    } finally { setUpl(uk, false); }
+  };
+
   const handleStyle = async (inputType: string, style: string, file: File) => {
     const uk = `s:${inputType}:${style}`;
     setUpl(uk, true);
@@ -118,6 +127,29 @@ export default function FramesClient({ initialFrames }: Props) {
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* Floor Plan Angle Thumbnails */}
+      <div className="adm-card" style={{ padding: "1.75rem", marginBottom: "1.5rem" }}>
+        <h3 className="adm-settings-title" style={{ marginBottom: "0.375rem" }}>Floor Plan — Angle Thumbnails</h3>
+        <p style={{ fontSize: "0.8rem", color: "#94a3b8", marginBottom: "1.5rem" }}>
+          Preview images shown in the angle picker for floor plan projects.
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: "1rem" }}>
+          {Object.keys(DEFAULT_ANGLES).map((angle) => (
+            <div key={angle}>
+              <ImageSlot
+                src={frames.angles?.[angle] ?? DEFAULT_ANGLES[angle]}
+                uploading={!!uploading[`a:${angle}`]}
+                square
+                onPick={(f) => handleAngle(angle, f)}
+              />
+              <p style={{ fontSize: "0.72rem", fontWeight: 600, color: "#475569", textAlign: "center", marginTop: "0.375rem" }}>
+                {ANGLE_LABELS[angle]}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
 
