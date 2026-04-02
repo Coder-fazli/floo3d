@@ -241,6 +241,8 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
     pendingFileBase64Ref.current = null;
   };
 
+  const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
+
   const handleExport = async () => {
     if (!currentImage) return;
     const response = await fetch(currentImage);
@@ -251,7 +253,7 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
     link.download = `${project?.name || "render"}.png`;
     link.click();
     URL.revokeObjectURL(url);
-     
+
     if(project?._id) {
       fetch("/api/track-download", {
         method: "POST",
@@ -259,6 +261,28 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
         body: JSON.stringify({ projectId: project._id }),
       });
     }
+  };
+
+  const handleFreeDownload = async () => {
+    const src = currentImage || guestResult;
+    if (!src) return;
+    setExportDropdownOpen(false);
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      const maxW = 800;
+      const scale = Math.min(1, maxW / img.width);
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      const link = document.createElement("a");
+      link.download = `${project?.name || "render"}-free.jpg`;
+      link.href = canvas.toDataURL("image/jpeg", 0.7);
+      link.click();
+    };
+    img.src = src;
   };
 
   const handleShare = async () => {
@@ -540,17 +564,33 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
             <div className="viz-output-head">
               <span className="viz-output-title">Preview</span>
               <div className="viz-output-actions">
-                <button className="viz-download-btn" onClick={guestResult ? () => { const a = document.createElement("a"); a.href = guestResult; a.download = "3d-render.png"; a.click(); } : handleExport} disabled={!currentImage && !guestResult}>
-                  <Download size={12} strokeWidth={2.5} />
-                  <SparklesText
-                    className="viz-download-sparkles-text"
-                    sparklesCount={4}
-                    colors={{ first: "#ffffff", second: "#e2e8f0" }}
-                  >
-                    Export Ultra HD
-                  </SparklesText>
-                  <div className="viz-download-shimmer" />
-                </button>
+                <div className="viz-export-wrapper">
+                  <button className="viz-download-btn" onClick={() => setExportDropdownOpen(o => !o)} disabled={!currentImage && !guestResult}>
+                    <Download size={12} strokeWidth={2.5} />
+                    <SparklesText
+                      className="viz-download-sparkles-text"
+                      sparklesCount={4}
+                      colors={{ first: "#ffffff", second: "#e2e8f0" }}
+                    >
+                      Export
+                    </SparklesText>
+                    <div className="viz-download-shimmer" />
+                  </button>
+                  {exportDropdownOpen && (
+                    <div className="viz-export-dropdown">
+                      <button className="viz-export-option" onClick={handleFreeDownload}>
+                        <Download size={13} strokeWidth={2} />
+                        Free Download
+                        <span className="viz-export-badge">JPG</span>
+                      </button>
+                      <button className="viz-export-option viz-export-option-hd" onClick={() => { setExportDropdownOpen(false); }}>
+                        <Download size={13} strokeWidth={2} />
+                        HD Download
+                        <span className="viz-export-badge viz-export-badge-hd">HD</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
                 <button className="viz-icon-btn" onClick={() => setLightboxOpen(true)} disabled={!currentImage} title="Fullscreen">
                   <Maximize2 size={13} />
                 </button>
