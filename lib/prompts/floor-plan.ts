@@ -45,11 +45,11 @@ No roof, no ceiling, no walls visible from the side. Only the floor, furniture t
 This must look like an architectural floor plan rendered in 3D — not a dollhouse, not isometric. Pure bird's-eye overhead.`,
 
   isometric: `
-CAMERA ANGLE — 3D FLOOR PLAN (CORNER DIAGONAL VIEW):
-CRITICAL: The camera must be positioned at a CORNER of the building — not above the center, not from the side. Looking diagonally from one corner so that TWO exterior walls are visible simultaneously (one on the left side of the image, one on the top/back).
-The building is rotated 45 degrees so the corner faces the camera directly. You see inside all rooms from this corner diagonal perspective.
-No roof. Building sits on a clean light grey surface with soft shadow. White background.
-This must look exactly like the professional 3D floor plan renders used by real estate agencies — corner diagonal camera, two walls visible, all interior rooms readable, clean and photorealistic.`,
+OUTPUT STYLE — PROFESSIONAL 3D FLOOR PLAN RENDER:
+The output must look like a physical 3D architectural model placed on a white table and photographed from a corner at waist height. The building corner points directly toward the camera.
+Two exterior walls are clearly visible — one running to the left, one running to the right. The interior of all rooms is fully visible from this angle. No roof.
+The building sits on a flat light grey or white base with a soft drop shadow underneath. Pure white background behind the building.
+This is the standard style used by real estate agencies worldwide for 3D floor plan visualization. The camera is NOT above — it is in FRONT of the corner, looking slightly downward into the open-top building.`,
 
   exterior: `
 CAMERA ANGLE — EXTERIOR DRONE VIEW (OUTSIDE THE BUILDING):
@@ -69,9 +69,9 @@ export function buildFloorPlanPrompt(style: string, viewAngle: string = "topDown
   const detail = floorPlanStyles[style] ?? `materials, colors and furniture typical of ${style} interior design`;
   const angle = anglePrompts[viewAngle] ?? anglePrompts.topDown;
   return `
-${BASE_PROMPT}
-
 ${angle}
+
+${BASE_PROMPT}
 
 DESIGN STYLE — ${style.toUpperCase()}:
 Apply the following specific aesthetic throughout the entire render: ${detail}.
