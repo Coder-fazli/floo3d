@@ -45,10 +45,11 @@ No roof, no ceiling, no walls visible from the side. Only the floor, furniture t
 This must look like an architectural floor plan rendered in 3D — not a dollhouse, not isometric. Pure bird's-eye overhead.`,
 
   isometric: `
-CAMERA ANGLE — ISOMETRIC DOLLHOUSE (OPEN-TOP CUTAWAY):
-CRITICAL: This is NOT a top-down view. Camera is at a LOW 45-degree diagonal angle from one corner of the building — like viewing a dollhouse from the corner at eye level.
-Walls must be TALL and clearly visible — at least half the image height should show wall faces. The floor plan is visible but the camera is LOW enough that you clearly see all four wall faces.
-No roof — the building is open-top so rooms are visible inside. This must look like a physical dollhouse model sitting on a table, viewed from a seated person's eye level from the corner.`,
+CAMERA ANGLE — ISOMETRIC DOLLHOUSE (LOW CORNER VIEW):
+CRITICAL: This is NOT a top-down view. The camera is positioned LOW — at the same height as the walls, looking from a corner diagonal.
+The WALLS must fill at least 60% of the image height. The floor/interior should only be a small portion visible at the top of the image.
+Think of a physical dollhouse on a table — you are sitting at the table looking at the corner of the dollhouse at eye level. You see mostly walls and only a little bit of the interior from above.
+No roof. Open top. Corner diagonal view. LOW camera. Walls dominate the image.`,
 
   exterior: `
 CAMERA ANGLE — EXTERIOR DRONE VIEW (OUTSIDE THE BUILDING):
@@ -63,10 +64,11 @@ Show the full front face of the building: front door, windows, exterior wall mat
 This is a straight-on exterior photo — like a real estate listing photo taken from the street. No interior visible. Show the front garden, path, or driveway in the foreground. Natural daylight, realistic outdoor environment.`,
 
   crossSection: `
-CAMERA ANGLE — CROSS-SECTION (SIDE VIEW, BUILDING SLICED OPEN):
-CRITICAL: This is a SIDE-ON view, not top-down. Imagine the building cut in half with a vertical plane — the front wall is completely removed and you are standing directly in front looking straight in from the side.
-The camera is at GROUND LEVEL looking horizontally into the exposed rooms. You see: the cut edge of the walls (showing wall thickness), the ceiling above each room, the floor below, and all furniture inside each room arranged side by side left to right.
-This must look like an architectural section drawing — a flat side-on horizontal view into the sliced interior. NO bird's eye view, NO top-down perspective. Pure side elevation with the interior exposed.`,
+CAMERA ANGLE — 3D CUTAWAY (LOW CORNER ANGLE, WALLS DOMINANT):
+CRITICAL: Camera is positioned LOW at a corner — at the same height as the walls, looking diagonally into the building from a corner. This is NOT top-down.
+Walls must be very tall and fill most of the image. The interior floor and furniture are visible from this low diagonal angle inside each room.
+No roof — open top. The building floats on a clean white background like a 3D architectural model.
+This must look exactly like a professional 3D floor plan render: low diagonal corner camera, tall prominent walls, all rooms visible inside, clean white background, realistic materials and furniture.`,
 };
 
 export function buildFloorPlanPrompt(style: string, viewAngle: string = "topDown"): string {
