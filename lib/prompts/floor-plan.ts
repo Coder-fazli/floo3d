@@ -45,11 +45,11 @@ No roof, no ceiling, no walls visible from the side. Only the floor, furniture t
 This must look like an architectural floor plan rendered in 3D — not a dollhouse, not isometric. Pure bird's-eye overhead.`,
 
   isometric: `
-CAMERA ANGLE — ISOMETRIC DOLLHOUSE (LOW CORNER VIEW):
-CRITICAL: This is NOT a top-down view. The camera is positioned LOW — at the same height as the walls, looking from a corner diagonal.
-The WALLS must fill at least 60% of the image height. The floor/interior should only be a small portion visible at the top of the image.
-Think of a physical dollhouse on a table — you are sitting at the table looking at the corner of the dollhouse at eye level. You see mostly walls and only a little bit of the interior from above.
-No roof. Open top. Corner diagonal view. LOW camera. Walls dominate the image.`,
+CAMERA ANGLE — ISOMETRIC 3D FLOOR PLAN (MEDIUM HEIGHT CORNER):
+CRITICAL: Camera is at a medium-high diagonal angle from a corner — high enough to see all rooms clearly from above, but low enough that walls are visible and have clear height.
+Walls are visible but the interior floor layout is the main focus — rooms, furniture, and layout are all clearly readable.
+No roof — open top. The building sits on a clean light grey or white surface/ground with subtle shadow underneath. Clean white background.
+This must look like a professional 3D floor plan visualization — the style used by real estate agencies and architects to show apartment layouts. Crisp, clean, neutral colors, all rooms visible and readable.`,
 
   exterior: `
 CAMERA ANGLE — EXTERIOR DRONE VIEW (OUTSIDE THE BUILDING):
@@ -64,11 +64,11 @@ Show the full front face of the building: front door, windows, exterior wall mat
 This is a straight-on exterior photo — like a real estate listing photo taken from the street. No interior visible. Show the front garden, path, or driveway in the foreground. Natural daylight, realistic outdoor environment.`,
 
   crossSection: `
-CAMERA ANGLE — 3D CUTAWAY (LOW CORNER ANGLE, WALLS DOMINANT):
-CRITICAL: Camera is positioned LOW at a corner — at the same height as the walls, looking diagonally into the building from a corner. This is NOT top-down.
-Walls must be very tall and fill most of the image. The interior floor and furniture are visible from this low diagonal angle inside each room.
-No roof — open top. The building floats on a clean white background like a 3D architectural model.
-This must look exactly like a professional 3D floor plan render: low diagonal corner camera, tall prominent walls, all rooms visible inside, clean white background, realistic materials and furniture.`,
+CAMERA ANGLE — NIGHT VIEW (EXTERIOR AT NIGHT):
+CRITICAL: This is an exterior shot at night. Dark sky, artificial lighting only.
+Warm golden light glows from inside through all windows and doors. Exterior facade lit by outdoor wall lights or garden spotlights.
+Show the full exterior of the building from a 45-degree angle — roof, walls, windows, entrance, and surrounding garden or ground all visible.
+The contrast between the dark exterior and warm glowing interior light is the key visual. This must look like a real estate exterior photo taken at dusk or night — dramatic, warm, and atmospheric.`,
 };
 
 export function buildFloorPlanPrompt(style: string, viewAngle: string = "topDown"): string {
