@@ -54,11 +54,9 @@ The roof is fully visible and closed. Show exterior facade, roof materials, wind
 NO interior is visible. This is a purely exterior architectural render — like a real estate drone photo. The building sits in its environment with landscaping around it.`,
 
   crossSection: `
-CAMERA ANGLE — NIGHT VIEW (EXTERIOR AT NIGHT):
-CRITICAL: This is an exterior shot at night. Dark sky, artificial lighting only.
-Warm golden light glows from inside through all windows and doors. Exterior facade lit by outdoor wall lights or garden spotlights.
-Show the full exterior of the building from a 45-degree angle — roof, walls, windows, entrance, and surrounding garden or ground all visible.
-The contrast between the dark exterior and warm glowing interior light is the key visual. This must look like a real estate exterior photo taken at dusk or night — dramatic, warm, and atmospheric.`,
+Create a detailed 3D architectural dollhouse render based on the provided floor plan. Use a strictly isometric, three-quarter front-corner perspective. Position the camera looking downward at a roughly 45-degree angle towards the near-front corner of the building. This corner must be clearly visible and the lowest point of the frame, showing depth and both of the front exterior wall faces (left and right) in equal perspective. The roof is removed to reveal all interior rooms with their vertical wall faces. The resulting image must look like a physical open-top model with depth and perspective, not a flat, overhead 2D plan. Place the entire model on a clean dark presentation base against a pure dark studio background.
+
+NIGHT ATMOSPHERE: This is a night-time render. The interior of every room is warmly lit with soft golden artificial lighting glowing from inside. Ceiling lights, floor lamps and accent lighting visible inside each room. The exterior walls are dark. Warm light spills out through doorways between rooms. Dramatic contrast between the dark exterior walls and the warm glowing interiors.`,
 
 };
 
