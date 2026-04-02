@@ -55,6 +55,6 @@ export const ANGLE_LABELS: Record<string, string> = {
   topDown:      "Top-Down",
   isometric:    "Isometric",
   exterior:     "Exterior",
-  entrance:     "Entrance",
+  entrance:     "Street View",
   crossSection: "Cross Section",
 };

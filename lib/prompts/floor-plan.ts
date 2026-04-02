@@ -46,9 +46,9 @@ This must look like an architectural floor plan rendered in 3D — not a dollhou
 
   isometric: `
 CAMERA ANGLE — ISOMETRIC DOLLHOUSE (OPEN-TOP CUTAWAY):
-CRITICAL: Camera is positioned at exactly 45 degrees from a corner — equal distance from all four sides. Classic dollhouse/isometric view.
-No roof — the top is fully open so all rooms are visible. Walls are visible and show full height. Furniture and interior details visible from this angled perspective.
-The building should look like a dollhouse model viewed from a diagonal corner above. All four exterior walls and all interior rooms visible simultaneously.`,
+CRITICAL: This is NOT a top-down view. Camera is at a LOW 45-degree diagonal angle from one corner of the building — like viewing a dollhouse from the corner at eye level.
+Walls must be TALL and clearly visible — at least half the image height should show wall faces. The floor plan is visible but the camera is LOW enough that you clearly see all four wall faces.
+No roof — the building is open-top so rooms are visible inside. This must look like a physical dollhouse model sitting on a table, viewed from a seated person's eye level from the corner.`,
 
   exterior: `
 CAMERA ANGLE — EXTERIOR DRONE VIEW (OUTSIDE THE BUILDING):
@@ -57,16 +57,16 @@ The roof is fully visible and closed. Show exterior facade, roof materials, wind
 NO interior is visible. This is a purely exterior architectural render — like a real estate drone photo. The building sits in its environment with landscaping around it.`,
 
   entrance: `
-CAMERA ANGLE — FIRST-PERSON ENTRANCE (GROUND LEVEL, LOOKING IN):
-CRITICAL: Camera is at human eye level (1.6m height), standing just inside or at the front entrance door, looking straight into the main living area.
-Strong forced perspective — the room depth recedes into the distance. Ceiling visible above. Floor stretching forward. Walls on both sides creating a corridor effect.
-Show furniture, windows with natural light flooding in, and the full depth of the interior space. This must feel like a photograph taken by a person standing at the door.`,
+CAMERA ANGLE — STREET VIEW (FRONT FACADE, GROUND LEVEL EXTERIOR):
+CRITICAL: Camera is at street level, standing on the pavement or path directly in front of the building, looking straight at the front facade.
+Show the full front face of the building: front door, windows, exterior wall materials, roof edge or roofline visible at the top.
+This is a straight-on exterior photo — like a real estate listing photo taken from the street. No interior visible. Show the front garden, path, or driveway in the foreground. Natural daylight, realistic outdoor environment.`,
 
   crossSection: `
-CAMERA ANGLE — CROSS-SECTION CUT (SLICED BUILDING):
-CRITICAL: The building is sliced in half with a clean vertical cut through the middle. The front half of the building is completely removed — as if cut with a knife.
-The exposed cut face shows wall thickness, floor layers, and ceiling height. All rooms visible from the side in full depth.
-Show multiple floors/levels if present. Furniture, ceiling fixtures, and floor materials all visible inside each room. This must look like an architectural section drawing rendered in 3D — like a doll's house sliced open from the front.`,
+CAMERA ANGLE — CROSS-SECTION (SIDE VIEW, BUILDING SLICED OPEN):
+CRITICAL: This is a SIDE-ON view, not top-down. Imagine the building cut in half with a vertical plane — the front wall is completely removed and you are standing directly in front looking straight in from the side.
+The camera is at GROUND LEVEL looking horizontally into the exposed rooms. You see: the cut edge of the walls (showing wall thickness), the ceiling above each room, the floor below, and all furniture inside each room arranged side by side left to right.
+This must look like an architectural section drawing — a flat side-on horizontal view into the sliced interior. NO bird's eye view, NO top-down perspective. Pure side elevation with the interior exposed.`,
 };
 
 export function buildFloorPlanPrompt(style: string, viewAngle: string = "topDown"): string {
