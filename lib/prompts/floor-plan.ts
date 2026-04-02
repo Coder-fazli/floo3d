@@ -45,11 +45,11 @@ No roof, no ceiling, no walls visible from the side. Only the floor, furniture t
 This must look like an architectural floor plan rendered in 3D — not a dollhouse, not isometric. Pure bird's-eye overhead.`,
 
   isometric: `
-CAMERA ANGLE — ISOMETRIC 3D FLOOR PLAN (MEDIUM HEIGHT CORNER):
-CRITICAL: Camera is at a medium-high diagonal angle from a corner — high enough to see all rooms clearly from above, but low enough that walls are visible and have clear height.
-Walls are visible but the interior floor layout is the main focus — rooms, furniture, and layout are all clearly readable.
-No roof — open top. The building sits on a clean light grey or white surface/ground with subtle shadow underneath. Clean white background.
-This must look like a professional 3D floor plan visualization — the style used by real estate agencies and architects to show apartment layouts. Crisp, clean, neutral colors, all rooms visible and readable.`,
+CAMERA ANGLE — 3D FLOOR PLAN (CORNER DIAGONAL VIEW):
+CRITICAL: The camera must be positioned at a CORNER of the building — not above the center, not from the side. Looking diagonally from one corner so that TWO exterior walls are visible simultaneously (one on the left side of the image, one on the top/back).
+The building is rotated 45 degrees so the corner faces the camera directly. You see inside all rooms from this corner diagonal perspective.
+No roof. Building sits on a clean light grey surface with soft shadow. White background.
+This must look exactly like the professional 3D floor plan renders used by real estate agencies — corner diagonal camera, two walls visible, all interior rooms readable, clean and photorealistic.`,
 
   exterior: `
 CAMERA ANGLE — EXTERIOR DRONE VIEW (OUTSIDE THE BUILDING):
@@ -63,12 +63,6 @@ CRITICAL: Camera is at street level, standing on the pavement or path directly i
 Show the full front face of the building: front door, windows, exterior wall materials, roof edge or roofline visible at the top.
 This is a straight-on exterior photo — like a real estate listing photo taken from the street. No interior visible. Show the front garden, path, or driveway in the foreground. Natural daylight, realistic outdoor environment.`,
 
-  crossSection: `
-CAMERA ANGLE — NIGHT VIEW (EXTERIOR AT NIGHT):
-CRITICAL: This is an exterior shot at night. Dark sky, artificial lighting only.
-Warm golden light glows from inside through all windows and doors. Exterior facade lit by outdoor wall lights or garden spotlights.
-Show the full exterior of the building from a 45-degree angle — roof, walls, windows, entrance, and surrounding garden or ground all visible.
-The contrast between the dark exterior and warm glowing interior light is the key visual. This must look like a real estate exterior photo taken at dusk or night — dramatic, warm, and atmospheric.`,
 };
 
 export function buildFloorPlanPrompt(style: string, viewAngle: string = "topDown"): string {
