@@ -47,7 +47,6 @@ export const DEFAULT_ANGLES: Record<string, string> = {
   topDown:      "/real-3d-render.jpg",
   isometric:    "/real-3d-render.jpg",
   exterior:     "/real-3d-render.jpg",
-  entrance:     "/real-3d-render.jpg",
   crossSection: "/real-3d-render.jpg",
 };
 
@@ -55,6 +54,5 @@ export const ANGLE_LABELS: Record<string, string> = {
   topDown:      "Top-Down",
   isometric:    "Isometric",
   exterior:     "Exterior",
-  entrance:     "Street View",
   crossSection: "Night View",
 };

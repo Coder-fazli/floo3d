@@ -53,12 +53,6 @@ CRITICAL: Camera is OUTSIDE the building, hovering like a drone at 45 degrees ab
 The roof is fully visible and closed. Show exterior facade, roof materials, windows, front door, and surrounding ground/garden.
 NO interior is visible. This is a purely exterior architectural render — like a real estate drone photo. The building sits in its environment with landscaping around it.`,
 
-  entrance: `
-CAMERA ANGLE — STREET VIEW (FRONT FACADE, GROUND LEVEL EXTERIOR):
-CRITICAL: Camera is at street level, standing on the pavement or path directly in front of the building, looking straight at the front facade.
-Show the full front face of the building: front door, windows, exterior wall materials, roof edge or roofline visible at the top.
-This is a straight-on exterior photo — like a real estate listing photo taken from the street. No interior visible. Show the front garden, path, or driveway in the foreground. Natural daylight, realistic outdoor environment.`,
-
   crossSection: `
 CAMERA ANGLE — NIGHT VIEW (EXTERIOR AT NIGHT):
 CRITICAL: This is an exterior shot at night. Dark sky, artificial lighting only.
