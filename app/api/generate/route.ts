@@ -45,8 +45,8 @@ export async function POST(request: Request) {
       buildPrompt({ inputType, style, roomType, viewAngle }),
     ]);
 
-    const parts = result.response.candidates![0].content.parts;
-    const imagePart = parts.find((p: any) => p.inlineData);
+    const parts = result.response.candidates?.[0]?.content?.parts;
+    const imagePart = parts?.find((p: any) => p.inlineData);
 
     if (!imagePart) {
       console.error("Gemini returned no image part");

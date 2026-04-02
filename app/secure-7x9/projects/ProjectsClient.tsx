@@ -270,7 +270,7 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
                     <td>
                       <StatusBadge project={p} />
                       {p.status === "error" && p.errorMessage && (
-                        <p style={{ margin: "0.25rem 0 0", fontSize: "0.7rem", color: "#dc2626", maxWidth: "10rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={p.errorMessage}>
+                        <p style={{ margin: "0.25rem 0 0", fontSize: "0.7rem", color: "#dc2626", maxWidth: "14rem", wordBreak: "break-word" }} title={p.errorMessage}>
                           {p.errorMessage}
                         </p>
                       )}
