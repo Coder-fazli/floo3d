@@ -39,30 +39,34 @@ const floorPlanStyles: Record<string, string> = {
 
 const anglePrompts: Record<string, string> = {
   topDown: `
-CAMERA ANGLE — TOP-DOWN:
-Strict orthographic top-down view, camera directly above the plan. No perspective tilt.
-No roof. Flat overhead perspective. All rooms visible from above.`,
+CAMERA ANGLE — STRICT TOP-DOWN (OVERHEAD PLAN VIEW):
+CRITICAL: Camera is mounted directly overhead, pointing straight down at 90 degrees. Zero perspective tilt. Zero angle. Purely flat like looking at a map.
+No roof, no ceiling, no walls visible from the side. Only the floor, furniture tops, and room layout visible from above.
+This must look like an architectural floor plan rendered in 3D — not a dollhouse, not isometric. Pure bird's-eye overhead.`,
 
   isometric: `
-CAMERA ANGLE — ISOMETRIC CUTAWAY:
-45-degree isometric angle, dollhouse style. No roof — fully open top.
-Show wall heights and room depth. All rooms visible from the angled view.
-Camera positioned at equal distance from all sides.`,
-exterior: `
-CAMERA ANGLE — AERIAL EXTERIOR:
-Show the full building from outside at a 45-degree drone angle.
-Include the roof, exterior walls, windows, doors and surrounding ground.
-Realistic exterior materials. Small garden or ground around the building.`,
-entrance: `
-CAMERA ANGLE — ENTRANCE VIEW:
-Ground-level first-person perspective. Camera standing at the front
-entrance door looking into the main living area.
-Show the interior depth, furniture and natural light from windows.`,
-crossSection: `
-CAMERA ANGLE — CROSS SECTION:
-Slice through the middle of the building, remove the front wall completely.
-Show all rooms visible from the side — furniture, ceiling height,
-floor layers and wall thickness all visible.`,
+CAMERA ANGLE — ISOMETRIC DOLLHOUSE (OPEN-TOP CUTAWAY):
+CRITICAL: Camera is positioned at exactly 45 degrees from a corner — equal distance from all four sides. Classic dollhouse/isometric view.
+No roof — the top is fully open so all rooms are visible. Walls are visible and show full height. Furniture and interior details visible from this angled perspective.
+The building should look like a dollhouse model viewed from a diagonal corner above. All four exterior walls and all interior rooms visible simultaneously.`,
+
+  exterior: `
+CAMERA ANGLE — EXTERIOR DRONE VIEW (OUTSIDE THE BUILDING):
+CRITICAL: Camera is OUTSIDE the building, hovering like a drone at 45 degrees above ground level. Show the FULL exterior of the building.
+The roof is fully visible and closed. Show exterior facade, roof materials, windows, front door, and surrounding ground/garden.
+NO interior is visible. This is a purely exterior architectural render — like a real estate drone photo. The building sits in its environment with landscaping around it.`,
+
+  entrance: `
+CAMERA ANGLE — FIRST-PERSON ENTRANCE (GROUND LEVEL, LOOKING IN):
+CRITICAL: Camera is at human eye level (1.6m height), standing just inside or at the front entrance door, looking straight into the main living area.
+Strong forced perspective — the room depth recedes into the distance. Ceiling visible above. Floor stretching forward. Walls on both sides creating a corridor effect.
+Show furniture, windows with natural light flooding in, and the full depth of the interior space. This must feel like a photograph taken by a person standing at the door.`,
+
+  crossSection: `
+CAMERA ANGLE — CROSS-SECTION CUT (SLICED BUILDING):
+CRITICAL: The building is sliced in half with a clean vertical cut through the middle. The front half of the building is completely removed — as if cut with a knife.
+The exposed cut face shows wall thickness, floor layers, and ceiling height. All rooms visible from the side in full depth.
+Show multiple floors/levels if present. Furniture, ceiling fixtures, and floor materials all visible inside each room. This must look like an architectural section drawing rendered in 3D — like a doll's house sliced open from the front.`,
 };
 
 export function buildFloorPlanPrompt(style: string, viewAngle: string = "topDown"): string {
