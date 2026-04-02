@@ -270,7 +270,7 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
     const img = document.createElement("img");
     img.crossOrigin = "anonymous";
     img.onload = () => {
-      const maxW = 800;
+      const maxW = 1024;
       const scale = Math.min(1, maxW / img.width);
       const canvas = document.createElement("canvas");
       canvas.width = img.width * scale;
@@ -279,7 +279,7 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       const link = document.createElement("a");
       link.download = `${project?.name || "render"}-free.jpg`;
-      link.href = canvas.toDataURL("image/jpeg", 0.7);
+      link.href = canvas.toDataURL("image/jpeg", 0.85);
       link.click();
     };
     img.src = src;
