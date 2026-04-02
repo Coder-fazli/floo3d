@@ -267,7 +267,7 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
     const src = currentImage || guestResult;
     if (!src) return;
     setExportDropdownOpen(false);
-    const img = new Image();
+    const img = document.createElement("img");
     img.crossOrigin = "anonymous";
     img.onload = () => {
       const maxW = 800;
