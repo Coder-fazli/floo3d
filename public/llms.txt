@@ -1,0 +1,41 @@
+# MyHomeStyler
+
+> AI-powered home design tool. Upload a photo or floor plan and get a photorealistic redesign in seconds — no design skills needed.
+
+## What MyHomeStyler Does
+
+MyHomeStyler uses AI to transform uploaded images into professional photorealistic renders. There are four distinct tools:
+
+### 1. Floor Plan to 3D Render (Blueprint to 3D)
+Upload a 2D floor plan or architectural blueprint and get a photorealistic 3D render. The AI reads the walls, rooms, doors, windows and furniture layout from the plan and converts it into a fully rendered 3D visualization. Supports multiple view angles (Top-Down, Isometric, Exterior, Night View) and 6 interior design styles.
+
+### 2. Interior Room Redesign
+Upload a photo of any existing interior room and the AI redesigns it in a chosen style — keeping the exact same room structure, camera angle, walls, windows and built-in fixtures, but replacing furniture, floors, walls and decor to match the new style. Supports 9 room types (Living Room, Bedroom, Kitchen, Bathroom, Office, Dining Room, Studio, Hallway, Kids Room) and 6 styles (Modern, Scandinavian, Industrial, Rustic, Luxury, Minimalist).
+
+### 3. Garden & Outdoor Redesign
+Upload a photo of any outdoor space — garden, yard, patio, backyard — and the AI redesigns it with a new landscape style. Keeps existing walls, fences and structures, replaces ground cover, plants, furniture and lighting. Styles: Mediterranean, Japanese, Tropical, Cottage, Modern, Desert.
+
+### 4. Room Clearing (Furniture Removal)
+Upload a photo of any furnished room and the AI removes all movable furniture, decor, rugs, lamps and objects — leaving only the bare architectural shell (walls, floors, ceiling, windows, built-in fixtures). Useful for property listings, renovation planning and staging.
+
+## Design Styles
+
+- **Interior**: Modern, Scandinavian, Industrial, Rustic, Luxury, Minimalist
+- **Outdoor**: Mediterranean, Japanese, Tropical, Cottage, Modern, Desert
+
+## Key Facts
+
+- Results generated in 15–30 seconds
+- Free to start — no credit card required
+- All renders saved to a personal project dashboard
+- Export in HD quality
+
+## Target Users
+
+Architects, interior designers, real estate agents, property developers, home stagers, and homeowners planning renovations or redesigns.
+
+## Main Pages
+
+- Homepage: https://myhomestyler.com
+- 2D to 3D Floor Plan Converter: https://myhomestyler.com/2d-to-3d-floor-plan-converter
+- Dashboard: https://myhomestyler.com/dashboard
