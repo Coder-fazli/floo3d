@@ -30,7 +30,7 @@ export default function FAQ({ faqs, twoColumns }: { faqs?: { q: string; a: strin
 
   return (
     <section className="faq-section" id="answers">
-      <div className="faq-inner">
+      <div className={`faq-inner${twoColumns ? " faq-inner-full" : ""}`}>
 
         {/* Left — Questions */}
         <div className={`faq-left${twoColumns ? " faq-left-full" : ""}`}>
@@ -76,8 +76,8 @@ export default function FAQ({ faqs, twoColumns }: { faqs?: { q: string; a: strin
           </div>
         </div>
 
-        {/* Right — Visual Showcase */}
-        <div className={`faq-right${twoColumns ? " faq-right-hidden" : ""}`}>
+        {!twoColumns && (
+        <div className="faq-right">
           <div className="faq-right-label">The Magic of MyHomeStyler</div>
 
           <div className="faq-visual-wrap">
@@ -128,6 +128,7 @@ export default function FAQ({ faqs, twoColumns }: { faqs?: { q: string; a: strin
             <div className="faq-accent faq-accent-left" />
           </div>
         </div>
+        )}
 
       </div>
     </section>

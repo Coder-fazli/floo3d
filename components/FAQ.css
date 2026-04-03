@@ -457,6 +457,14 @@
     align-items: center;
   }
 
+  .faq-inner-full {
+    flex-direction: column !important;
+  }
+
+  .faq-inner-full {
+    flex-direction: column !important;
+  }
+
   .faq-left {
     margin: 0;
   }
