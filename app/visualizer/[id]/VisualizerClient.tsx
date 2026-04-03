@@ -283,6 +283,13 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
       link.click();
     };
     img.src = src;
+    if (project?._id) {
+      fetch("/api/track-download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectId: project._id }),
+      });
+    }
   };
 
   const handleShare = async () => {
