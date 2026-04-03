@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { Download, Loader2, Sparkles, Plus, Minus } from "lucide-react";
+import "./floor-plan-generator.css";
 
 const PROPERTY_TYPES = ["House", "Apartment", "Villa", "Studio", "Office"];
 

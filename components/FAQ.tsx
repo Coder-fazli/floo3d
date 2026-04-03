@@ -24,7 +24,7 @@ const DEFAULT_FAQS = [
   },
 ];
 
-export default function FAQ({ faqs }: { faqs?: { q: string; a: string }[] } = {}) {
+export default function FAQ({ faqs, twoColumns }: { faqs?: { q: string; a: string }[]; twoColumns?: boolean } = {}) {
   const [active, setActive] = useState<number | null>(null);
   const FAQS = faqs ?? DEFAULT_FAQS;
 
@@ -40,7 +40,7 @@ export default function FAQ({ faqs }: { faqs?: { q: string; a: string }[] } = {}
             <p className="faq-sub">Select a card to explore how MyHomeStyler transforms your architectural workflow.</p>
           </header>
 
-          <div className="faq-list">
+          <div className={`faq-list${twoColumns ? " faq-list-two-col" : ""}`}>
             {FAQS.map((faq, i) => (
               <div
                 key={i}

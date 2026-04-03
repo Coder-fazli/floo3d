@@ -175,7 +175,7 @@ export default async function FloorPlanGeneratorPage() {
         </Marquee>
       </section>
 
-      <FAQ faqs={[
+      <FAQ twoColumns faqs={[
         { q: "Is the AI floor plan generator free to use?", a: "Yes — our AI floor plan generator free tool lets you create professional floor plans without a credit card. New accounts receive free credits instantly so you can start generating right away." },
         { q: "What is an AI floor plan generator?", a: "An AI floor plan generator is a tool that automatically creates architectural floor plans based on your inputs — property type, room count, size, and style. Instead of drawing manually, the AI blueprint generator handles the layout and design for you in seconds." },
         { q: "What can the AI blueprint generator create?", a: "The AI blueprint generator can produce three types of floor plans: black and white architectural blueprints, soft colored room plans with furniture icons, and isometric 3D-style views. It works for houses, apartments, villas, studios, and offices." },

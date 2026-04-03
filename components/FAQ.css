@@ -60,6 +60,19 @@
   gap: 0.6rem;
 }
 
+.faq-list-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .faq-list-two-col {
+    grid-template-columns: 1fr;
+  }
+}
+
 .faq-item {
   border-radius: 1rem;
   border: 2px solid transparent;
