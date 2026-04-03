@@ -9,7 +9,7 @@ const isPublicRoute = createRouteMatcher([
   "/2d-to-3d-floor-plan-converter(.*)",
   "/api/guest-generate(.*)",
   "/api/webhooks(.*)", 
-  "/floor-plan-generator#generator(.*)"
+  "/floor-plan-generator(.*)"
 ]);
 
 const isAdminRoute = createRouteMatcher(["/secure-7x9(.*)"]);
