@@ -27,6 +27,14 @@
   width: 100%;
 }
 
+.faq-left-full {
+  max-width: 100%;
+}
+
+.faq-right-hidden {
+  display: none;
+}
+
 .faq-eyebrow {
   display: block;
   font-size: 0.75rem;

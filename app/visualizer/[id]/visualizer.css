@@ -970,6 +970,15 @@
     border-color: rgba(236, 91, 19, 0.5);
 }
 
+.viz-sb-upload-active {
+    border-color: #ec5b13;
+    background: rgba(236, 91, 19, 0.05);
+}
+
+.viz-sb-upload * {
+    pointer-events: none;
+}
+
 .viz-sb-upload-title {
     font-size: 0.78rem;
     font-weight: 700;

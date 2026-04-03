@@ -33,7 +33,7 @@ const STYLES: Record<string, string[]> = {
 
 const ROOM_TYPES = ["Living Room", "Bedroom", "Kitchen", "Bathroom", "Office", "Dining Room", "Studio", "Hallway", "Kids Room"];
 
-export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: string; frames?: FramesData } = {}) {
+export default function VisualizerClient({ embeddedId, frames, defaultType }: { embeddedId?: string; frames?: FramesData; defaultType?: string } = {}) {
   const FALLBACK_IMAGES = Object.fromEntries(
     Object.entries(DEFAULT_FALLBACKS).map(([k, v]) => [k, { ...v, ...(frames?.fallbacks?.[k] ?? {}) }])
   );
@@ -77,11 +77,11 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
   const zoomIn  = () => setZoomLevel(z => parseFloat(Math.min(z + 0.25, 3).toFixed(2)));
   const zoomOut = () => setZoomLevel(z => parseFloat(Math.max(z - 0.25, 0.5).toFixed(2)));
 
-  // Read type from URL for new mode
+  // Read type from URL for new mode (or use defaultType prop)
   useEffect(() => {
     if (isNewMode) {
       const params = new URLSearchParams(window.location.search);
-      const t = params.get("type") ?? "floor-plan";
+      const t = params.get("type") ?? defaultType ?? "floor-plan";
       setInputTypeNew(t);
       setRenderStyle(STYLES[t]?.[0] ?? "Modern");
     }
@@ -268,6 +268,8 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
   };
 
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const dragCounterRef = useRef(0);
 
   // Floor plan generator config
   const [fpgConfig, setFpgConfig] = useState<FpgConfig>({
@@ -478,10 +480,12 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
                 Upload Your Image
               </div>
               <div
-                className="viz-sb-upload"
+                className={`viz-sb-upload${isDraggingOver ? " viz-sb-upload-active" : ""}`}
                 onClick={() => (user || embeddedId) ? sidebarFileRef.current?.click() : openSignUp({ fallbackRedirectUrl: "/dashboard" })}
+                onDragEnter={(e) => { e.preventDefault(); dragCounterRef.current++; setIsDraggingOver(true); }}
+                onDragLeave={(e) => { e.preventDefault(); dragCounterRef.current--; if (dragCounterRef.current === 0) setIsDraggingOver(false); }}
                 onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) handleSidebarFile(f); }}
+                onDrop={(e) => { e.preventDefault(); dragCounterRef.current = 0; setIsDraggingOver(false); const f = e.dataTransfer.files[0]; if (f) handleSidebarFile(f); }}
               >
                 <input
                   ref={sidebarFileRef}

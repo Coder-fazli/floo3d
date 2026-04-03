@@ -7,9 +7,9 @@ import DesignOptions from "@/components/DesignOptions";
 import RecentProjects from "@/components/RecentProjects";
 import Footer from "@/components/Footer";
 import FAQ from "@/components/FAQ";
-import FloorPlanGeneratorClient from "./FloorPlanGeneratorClient";
+import VisualizerClient from "@/app/visualizer/[id]/VisualizerClient";
 import { Marquee } from "@/components/ui/marquee";
-import { getSiteSettings, getFpgImages } from "@/lib/actions";
+import { getSiteSettings, getFpgImages, getAppFrames } from "@/lib/actions";
 
 const DEFAULT_TITLE = "AI Floor Plan Generator — Create Custom Floor Plans Free Online";
 const DEFAULT_DESC = "Generate a custom 2D floor plan from scratch using AI. Choose your rooms, size, and style — get a professional floor plan in seconds. Free to start.";
@@ -113,7 +113,7 @@ const jsonLd = {
 };
 
 export default async function FloorPlanGeneratorPage() {
-  const fpgImages = await getFpgImages();
+  const [fpgImages, frames] = await Promise.all([getFpgImages(), getAppFrames()]);
   return (
     <div className="home">
       <script
@@ -130,7 +130,7 @@ export default async function FloorPlanGeneratorPage() {
       <HowItWorks2 />
 
       <section id="generator">
-        <FloorPlanGeneratorClient />
+        <VisualizerClient embeddedId="new" frames={frames} defaultType="floor-plan-generator" />
       </section>
 
       <DesignOptions />

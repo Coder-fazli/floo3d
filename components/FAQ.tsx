@@ -33,7 +33,7 @@ export default function FAQ({ faqs, twoColumns }: { faqs?: { q: string; a: strin
       <div className="faq-inner">
 
         {/* Left — Questions */}
-        <div className="faq-left">
+        <div className={`faq-left${twoColumns ? " faq-left-full" : ""}`}>
           <header className="faq-header">
             <span className="faq-eyebrow">Help Center</span>
             <h2 className="faq-title">Got Questions?<br />We've Got Answers.</h2>
@@ -77,7 +77,7 @@ export default function FAQ({ faqs, twoColumns }: { faqs?: { q: string; a: strin
         </div>
 
         {/* Right — Visual Showcase */}
-        <div className="faq-right">
+        <div className={`faq-right${twoColumns ? " faq-right-hidden" : ""}`}>
           <div className="faq-right-label">The Magic of MyHomeStyler</div>
 
           <div className="faq-visual-wrap">
