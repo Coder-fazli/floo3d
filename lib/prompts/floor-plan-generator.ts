@@ -42,8 +42,6 @@ export function buildFloorPlanGeneratorPrompt(config:FloorPlanGeneratorConfig) :
     extras.terrace && "Terrace", 
     extras.garden && "Garden area"
   ].filter(Boolean).join(", ");
-}
 
-const roomList = [
-    rooms.bedroom
-]
+  return `Generate a 2D floor plan for a ${floors}-floor ${propertyType} of ${area} ${areaUnit}.\n\nRooms: ${roomList}\n\n${stylePrompts[style]}`;
+}
