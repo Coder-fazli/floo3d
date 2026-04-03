@@ -17,13 +17,14 @@ export interface FloorPlanGeneratorConfig {
     terrace: boolean;
     garden: boolean;
     }
-  style: "blueprint" | "colored" | "isometric";
+  style: "blueprint" | "colored" | "isometric" | "3d top-down";
 }
 
-const stylePrompts = {
+const stylePrompts: Record<string, string> = {
     blueprint: "Clean black and white architectural blueprint style. Thin precise lines, room labels, standard architectural symbols for doors and windows. White background.",
     colored: "Top-down 2D floor plan with colored rooms. Each room filled with a soft distinct color. Furniture icons shown as simple flat shapes. Clean and readable.",
     isometric: "Isometric 3D floor plan view from a corner angle. Photorealistic furniture and materials. Open top showing all rooms. White background.",
+    "3d top-down": "Photorealistic 3D top-down aerial view of the floor plan. Camera directly overhead. Realistic furniture, materials, lighting and shadows. High-detail render.",
 }
 
 export function buildFloorPlanGeneratorPrompt(config:FloorPlanGeneratorConfig) : string {

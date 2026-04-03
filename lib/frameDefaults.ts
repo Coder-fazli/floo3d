@@ -35,6 +35,12 @@ export const DEFAULT_STYLES: Record<string, Record<string, string>> = {
   "empty-room": {
     "Clean": "/card-empty-before.webp",
   },
+  "floor-plan-generator": {
+    "Blueprint":    "/real-2d-plan.jpg",
+    "Colored":      "/real-2d-plan.jpg",
+    "Isometric":    "/real-3d-render.jpg",
+    "3D Top-Down":  "/real-3d-render.jpg",
+  },
 };
 
 export const INPUT_TYPE_LABELS: Record<string, string> = {

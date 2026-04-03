@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import "./floor-plan-generator.css";
 import Navbar from "@/components/Navbar";
+import FloorPlanGeneratorHero from "@/components/FloorPlanGeneratorHero";
+import HowItWorks2 from "@/components/HowItWorks2";
+import DesignOptions from "@/components/DesignOptions";
+import RecentProjects from "@/components/RecentProjects";
 import Footer from "@/components/Footer";
 import FAQ from "@/components/FAQ";
 import FloorPlanGeneratorClient from "./FloorPlanGeneratorClient";
-import { getSiteSettings } from "@/lib/actions";
 import { Marquee } from "@/components/ui/marquee";
+import { getSiteSettings } from "@/lib/actions";
 
 const DEFAULT_TITLE = "AI Floor Plan Generator — Create Custom Floor Plans Free Online";
 const DEFAULT_DESC = "Generate a custom 2D floor plan from scratch using AI. Choose your rooms, size, and style — get a professional floor plan in seconds. Free to start.";
@@ -60,6 +63,12 @@ const jsonLd = {
         "bestRating": "5",
         "worstRating": "1",
       },
+      "review": reviews.map((r) => ({
+        "@type": "Review",
+        "author": { "@type": "Person", "name": r.name },
+        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+        "reviewBody": r.text,
+      })),
       "description": DEFAULT_DESC,
       "screenshot": "https://myhomestyler.com/og-image.png",
     },
@@ -68,28 +77,28 @@ const jsonLd = {
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "Is the AI floor plan generator really free?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes. You can generate floor plans for free without a credit card. New accounts get free credits to try the tool immediately." },
+          "name": "Is the AI floor plan generator free to use?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes — our AI floor plan generator free tool lets you create professional floor plans without a credit card. New accounts receive free credits instantly so you can start generating right away." },
         },
         {
           "@type": "Question",
-          "name": "What styles are available for the floor plan?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Three styles are available: Blueprint (black and white architectural style), Colored (soft colored rooms with furniture icons), and Isometric (3D corner view with photorealistic furniture)." },
+          "name": "What is an AI floor plan generator?",
+          "acceptedAnswer": { "@type": "Answer", "text": "An AI floor plan generator is a tool that automatically creates architectural floor plans based on your inputs — property type, room count, size, and style. Instead of drawing manually, the AI blueprint generator handles the layout and design for you in seconds." },
         },
         {
           "@type": "Question",
-          "name": "How many rooms can I add?",
-          "acceptedAnswer": { "@type": "Answer", "text": "You can add bedrooms, bathrooms, kitchen, living room, dining room, and office. You can also include extras like garage, balcony, terrace, and garden area." },
+          "name": "What can the AI blueprint generator create?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The AI blueprint generator can produce three types of floor plans: black and white architectural blueprints, soft colored room plans with furniture icons, and isometric 3D-style views. It works for houses, apartments, villas, studios, and offices." },
         },
         {
           "@type": "Question",
-          "name": "How long does it take to generate a floor plan?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Most floor plans are generated in 15–30 seconds. You will see a live loading indicator while the AI is working." },
+          "name": "Can I convert the AI-generated floor plan to a 3D render?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. After the AI floor plan generator creates your plan, click Convert to 3D to open it in the visualizer and generate a photorealistic 3D render from it — no extra uploads needed." },
         },
         {
           "@type": "Question",
-          "name": "Can I convert the generated floor plan to a 3D render?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes. After generation, click the Convert to 3D button to open the floor plan in the visualizer and generate a photorealistic 3D render from it." },
+          "name": "How long does the AI floor plan generator take?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Most results from the AI floor plan generator are ready in 15–30 seconds. You will see a live loading indicator while the AI is working on your layout." },
         },
       ],
     },
@@ -112,51 +121,18 @@ export default async function FloorPlanGeneratorPage() {
       />
       <Navbar />
 
-      {/* Hero */}
-      <section className="fpg-landing-hero">
-        <div className="fpg-landing-hero-inner">
-          <span className="fpg-landing-eyebrow">AI Floor Plan Generator</span>
-          <h1 className="fpg-landing-title">Generate Any Floor Plan<br />From Scratch with AI</h1>
-          <p className="fpg-landing-subtitle">
-            No design skills needed. Pick your rooms, set the size, choose a style — get a professional floor plan in seconds. Free to start.
-          </p>
-          <div className="fpg-landing-badges">
-            <span className="fpg-landing-badge">Free to start</span>
-            <span className="fpg-landing-badge">No software needed</span>
-            <span className="fpg-landing-badge">Results in 15–30s</span>
-          </div>
-        </div>
-      </section>
+      <FloorPlanGeneratorHero />
 
-      {/* Generator Tool */}
+      <HowItWorks2 />
+
       <section id="generator">
         <FloorPlanGeneratorClient />
       </section>
 
-      {/* How it works */}
-      <section className="fpg-hiw-section">
-        <div className="fpg-hiw-inner">
-          <div className="fpg-hiw-header">
-            <span className="fpg-landing-eyebrow">How It Works</span>
-            <h2 className="fpg-hiw-title">AI Floor Plan Generator — Three Simple Steps</h2>
-          </div>
-          <div className="fpg-hiw-steps">
-            {[
-              { num: "01", title: "Configure Your Property", desc: "Choose property type, total area, number of floors, rooms, and extras like garage or balcony. Our ai floor plan generator free tool handles any layout." },
-              { num: "02", title: "Pick a Style", desc: "Select Blueprint for architectural drawings, Colored for visual planning, or Isometric for a 3D perspective view. Works as a full ai blueprint generator." },
-              { num: "03", title: "Generate & Download", desc: "The ai floor plan generator draws your plan in seconds. Download it or convert directly to a photorealistic 3D render." },
-            ].map((step) => (
-              <div key={step.num} className="fpg-hiw-step">
-                <span className="fpg-hiw-num">{step.num}</span>
-                <h3 className="fpg-hiw-step-title">{step.title}</h3>
-                <p className="fpg-hiw-step-desc">{step.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <DesignOptions />
 
-      {/* Reviews */}
+      <RecentProjects />
+
       <section className="marquee-section" id="reviews">
         <div className="marquee-header">
           <span className="marquee-eyebrow">Real Stories</span>
@@ -193,16 +169,6 @@ export default async function FloorPlanGeneratorPage() {
             </div>
           ))}
         </Marquee>
-      </section>
-
-      {/* AI Blueprint Generator section */}
-      <section className="fpg-hiw-section" style={{ background: "#f8fafc" }}>
-        <div className="fpg-hiw-inner" style={{ textAlign: "center" }}>
-          <h2 className="fpg-hiw-title">AI Blueprint Generator for Any Property Type</h2>
-          <p style={{ color: "#64748b", fontSize: "1rem", maxWidth: "600px", margin: "1rem auto 0", lineHeight: 1.7 }}>
-            Whether you need a house, apartment, villa, or office layout — our ai blueprint generator creates accurate, professional-grade floor plans instantly. Use it as a free ai floor plan generator with no design experience required.
-          </p>
-        </div>
       </section>
 
       <FAQ faqs={[

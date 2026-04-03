@@ -20,14 +20,14 @@ import { RainbowButton } from "@/components/ui/rainbow-button";
 import { SparklesText } from "@/components/ui/sparkles-text";
 import { type FramesData } from "@/lib/actions";
 import { DEFAULT_FALLBACKS, DEFAULT_STYLES, DEFAULT_ANGLES, ANGLE_LABELS } from "@/lib/frameDefaults";
-import FpgSidebarSection, { type FpgConfig } from "./components/FpgSidebarSection";
+import FpgSidebarSection, { type FpgConfig } from "../components/FpgSidebarSection";
 
 const STYLES: Record<string, string[]> = {
   "floor-plan":           ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
   "interior-design":      ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
   "outdoor":              ["Mediterranean", "Japanese", "Tropical", "Cottage", "Modern", "Desert"],
   "empty-room":           ["Clean"],
-  "floor-plan-generator": ["Blueprint", "Colored", "Isometric"],
+  "floor-plan-generator": ["Blueprint", "Colored", "Isometric", "3D Top-Down"],
 };
 
 
@@ -150,7 +150,7 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            config: { ...fpgConfig, style: renderStyle.toLowerCase() as "blueprint" | "colored" | "isometric" },
+            config: { ...fpgConfig, style: renderStyle.toLowerCase() as "blueprint" | "colored" | "isometric" | "3d top-down" },
           }),
         });
         const data = await res.json();
@@ -663,6 +663,13 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
                 />
               ) : embeddedId && !user && guestBase64 ? (
                 <img src={guestBase64} alt="Uploaded" style={{ width: "100%", height: "100%", objectFit: "contain", background: "#f1f5f9" }} />
+              ) : activeInputType === "floor-plan-generator" && currentImage ? (
+                <img
+                  src={currentImage}
+                  alt="Generated Floor Plan"
+                  style={{ width: "100%", height: "100%", objectFit: "contain", background: "#f1f5f9", cursor: "zoom-in", transform: `scale(${zoomLevel})`, transformOrigin: "center", transition: "transform 0.3s ease" }}
+                  onClick={() => setLightboxOpen(true)}
+                />
               ) : project?.originalImageUrl && currentImage ? (
                 <ReactCompareSlider
                   defaultValue={50}
