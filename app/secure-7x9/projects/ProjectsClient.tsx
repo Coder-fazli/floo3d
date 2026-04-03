@@ -9,7 +9,7 @@ const PAGE_SIZE = 20;
 const INPUT_TABS = [
   { key: "all", label: "All" },
   { key: "floor-plan", label: "Floor Plan" },
-  { key: "interior", label: "Interior" },
+  { key: "interior-design", label: "Interior" },
   { key: "outdoor", label: "Garden & Yard" },
   { key: "empty-room", label: "Empty Room" },
 ];
