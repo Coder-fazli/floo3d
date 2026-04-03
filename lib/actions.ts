@@ -236,3 +236,33 @@ export async function saveFloorPlanGeneratorSettings(floorPlanGeneratorMetaTitle
         { upsert: true, new: true }
     );
 }
+
+export type FpgImages = {
+  heroBeforeUrl: string | null;
+  heroAfterUrl: string | null;
+};
+
+export async function getFpgImages(): Promise<FpgImages> {
+  await connectDb();
+  const doc = await SiteSettings.findOne({ key: "home" });
+  return {
+    heroBeforeUrl: doc?.fpgHeroBeforeUrl ?? null,
+    heroAfterUrl:  doc?.fpgHeroAfterUrl  ?? null,
+  };
+}
+
+export async function saveFpgImage(
+  slot: "hero-before" | "hero-after",
+  base64: string
+): Promise<string> {
+  const url = await uploadImage(base64, "fpg-images");
+  await connectDb();
+  let doc = await SiteSettings.findOne({ key: "home" });
+  if (!doc) doc = await SiteSettings.create({ key: "home" });
+  if (slot === "hero-before") doc.fpgHeroBeforeUrl = url;
+  else doc.fpgHeroAfterUrl = url;
+  await doc.save();
+  revalidatePath("/floor-plan-generator");
+  revalidatePath("/secure-7x9/floor-plan-generator");
+  return url;
+}

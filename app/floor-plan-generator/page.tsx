@@ -9,7 +9,7 @@ import Footer from "@/components/Footer";
 import FAQ from "@/components/FAQ";
 import FloorPlanGeneratorClient from "./FloorPlanGeneratorClient";
 import { Marquee } from "@/components/ui/marquee";
-import { getSiteSettings } from "@/lib/actions";
+import { getSiteSettings, getFpgImages } from "@/lib/actions";
 
 const DEFAULT_TITLE = "AI Floor Plan Generator — Create Custom Floor Plans Free Online";
 const DEFAULT_DESC = "Generate a custom 2D floor plan from scratch using AI. Choose your rooms, size, and style — get a professional floor plan in seconds. Free to start.";
@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+      images: [{ url: "/og-floor-plan-generator.jpg", width: 1200, height: 630 }],
     },
   };
 }
@@ -70,7 +70,7 @@ const jsonLd = {
         "reviewBody": r.text,
       })),
       "description": DEFAULT_DESC,
-      "screenshot": "https://myhomestyler.com/og-image.png",
+      "screenshot": "https://myhomestyler.com/og-floor-plan-generator.jpg",
     },
     {
       "@type": "FAQPage",
@@ -113,6 +113,7 @@ const jsonLd = {
 };
 
 export default async function FloorPlanGeneratorPage() {
+  const fpgImages = await getFpgImages();
   return (
     <div className="home">
       <script
@@ -121,7 +122,10 @@ export default async function FloorPlanGeneratorPage() {
       />
       <Navbar />
 
-      <FloorPlanGeneratorHero />
+      <FloorPlanGeneratorHero
+        heroBeforeUrl={fpgImages.heroBeforeUrl ?? undefined}
+        heroAfterUrl={fpgImages.heroAfterUrl ?? undefined}
+      />
 
       <HowItWorks2 />
 

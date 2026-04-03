@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+      images: [{ url: "/og-2d-to-3d-floor-plan.jpg", width: 1200, height: 630 }],
     },
   };
 }
@@ -70,7 +70,7 @@ const jsonLd = {
         "reviewBody": r.text,
       })),
       "description": DEFAULT_DESC,
-      "screenshot": "https://myhomestyler.com/og-image.png",
+      "screenshot": "https://myhomestyler.com/og-2d-to-3d-floor-plan.jpg",
     },
     {
       "@type": "FAQPage",

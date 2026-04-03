@@ -8,11 +8,14 @@ const SiteSettingsSchema = new mongoose.Schema({
    floorPlanMetaDescription: { type: String, default: "Convert 2D floor plans to 3D models free online — no credit card, no login required. Works with blueprints, house plans & hand-drawn sketches. Results in seconds." },
    floorPlanGeneratorMetaTitle: { type: String, default: "AI Floor Plan Generator — Create Custom Floor Plans Free Online" },
    floorPlanGeneratorMetaDescription: { type: String, default: "Generate a custom 2D floor plan from scratch using AI. Choose your rooms, size, and style — get a professional floor plan in seconds. Free to start." },
-   // Hero slider images
+   // Hero slider images (home page)
    heroBeforeUrl: { type: String, default: null },
    heroAfterUrl: { type: String, default: null },
    // LIMITLESS TRANSFORMATIONS section images: { "01": { before, after }, ... }
    transformImages: { type: mongoose.Schema.Types.Mixed, default: {} },
+   // Floor Plan Generator page hero slider
+   fpgHeroBeforeUrl: { type: String, default: null },
+   fpgHeroAfterUrl:  { type: String, default: null },
 },
  { timestamps: true });
 

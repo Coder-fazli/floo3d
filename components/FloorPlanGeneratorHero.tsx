@@ -49,7 +49,13 @@ const features = [
   },
 ];
 
-export default function FloorPlanGeneratorHero() {
+export default function FloorPlanGeneratorHero({
+  heroBeforeUrl = "/real-2d-plan.jpg",
+  heroAfterUrl  = "/real-3d-render.jpg",
+}: {
+  heroBeforeUrl?: string;
+  heroAfterUrl?: string;
+}) {
   const { isSignedIn } = useUser();
   const { openSignUp } = useClerk();
   const [sliderPos, setSliderPos] = useState(40);
@@ -191,8 +197,8 @@ export default function FloorPlanGeneratorHero() {
                   linesStyle={{ background: "rgba(255,255,255,0.3)", width: 1 }}
                 />
               }
-              itemOne={<ReactCompareSliderImage src="/real-2d-plan.jpg" alt="2D Floor Plan Configuration" style={{ objectFit: "cover" }} />}
-              itemTwo={<ReactCompareSliderImage src="/real-3d-render.jpg" alt="AI Generated Floor Plan" style={{ objectFit: "cover" }} />}
+              itemOne={<ReactCompareSliderImage src={heroBeforeUrl} alt="2D Floor Plan Configuration" style={{ objectFit: "cover" }} />}
+              itemTwo={<ReactCompareSliderImage src={heroAfterUrl} alt="AI Generated Floor Plan" style={{ objectFit: "cover" }} />}
             />
 
             {/* Labels */}
