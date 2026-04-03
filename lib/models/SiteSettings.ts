@@ -6,6 +6,8 @@ const SiteSettingsSchema = new mongoose.Schema({
    metaDescription: { type: String, default: "Upload any 2D floor plan and get a photorealistic 3D render in under 60 seconds. Free to start. No 3D software needed. Used by architects, designers & real estate pros." },
    floorPlanMetaTitle: { type: String, default: "2D to 3D Floor Plan Converter — Convert 2D Floor Plan to 3D Model Free Online" },
    floorPlanMetaDescription: { type: String, default: "Convert 2D floor plans to 3D models free online — no credit card, no login required. Works with blueprints, house plans & hand-drawn sketches. Results in seconds." },
+   floorPlanGeneratorMetaTitle: { type: String, default: "AI Floor Plan Generator — Create Custom Floor Plans Free Online" },
+   floorPlanGeneratorMetaDescription: { type: String, default: "Generate a custom 2D floor plan from scratch using AI. Choose your rooms, size, and style — get a professional floor plan in seconds. Free to start." },
    // Hero slider images
    heroBeforeUrl: { type: String, default: null },
    heroAfterUrl: { type: String, default: null },

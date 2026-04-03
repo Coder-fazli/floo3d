@@ -5,6 +5,7 @@ import { updateProject, getCredits, deductCredit} from "@/lib/actions";
 import { buildPrompt } from "@/lib/prompts";
 import Project from "@/lib/models/Project";
 import { connectDb } from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
@@ -14,9 +15,16 @@ export const maxDuration = 60;
 export async function POST(request: Request) {
   let projectId: string | null = null;
   try {
+     const { userId } = await auth();
+     if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     const body = await request.json();
     projectId = body.projectId;
-    const { imageUrl, userId, inputType = "interior-design", style = "Modern", roomType, viewAngle } = body;
+
+    const { imageUrl, inputType = "interior-design", style = "Modern", roomType, viewAngle } = body;
+
+    // Validate ImageUrl
+    if (!imageUrl || !imageUrl.startsWith("https://res.cloudinary.com/"))
+      return NextResponse.json({ error: "Invalid image URL" }, { status: 400 });
 
     const credits = await getCredits(userId);
     const isUnlimited = credits >= 99999;

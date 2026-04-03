@@ -14,7 +14,8 @@ const INPUT_TYPE_META: Record<string, { label: string; desc: string }> = {
   "floor-plan":      { label: "2D Floor Plan → 3D",  desc: "Turn blueprints into photorealistic 3D renders" },
   "interior-design": { label: "Interior Redesign",    desc: "Reimagine any room with AI-powered styling" },
   "outdoor":         { label: "Garden & Yard Design", desc: "Transform your exterior with stunning landscape AI" },
-  "empty-room":      { label: "Virtual Staging",      desc: "Stage empty spaces with beautiful AI furniture" },
+  "empty-room":           { label: "Virtual Staging",        desc: "Stage empty spaces with beautiful AI furniture" },
+  "floor-plan-generator": { label: "Floor Plan Generator",   desc: "Generate a custom floor plan from scratch with AI" },
 };
 
 export default function DashboardClient({ frames, displayName }: { frames: FramesData; displayName: string | null }) {
@@ -68,7 +69,7 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
                 <div
                   key={id}
                   className="nr-type-card"
-                  onClick={() => router.push(`/visualizer/new?type=${id}`)}
+                  onClick={() => router.push(id === "floor-plan-generator" ? "/floor-plan-generator" : `/visualizer/new?type=${id}`)}
                 >
                   <div className="nr-reveal-container">
                     <AutoCompareSlider before={imgBefore} after={imgAfter} />

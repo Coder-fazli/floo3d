@@ -227,3 +227,12 @@ export async function saveFloorPlanSettings(floorPlanMetaTitle: string, floorPla
         { upsert: true, new: true }
     );
 }
+
+export async function saveFloorPlanGeneratorSettings(floorPlanGeneratorMetaTitle: string, floorPlanGeneratorMetaDescription: string) {
+    await connectDb();
+    await SiteSettings.findOneAndUpdate(
+        { key: "home" },
+        { floorPlanGeneratorMetaTitle, floorPlanGeneratorMetaDescription },
+        { upsert: true, new: true }
+    );
+}

@@ -2,7 +2,8 @@ export const DEFAULT_FALLBACKS: Record<string, { before: string; after: string; 
   "floor-plan":      { before: "/real-2d-plan.jpg",         after: "/real-3d-render.jpg",      labelBefore: "Original 2D Plan",  labelAfter: "AI 3D Render" },
   "interior-design": { before: "/card-room-before.webp",    after: "/card-room-after.webp",    labelBefore: "Original Room",     labelAfter: "AI Redesigned" },
   "outdoor":         { before: "/card-outdoor-before.webp", after: "/card-outdoor-after.webp", labelBefore: "Original Outdoor",  labelAfter: "AI Outdoor Design" },
-  "empty-room":      { before: "/card-empty-before.webp",   after: "/card-empty-after.webp",   labelBefore: "Furnished Room",    labelAfter: "Emptied Room" },
+  "empty-room":           { before: "/card-empty-before.webp",   after: "/card-empty-after.webp",   labelBefore: "Furnished Room",    labelAfter: "Emptied Room" },
+  "floor-plan-generator": { before: "/real-2d-plan.jpg",         after: "/real-3d-render.jpg",      labelBefore: "Configuration",     labelAfter: "Generated Plan" },
 };
 
 // Keyed by inputType → styleName → default image path
@@ -40,7 +41,8 @@ export const INPUT_TYPE_LABELS: Record<string, string> = {
   "floor-plan":      "Floor Plan",
   "interior-design": "Interior Design",
   "outdoor":         "Garden & Yard Design",
-  "empty-room":      "Empty Room",
+  "empty-room":           "Empty Room",
+  "floor-plan-generator": "Floor Plan Generator",
 };
 
 export const DEFAULT_ANGLES: Record<string, string> = {
