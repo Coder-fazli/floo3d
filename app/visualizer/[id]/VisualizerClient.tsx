@@ -13,19 +13,21 @@ import "yet-another-react-lightbox/styles.css";
 import SocialButton from "@/components/kokonutui/social-button";
 import Image from "next/image";
 import Link from "next/link";
-import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, Clock, ChevronRight, Upload as UploadIcon, Home, Zap, Sparkles, Bell } from "lucide-react";
+import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, ChevronRight, Upload as UploadIcon, Home, Zap, Sparkles, Bell } from "lucide-react";
 import NameProjectModal from "@/components/NameProjectModal";
 import { HoleBackground } from "@/components/animate-ui/components/backgrounds/hole";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { SparklesText } from "@/components/ui/sparkles-text";
 import { type FramesData } from "@/lib/actions";
 import { DEFAULT_FALLBACKS, DEFAULT_STYLES, DEFAULT_ANGLES, ANGLE_LABELS } from "@/lib/frameDefaults";
+import FpgSidebarSection, { type FpgConfig } from "./components/FpgSidebarSection";
 
 const STYLES: Record<string, string[]> = {
-  "floor-plan":      ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
-  "interior-design": ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
-  "outdoor":         ["Mediterranean", "Japanese", "Tropical", "Cottage", "Modern", "Desert"],
-  "empty-room":      ["Clean"],
+  "floor-plan":           ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
+  "interior-design":      ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
+  "outdoor":              ["Mediterranean", "Japanese", "Tropical", "Cottage", "Modern", "Desert"],
+  "empty-room":           ["Clean"],
+  "floor-plan-generator": ["Blueprint", "Colored", "Isometric"],
 };
 
 
@@ -134,9 +136,33 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
       return;
     }
 
-    if (!project) return;
-    if (!project?._id || !project?.originalImageUrl || !user?.id) {
+    if (!project && activeInputType !== "floor-plan-generator") return;
+    if (activeInputType !== "floor-plan-generator" && (!project?._id || !project?.originalImageUrl || !user?.id)) {
       console.error("Missing required data");
+      return;
+    }
+
+    // Floor plan generator — no image needed, uses config
+    if (activeInputType === "floor-plan-generator" && user) {
+      setIsProcessing(true);
+      try {
+        const res = await fetch("/api/generate-floor-plan", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            config: { ...fpgConfig, style: renderStyle.toLowerCase() as "blueprint" | "colored" | "isometric" },
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Generation failed");
+        setCurrentImage(data.renderedImageUrl);
+        if (data.projectId) window.history.replaceState(null, "", `/visualizer/${data.projectId}`);
+        if (user) getCredits(user.id, user.fullName ?? user.firstName ?? "", user.emailAddresses?.[0]?.emailAddress ?? "").then(setCredits);
+      } catch (error: any) {
+        setModalType("error");
+      } finally {
+        setIsProcessing(false);
+      }
       return;
     }
 
@@ -242,6 +268,16 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
   };
 
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
+
+  // Floor plan generator config
+  const [fpgConfig, setFpgConfig] = useState<FpgConfig>({
+    propertyType: "House",
+    area: 100,
+    areaUnit: "m2",
+    floors: 1,
+    rooms: { bedroom: 2, bathroom: 1, kitchen: 1, livingRoom: 1, diningRoom: 0, office: 0 },
+    extras: { garage: false, balcony: false, terrace: false, garden: false },
+  });
 
   const handleExport = async () => {
     if (!currentImage) return;
@@ -433,7 +469,9 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
           {/* Sidebar */}
           <aside className="viz-sidebar">
 
-            {/* Upload */}
+            {activeInputType === "floor-plan-generator" ? (
+              <FpgSidebarSection config={fpgConfig} onChange={setFpgConfig} />
+            ) : (
             <div className="viz-sb-section">
               <div className="viz-sb-section-title">
                 <UploadIcon size={13} strokeWidth={2.5} style={{ color: "#ec5b13" }} />
@@ -459,9 +497,10 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
                 <span className="viz-sb-upload-sub">PNG, JPG · Max 10MB</span>
               </div>
             </div>
+            )}
 
             {/* Room Type — only for interior-design and empty-room */}
-            {!embeddedId && activeInputType !== "floor-plan" && activeInputType !== "outdoor" && <div className="viz-sb-section">
+            {!embeddedId && activeInputType !== "floor-plan" && activeInputType !== "outdoor" && activeInputType !== "floor-plan-generator" && <div className="viz-sb-section">
               <div className="viz-sb-section-title">
                 <Home size={13} strokeWidth={2.5} style={{ color: "#ec5b13" }} />
                 Room Type
@@ -478,7 +517,7 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
             </div>}
 
             {/* View Angle — only for floor-plan */}
-            {activeInputType === "floor-plan" && (
+            {activeInputType === "floor-plan" && activeInputType !== "floor-plan-generator" && (
               <div className="viz-sb-section">
                 <div className="viz-sb-section-title">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ec5b13" strokeWidth="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
@@ -542,7 +581,7 @@ export default function VisualizerClient({ embeddedId, frames }: { embeddedId?: 
               <button
                 className="viz-generate-btn"
                 onClick={runGeneration}
-                disabled={isProcessing || (embeddedId && !user ? !guestBase64 : (isNewMode || !project))}
+                disabled={isProcessing || (embeddedId && !user ? !guestBase64 : (activeInputType !== "floor-plan-generator" && (isNewMode || !project)))}
               >
                 {isProcessing ? (
                   <>

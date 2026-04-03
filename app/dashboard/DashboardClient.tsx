@@ -69,7 +69,7 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
                 <div
                   key={id}
                   className="nr-type-card"
-                  onClick={() => router.push(id === "floor-plan-generator" ? "/floor-plan-generator" : `/visualizer/new?type=${id}`)}
+                  onClick={() => router.push(`/visualizer/new?type=${id}`)}
                 >
                   <div className="nr-reveal-container">
                     <AutoCompareSlider before={imgBefore} after={imgAfter} />
