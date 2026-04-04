@@ -36,6 +36,7 @@ export default function DashboardNavbar() {
           </Link>
           <nav className="dbnav-links">
             <a href="#" className="dbnav-link">Gallery</a>
+            <Link href="/pricing" className="dbnav-link">Pricing</Link>
           </nav>
         </div>
 

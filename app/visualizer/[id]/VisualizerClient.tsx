@@ -712,18 +712,25 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
                         <Download size={14} strokeWidth={2.5} />
                         Download
                       </button>
-                      {!hasPurchased && (
-                        <p style={{ fontSize: '0.7rem', color: '#94a3b8', margin: '0 0 0.5rem', textAlign: 'center' }}>
-                          Standard quality · <a href="/pricing" target="_blank" rel="noopener noreferrer" style={{ color: '#ec5b13', fontWeight: 700, textDecoration: 'none' }}>Upgrade for HD</a>
-                        </p>
+                      {hasPurchased ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', justifyContent: 'center', padding: '0.5rem 0.75rem', background: 'rgba(22,163,74,0.07)', borderRadius: '0.5rem', marginTop: '0.25rem' }}>
+                          <span style={{ fontSize: '0.85rem' }}>🔓</span>
+                          <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#16a34a' }}>HD quality · Commercial use unlocked</span>
+                        </div>
+                      ) : (
+                        <>
+                          <p style={{ fontSize: '0.7rem', color: '#94a3b8', margin: '0 0 0.25rem', textAlign: 'center' }}>
+                            Standard quality · <a href="/pricing" target="_blank" rel="noopener noreferrer" style={{ color: '#ec5b13', fontWeight: 700, textDecoration: 'none' }}>Upgrade for HD</a>
+                          </p>
+                          <p className="viz-export-commercial">
+                            Free downloads are for personal use only.{" "}
+                            <a href="/pricing" target="_blank" rel="noopener noreferrer" className="viz-export-get-plan">
+                              Get a plan
+                            </a>{" "}
+                            for commercial use.
+                          </p>
+                        </>
                       )}
-                      <p className="viz-export-commercial">
-                        Free downloads are for personal use only.{" "}
-                        <a href="/pricing" target="_blank" rel="noopener noreferrer" className="viz-export-get-plan">
-                          Get a plan
-                        </a>{" "}
-                        for commercial use.
-                      </p>
                     </div>
                   )}
                 </div>

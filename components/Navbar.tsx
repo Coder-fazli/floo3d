@@ -59,6 +59,7 @@ const Navbar = () => {
           <li><a href="#reviews">Love</a></li>
           <li><a href="#journal">Journal</a></li>
           <li><a href="#answers">Answers</a></li>
+          <li><a href="/pricing">Pricing</a></li>
         </ul>
 
         {/* Actions */}

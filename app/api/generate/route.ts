@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 import { uploadImage } from "@/lib/cloudinary";
-import { updateProject, getCredits, deductCredit, getModelSettings } from "@/lib/actions";
+import { updateProject, getCredits, deductCredit, getModelSettings, getUserInfo } from "@/lib/actions";
 import { buildPrompt } from "@/lib/prompts";
 import Project from "@/lib/models/Project";
 import GenerationLog from "@/lib/models/GenerationLog";
@@ -44,11 +44,17 @@ export async function POST(request: Request) {
     const base64 = Buffer.from(buffer).toString("base64");
     const mimeType = imageUrl.endsWith(".png") ? "image/png" : "image/jpeg";
 
-    const modelSettings = await getModelSettings();
+    const [modelSettings, userInfo] = await Promise.all([getModelSettings(), getUserInfo(userId)]);
     const isSpecialAngle = viewAngle === "isometric" || viewAngle === "crossSection";
-    modelName = isSpecialAngle
-      ? (modelSettings["isometric"] ?? "gemini-3-pro-image-preview")
-      : (modelSettings[inputType] ?? "gemini-3.1-flash-image-preview");
+
+    if (userInfo.hasPurchased) {
+      // Paid users get better models automatically
+      modelName = isSpecialAngle ? "gemini-3-pro-image-preview" : "gemini-3.1-flash-image-preview";
+    } else {
+      modelName = isSpecialAngle
+        ? (modelSettings["isometric"] ?? "gemini-3-pro-image-preview")
+        : (modelSettings[inputType] ?? "gemini-3.1-flash-image-preview");
+    }
 
     const model = genAI.getGenerativeModel({
       model: modelName,

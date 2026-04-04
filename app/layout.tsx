@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { getSiteSettings } from "@/lib/actions";
 import PagePreloader from "@/components/PagePreloader";
 import CrispChat from "@/components/CrispChat";
+import CookieBanner from "@/components/CookieBanner";
 import Script from "next/script";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
@@ -115,6 +116,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <CrispChat />
           <PagePreloader />
           {children}
+          <CookieBanner />
         </body>
       </html>
     </ClerkProvider>
