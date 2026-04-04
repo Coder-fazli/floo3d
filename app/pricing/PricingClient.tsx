@@ -71,12 +71,12 @@ const plans = [
       oneTime: 24,
     },
     credits: 300,
-    description: 'Highest accuracy AI renders powered by Gemini 3 Pro — for architects, agencies and real estate professionals.',
+    description: 'Highest accuracy AI renders powered by StyleAI Pro — for architects, agencies and real estate professionals.',
     features: [
       '300 credits — 150 AI renders',
       'All Starter features',
       'Isometric & cross-section views',
-      'Gemini 3 Pro — highest accuracy',
+      'StyleAI Pro — highest accuracy',
       'Superior detail & realism',
       'PNG, JPG & PDF export',
       'Commercial usage rights',
@@ -229,6 +229,11 @@ export default function PricingClient() {
                       style={{ color: plan.popular ? '#e5484d' : '#0f172a' }}
                     >
                       {plan.name}
+                      {plan.id === 'pro' && (
+                        <span style={{ display: 'block', fontSize: '0.72rem', fontWeight: 500, color: '#94a3b8', marginTop: '0.2rem', letterSpacing: '0.01em' }}>
+                          ☕ Less than a coffee a week
+                        </span>
+                      )}
                     </CardTitle>
                   </div>
 
@@ -389,9 +394,9 @@ export default function PricingClient() {
             <tbody>
               {[
                 { label: 'AI renders',         free: '5',               starter: '50',              pro: '150' },
-                { label: 'Quality',            free: 'Standard 1024px', starter: 'HD',              pro: 'HD + Gemini 3 Pro' },
+                { label: 'Quality',            free: 'Standard 1024px', starter: 'HD',              pro: 'HD + StyleAI Pro' },
                 { label: 'Cost per render',    free: '—',               starter: '$0.20',           pro: '$0.17' },
-                { label: 'Watermark',          free: '✓',               starter: '✗',               pro: '✗' },
+                { label: 'No watermark',       free: '✗',               starter: '✓',               pro: '✓' },
                 { label: 'PDF export',         free: '✗',               starter: '✓',               pro: '✓' },
                 { label: 'Isometric views',    free: '✗',               starter: '✗',               pro: '✓' },
                 { label: 'Commercial use',     free: '✗',               starter: '✓',               pro: '✓' },

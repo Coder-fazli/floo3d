@@ -13,7 +13,7 @@ import "yet-another-react-lightbox/styles.css";
 import SocialButton from "@/components/kokonutui/social-button";
 import Image from "next/image";
 import Link from "next/link";
-import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, ChevronRight, Upload as UploadIcon, Home, Zap, Sparkles, Bell } from "lucide-react";
+import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, ChevronRight, Upload as UploadIcon, Home, Zap, Sparkles, Bell, Lock } from "lucide-react";
 import NameProjectModal from "@/components/NameProjectModal";
 import { HoleBackground } from "@/components/animate-ui/components/backgrounds/hole";
 import { RainbowButton } from "@/components/ui/rainbow-button";
@@ -578,23 +578,36 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
                 </div>
                 <div className="viz-style-scroll">
                   <div className="viz-style-grid">
-                    {Object.keys(DEFAULT_ANGLES).map((angle) => (
-                      <div
-                        key={angle}
-                        className={`viz-style-card${viewAngle === angle ? " viz-style-card-active" : ""}`}
-                        onClick={() => setViewAngle(angle)}
-                      >
-                        <div className="viz-style-card-img">
-                          <img src={getAngleImage(angle)} alt={ANGLE_LABELS[angle]} />
-                          {viewAngle === angle && (
-                            <div className="viz-style-card-check">
-                              <svg width="8" height="8" viewBox="0 0 12 12" fill="none" stroke="#fff" strokeWidth="2.5"><polyline points="2,6 5,9 10,3"/></svg>
-                            </div>
-                          )}
+                    {Object.keys(DEFAULT_ANGLES).map((angle) => {
+                      const isProAngle = angle === "isometric" || angle === "crossSection";
+                      const locked = isProAngle && !hasPurchased;
+                      return (
+                        <div
+                          key={angle}
+                          className={`viz-style-card${viewAngle === angle && !locked ? " viz-style-card-active" : ""}${locked ? " viz-style-card-locked" : ""}`}
+                          onClick={() => {
+                            if (locked) { window.open("/pricing", "_blank"); return; }
+                            setViewAngle(angle);
+                          }}
+                          title={locked ? "Pro feature — Upgrade to unlock" : undefined}
+                        >
+                          <div className="viz-style-card-img">
+                            <img src={getAngleImage(angle)} alt={ANGLE_LABELS[angle]} style={locked ? { filter: "brightness(0.45)" } : undefined} />
+                            {locked ? (
+                              <div className="viz-style-card-lock">
+                                <Lock size={14} color="#fff" />
+                                <span>Pro</span>
+                              </div>
+                            ) : viewAngle === angle && (
+                              <div className="viz-style-card-check">
+                                <svg width="8" height="8" viewBox="0 0 12 12" fill="none" stroke="#fff" strokeWidth="2.5"><polyline points="2,6 5,9 10,3"/></svg>
+                              </div>
+                            )}
+                          </div>
+                          <div className="viz-style-card-label" style={locked ? { color: "#64748b" } : undefined}>{ANGLE_LABELS[angle]}</div>
                         </div>
-                        <div className="viz-style-card-label">{ANGLE_LABELS[angle]}</div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               </div>
