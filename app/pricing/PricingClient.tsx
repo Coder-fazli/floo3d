@@ -88,12 +88,12 @@ export default function PricingClient() {
   if (!mounted) return null;
 
   return (
-    <div className="not-prose relative flex w-full flex-col gap-16 overflow-hidden px-4 py-24 text-center sm:px-8">
+    <div className="not-prose relative flex w-full flex-col gap-16 px-4 py-24 text-center sm:px-8" style={{ overflow: 'visible' }}>
       {/* Background blobs */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-[10%] left-[50%] h-[40%] w-[60%] -translate-x-1/2 rounded-full blur-3xl" style={{ background: 'rgba(236,91,19,0.08)' }} />
-        <div className="absolute -right-[10%] -bottom-[10%] h-[40%] w-[40%] rounded-full blur-3xl" style={{ background: 'rgba(236,91,19,0.05)' }} />
-        <div className="absolute -bottom-[10%] -left-[10%] h-[40%] w-[40%] rounded-full blur-3xl" style={{ background: 'rgba(236,91,19,0.05)' }} />
+        <div className="absolute -top-[10%] left-[50%] h-[40%] w-[60%] -translate-x-1/2 rounded-full blur-3xl" style={{ background: 'rgba(229,72,77,0.08)' }} />
+        <div className="absolute -right-[10%] -bottom-[10%] h-[40%] w-[40%] rounded-full blur-3xl" style={{ background: 'rgba(229,72,77,0.05)' }} />
+        <div className="absolute -bottom-[10%] -left-[10%] h-[40%] w-[40%] rounded-full blur-3xl" style={{ background: 'rgba(229,72,77,0.05)' }} />
       </div>
 
       <div className="flex flex-col items-center justify-center gap-8">
@@ -102,9 +102,9 @@ export default function PricingClient() {
           <Badge
             variant="outline"
             className="mb-4 rounded-full px-4 py-1 text-sm font-medium"
-            style={{ borderColor: 'rgba(236,91,19,0.2)', background: 'rgba(236,91,19,0.05)', color: '#ec5b13' }}
+            style={{ borderColor: 'rgba(229,72,77,0.2)', background: 'rgba(229,72,77,0.05)', color: '#e5484d' }}
           >
-            <Sparkles className="mr-1 h-3.5 w-3.5 animate-pulse" style={{ color: '#ec5b13' }} />
+            <Sparkles className="mr-1 h-3.5 w-3.5 animate-pulse" style={{ color: '#e5484d' }} />
             Pricing Plans
           </Badge>
           <motion.h1
@@ -128,7 +128,7 @@ export default function PricingClient() {
         </div>
 
         {/* Cards */}
-        <div className="mt-8 grid w-full max-w-6xl grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="mt-8 grid w-full max-w-6xl grid-cols-1 gap-6 md:grid-cols-3" style={{ paddingTop: '1rem', overflow: 'visible' }}>
           {plans.map((plan, index) => (
             <motion.div
               key={plan.id}
@@ -137,6 +137,7 @@ export default function PricingClient() {
               transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
               whileHover={{ y: -5 }}
               className="flex"
+              style={{ overflow: 'visible' }}
             >
               <Card
                 className={cn(
@@ -146,7 +147,7 @@ export default function PricingClient() {
                     : '',
                 )}
                 style={plan.popular ? {
-                  outline: '2px solid rgba(236,91,19,0.5)',
+                  outline: '2px solid rgba(229,72,77,0.5)',
                   outlineOffset: '0px',
                   background: 'linear-gradient(to bottom, rgba(236,91,19,0.03), transparent)',
                 } : {}}
@@ -155,7 +156,7 @@ export default function PricingClient() {
                   <div className="absolute -top-3 right-0 left-0 mx-auto w-fit">
                     <Badge
                       className="rounded-full px-4 py-1 shadow-sm"
-                      style={{ background: '#ec5b13', color: '#fff' }}
+                      style={{ background: '#e5484d', color: '#fff' }}
                     >
                       <Sparkles className="mr-1 h-3.5 w-3.5" />
                       Popular
@@ -168,14 +169,14 @@ export default function PricingClient() {
                     <div
                       className="flex h-8 w-8 items-center justify-center rounded-full"
                       style={plan.popular
-                        ? { background: 'rgba(236,91,19,0.1)', color: '#ec5b13' }
+                        ? { background: 'rgba(229,72,77,0.1)', color: '#e5484d' }
                         : { background: '#f1f5f9', color: '#475569' }}
                     >
                       <plan.icon className="h-4 w-4" />
                     </div>
                     <CardTitle
                       className="text-xl font-bold"
-                      style={{ color: plan.popular ? '#ec5b13' : '#0f172a' }}
+                      style={{ color: plan.popular ? '#e5484d' : '#0f172a' }}
                     >
                       {plan.name}
                     </CardTitle>
@@ -188,7 +189,7 @@ export default function PricingClient() {
                         <div className="flex items-baseline gap-1">
                           <NumberFlow
                             className="text-3xl font-bold"
-                            style={{ color: plan.popular ? '#ec5b13' : '#0f172a' }}
+                            style={{ color: plan.popular ? '#e5484d' : '#0f172a' }}
                             format={{ style: 'currency', currency: 'USD', maximumFractionDigits: 0 }}
                             value={plan.price.oneTime}
                           />
@@ -215,7 +216,7 @@ export default function PricingClient() {
                       <div
                         className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full"
                         style={plan.popular
-                          ? { background: 'rgba(236,91,19,0.1)', color: '#ec5b13' }
+                          ? { background: 'rgba(229,72,77,0.1)', color: '#e5484d' }
                           : { background: '#f1f5f9', color: '#64748b' }}
                       >
                         <Check className="h-3.5 w-3.5" />
@@ -233,7 +234,7 @@ export default function PricingClient() {
                         style={{ borderColor: '#e2e8f0', color: '#0f172a', background: '#fff' }}
                         onMouseEnter={e => {
                           (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(236,91,19,0.3)';
-                          (e.currentTarget as HTMLButtonElement).style.color = '#ec5b13';
+                          (e.currentTarget as HTMLButtonElement).style.color = '#e5484d';
                         }}
                         onMouseLeave={e => {
                           (e.currentTarget as HTMLButtonElement).style.borderColor = '#e2e8f0';
@@ -248,14 +249,14 @@ export default function PricingClient() {
                     <button
                       className="w-full rounded-lg py-2.5 px-4 text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2"
                       style={plan.popular
-                        ? { background: '#ec5b13', color: '#fff', border: 'none' }
+                        ? { background: '#e5484d', color: '#fff', border: 'none' }
                         : { background: '#fff', color: '#0f172a', border: '1px solid #e2e8f0' }}
                       onMouseEnter={e => {
                         if (!plan.popular) {
                           (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(236,91,19,0.3)';
-                          (e.currentTarget as HTMLButtonElement).style.color = '#ec5b13';
+                          (e.currentTarget as HTMLButtonElement).style.color = '#e5484d';
                         } else {
-                          (e.currentTarget as HTMLButtonElement).style.background = '#d4510f';
+                          (e.currentTarget as HTMLButtonElement).style.background = '#cc2f34';
                         }
                       }}
                       onMouseLeave={e => {
@@ -263,7 +264,7 @@ export default function PricingClient() {
                           (e.currentTarget as HTMLButtonElement).style.borderColor = '#e2e8f0';
                           (e.currentTarget as HTMLButtonElement).style.color = '#0f172a';
                         } else {
-                          (e.currentTarget as HTMLButtonElement).style.background = '#ec5b13';
+                          (e.currentTarget as HTMLButtonElement).style.background = '#e5484d';
                         }
                       }}
                     >
@@ -274,7 +275,7 @@ export default function PricingClient() {
                 </CardFooter>
 
                 {plan.popular && (
-                  <div className="pointer-events-none absolute inset-0 rounded-lg" style={{ border: '1px solid rgba(236,91,19,0.2)' }} />
+                  <div className="pointer-events-none absolute inset-0 rounded-lg" style={{ border: '1px solid rgba(229,72,77,0.2)' }} />
                 )}
               </Card>
             </motion.div>

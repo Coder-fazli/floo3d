@@ -1,11 +1,12 @@
- import { GoogleGenerativeAI } from "@google/generative-ai";
-  import { NextResponse } from "next/server";
-  import { uploadImage } from "@/lib/cloudinary";
-  import { getCredits, deductCredit } from "@/lib/actions";
-  import { buildFloorPlanGeneratorPrompt, FloorPlanGeneratorConfig }
-   from "@/lib/prompts/floor-plan-generator";
-  import { connectDb } from "@/lib/db";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { NextResponse } from "next/server";
+import { uploadImage } from "@/lib/cloudinary";
+import { getCredits, deductCredit, getModelSettings } from "@/lib/actions";
+import { buildFloorPlanGeneratorPrompt, FloorPlanGeneratorConfig }
+ from "@/lib/prompts/floor-plan-generator";
+import { connectDb } from "@/lib/db";
 import Project from "@/lib/models/Project";
+import GenerationLog from "@/lib/models/GenerationLog";
 import { auth } from "@clerk/nextjs/server";
 
 
@@ -13,6 +14,9 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 export const maxDuration = 60;
 
 export async function POST(request: Request) {
+    let modelName = "gemini-3.1-flash-image-preview";
+    const startTime = Date.now();
+
     try {
         const { userId } = await auth();
         if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -28,15 +32,19 @@ export async function POST(request: Request) {
         if(!isUnlimited) await deductCredit(userId);
 
 
-     // Build prompt 
+     // Build prompt
       const prompt = buildFloorPlanGeneratorPrompt(config);
-      
+
+      // Read model from admin settings
+      const modelSettings = await getModelSettings();
+      modelName = modelSettings["floor-plan-generator"] ?? "gemini-3.1-flash-image-preview";
+
       // Call Gemini API
         const model = genAI.getGenerativeModel({
-        model: "gemini-3.1-flash-image-preview",
+        model: modelName,
         generationConfig: {
           responseModalities: ["IMAGE", "TEXT"],
-        } as any, 
+        } as any,
       });
 
      const result = await model.generateContent([prompt]);
@@ -44,15 +52,24 @@ export async function POST(request: Request) {
      const imagePart = parts?.find((p: any) => p.inlineData);
 
       if (!imagePart) {
-        return NextResponse.json({ error: "No image generated" }, {
-  status: 500 });
+        await connectDb();
+        await GenerationLog.create({
+          userId,
+          inputType: "floor-plan-generator",
+          model: modelName,
+          status: "error",
+          duration: Date.now() - startTime,
+          errorMessage: "Gemini returned no image part",
+        });
+        return NextResponse.json({ error: "No image generated" }, { status: 500 });
       }
 
       const renderedBase64 = `data:image/png;base64,${imagePart.inlineData!.data}`;
       const renderedImageUrl = await uploadImage(renderedBase64, "floo3d/floor-plans");
 
         await connectDb();
-        const project = await Project.create({
+        const [project] = await Promise.all([
+          Project.create({
             userId,
             name: `${config.propertyType} Floor Plan`,
             originalImageUrl: renderedImageUrl,
@@ -61,13 +78,35 @@ export async function POST(request: Request) {
             renderStyle: config.style,
             status: "done",
             generationCount: 1,
-        });
+          }),
+          GenerationLog.create({
+            userId,
+            inputType: "floor-plan-generator",
+            model: modelName,
+            status: "success",
+            duration: Date.now() - startTime,
+          }),
+        ]);
 
         return NextResponse.json({
             renderedImageUrl, projectId: project._id
         });
     }  catch (error: any) {
         console.error("Floor Plan Generator Error", error?.message || error);
+        try {
+          const { userId } = await auth();
+          if (userId) {
+            await connectDb();
+            await GenerationLog.create({
+              userId,
+              inputType: "floor-plan-generator",
+              model: modelName,
+              status: "error",
+              duration: Date.now() - startTime,
+              errorMessage: error?.message || "Generation failed",
+            });
+          }
+        } catch {}
         return NextResponse.json({ error: error?.message||"Failed to generate floor plan" }, { status: 500 });
     }
 }

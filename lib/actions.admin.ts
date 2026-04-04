@@ -8,6 +8,7 @@ import User from "./models/User";
 import Project from "./models/Project";
 import SiteSettings from "./models/SiteSettings";
 import AppFrames from "./models/AppFrames";
+import GenerationLog from "./models/GenerationLog";
 
 async function requireAdmin() {
   const { userId, sessionClaims } = await auth();
@@ -183,3 +184,27 @@ export async function saveFrameImage(
 
   return url;
 }
+
+// ─── Generation Logs ──────────────────────────────────────────────────────────
+
+export async function getAllLogs(limit = 200) {
+  await requireAdmin();
+  noStore();
+  await connectDb();
+  const logs = await GenerationLog.find({}).sort("-createdAt").limit(limit);
+  return JSON.parse(JSON.stringify(logs));
+}
+
+// ─── Gemini Models Settings ──────────────────────────────────────────────────────────────
+
+export async function saveModelSettings(models: Record<string, string>) {
+  await requireAdmin();
+  await connectDb();
+  await SiteSettings.findOneAndUpdate(
+    { key: "home" },                               
+    { models },       
+    { upsert: true, new: true }   
+  );
+  revalidatePath("/secure-7x9/models");
+}
+

@@ -112,3 +112,8 @@ export async function getFpgImages(): Promise<FpgImages> {
   };
 }
 
+export async function getModelSettings(): Promise<Record<string, string>> {
+  await connectDb();
+  const doc = await SiteSettings.findOne({ key: "home" });
+  return doc?.models ?? {};
+}
