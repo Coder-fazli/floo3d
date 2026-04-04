@@ -146,16 +146,16 @@ export default function PricingClient() {
               transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
               whileHover={{ y: -5 }}
               className="flex"
-              style={{ overflow: 'visible' }}
+              style={{ overflow: 'visible', position: 'relative' }}
             >
               {plan.popular && (
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '-16px', position: 'relative', zIndex: 10 }}>
+                <div style={{ position: 'absolute', top: '-14px', left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 20 }}>
                   <Badge
                     className="rounded-full px-4 py-1 shadow-sm"
-                    style={{ background: '#e5484d', color: '#fff' }}
+                    style={{ background: '#e5484d', color: '#fff', whiteSpace: 'nowrap' }}
                   >
                     <Sparkles className="mr-1 h-3.5 w-3.5" />
-                    Best Value
+                    Fan Favorite
                   </Badge>
                 </div>
               )}
