@@ -68,7 +68,7 @@ export async function deductCredit(userId:string) {
     await connectDb();
     await User.findOneAndUpdate(
         { clerkId: userId },
-        { $inc: { credits: -3 } }
+        { $inc: { credits: -2 } }
     );
 }
 

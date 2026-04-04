@@ -320,6 +320,24 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
       canvas.height = img.height * scale;
       const ctx = canvas.getContext("2d")!;
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      // Watermark
+      const wFontSize = Math.max(18, Math.round(canvas.width * 0.045));
+      ctx.save();
+      ctx.globalAlpha = 0.32;
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = "rgba(0,0,0,0.4)";
+      ctx.lineWidth = wFontSize * 0.06;
+      ctx.font = `700 ${wFontSize}px sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      const wText = "MyHomeStyler.com";
+      const wX = canvas.width * 0.5;
+      const wY = canvas.height * 0.5;
+      ctx.strokeText(wText, wX, wY);
+      ctx.fillText(wText, wX, wY);
+      ctx.restore();
+
       const link = document.createElement("a");
       const isPng = fmt === "png";
       link.download = `${project?.name || "render"}.${fmt}`;
@@ -402,7 +420,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
       <main className="viz-main">
 
         {/* Low credits banner — full visualizer */}
-        {!embeddedId && credits !== null && credits < 3 && (
+        {!embeddedId && credits !== null && credits < 2 && (
           <div className="viz-credits-banner">
             <span className="viz-credits-banner-icon">⚡</span>
             <span className="viz-credits-banner-text">
@@ -609,7 +627,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
                 )}
               </button>
               <div className="viz-credit-note">
-                ⚡ Uses <span>3 credits</span> per generation
+                ⚡ Uses <span>2 credits</span> per generation
               </div>
             </div>
 

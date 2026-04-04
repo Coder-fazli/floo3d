@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Sparkles, ArrowRight, Check, Star, Zap, Shield } from 'lucide-react';
+import { Sparkles, ArrowRight, Check, Star, Zap, Shield, Lock } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useClerk, useUser } from '@clerk/nextjs';
@@ -28,11 +28,16 @@ const plans = [
     },
     description: 'Perfect for trying out MyHomeStyler. No credit card required.',
     features: [
-      '10 credits on signup',
-      '1 credit = 1 AI generation',
+      '10 credits — 5 AI renders',
       'All 4 AI tools included',
-      'Download your renders',
-      'Basic support',
+      'Standard quality (1024px)',
+      'Download as PNG / JPG',
+      'Personal use only',
+    ],
+    lockedFeatures: [
+      'HD quality export',
+      'PDF export',
+      'No watermark',
     ],
     cta: 'Get started free',
     href: '/sign-up',
@@ -44,13 +49,15 @@ const plans = [
     price: {
       oneTime: 9,
     },
-    credits: 50,
+    credits: 100,
     description: 'Great for homeowners and designers working on a project.',
     features: [
-      '50 credits — never expire',
-      '2D to 3D floor plan converter',
-      'AI interior design',
-      'AI floor plan generator',
+      '100 credits — 50 AI renders',
+      'All 4 AI tools included',
+      'HD quality renders',
+      'PNG, JPG & PDF export',
+      'No watermark',
+      'Commercial usage rights',
       'Priority support',
     ],
     cta: 'Buy Starter',
@@ -63,13 +70,15 @@ const plans = [
     price: {
       oneTime: 24,
     },
-    credits: 150,
+    credits: 300,
     description: 'For architects, agencies, and real estate professionals.',
     features: [
-      '150 credits — never expire',
+      '300 credits — 150 AI renders',
       'All Starter features',
       'Isometric & cross-section views',
-      'Bulk project generation',
+      'HD quality renders',
+      'PNG, JPG & PDF export',
+      'Commercial usage rights',
       'Priority support',
     ],
     cta: 'Buy Pro',
@@ -139,12 +148,21 @@ export default function PricingClient() {
               className="flex"
               style={{ overflow: 'visible' }}
             >
+              {plan.popular && (
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '-14px', position: 'relative', zIndex: 10 }}>
+                  <Badge
+                    className="rounded-full px-4 py-1 shadow-sm"
+                    style={{ background: '#e5484d', color: '#fff' }}
+                  >
+                    <Sparkles className="mr-1 h-3.5 w-3.5" />
+                    Best Value
+                  </Badge>
+                </div>
+              )}
               <Card
                 className={cn(
                   'relative h-full w-full text-left transition-all duration-300 hover:shadow-lg',
-                  plan.popular
-                    ? 'shadow-md'
-                    : '',
+                  plan.popular ? 'shadow-md' : '',
                 )}
                 style={plan.popular ? {
                   outline: '2px solid rgba(229,72,77,0.5)',
@@ -152,19 +170,8 @@ export default function PricingClient() {
                   background: 'linear-gradient(to bottom, rgba(236,91,19,0.03), transparent)',
                 } : {}}
               >
-                {plan.popular && (
-                  <div className="absolute -top-3 right-0 left-0 mx-auto w-fit">
-                    <Badge
-                      className="rounded-full px-4 py-1 shadow-sm"
-                      style={{ background: '#e5484d', color: '#fff' }}
-                    >
-                      <Sparkles className="mr-1 h-3.5 w-3.5" />
-                      Popular
-                    </Badge>
-                  </div>
-                )}
 
-                <CardHeader className={cn('pb-4', plan.popular && 'pt-8')}>
+                <CardHeader className={cn('pb-4', plan.popular && 'pt-6')}>
                   <div className="flex items-center gap-2">
                     <div
                       className="flex h-8 w-8 items-center justify-center rounded-full"
@@ -222,6 +229,23 @@ export default function PricingClient() {
                         <Check className="h-3.5 w-3.5" />
                       </div>
                       <span style={{ color: plan.popular ? '#0f172a' : '#64748b' }}>{feature}</span>
+                    </motion.div>
+                  ))}
+                  {'lockedFeatures' in plan && (plan as any).lockedFeatures.map((feature: string, i: number) => (
+                    <motion.div
+                      key={`locked-${i}`}
+                      initial={{ opacity: 0, x: -5 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: 0.5 + (plan.features.length + i) * 0.05 }}
+                      className="flex items-center gap-2 text-sm"
+                    >
+                      <div
+                        className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full"
+                        style={{ background: '#f1f5f9', color: '#cbd5e1' }}
+                      >
+                        <Lock className="h-3 w-3" />
+                      </div>
+                      <span style={{ color: '#cbd5e1', textDecoration: 'line-through' }}>{feature}</span>
                     </motion.div>
                   ))}
                 </CardContent>
@@ -290,7 +314,7 @@ export default function PricingClient() {
           className="text-sm"
           style={{ color: '#94a3b8' }}
         >
-          All plans include access to all 4 AI tools. Credits never expire. Secure checkout via Stripe.
+          All plans include access to all 4 AI tools. 2 credits per render. Credits never expire. Secure checkout via Stripe.
         </motion.p>
       </div>
     </div>
