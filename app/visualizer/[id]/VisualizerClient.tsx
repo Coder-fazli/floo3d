@@ -3,7 +3,7 @@
 import "./visualizer.css";
 import NextImage from "next/image";
 import { useUser, useClerk } from "@clerk/nextjs";
-import { getCredits } from "@/lib/actions";
+import { getCredits, getUserInfo } from "@/lib/actions";
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { getProject } from "@/lib/actions";
@@ -48,6 +48,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
   const { user } = useUser();
   const { openUserProfile, openSignUp, signOut } = useClerk();
   const [credits, setCredits] = useState<number | null>(null);
+  const [hasPurchased, setHasPurchased] = useState(false);
 
   const [isNewMode, setIsNewMode] = useState(id === "new");
 
@@ -100,11 +101,28 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
   }, [id, isNewMode]);
 
   useEffect(() => {
-    if (user) getCredits(
-      user.id,
-      user.fullName ?? user.firstName ?? "",
-      user.emailAddresses?.[0]?.emailAddress ?? ""
-    ).then(setCredits);
+    if (!user) return;
+    getCredits(user.id, user.fullName ?? user.firstName ?? "", user.emailAddresses?.[0]?.emailAddress ?? "").then(setCredits);
+    getUserInfo(user.id).then(d => setHasPurchased(d.hasPurchased));
+  }, [user]);
+
+  // Poll credits + hasPurchased after successful payment
+  useEffect(() => {
+    if (!user || !window.location.search.includes("success=1")) return;
+    let attempts = 0;
+    let lastCredits: number | null = null;
+    const interval = setInterval(async () => {
+      attempts++;
+      const d = await getUserInfo(user.id);
+      if (lastCredits === null) lastCredits = d.credits;
+      if (d.credits > (lastCredits ?? 0)) {
+        setCredits(d.credits);
+        setHasPurchased(d.hasPurchased);
+        clearInterval(interval);
+      }
+      if (attempts >= 5) clearInterval(interval);
+    }, 2000);
+    return () => clearInterval(interval);
   }, [user]);
 
   useEffect(() => {
@@ -306,7 +324,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
     }
   };
 
-  const handleFreeDownload = async (fmt: "png" | "jpg" = exportFormat === "pdf" ? "png" : exportFormat) => {
+  const handleFreeDownload = async (fmt: "png" | "jpg" | "pdf" = exportFormat) => {
     const src = currentImage || guestResult;
     if (!src) return;
     setExportDropdownOpen(false);
@@ -321,28 +339,35 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
       const ctx = canvas.getContext("2d")!;
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      // Watermark
-      const wFontSize = Math.max(18, Math.round(canvas.width * 0.045));
-      ctx.save();
-      ctx.globalAlpha = 0.32;
-      ctx.fillStyle = "#ffffff";
-      ctx.strokeStyle = "rgba(0,0,0,0.4)";
-      ctx.lineWidth = wFontSize * 0.06;
-      ctx.font = `700 ${wFontSize}px sans-serif`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      const wText = "MyHomeStyler.com";
-      const wX = canvas.width * 0.5;
-      const wY = canvas.height * 0.5;
-      ctx.strokeText(wText, wX, wY);
-      ctx.fillText(wText, wX, wY);
-      ctx.restore();
+      // Watermark — only for free users
+      if (!hasPurchased) {
+        const wFontSize = Math.max(12, Math.round(canvas.width * 0.022));
+        ctx.save();
+        ctx.globalAlpha = 0.18;
+        ctx.fillStyle = "#ffffff";
+        ctx.strokeStyle = "rgba(0,0,0,0.25)";
+        ctx.lineWidth = wFontSize * 0.04;
+        ctx.font = `600 ${wFontSize}px sans-serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.strokeText("MyHomeStyler.com", canvas.width * 0.5, canvas.height * 0.5);
+        ctx.fillText("MyHomeStyler.com", canvas.width * 0.5, canvas.height * 0.5);
+        ctx.restore();
+      }
 
-      const link = document.createElement("a");
-      const isPng = fmt === "png";
-      link.download = `${project?.name || "render"}.${fmt}`;
-      link.href = canvas.toDataURL(isPng ? "image/png" : "image/jpeg", isPng ? 1 : 0.85);
-      link.click();
+      if (fmt === "pdf") {
+        import("jspdf").then(({ jsPDF }) => {
+          const pdf = new jsPDF({ orientation: canvas.width > canvas.height ? "landscape" : "portrait", unit: "px", format: [canvas.width, canvas.height] });
+          pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, canvas.width, canvas.height);
+          pdf.save(`${project?.name || "render"}.pdf`);
+        });
+      } else {
+        const link = document.createElement("a");
+        const isPng = fmt === "png";
+        link.download = `${project?.name || "render"}.${fmt}`;
+        link.href = canvas.toDataURL(isPng ? "image/png" : "image/jpeg", isPng ? 1 : 0.85);
+        link.click();
+      }
     };
     img.src = src;
     if (project?._id) {
@@ -657,9 +682,9 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
                         {(["png", "jpg", "pdf"] as const).map(fmt => (
                           <label
                             key={fmt}
-                            className={`viz-export-fmt${exportFormat === fmt ? " viz-export-fmt-active" : ""}${fmt === "pdf" ? " viz-export-fmt-locked" : ""}`}
+                            className={`viz-export-fmt${exportFormat === fmt ? " viz-export-fmt-active" : ""}${fmt === "pdf" && !hasPurchased ? " viz-export-fmt-locked" : ""}`}
                             onClick={() => {
-                              if (fmt === "pdf") {
+                              if (fmt === "pdf" && !hasPurchased) {
                                 window.open("/pricing", "_blank");
                               } else {
                                 setExportFormat(fmt);
@@ -672,11 +697,11 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
                               value={fmt}
                               checked={exportFormat === fmt}
                               readOnly
-                              disabled={fmt === "pdf"}
+                              disabled={fmt === "pdf" && !hasPurchased}
                               style={{ accentColor: "#ec5b13" }}
                             />
                             <span className="viz-export-fmt-label">{fmt.toUpperCase()}</span>
-                            {fmt === "pdf" && <span className="viz-export-pro-badge">👑 Pro</span>}
+                            {fmt === "pdf" && !hasPurchased && <span className="viz-export-pro-badge">👑 Pro</span>}
                           </label>
                         ))}
                       </div>
@@ -687,6 +712,11 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
                         <Download size={14} strokeWidth={2.5} />
                         Download
                       </button>
+                      {!hasPurchased && (
+                        <p style={{ fontSize: '0.7rem', color: '#94a3b8', margin: '0 0 0.5rem', textAlign: 'center' }}>
+                          Standard quality · <a href="/pricing" target="_blank" rel="noopener noreferrer" style={{ color: '#ec5b13', fontWeight: 700, textDecoration: 'none' }}>Upgrade for HD</a>
+                        </p>
+                      )}
                       <p className="viz-export-commercial">
                         Free downloads are for personal use only.{" "}
                         <a href="/pricing" target="_blank" rel="noopener noreferrer" className="viz-export-get-plan">

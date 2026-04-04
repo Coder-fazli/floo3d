@@ -29,9 +29,9 @@
         if (userId && credits > 0) {
             await connectDb();
             await User.findOneAndUpdate(
-            { clerkId: userId }, 
-            { $inc: { credits: credits } 
-        });
+              { clerkId: userId },
+              { $inc: { credits }, $set: { hasPurchased: true } }
+            );
       }
     }   
 

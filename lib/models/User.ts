@@ -6,7 +6,9 @@ const UserSchema = new Schema({
     role: { type: String, enum: ["user", "admin"], default: "user" },
     name: { type: String, default: "" },
     email: { type: String, default: "" },
-}, { timestamps: true });
+    hasPurchased: { type: Boolean, default: false },
+    }, 
+{ timestamps: true });
 
 const User = models.User || model("User", UserSchema);
 

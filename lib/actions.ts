@@ -64,6 +64,12 @@ export async function getCredits(userId: string, name?: string, email?: string) 
     return user.credits;
 }
 
+export async function getUserInfo(userId: string): Promise<{ credits: number; hasPurchased: boolean }> {
+    await connectDb();
+    const user = await User.findOne({ clerkId: userId });
+    return { credits: user?.credits ?? 10, hasPurchased: user?.hasPurchased ?? false };
+}
+
 export async function deductCredit(userId:string) {
     await connectDb();
     await User.findOneAndUpdate(

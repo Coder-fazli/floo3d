@@ -24,6 +24,7 @@
     "cloudinary": "^2.9.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.36.0",
+    "jspdf": "^4.2.1",
     "lucide-react": "^0.575.0",
     "mongoose": "^9.2.3",
     "motion": "^12.38.0",

@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     const { userId } = await auth();
     if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const { plan } = await request.json();
+    const { plan, returnUrl } = await request.json();
     const planData = PLANS[plan as keyof typeof PLANS];
     if (!planData) return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
 
@@ -40,8 +40,8 @@ export async function POST(request: Request) {
         plan,
         credits: planData.credits.toString(),
       },
-      success_url: `${origin}/pricing?success=1&plan=${plan}`,
-      cancel_url:  `${origin}/pricing?canceled=1`,
+      success_url: `${returnUrl ?? origin}?success=1&plan=${plan}`,
+      cancel_url:  `${returnUrl ?? `${origin}/pricing`}?canceled=1`,
     });
 
     return NextResponse.json({ url: session.url });

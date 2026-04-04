@@ -3,7 +3,7 @@
 import "./DashboardNavbar.css";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import { getCredits } from "@/lib/actions";
+import { getUserInfo } from "@/lib/actions";
 import { Search, Bell, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,13 +12,14 @@ export default function DashboardNavbar() {
   const { user } = useUser();
   const { openUserProfile, signOut } = useClerk();
   const [credits, setCredits] = useState<number | null>(null);
+  const [hasPurchased, setHasPurchased] = useState(false);
 
   useEffect(() => {
-    if (user) getCredits(
-      user.id,
-      user.fullName ?? user.firstName ?? user.username ?? "",
-      user.emailAddresses[0]?.emailAddress ?? ""
-    ).then(setCredits);
+    if (!user) return;
+    getUserInfo(user.id).then(d => {
+      setCredits(d.credits);
+      setHasPurchased(d.hasPurchased);
+    });
   }, [user]);
 
   return (
@@ -62,7 +63,7 @@ export default function DashboardNavbar() {
           <button className="dbnav-user" onClick={() => openUserProfile()}>
             <div className="dbnav-user-info">
               <p className="dbnav-user-name">{user?.username ?? "User"}</p>
-              <p className="dbnav-user-plan">Pro Plan</p>
+              <p className="dbnav-user-plan">{hasPurchased ? "Pro Plan" : "Free Plan"}</p>
             </div>
             <div className="dbnav-avatar">
               {user?.imageUrl ? (

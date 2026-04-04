@@ -4,7 +4,7 @@ import { Zap, Menu, X, User, LogIn } from "lucide-react";
 import Image from "next/image";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import { getCredits } from "@/lib/actions";
+import { getUserInfo } from "@/lib/actions";
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -14,7 +14,26 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    if (user) getCredits(user.id).then(setCredits);
+    if (!user) return;
+    getUserInfo(user.id).then(d => setCredits(d.credits));
+  }, [user]);
+
+  // Poll credits after successful payment
+  useEffect(() => {
+    if (!user || !window.location.search.includes("success=1")) return;
+    let attempts = 0;
+    let lastCredits: number | null = null;
+    const interval = setInterval(async () => {
+      attempts++;
+      const d = await getUserInfo(user.id);
+      if (lastCredits === null) { lastCredits = d.credits; }
+      if (d.credits > (lastCredits ?? 0)) {
+        setCredits(d.credits);
+        clearInterval(interval);
+      }
+      if (attempts >= 5) clearInterval(interval);
+    }, 2000);
+    return () => clearInterval(interval);
   }, [user]);
 
   const handleSignOut = async () => {

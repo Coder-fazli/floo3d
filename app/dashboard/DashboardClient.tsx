@@ -2,10 +2,10 @@
 
 import "./dashboard.css";
 import DashboardNavbar from "@/components/DashboardNavbar";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
-import { ArrowUpRight, FolderOpen } from "lucide-react";
+import { ArrowUpRight, FolderOpen, Sparkles, X } from "lucide-react";
 import AutoCompareSlider from "@/components/AutoCompareSlider";
 import { type FramesData } from "@/lib/actions";
 import { DEFAULT_FALLBACKS } from "@/lib/frameDefaults";
@@ -20,17 +20,76 @@ const INPUT_TYPE_META: Record<string, { label: string; desc: string }> = {
 
 export default function DashboardClient({ frames, displayName }: { frames: FramesData; displayName: string | null }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user, isLoaded } = useUser();
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     if (isLoaded && !user) router.push("/");
   }, [isLoaded, user]);
+
+  useEffect(() => {
+    if (searchParams.get("success") === "1") {
+      setShowSuccess(true);
+      // Remove ?success=1 from URL without reload
+      window.history.replaceState({}, "", "/dashboard");
+    }
+  }, [searchParams]);
 
   if (!isLoaded || !user) return null;
 
   return (
     <div className="db-page">
       <DashboardNavbar />
+
+      {showSuccess && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 1000,
+          background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(4px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: '1rem',
+        }}>
+          <div style={{
+            background: '#fff', borderRadius: '1.25rem',
+            padding: '2.5rem 2rem', maxWidth: '420px', width: '100%',
+            textAlign: 'center', position: 'relative',
+            boxShadow: '0 24px 60px rgba(0,0,0,0.18)',
+          }}>
+            <button onClick={() => setShowSuccess(false)} style={{
+              position: 'absolute', top: '1rem', right: '1rem',
+              background: '#f1f5f9', border: 'none', borderRadius: '50%',
+              width: '2rem', height: '2rem', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b',
+            }}><X size={14} /></button>
+
+            <div style={{
+              width: '64px', height: '64px', borderRadius: '50%',
+              background: 'rgba(236,91,19,0.1)', display: 'flex',
+              alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem',
+            }}>
+              <Sparkles size={28} style={{ color: '#ec5b13' }} />
+            </div>
+
+            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f172a', margin: '0 0 0.5rem' }}>
+              Credits Added! 🎉
+            </h2>
+            <p style={{ fontSize: '0.9rem', color: '#64748b', margin: '0 0 1.75rem', lineHeight: 1.6 }}>
+              Your purchase was successful. Your credits have been added to your account — start generating right away.
+            </p>
+
+            <button
+              onClick={() => { setShowSuccess(false); router.push("/visualizer/new"); }}
+              style={{
+                width: '100%', padding: '0.75rem', background: '#ec5b13',
+                color: '#fff', border: 'none', borderRadius: '0.75rem',
+                fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer',
+              }}
+            >
+              Start Generating →
+            </button>
+          </div>
+        </div>
+      )}
 
       <main className="db-main">
 
@@ -45,7 +104,7 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
               <FolderOpen size={16} />
               My Studio
             </button>
-            <button className="db-btn-primary">
+            <button className="db-btn-primary" onClick={() => window.open("/pricing", "_blank")}>
               <ArrowUpRight size={16} />
               Upgrade Account
             </button>
