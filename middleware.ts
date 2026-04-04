@@ -10,6 +10,7 @@ const isPublicRoute = createRouteMatcher([
   "/api/guest-generate(.*)",
   "/api/webhooks(.*)",
   "/floor-plan-generator(.*)",
+  "/pricing(.*)",
   "/privacy-policy(.*)",
   "/terms-of-service(.*)",
   "/refund-policy(.*)",

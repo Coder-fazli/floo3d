@@ -21,6 +21,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.9,
         },
         {
+            url: "https://myhomestyler.com/pricing",
+            lastModified: new Date(),
+            changeFrequency: "weekly",
+            priority: 0.8,
+        },
+        {
             url: "https://myhomestyler.com/privacy-policy",
             lastModified: new Date(),
             changeFrequency: "yearly",

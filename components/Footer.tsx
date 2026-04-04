@@ -78,6 +78,7 @@ export default function Footer() {
             <ul className="ftr-nav-list">
               <li><a href="/2d-to-3d-floor-plan-converter" className="ftr-nav-link">2D to 3D Converter</a></li>
               <li><a href="/floor-plan-generator" className="ftr-nav-link">Floor Plan Generator</a></li>
+              <li><a href="/pricing" className="ftr-nav-link">Pricing</a></li>
             </ul>
           </div>
           <div className="ftr-nav-col">
