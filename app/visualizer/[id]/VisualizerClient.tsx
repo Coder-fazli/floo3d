@@ -271,6 +271,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
   };
 
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
+  const [exportFormat, setExportFormat] = useState<"png" | "jpg" | "pdf">("png");
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const dragCounterRef = useRef(0);
 
@@ -305,7 +306,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
     }
   };
 
-  const handleFreeDownload = async () => {
+  const handleFreeDownload = async (fmt: "png" | "jpg" = exportFormat === "pdf" ? "png" : exportFormat) => {
     const src = currentImage || guestResult;
     if (!src) return;
     setExportDropdownOpen(false);
@@ -320,8 +321,9 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
       const ctx = canvas.getContext("2d")!;
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       const link = document.createElement("a");
-      link.download = `${project?.name || "render"}-free.jpg`;
-      link.href = canvas.toDataURL("image/jpeg", 0.85);
+      const isPng = fmt === "png";
+      link.download = `${project?.name || "render"}.${fmt}`;
+      link.href = canvas.toDataURL(isPng ? "image/png" : "image/jpeg", isPng ? 1 : 0.85);
       link.click();
     };
     img.src = src;
@@ -408,7 +410,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
                 ? "You're out of credits — upgrade to keep generating."
                 : `Only ${credits} credit${credits === 1 ? "" : "s"} left — upgrade to avoid interruption.`}
             </span>
-            <button className="viz-credits-banner-btn">Upgrade Now</button>
+            <button className="viz-credits-banner-btn" onClick={() => window.open("/pricing", "_blank")}>Upgrade Now</button>
           </div>
         )}
 
@@ -632,16 +634,48 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
                   </button>
                   {exportDropdownOpen && (
                     <div className="viz-export-dropdown">
-                      <button className="viz-export-option" onClick={handleFreeDownload}>
-                        <Download size={13} strokeWidth={2} />
-                        Free Download
-                        <span className="viz-export-badge">JPG</span>
+                      <p className="viz-export-title">Export options</p>
+                      <div className="viz-export-formats">
+                        {(["png", "jpg", "pdf"] as const).map(fmt => (
+                          <label
+                            key={fmt}
+                            className={`viz-export-fmt${exportFormat === fmt ? " viz-export-fmt-active" : ""}${fmt === "pdf" ? " viz-export-fmt-locked" : ""}`}
+                            onClick={() => {
+                              if (fmt === "pdf") {
+                                window.open("/pricing", "_blank");
+                              } else {
+                                setExportFormat(fmt);
+                              }
+                            }}
+                          >
+                            <input
+                              type="radio"
+                              name="exportFormat"
+                              value={fmt}
+                              checked={exportFormat === fmt}
+                              readOnly
+                              disabled={fmt === "pdf"}
+                              style={{ accentColor: "#ec5b13" }}
+                            />
+                            <span className="viz-export-fmt-label">{fmt.toUpperCase()}</span>
+                            {fmt === "pdf" && <span className="viz-export-pro-badge">👑 Pro</span>}
+                          </label>
+                        ))}
+                      </div>
+                      <p className="viz-export-desc">
+                        {exportFormat === "png" ? "High quality with transparent background." : "Smaller file size, great for sharing."}
+                      </p>
+                      <button className="viz-export-dl-btn" onClick={() => handleFreeDownload()}>
+                        <Download size={14} strokeWidth={2.5} />
+                        Download
                       </button>
-                      <button className="viz-export-option viz-export-option-hd" onClick={() => { setExportDropdownOpen(false); }}>
-                        <Download size={13} strokeWidth={2} />
-                        HD Download
-                        <span className="viz-export-badge viz-export-badge-hd">HD</span>
-                      </button>
+                      <p className="viz-export-commercial">
+                        Free downloads are for personal use only.{" "}
+                        <a href="/pricing" target="_blank" rel="noopener noreferrer" className="viz-export-get-plan">
+                          Get a plan
+                        </a>{" "}
+                        for commercial use.
+                      </p>
                     </div>
                   )}
                 </div>
@@ -667,16 +701,17 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
                   style={{ width: "100%", height: "100%", transform: `scale(${zoomLevel})`, transformOrigin: "center", transition: "transform 0.3s ease" }}
                   handle={<ReactCompareSliderHandle buttonStyle={{ background: "#fff", border: "none", boxShadow: "0 2px 16px rgba(0,0,0,0.25)", color: "#ec5b13" }} linesStyle={{ background: "#ec5b13", width: 3, opacity: 0.9 }} />}
                   itemOne={<ReactCompareSliderImage src={guestBase64} alt="Original" style={{ objectFit: "contain", background: "#f1f5f9" }} />}
-                  itemTwo={<ReactCompareSliderImage src={guestResult} alt="Result" style={{ objectFit: "contain", background: "#f1f5f9", cursor: "zoom-in" }} onClick={() => setLightboxOpen(true)} />}
+                  itemTwo={<ReactCompareSliderImage src={guestResult} alt="Result" style={{ objectFit: "contain", background: "#f1f5f9", cursor: "zoom-in" }} onClick={() => setLightboxOpen(true)} onContextMenu={e => e.preventDefault()} />}
                 />
               ) : embeddedId && !user && guestBase64 ? (
-                <img src={guestBase64} alt="Uploaded" style={{ width: "100%", height: "100%", objectFit: "contain", background: "#f1f5f9" }} />
+                <img src={guestBase64} alt="Uploaded" style={{ width: "100%", height: "100%", objectFit: "contain", background: "#f1f5f9" }} onContextMenu={e => e.preventDefault()} />
               ) : activeInputType === "floor-plan-generator" && currentImage ? (
                 <img
                   src={currentImage}
                   alt="Generated Floor Plan"
                   style={{ width: "100%", height: "100%", objectFit: "contain", background: "#f1f5f9", cursor: "zoom-in", transform: `scale(${zoomLevel})`, transformOrigin: "center", transition: "transform 0.3s ease" }}
                   onClick={() => setLightboxOpen(true)}
+                  onContextMenu={e => e.preventDefault()}
                 />
               ) : project?.originalImageUrl && currentImage ? (
                 <ReactCompareSlider
@@ -706,6 +741,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
                       alt="Result"
                       style={{ objectFit: "contain", background: "#f1f5f9", cursor: "zoom-in" }}
                       onClick={() => setLightboxOpen(true)}
+                      onContextMenu={e => e.preventDefault()}
                     />
                   }
                 />
@@ -803,10 +839,10 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
             <div className="viz-modal-actions">
               {modalType === "credits" ? (
                 <>
-                  <button className="viz-modal-btn-primary" onClick={() => router.push("/dashboard")}>
+                  <button className="viz-modal-btn-primary" onClick={() => window.open("/pricing", "_blank")}>
                     Upgrade Now
                   </button>
-                  <button className="viz-modal-btn-secondary" onClick={() => router.push("/dashboard")}>
+                  <button className="viz-modal-btn-secondary" onClick={() => { setModalType(null); router.push("/dashboard"); }}>
                     Back to Dashboard
                   </button>
                 </>
@@ -830,6 +866,18 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
           open={lightboxOpen}
           close={() => setLightboxOpen(false)}
           slides={[{ src: currentImage }]}
+          toolbar={{ buttons: ["close"] }}
+          render={{
+            slide: ({ slide }) => (
+              <img
+                src={slide.src}
+                alt=""
+                style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
+                onContextMenu={e => e.preventDefault()}
+                draggable={false}
+              />
+            ),
+          }}
         />
       )}
 

@@ -1314,50 +1314,106 @@
     right: 0;
     background: #fff;
     border: 1.5px solid #e2e8f0;
-    border-radius: 0.625rem;
-    overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    border-radius: 0.875rem;
+    padding: 1.1rem 1.1rem 0.9rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
     z-index: 100;
-    min-width: 180px;
+    min-width: 240px;
 }
 
-.viz-export-option {
+.viz-export-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 0.9rem;
+}
+
+.viz-export-formats {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.viz-export-fmt {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    width: 100%;
-    padding: 0.7rem 1rem;
-    border: none;
-    background: #fff;
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: #0f172a;
-    cursor: pointer;
-    transition: background 0.15s;
-}
-
-.viz-export-option:hover {
+    gap: 0.4rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: 9999px;
+    border: 1.5px solid #e2e8f0;
     background: #f8fafc;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    user-select: none;
 }
 
-.viz-export-option-hd {
-    color: #94a3b8;
-    border-top: 1px solid #f1f5f9;
+.viz-export-fmt-active {
+    border-color: #ec5b13;
+    background: rgba(236, 91, 19, 0.06);
 }
 
-.viz-export-badge {
-    margin-left: auto;
+.viz-export-fmt-locked {
+    opacity: 0.55;
+    cursor: pointer;
+}
+
+.viz-export-fmt-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.viz-export-pro-badge {
     font-size: 0.65rem;
     font-weight: 700;
-    padding: 0.15rem 0.4rem;
-    border-radius: 0.25rem;
-    background: #f1f5f9;
-    color: #64748b;
+    color: #f59e0b;
+    white-space: nowrap;
 }
 
-.viz-export-badge-hd {
-    background: #fef3c7;
-    color: #d97706;
+.viz-export-desc {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin: 0 0 0.9rem;
+    line-height: 1.4;
+}
+
+.viz-export-dl-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.6rem 1rem;
+    background: #ec5b13;
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-bottom: 0.75rem;
+}
+
+.viz-export-dl-btn:hover {
+    background: #d44e0f;
+}
+
+.viz-export-commercial {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.viz-export-get-plan {
+    color: #ec5b13;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.viz-export-get-plan:hover {
+    text-decoration: underline;
 }
 
 @keyframes viz-dl-sweep {
