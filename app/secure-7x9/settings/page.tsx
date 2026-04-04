@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getSiteSettings, saveSiteSettings, saveFloorPlanSettings } from "@/lib/actions";
+import { getSiteSettings } from "@/lib/actions";
+import { saveSiteSettings, saveFloorPlanSettings } from "@/lib/actions.admin";
 
 export default function AdminSettings() {
   // Home page SEO

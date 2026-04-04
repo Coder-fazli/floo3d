@@ -1,4 +1,4 @@
-import { getAllProjects } from "@/lib/actions";
+import { getAllProjects } from "@/lib/actions.admin";
 import ProjectsClient from "./ProjectsClient";
 
 export default async function AdminProjects() {

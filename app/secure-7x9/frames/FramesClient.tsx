@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { saveFrameImage, type FramesData } from "@/lib/actions";
+import { type FramesData } from "@/lib/actions";
+import { saveFrameImage } from "@/lib/actions.admin";
 import { DEFAULT_FALLBACKS, DEFAULT_STYLES, DEFAULT_ANGLES, ANGLE_LABELS, INPUT_TYPE_LABELS } from "@/lib/frameDefaults";
 import { Upload } from "lucide-react";
 

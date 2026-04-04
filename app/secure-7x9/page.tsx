@@ -1,4 +1,4 @@
-import { getAllUSers, getAllProjects } from "@/lib/actions";
+import { getAllUSers, getAllProjects } from "@/lib/actions.admin";
 
 export default async function AdminOverview() {
   const users = await getAllUSers();

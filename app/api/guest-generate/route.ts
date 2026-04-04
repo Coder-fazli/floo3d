@@ -14,9 +14,10 @@ export async function POST(request: Request) {
       inputType = "floor-plan",
     } = await request.json();
 
-    if (!base64Image) {
-      return NextResponse.json({ error: "No image provided" }, { status: 400 });
-    }
+
+    if (!base64Image || base64Image.length > 10_000_000)
+  {  return NextResponse.json({ error: "No image provided or image too large" }, { status: 400 });
+  }
 
     const mimeMatch = base64Image.match(/^data:(image\/[\w+]+);base64,/);
     const mimeType = (mimeMatch?.[1] as string) || "image/jpeg";

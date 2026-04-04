@@ -4,6 +4,7 @@ import { Sparkles, Building2, Ruler, Layers, BedDouble, Bath, UtensilsCrossed, S
 
 type RoomKey = "bedroom" | "bathroom" | "kitchen" | "livingRoom" | "diningRoom" | "office";
 type ExtraKey = "garage" | "balcony" | "terrace" | "garden";
+export type FpgStyle = "blueprint" | "colored" | "isometric" | "3d top-down";
 
 export interface FpgConfig {
   propertyType: string;
@@ -12,11 +13,13 @@ export interface FpgConfig {
   floors: number;
   rooms: Record<RoomKey, number>;
   extras: Record<ExtraKey, boolean>;
+  style: FpgStyle;
 }
 
 interface Props {
   config: FpgConfig;
   onChange: (updater: (prev: FpgConfig) => FpgConfig) => void;
+  getStyleImage: (style: string) => string;
 }
 
 const ROOMS: { key: RoomKey; label: string; icon: React.ReactNode }[] = [
@@ -35,7 +38,14 @@ const EXTRAS: { key: ExtraKey; label: string }[] = [
   { key: "garden",  label: "Garden" },
 ];
 
-export default function FpgSidebarSection({ config, onChange }: Props) {
+const STYLES: { key: FpgStyle; label: string }[] = [
+  { key: "blueprint",    label: "Blueprint" },
+  { key: "colored",      label: "Colored" },
+  { key: "isometric",    label: "Isometric" },
+  { key: "3d top-down",  label: "3D Top-Down" },
+];
+
+export default function FpgSidebarSection({ config, onChange, getStyleImage }: Props) {
   return (
     <div className="viz-sb-section">
       <div className="viz-sb-section-title">
@@ -128,6 +138,35 @@ export default function FpgSidebarSection({ config, onChange }: Props) {
               {label}
             </button>
           ))}
+        </div>
+
+        {/* Style */}
+        <div style={{ marginTop: "0.25rem" }}>
+          <div className="viz-sb-section-title" style={{ marginBottom: "0.5rem" }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ec5b13" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            Design Style
+          </div>
+          <div className="viz-style-scroll">
+            <div className="viz-style-grid">
+              {STYLES.map(({ key, label }) => (
+                <div
+                  key={key}
+                  className={`viz-style-card${config.style === key ? " viz-style-card-active" : ""}`}
+                  onClick={() => onChange(c => ({ ...c, style: key }))}
+                >
+                  <div className="viz-style-card-img">
+                    <img src={getStyleImage(label)} alt={label} />
+                    {config.style === key && (
+                      <div className="viz-style-card-check">
+                        <svg width="8" height="8" viewBox="0 0 12 12" fill="none" stroke="#fff" strokeWidth="2.5"><polyline points="2,6 5,9 10,3"/></svg>
+                      </div>
+                    )}
+                  </div>
+                  <div className="viz-style-card-label">{label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
       </div>

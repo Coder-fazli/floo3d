@@ -25,9 +25,9 @@ import FpgSidebarSection, { type FpgConfig } from "../components/FpgSidebarSecti
 const STYLES: Record<string, string[]> = {
   "floor-plan":           ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
   "interior-design":      ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
-  "outdoor":              ["Mediterranean", "Japanese", "Tropical", "Cottage", "Modern", "Desert"],
+  "outdoor":              ["Modern", "Japanese", "Tropical", "Cottage", "Mediterranean", "Desert"],
   "empty-room":           ["Clean"],
-  "floor-plan-generator": ["Blueprint", "Colored", "Isometric", "3D Top-Down"],
+  "floor-plan-generator": [],
 };
 
 
@@ -69,23 +69,19 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
   const [renderStyle, setRenderStyle] = useState("Modern");
   const [roomType, setRoomType] = useState("Living Room");
   const [viewAngle, setViewAngle] = useState("topDown");
-  const [inputTypeNew, setInputTypeNew] = useState("floor-plan");
   const [isCreating, setIsCreating] = useState(false);
   const [nameModalOpen, setNameModalOpen] = useState(false);
   const pendingFileBase64Ref = useRef<string | null>(null);
+  // Read type from URL for new mode (or use defaultType prop)
+
+   const [inputTypeNew, setInputTypeNew] = useState(() => {
+    if (typeof window === "undefined") return defaultType ?? "floor-plan";
+    const t = new URLSearchParams(window.location.search).get("type") ?? defaultType ?? "floor-plan";
+    return t;
+  });
 
   const zoomIn  = () => setZoomLevel(z => parseFloat(Math.min(z + 0.25, 3).toFixed(2)));
   const zoomOut = () => setZoomLevel(z => parseFloat(Math.max(z - 0.25, 0.5).toFixed(2)));
-
-  // Read type from URL for new mode (or use defaultType prop)
-  useEffect(() => {
-    if (isNewMode) {
-      const params = new URLSearchParams(window.location.search);
-      const t = params.get("type") ?? defaultType ?? "floor-plan";
-      setInputTypeNew(t);
-      setRenderStyle(STYLES[t]?.[0] ?? "Modern");
-    }
-  }, [isNewMode]);
 
   // Sync local renderStyle when project loads
   useEffect(() => {
@@ -150,7 +146,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            config: { ...fpgConfig, style: renderStyle.toLowerCase() as "blueprint" | "colored" | "isometric" | "3d top-down" },
+            config: fpgConfig,
           }),
         });
         const data = await res.json();
@@ -279,6 +275,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
     floors: 1,
     rooms: { bedroom: 2, bathroom: 1, kitchen: 1, livingRoom: 1, diningRoom: 0, office: 0 },
     extras: { garage: false, balcony: false, terrace: false, garden: false },
+    style: "blueprint",
   });
 
   const handleExport = async () => {
@@ -472,7 +469,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
           <aside className="viz-sidebar">
 
             {activeInputType === "floor-plan-generator" ? (
-              <FpgSidebarSection config={fpgConfig} onChange={setFpgConfig} />
+              <FpgSidebarSection config={fpgConfig} onChange={setFpgConfig} getStyleImage={(s) => getStyleImage("floor-plan-generator", s)} />
             ) : (
             <div className="viz-sb-section">
               <div className="viz-sb-section-title">
@@ -551,8 +548,8 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
               </div>
             )}
 
-            {/* Design Style */}
-            <div className="viz-sb-section viz-sb-section-grow">
+            {/* Design Style — hidden for floor-plan-generator (handled inside FpgSidebarSection) */}
+            {activeInputType !== "floor-plan-generator" && <div className="viz-sb-section viz-sb-section-grow">
               <div className="viz-sb-section-title">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ec5b13" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
                 Design Style
@@ -578,7 +575,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
                   ))}
                 </div>
               </div>
-            </div>
+            </div>}
 
             {/* Generate */}
             <div className="viz-generate-wrap">

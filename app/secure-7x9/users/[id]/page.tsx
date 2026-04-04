@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Calendar, Lock, RotateCcw, Trash2, ChevronLeft } from "lucide-react";
-import { getUserByClerkId, getProjects, updateUserCredits, deleteUSer } from "@/lib/actions";
+import { getUserByClerkId, getProjects } from "@/lib/actions";
+import { updateUserCredits, deleteUSer } from "@/lib/actions.admin";
 
 export default async function AdminUserDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

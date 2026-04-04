@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 import Link from "next/link";
-import { getAllUSers, getAllProjects } from "@/lib/actions";
+import { getAllUSers, getAllProjects } from "@/lib/actions.admin";
 
 
 export default async function AdminUsers() {

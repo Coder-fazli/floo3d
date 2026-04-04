@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { ReactCompareSlider, ReactCompareSliderHandle, ReactCompareSliderImage } from "react-compare-slider";
-import { saveHomeImage, type HomeImages } from "@/lib/actions";
+import { saveHomeImage, type HomeImages } from "@/lib/actions.admin";
 import { Upload, CheckCircle2 } from "lucide-react";
 
 // ── Fallback static images (used when no DB image set yet) ──

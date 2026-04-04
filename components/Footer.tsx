@@ -70,28 +70,23 @@ export default function Footer() {
           <div className="ftr-nav-col">
             <h4 className="ftr-nav-heading">Company</h4>
             <ul className="ftr-nav-list">
-              <li><a href="#" className="ftr-nav-link">About Us</a></li>
-              <li><a href="#" className="ftr-nav-link">Careers</a></li>
-              <li><a href="#" className="ftr-nav-link">Press</a></li>
-              <li><a href="#" className="ftr-nav-link">Contact</a></li>
+              <li><a href="/contact" className="ftr-nav-link">Contact Us</a></li>
             </ul>
           </div>
           <div className="ftr-nav-col">
-            <h4 className="ftr-nav-heading">Resources</h4>
+            <h4 className="ftr-nav-heading">Tools</h4>
             <ul className="ftr-nav-list">
-              <li><a href="#" className="ftr-nav-link">Documentation</a></li>
-              <li><a href="#" className="ftr-nav-link">Blog</a></li>
-              <li><a href="#" className="ftr-nav-link">Tutorials</a></li>
-              <li><a href="#" className="ftr-nav-link">Community</a></li>
+              <li><a href="/2d-to-3d-floor-plan-converter" className="ftr-nav-link">2D to 3D Converter</a></li>
+              <li><a href="/floor-plan-generator" className="ftr-nav-link">Floor Plan Generator</a></li>
             </ul>
           </div>
           <div className="ftr-nav-col">
             <h4 className="ftr-nav-heading">Legal</h4>
             <ul className="ftr-nav-list">
-              <li><a href="#" className="ftr-nav-link">Privacy Policy</a></li>
-              <li><a href="#" className="ftr-nav-link">Terms of Service</a></li>
-              <li><a href="#" className="ftr-nav-link">Cookie Policy</a></li>
-              <li><a href="#" className="ftr-nav-link">Security</a></li>
+              <li><a href="/privacy-policy" className="ftr-nav-link">Privacy Policy</a></li>
+              <li><a href="/terms-of-service" className="ftr-nav-link">Terms of Service</a></li>
+              <li><a href="/refund-policy" className="ftr-nav-link">Refund Policy</a></li>
+              <li><a href="/contact" className="ftr-nav-link">Contact</a></li>
             </ul>
           </div>
         </div>

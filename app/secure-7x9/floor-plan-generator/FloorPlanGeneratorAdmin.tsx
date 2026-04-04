@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ReactCompareSlider, ReactCompareSliderHandle, ReactCompareSliderImage } from "react-compare-slider";
-import { getSiteSettings, saveFloorPlanGeneratorSettings, saveFpgImage } from "@/lib/actions";
+import { getSiteSettings } from "@/lib/actions";
+import { saveFloorPlanGeneratorSettings, saveFpgImage } from "@/lib/actions.admin";
 import { Upload, CheckCircle2 } from "lucide-react";
 
 // ── Fallbacks ──
