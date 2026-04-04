@@ -96,7 +96,11 @@ export default function PricingClient() {
   }, []);
 
   const handleBuy = async (planId: string) => {
-    if (!isSignedIn) { openSignUp(); return; }
+    if (!isSignedIn) {
+      localStorage.setItem("pendingPlan", planId);
+      openSignUp({ fallbackRedirectUrl: "/pricing" });
+      return;
+    }
     setLoadingPlan(planId);
     try {
       const res = await fetch("/api/stripe/checkout", {
@@ -110,6 +114,15 @@ export default function PricingClient() {
       setLoadingPlan(null);
     }
   };
+
+  useEffect(() => {
+    if (!isSignedIn) return;
+    const pending = localStorage.getItem("pendingPlan");
+    if (pending) {
+      localStorage.removeItem("pendingPlan");
+      handleBuy(pending);
+    }
+  }, [isSignedIn]);
 
   if (!mounted) return null;
 
