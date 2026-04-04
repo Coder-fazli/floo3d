@@ -5,7 +5,7 @@ import NextImage from "next/image";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { getCredits } from "@/lib/actions";
 import { useEffect, useRef, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { getProject } from "@/lib/actions";
 import { ReactCompareSlider, ReactCompareSliderImage, ReactCompareSliderHandle } from "react-compare-slider";
 import Lightbox from "yet-another-react-lightbox";
@@ -43,6 +43,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
     frames?.styles?.[inputType]?.[style] ?? DEFAULT_STYLES[inputType]?.[style] ?? "/card-room-after.webp";
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const id = embeddedId ?? (Array.isArray(params.id) ? params.id[0] : params.id);
   const { user } = useUser();
   const { openUserProfile, openSignUp, signOut } = useClerk();
@@ -82,6 +83,12 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
 
   const zoomIn  = () => setZoomLevel(z => parseFloat(Math.min(z + 0.25, 3).toFixed(2)));
   const zoomOut = () => setZoomLevel(z => parseFloat(Math.max(z - 0.25, 0.5).toFixed(2)));
+
+  // Sync inputTypeNew when URL ?type= changes (client-side navigation)
+  useEffect(() => {
+    const t = searchParams.get("type");
+    if (t) setInputTypeNew(t);
+  }, [searchParams]);
 
   // Sync local renderStyle when project loads
   useEffect(() => {
