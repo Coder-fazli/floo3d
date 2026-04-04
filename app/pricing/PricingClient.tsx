@@ -137,7 +137,7 @@ export default function PricingClient() {
         </div>
 
         {/* Cards */}
-        <div className="mt-8 grid w-full max-w-6xl grid-cols-1 gap-6 md:grid-cols-3" style={{ paddingTop: '1rem', overflow: 'visible' }}>
+        <div className="mt-8 grid w-full max-w-6xl grid-cols-1 gap-6 md:grid-cols-3" style={{ paddingTop: '2rem', overflow: 'visible' }}>
           {plans.map((plan, index) => (
             <motion.div
               key={plan.id}
@@ -149,7 +149,7 @@ export default function PricingClient() {
               style={{ overflow: 'visible' }}
             >
               {plan.popular && (
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '-14px', position: 'relative', zIndex: 10 }}>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '-16px', position: 'relative', zIndex: 10 }}>
                   <Badge
                     className="rounded-full px-4 py-1 shadow-sm"
                     style={{ background: '#e5484d', color: '#fff' }}
