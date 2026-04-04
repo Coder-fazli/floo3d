@@ -4,6 +4,8 @@
  import { connectDb } from "@/lib/db";
  import User from "@/lib/models/User";
 
+  export const runtime = "nodejs";
+
   export async function POST(req: Request) {            
     const WEBHOOK_SECRET =
     process.env.CLERK_WEBHOOK_SECRET;                     

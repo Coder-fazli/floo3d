@@ -87,12 +87,29 @@ const plans = [
 
 export default function PricingClient() {
   const [mounted, setMounted] = useState(false);
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const { openSignUp } = useClerk();
   const { isSignedIn } = useUser();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleBuy = async (planId: string) => {
+    if (!isSignedIn) { openSignUp(); return; }
+    setLoadingPlan(planId);
+    try {
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: planId }),
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } finally {
+      setLoadingPlan(null);
+    }
+  };
 
   if (!mounted) return null;
 
@@ -275,6 +292,8 @@ export default function PricingClient() {
                       style={plan.popular
                         ? { background: '#e5484d', color: '#fff', border: 'none' }
                         : { background: '#fff', color: '#0f172a', border: '1px solid #e2e8f0' }}
+                      disabled={loadingPlan === plan.id}
+                      onClick={() => handleBuy(plan.id)}
                       onMouseEnter={e => {
                         if (!plan.popular) {
                           (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(236,91,19,0.3)';
@@ -292,7 +311,7 @@ export default function PricingClient() {
                         }
                       }}
                     >
-                      {plan.cta}
+                      {loadingPlan === plan.id ? "Redirecting..." : plan.cta}
                       <ArrowRight className="h-4 w-4" />
                     </button>
                   )}
