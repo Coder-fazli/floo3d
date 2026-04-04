@@ -6,6 +6,7 @@ import DesignOptions from "@/components/DesignOptions";
 import HowItWorks2 from "@/components/HowItWorks2";
 import RecentProjects from "@/components/RecentProjects";
 import Footer from "@/components/Footer";
+import { Suspense } from "react";
 import VisualizerClient from "@/app/visualizer/[id]/VisualizerClient";
 import FAQ from "@/components/FAQ";
 import { Marquee } from "@/components/ui/marquee";
@@ -137,7 +138,7 @@ export default async function FloorPlanConverterPage() {
       <HowItWorks2 />
 
       <section id="try-converter">
-        <VisualizerClient embeddedId="new" frames={frames} />
+        <Suspense><VisualizerClient embeddedId="new" frames={frames} /></Suspense>
       </section>
 
       <DesignOptions />

@@ -7,6 +7,7 @@ import DesignOptions from "@/components/DesignOptions";
 import RecentProjects from "@/components/RecentProjects";
 import Footer from "@/components/Footer";
 import FAQ from "@/components/FAQ";
+import { Suspense } from "react";
 import VisualizerClient from "@/app/visualizer/[id]/VisualizerClient";
 import { Marquee } from "@/components/ui/marquee";
 import { getSiteSettings, getFpgImages, getAppFrames } from "@/lib/actions";
@@ -130,7 +131,7 @@ export default async function FloorPlanGeneratorPage() {
       <HowItWorks2 />
 
       <section id="generator">
-        <VisualizerClient embeddedId="new" frames={frames} defaultType="floor-plan-generator" />
+        <Suspense><VisualizerClient embeddedId="new" frames={frames} defaultType="floor-plan-generator" /></Suspense>
       </section>
 
       <DesignOptions />

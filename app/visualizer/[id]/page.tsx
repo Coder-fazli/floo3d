@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import VisualizerClient from "./VisualizerClient";
 import { getProject, getAppFrames } from "@/lib/actions";
 
@@ -19,5 +20,5 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function Page() {
   const frames = await getAppFrames();
-  return <VisualizerClient frames={frames} />;
+  return <Suspense><VisualizerClient frames={frames} /></Suspense>;
 }
