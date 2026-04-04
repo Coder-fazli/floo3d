@@ -106,7 +106,7 @@ export default function PricingClient() {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: planId, returnUrl: window.location.href }),
+        body: JSON.stringify({ plan: planId, returnUrl: `${window.location.origin}/dashboard` }),
       });
       const data = await res.json();
       if (data.url) window.location.href = data.url;

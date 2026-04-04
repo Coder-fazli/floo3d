@@ -706,7 +706,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
                         ))}
                       </div>
                       <p className="viz-export-desc">
-                        {exportFormat === "png" ? "High quality with transparent background." : "Smaller file size, great for sharing."}
+                        {exportFormat === "png" ? "Standard quality · Upgrade for HD" : "Smaller file size, great for sharing."}
                       </p>
                       <button className="viz-export-dl-btn" onClick={() => handleFreeDownload()}>
                         <Download size={14} strokeWidth={2.5} />
