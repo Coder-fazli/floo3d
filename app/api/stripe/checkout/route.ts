@@ -1,13 +1,9 @@
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
+import { getPricingSettings } from "@/lib/actions.admin";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-
-const PLANS = {
-  starter: { credits: 100, amount: 999,  label: "Starter — 100 Credits" },
-  pro:     { credits: 300, amount: 2499, label: "Pro — 300 Credits" },
-};
 
 export async function POST(request: Request) {
   try {
@@ -15,8 +11,14 @@ export async function POST(request: Request) {
     if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const { plan, returnUrl } = await request.json();
+    if (!["starter", "pro"].includes(plan)) return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
+
+    const pricing = await getPricingSettings();
+    const PLANS = {
+      starter: { credits: pricing.starterCredits, amount: Math.round(pricing.starterPrice * 100), label: `Starter — ${pricing.starterCredits} Credits` },
+      pro:     { credits: pricing.proCredits,     amount: Math.round(pricing.proPrice * 100),     label: `Pro — ${pricing.proCredits} Credits` },
+    };
     const planData = PLANS[plan as keyof typeof PLANS];
-    if (!planData) return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
 
     const origin = request.headers.get("origin") ?? "http://localhost:3000";
 
