@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { savePricingSettings } from "@/lib/actions.admin";
-import { Zap, Shield, CheckCircle2 } from "lucide-react";
+import { Zap, Shield, Star, CheckCircle2 } from "lucide-react";
 
 type Settings = {
   starterPrice: number; starterCredits: number; starterDescription: string; starterFeatures: string[];
   proPrice: number; proCredits: number; proDescription: string; proFeatures: string[];
+  elitePrice: number; eliteCredits: number; eliteDescription: string; eliteFeatures: string[];
 };
 
 function PlanEditor({
@@ -77,11 +78,16 @@ function PlanEditor({
 }
 
 export default function PricingAdmin({ settings }: { settings: Settings }) {
-  const [data, setData] = useState<Settings>(settings);
+  const [data, setData] = useState<Settings>({
+    ...settings,
+    starterFeatures: settings.starterFeatures ?? [],
+    proFeatures:     settings.proFeatures ?? [],
+    eliteFeatures:   settings.eliteFeatures ?? [],
+  });
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  const update = (plan: "starter" | "pro", field: string, value: any) => {
+  const update = (plan: "starter" | "pro" | "elite", field: string, value: any) => {
     setData(prev => ({ ...prev, [`${plan}${field.charAt(0).toUpperCase() + field.slice(1)}`]: value }));
     setSaved(false);
   };
@@ -111,13 +117,8 @@ export default function PricingAdmin({ settings }: { settings: Settings }) {
         </button>
       </div>
 
-      {/* Preview note */}
-      <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "0.75rem", padding: "0.9rem 1.25rem", marginBottom: "1.5rem", fontSize: "0.8rem", color: "#64748b", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-        💡 The Free plan is not editable here — it has no payment. Edit it directly in code if needed.
-      </div>
-
       {/* Plan editors side by side */}
-      <div style={{ display: "flex", gap: "1.25rem", marginBottom: "1.5rem" }}>
+      <div style={{ display: "flex", gap: "1.25rem", marginBottom: "1.5rem", flexWrap: "wrap" }}>
         <PlanEditor
           title="Starter"
           icon={<Zap size={14} color="#e5484d" />}
@@ -138,6 +139,16 @@ export default function PricingAdmin({ settings }: { settings: Settings }) {
           features={data.proFeatures}
           onChange={(field, value) => update("pro", field, value)}
         />
+        <PlanEditor
+          title="Elite"
+          icon={<Star size={14} color="#f59e0b" />}
+          color="#f59e0b"
+          price={data.elitePrice}
+          credits={data.eliteCredits}
+          description={data.eliteDescription}
+          features={data.eliteFeatures}
+          onChange={(field, value) => update("elite", field, value)}
+        />
       </div>
 
       {/* Live preview */}
@@ -147,6 +158,7 @@ export default function PricingAdmin({ settings }: { settings: Settings }) {
           {[
             { label: "Starter", price: data.starterPrice, credits: data.starterCredits, desc: data.starterDescription, features: data.starterFeatures, color: "#e5484d" },
             { label: "Pro", price: data.proPrice, credits: data.proCredits, desc: data.proDescription, features: data.proFeatures, color: "#6366f1" },
+            { label: "Elite", price: data.elitePrice, credits: data.eliteCredits, desc: data.eliteDescription, features: data.eliteFeatures, color: "#f59e0b" },
           ].map(plan => (
             <div key={plan.label} style={{ flex: 1, minWidth: "220px", border: `1.5px solid ${plan.color}30`, borderRadius: "1rem", padding: "1.25rem" }}>
               <p style={{ margin: "0 0 0.25rem", fontSize: "0.72rem", fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.06em" }}>{plan.label}</p>

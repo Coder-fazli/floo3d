@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Sparkles, ArrowRight, Check, Zap, Shield, Lock } from 'lucide-react';
+import { Sparkles, ArrowRight, Check, Zap, Shield, Lock, Star } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useClerk, useUser } from '@clerk/nextjs';
@@ -22,6 +22,7 @@ import Link from 'next/link';
 type PricingSettings = {
   starterPrice: number; starterCredits: number; starterDescription: string; starterFeatures: string[];
   proPrice: number; proCredits: number; proDescription: string; proFeatures: string[];
+  elitePrice: number; eliteCredits: number; eliteDescription: string; eliteFeatures: string[];
 };
 
 export default function PricingClient({ pricingSettings }: { pricingSettings?: PricingSettings }) {
@@ -38,9 +39,17 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
       id: 'pro', name: 'Pro', icon: Shield,
       price: { oneTime: pricingSettings?.proPrice ?? 24 },
       credits: pricingSettings?.proCredits ?? 300,
-      description: pricingSettings?.proDescription ?? 'Highest accuracy AI renders powered by StyleAI Pro — for architects, agencies and real estate professionals.',
+      description: pricingSettings?.proDescription ?? 'Great value for homeowners and designers who need professional results fast.',
       features: pricingSettings?.proFeatures ?? ['300 credits — 150 AI renders', 'All Starter features', 'Isometric & cross-section views', 'StyleAI Pro — highest accuracy', 'Superior detail & realism', 'PNG, JPG & PDF export', 'Commercial usage rights', 'Priority support'],
       cta: 'Buy Pro',
+    },
+    {
+      id: 'elite', name: 'Elite', icon: Star,
+      price: { oneTime: pricingSettings?.elitePrice ?? 49.99 },
+      credits: pricingSettings?.eliteCredits ?? 300,
+      description: pricingSettings?.eliteDescription ?? 'Highest accuracy AI — for architects, agencies and real estate professionals who demand the best.',
+      features: pricingSettings?.eliteFeatures ?? ['300 credits — 150 AI renders', 'All Pro features included', 'Highest accuracy AI model', 'Superior material & texture detail', 'More realistic lighting & shadows', 'Sharper architectural lines', 'Best for client presentations', 'Commercial usage rights', 'Priority support'],
+      cta: 'Buy Elite',
     },
   ];
 
@@ -125,7 +134,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
         </div>
 
         {/* Cards */}
-        <div className="mt-8 grid w-full max-w-3xl grid-cols-1 gap-6 md:grid-cols-2" style={{ paddingTop: '2rem', overflow: 'visible' }}>
+        <div className="mt-8 grid w-full max-w-6xl grid-cols-1 gap-6 md:grid-cols-3" style={{ paddingTop: '2rem', overflow: 'visible' }}>
           {plans.map((plan, index) => (
             <motion.div
               key={plan.id}
@@ -148,7 +157,15 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                 <div style={{ position: 'absolute', top: '-14px', left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 20 }}>
                   <Badge className="rounded-full px-4 py-1 shadow-sm" style={{ background: 'linear-gradient(135deg, #6366f1, #a855f7)', color: '#fff', whiteSpace: 'nowrap' }}>
                     <Sparkles className="mr-1 h-3.5 w-3.5" />
-                    Best Quality
+                    Best Value
+                  </Badge>
+                </div>
+              )}
+              {plan.id === 'elite' && (
+                <div style={{ position: 'absolute', top: '-14px', left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 20 }}>
+                  <Badge className="rounded-full px-4 py-1 shadow-sm" style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#fff', whiteSpace: 'nowrap' }}>
+                    <Star className="mr-1 h-3.5 w-3.5" />
+                    Highest Accuracy
                   </Badge>
                 </div>
               )}
@@ -158,7 +175,12 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                   plan.popular ? 'shadow-md' : '',
                 )}
                 style={
-                  plan.id === 'pro' ? {
+                  plan.id === 'elite' ? {
+                    outline: '2px solid rgba(245,158,11,0.5)',
+                    outlineOffset: '0px',
+                    background: 'linear-gradient(135deg, rgba(245,158,11,0.05), rgba(217,119,6,0.03))',
+                    boxShadow: '0 0 40px rgba(245,158,11,0.12), 0 8px 32px rgba(0,0,0,0.08)',
+                  } : plan.id === 'pro' ? {
                     outline: '2px solid rgba(99,102,241,0.5)',
                     outlineOffset: '0px',
                     background: 'linear-gradient(135deg, rgba(99,102,241,0.04), rgba(168,85,247,0.04))',
@@ -175,7 +197,9 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                   <div className="flex items-center gap-2">
                     <div
                       className="flex h-8 w-8 items-center justify-center rounded-full"
-                      style={plan.popular
+                      style={plan.id === 'elite'
+                        ? { background: 'rgba(245,158,11,0.12)', color: '#f59e0b' }
+                        : plan.popular
                         ? { background: 'rgba(229,72,77,0.1)', color: '#e5484d' }
                         : { background: '#f1f5f9', color: '#475569' }}
                     >
@@ -183,7 +207,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                     </div>
                     <CardTitle
                       className="text-xl font-bold"
-                      style={{ color: plan.popular ? '#e5484d' : '#0f172a' }}
+                      style={{ color: plan.id === 'elite' ? '#d97706' : plan.popular ? '#e5484d' : '#0f172a' }}
                     >
                       {plan.name}
                       {plan.id === 'pro' && (
@@ -202,7 +226,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                           <div className="flex items-baseline gap-1">
                             <NumberFlow
                               className="text-3xl font-bold"
-                              style={{ color: plan.id === 'pro' ? '#6366f1' : plan.popular ? '#e5484d' : '#0f172a' }}
+                              style={{ color: plan.id === 'elite' ? '#f59e0b' : plan.id === 'pro' ? '#6366f1' : plan.popular ? '#e5484d' : '#0f172a' }}
                               format={{ style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 }}
                               value={plan.price.oneTime}
                             />
@@ -216,6 +240,9 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                           )}
                           {plan.id === 'starter' && (
                             <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>$0.20 per render · 50 renders total</span>
+                          )}
+                          {plan.id === 'elite' && (
+                            <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>$0.33 per render · 150 renders · best AI model</span>
                           )}
                         </div>
                       ) : (
@@ -238,13 +265,15 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                     >
                       <div
                         className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full"
-                        style={plan.popular
+                        style={plan.id === 'elite'
+                          ? { background: 'rgba(245,158,11,0.12)', color: '#f59e0b' }
+                          : plan.popular
                           ? { background: 'rgba(229,72,77,0.1)', color: '#e5484d' }
                           : { background: '#f1f5f9', color: '#64748b' }}
                       >
                         <Check className="h-3.5 w-3.5" />
                       </div>
-                      <span style={{ color: plan.popular ? '#0f172a' : '#64748b' }}>{feature}</span>
+                      <span style={{ color: plan.id === 'elite' || plan.popular ? '#0f172a' : '#64748b' }}>{feature}</span>
                     </motion.div>
                   ))}
                   {'lockedFeatures' in plan && (plan as any).lockedFeatures.map((feature: string, i: number) => (
@@ -269,13 +298,17 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                 <CardFooter style={{ flexDirection: 'column', gap: '0.5rem' }}>
                   <button
                     className="w-full rounded-lg py-2.5 px-4 text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2"
-                    style={plan.popular
+                    style={plan.id === 'elite'
+                      ? { background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#fff', border: 'none' }
+                      : plan.popular
                       ? { background: '#e5484d', color: '#fff', border: 'none' }
                       : { background: '#fff', color: '#0f172a', border: '1px solid #e2e8f0' }}
                     disabled={loadingPlan === plan.id}
                     onClick={() => handleBuy(plan.id)}
                     onMouseEnter={e => {
-                      if (!plan.popular) {
+                      if (plan.id === 'elite') {
+                        (e.currentTarget as HTMLButtonElement).style.background = 'linear-gradient(135deg, #d97706, #b45309)';
+                      } else if (!plan.popular) {
                         (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(236,91,19,0.3)';
                         (e.currentTarget as HTMLButtonElement).style.color = '#e5484d';
                       } else {
@@ -283,7 +316,9 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                       }
                     }}
                     onMouseLeave={e => {
-                      if (!plan.popular) {
+                      if (plan.id === 'elite') {
+                        (e.currentTarget as HTMLButtonElement).style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+                      } else if (!plan.popular) {
                         (e.currentTarget as HTMLButtonElement).style.borderColor = '#e2e8f0';
                         (e.currentTarget as HTMLButtonElement).style.color = '#0f172a';
                       } else {
@@ -315,7 +350,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.5 }}
-          style={{ width: '100%', maxWidth: '720px', background: '#fff', borderRadius: '1rem', border: '1.5px solid #e2e8f0', overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,0,0,0.06)' }}
+          style={{ width: '100%', maxWidth: '900px', background: '#fff', borderRadius: '1rem', border: '1.5px solid #e2e8f0', overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,0,0,0.06)' }}
         >
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
             <thead>
@@ -323,23 +358,26 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                 <th style={{ padding: '0.9rem 1.25rem', textAlign: 'left', color: '#94a3b8', fontWeight: 700, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Feature</th>
                 <th style={{ padding: '0.9rem 1rem', textAlign: 'center', color: '#e5484d', fontWeight: 700, fontSize: '0.72rem', textTransform: 'uppercase' }}>Starter</th>
                 <th style={{ padding: '0.9rem 1rem', textAlign: 'center', color: '#6366f1', fontWeight: 700, fontSize: '0.72rem', textTransform: 'uppercase' }}>Pro</th>
+                <th style={{ padding: '0.9rem 1rem', textAlign: 'center', color: '#d97706', fontWeight: 700, fontSize: '0.72rem', textTransform: 'uppercase' }}>Elite</th>
               </tr>
             </thead>
             <tbody>
               {[
-                { label: 'AI renders',      starter: '50',    pro: '150' },
-                { label: 'Quality',         starter: 'HD',    pro: 'HD + StyleAI Pro' },
-                { label: 'Cost per render', starter: '$0.20', pro: '$0.17' },
-                { label: 'No watermark',    starter: '✓',     pro: '✓' },
-                { label: 'PDF export',      starter: '✓',     pro: '✓' },
-                { label: 'Isometric views', starter: '✗',     pro: '✓' },
-                { label: 'Commercial use',  starter: '✓',     pro: '✓' },
-                { label: 'Credits expire',  starter: 'No',    pro: 'No' },
+                { label: 'AI renders',      starter: '50',    pro: '150',              elite: '150' },
+                { label: 'AI model',        starter: 'Standard', pro: 'Standard',      elite: 'Highest accuracy' },
+                { label: 'Cost per render', starter: '$0.20', pro: '$0.17',            elite: '$0.33' },
+                { label: 'No watermark',    starter: '✓',     pro: '✓',               elite: '✓' },
+                { label: 'PDF export',      starter: '✓',     pro: '✓',               elite: '✓' },
+                { label: 'Isometric views', starter: '✗',     pro: '✓',               elite: '✓' },
+                { label: 'Material detail', starter: 'HD',    pro: 'HD',               elite: 'Superior' },
+                { label: 'Commercial use',  starter: '✓',     pro: '✓',               elite: '✓' },
+                { label: 'Credits expire',  starter: 'No',    pro: 'No',               elite: 'No' },
               ].map((row, i) => (
-                <tr key={i} style={{ borderBottom: i < 7 ? '1px solid #f8fafc' : 'none', background: i % 2 === 0 ? '#fafafa' : '#fff' }}>
+                <tr key={i} style={{ borderBottom: i < 8 ? '1px solid #f8fafc' : 'none', background: i % 2 === 0 ? '#fafafa' : '#fff' }}>
                   <td style={{ padding: '0.75rem 1.25rem', color: '#334155', fontWeight: 600 }}>{row.label}</td>
                   <td style={{ padding: '0.75rem 1rem', textAlign: 'center', color: '#e5484d', fontWeight: 600 }}>{row.starter}</td>
                   <td style={{ padding: '0.75rem 1rem', textAlign: 'center', color: '#6366f1', fontWeight: 700 }}>{row.pro}</td>
+                  <td style={{ padding: '0.75rem 1rem', textAlign: 'center', color: '#d97706', fontWeight: 700 }}>{row.elite}</td>
                 </tr>
               ))}
             </tbody>

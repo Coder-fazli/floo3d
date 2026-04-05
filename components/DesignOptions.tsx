@@ -63,7 +63,7 @@ export default function DesignOptions({ transformImages = {} }: { transformImage
       {/* ── Items ── */}
       <div className="do-items">
 
-        {/* 01 — 2D Floor Plan to 3D */}
+        {/* 01 — Blueprint Floor Plan to 3D */}
         <div className="do-item do-fade" ref={ref01}>
           <span className="do-ghost-num" style={{ top: "-1.5rem", left: "-0.5rem" }}>01</span>
           <div className="do-grid">
@@ -72,7 +72,7 @@ export default function DesignOptions({ transformImages = {} }: { transformImage
             </div>
             <div className="do-col-text-right">
               <div className="do-text-card">
-                <h3 className="do-item-title">2D Floor Plan to 3D</h3>
+                <h3 className="do-item-title">Blueprint Floor Plan to 3D</h3>
                 <p className="do-item-desc">
                   The easiest way to convert 2D floor plans to 3D online — free AI floor plan generator with no software needed. Upload a blueprint, get a photorealistic render instantly.
                 </p>

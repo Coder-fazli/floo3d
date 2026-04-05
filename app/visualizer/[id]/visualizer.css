@@ -1089,14 +1089,14 @@
     align-items: center;
     justify-content: center;
     gap: 0.2rem;
-    background: rgba(0,0,0,0.35);
+    background: rgba(0,0,0,0.2);
 }
 
 .viz-style-card-lock span {
     font-size: 0.6rem;
     font-weight: 700;
     color: #fff;
-    background: #7c3aed;
+    background: #ec5b13;
     padding: 0.1rem 0.35rem;
     border-radius: 0.25rem;
     letter-spacing: 0.04em;

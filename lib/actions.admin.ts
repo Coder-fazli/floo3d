@@ -387,12 +387,18 @@ export async function getPricingSettings() {
   await connectDb();
   let settings = await PricingSettings.findOne().lean() as any;
   if (!settings) settings = await PricingSettings.create({});
-  return JSON.parse(JSON.stringify(settings));
+  const result = JSON.parse(JSON.stringify(settings));
+  // Ensure array fields are never undefined for old documents missing new fields
+  result.starterFeatures = result.starterFeatures ?? [];
+  result.proFeatures     = result.proFeatures ?? [];
+  result.eliteFeatures   = result.eliteFeatures ?? [];
+  return result;
 }
 
 export async function savePricingSettings(data: {
   starterPrice: number; starterCredits: number; starterDescription: string; starterFeatures: string[];
   proPrice: number; proCredits: number; proDescription: string; proFeatures: string[];
+  elitePrice: number; eliteCredits: number; eliteDescription: string; eliteFeatures: string[];
 }) {
   await requireAdmin();
   await connectDb();

@@ -7,8 +7,12 @@ const PricingSettingsSchema = new mongoose.Schema({
   starterFeatures:    { type: [String], default: ["100 credits — 50 AI renders", "All 4 AI tools included", "HD quality renders", "PNG, JPG & PDF export", "No watermark", "Commercial usage rights", "Priority support"] },
   proPrice:           { type: Number, default: 24.99 },
   proCredits:         { type: Number, default: 300 },
-  proDescription:     { type: String, default: "Highest accuracy AI renders powered by StyleAI Pro — for architects, agencies and real estate professionals." },
-  proFeatures:        { type: [String], default: ["300 credits — 150 AI renders", "All Starter features", "Isometric & cross-section views", "StyleAI Pro — highest accuracy", "Superior detail & realism", "PNG, JPG & PDF export", "Commercial usage rights", "Priority support"] },
+  proDescription:     { type: String, default: "Great value for homeowners and designers who need professional results fast." },
+  proFeatures:        { type: [String], default: ["300 credits — 150 AI renders", "All Starter features", "Isometric & cross-section views", "HD quality renders", "PNG, JPG & PDF export", "No watermark", "Commercial usage rights", "Priority support"] },
+  elitePrice:         { type: Number, default: 49.99 },
+  eliteCredits:       { type: Number, default: 300 },
+  eliteDescription:   { type: String, default: "Highest accuracy AI — for architects, agencies and real estate professionals who demand the best." },
+  eliteFeatures:      { type: [String], default: ["300 credits — 150 AI renders", "All Pro features included", "Highest accuracy AI model", "Superior material & texture detail", "More realistic lighting & shadows", "Sharper architectural lines", "Best for client presentations", "Commercial usage rights", "Priority support"] },
 }, { timestamps: true });
 
 const PricingSettings =

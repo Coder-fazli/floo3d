@@ -646,7 +646,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                           title={locked ? "Pro feature — Upgrade to unlock" : undefined}
                         >
                           <div className="viz-style-card-img">
-                            <img src={getAngleImage(angle)} alt={ANGLE_LABELS[angle]} style={locked ? { filter: "brightness(0.45)" } : undefined} />
+                            <img src={getAngleImage(angle)} alt={ANGLE_LABELS[angle]} style={locked ? { filter: "blur(3px) brightness(0.6)" } : undefined} />
                             {locked ? (
                               <div className="viz-style-card-lock">
                                 <Lock size={14} color="#fff" />
