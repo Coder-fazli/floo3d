@@ -94,10 +94,8 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
     "floor-plan-generator": null,
   };
   const [welcomeOpen, setWelcomeOpen] = useState(false);
-  const welcomeChecked = useRef(false);
   useEffect(() => {
-    if (!isNewMode || welcomeChecked.current || isAdminView) return;
-    welcomeChecked.current = true;
+    if (!isNewMode || isAdminView) return;
     const key = `welcome_shown_${inputTypeNew}`;
     if (!sessionStorage.getItem(key) && WELCOME_POPUP_META[inputTypeNew]) {
       setWelcomeOpen(true);
