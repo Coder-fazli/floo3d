@@ -47,7 +47,9 @@ export async function POST(request: Request) {
     const imageResponse = await fetch(imageUrl);
     const buffer = await imageResponse.arrayBuffer();
     const base64 = Buffer.from(buffer).toString("base64");
-    const mimeType = imageUrl.endsWith(".png") ? "image/png" : "image/jpeg";
+    // Detect mimeType from response headers, not from URL (Cloudinary URLs often have no extension)
+    const contentType = imageResponse.headers.get("content-type") ?? "";
+    const mimeType: "image/png" | "image/jpeg" = contentType.includes("png") ? "image/png" : "image/jpeg";
 
     const [modelSettings, userInfo] = await Promise.all([getModelSettings(), getUserInfo(userId)]);
     const isSpecialAngle = viewAngle === "isometric" || viewAngle === "crossSection";
@@ -68,16 +70,24 @@ export async function POST(request: Request) {
       } as any,
     });
 
-    const result = await model.generateContent([
-      { inlineData: { data: base64, mimeType } },
-      buildPrompt({ inputType, style, roomType, viewAngle }),
-    ]);
+    const prompt = buildPrompt({ inputType, style, roomType, viewAngle });
 
-    const parts = result.response.candidates?.[0]?.content?.parts;
-    const imagePart = parts?.find((p: any) => p.inlineData);
+    // Try up to 2 times — Gemini occasionally returns no image on first attempt
+    let imagePart: any = null;
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      const result = await model.generateContent([
+        { inlineData: { data: base64, mimeType } },
+        prompt,
+      ]);
+      const parts = result.response.candidates?.[0]?.content?.parts;
+      imagePart = parts?.find((p: any) => p.inlineData);
+      if (imagePart) break;
+      const textPart = parts?.find((p: any) => p.text);
+      console.warn(`Gemini attempt ${attempt} returned no image. Text: ${textPart?.text ?? "(none)"}`);
+    }
 
     if (!imagePart) {
-      console.error("Gemini returned no image part");
+      console.error("Gemini returned no image part after 2 attempts");
       await connectDb();
       await GenerationLog.create({
         userId,
