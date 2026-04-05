@@ -85,6 +85,26 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   const zoomIn  = () => setZoomLevel(z => parseFloat(Math.min(z + 0.25, 3).toFixed(2)));
   const zoomOut = () => setZoomLevel(z => parseFloat(Math.max(z - 0.25, 0.5).toFixed(2)));
 
+  // Welcome popup
+  const WELCOME_POPUP_META: Record<string, { title: string; body: string; img?: string } | null> = {
+    "floor-plan":      { title: "You need a floor plan drawing", body: "Upload a top-down architectural drawing — like the example below. Hand-drawn sketches, digital plans, or scanned blueprints all work great.\n\nPhotos of rooms or furniture will NOT work here.", img: "/example-blueprint.jpg" },
+    "interior-design": { title: "Upload an interior photo", body: "Upload any photo of an interior space — kitchen, living room, bedroom, bathroom, anything inside.\n\nDo NOT upload floor plan drawings or blueprints here. This tool is for interior photos only.", img: "/example-interior.jpg" },
+    "outdoor":         { title: "You need a photo of your outdoor space", body: "Upload a photo of your garden, yard, or exterior. The AI will transform it with a new landscape design.\n\nMake sure the outdoor area is clearly visible.", img: null },
+    "empty-room":      { title: "You need a photo of an empty room", body: "Upload a photo of a room with no furniture. The AI will virtually stage it with beautiful furniture and decor.\n\nRooms with existing furniture may give unexpected results.", img: null },
+    "floor-plan-generator": null,
+  };
+  const [welcomeOpen, setWelcomeOpen] = useState(false);
+  const welcomeChecked = useRef(false);
+  useEffect(() => {
+    if (!isNewMode || welcomeChecked.current || isAdminView) return;
+    welcomeChecked.current = true;
+    const key = `welcome_shown_${inputTypeNew}`;
+    if (!sessionStorage.getItem(key) && WELCOME_POPUP_META[inputTypeNew]) {
+      setWelcomeOpen(true);
+      sessionStorage.setItem(key, "1");
+    }
+  }, [isNewMode, inputTypeNew]);
+
   // Sync inputTypeNew when URL ?type= changes (client-side navigation)
   useEffect(() => {
     const t = searchParams.get("type");
@@ -392,6 +412,35 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
 
   return (
     <div className="viz-page" onContextMenu={isAdminView ? undefined : e => e.preventDefault()}>
+
+      {/* Welcome popup */}
+      {welcomeOpen && (() => {
+        const meta = WELCOME_POPUP_META[inputTypeNew];
+        if (!meta) return null;
+        return (
+          <div style={{ position: "fixed", inset: 0, zIndex: 9999, background: "rgba(0,0,0,0.55)", display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }} onClick={() => setWelcomeOpen(false)}>
+            <div style={{ background: "#fff", borderRadius: "1.25rem", maxWidth: "480px", width: "100%", overflow: "hidden", boxShadow: "0 25px 60px rgba(0,0,0,0.25)" }} onClick={e => e.stopPropagation()}>
+              {meta.img && (
+                <div style={{ background: "#eef2ff", padding: "1.5rem 1.5rem 0" }}>
+                  <img src={meta.img} alt="Example" style={{ width: "100%", borderRadius: "0.75rem", display: "block", maxHeight: "220px", objectFit: "cover", objectPosition: "top" }} />
+                </div>
+              )}
+              <div style={{ padding: "1.5rem" }}>
+                <h2 style={{ margin: "0 0 0.75rem", fontSize: "1.1rem", fontWeight: 800, color: "#0f172a" }}>{meta.title}</h2>
+                {meta.body.split("\n\n").map((para, i) => (
+                  <p key={i} style={{ margin: "0 0 0.6rem", fontSize: "0.875rem", color: i === 0 ? "#334155" : "#94a3b8", lineHeight: 1.6 }}>{para}</p>
+                ))}
+                <button
+                  onClick={() => setWelcomeOpen(false)}
+                  style={{ marginTop: "1rem", width: "100%", padding: "0.75rem", background: "#ec5b13", color: "#fff", border: "none", borderRadius: "0.75rem", fontSize: "0.9rem", fontWeight: 700, cursor: "pointer" }}
+                >
+                  Got it, let&apos;s go →
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Admin View Banner */}
       {isAdminView && (
