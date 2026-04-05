@@ -5,6 +5,12 @@ import { getUserByClerkId, getProjects } from "@/lib/actions";
 import { updateUserCredits, deleteUSer, getOrdersByUser, getLogsByUser } from "@/lib/actions.admin";
 import AdminViewButton from "./AdminViewButton";
 
+const MODEL_LABELS: Record<string, { label: string; color: string; bg: string }> = {
+  "gemini-3-pro-image-preview":     { label: "StyleAI Pro",   color: "#7c3aed", bg: "#ede9fe" },
+  "gemini-3.1-flash-image-preview": { label: "StyleAI Flash", color: "#0369a1", bg: "#e0f2fe" },
+  "gemini-2.5-flash-image":         { label: "StyleAI Lite",  color: "#64748b", bg: "#f1f5f9" },
+};
+
 export default async function AdminUserDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const [user, projects, orders, logs] = await Promise.all([
@@ -257,7 +263,13 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
                   <tr key={l._id}>
                     <td style={{ color: "#94a3b8", fontSize: "0.78rem" }}>{new Date(l.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
                     <td style={{ fontSize: "0.78rem" }}>{l.inputType}</td>
-                    <td style={{ fontSize: "0.72rem", color: "#64748b" }}>{l.model}</td>
+                    <td>
+                      {l.model ? (
+                        <span style={{ fontSize: "0.72rem", fontWeight: 700, padding: "0.2rem 0.5rem", borderRadius: "999px", background: MODEL_LABELS[l.model]?.bg ?? "#f1f5f9", color: MODEL_LABELS[l.model]?.color ?? "#64748b" }}>
+                          {MODEL_LABELS[l.model]?.label ?? l.model}
+                        </span>
+                      ) : "—"}
+                    </td>
                     <td style={{ fontSize: "0.78rem", color: "#94a3b8" }}>{l.duration ? `${(l.duration / 1000).toFixed(1)}s` : "—"}</td>
                     <td>
                       <span className={`adm-badge ${l.status === "success" ? "adm-badge-green" : "adm-badge-red"}`}>

@@ -42,8 +42,20 @@ export async function getAllUSers() {
   await requireAdmin();
   noStore();
   await connectDb();
-  const users = await User.find({}).sort("-createdAt");
-  return JSON.parse(JSON.stringify(users));
+  const users = await User.find({}).sort("-createdAt").lean();
+
+  // Get last used model for each user
+  const userIds = users.map((u: any) => u.clerkId);
+  const lastLogs = await GenerationLog.aggregate([
+    { $match: { userId: { $in: userIds }, status: "success" } },
+    { $sort: { createdAt: -1 } },
+    { $group: { _id: "$userId", model: { $first: "$model" } } },
+  ]);
+  const modelByUser: Record<string, string> = {};
+  for (const l of lastLogs) modelByUser[l._id] = l.model;
+
+  const result = users.map((u: any) => ({ ...u, lastModel: modelByUser[u.clerkId] ?? null }));
+  return JSON.parse(JSON.stringify(result));
 }
 
 export async function updateUserCredits(clerkId: string, credits: number) {

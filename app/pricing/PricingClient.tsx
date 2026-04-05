@@ -211,7 +211,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                             <NumberFlow
                               className="text-3xl font-bold"
                               style={{ color: plan.id === 'pro' ? '#6366f1' : plan.popular ? '#e5484d' : '#0f172a' }}
-                              format={{ style: 'currency', currency: 'USD', maximumFractionDigits: 0 }}
+                              format={{ style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 }}
                               value={plan.price.oneTime}
                             />
                             <span className="text-sm" style={{ color: '#94a3b8' }}>one-time · {plan.credits} credits</span>
