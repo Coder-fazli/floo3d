@@ -15,11 +15,11 @@ export default function GetStartedButton({
   onClick,
 }: IGetStartedButtonProps) {
   return (
-    <div className="min-h-12 w-48">
+    <div className="min-h-12 w-auto">
       <button
         onClick={onClick}
         className={cn(
-          "group flex h-12 w-40 items-center justify-center gap-3 rounded-lg bg-amber-100 p-2 font-bold transition-colors duration-100 ease-in-out hover:bg-orange-600",
+          "group flex h-12 w-auto items-center justify-center gap-3 rounded-lg bg-white px-4 py-2 font-bold whitespace-nowrap transition-colors duration-100 ease-in-out hover:bg-orange-600",
           className,
         )}
       >
@@ -33,7 +33,7 @@ export default function GetStartedButton({
         <div
           className={cn(
             "relative flex h-7 w-7 items-center justify-center overflow-hidden rounded-full transition-transform duration-100",
-            "bg-orange-600 group-hover:bg-amber-100",
+            "bg-orange-600 group-hover:bg-white",
           )}
         >
           <div className="absolute left-0 flex h-7 w-14 -translate-x-1/2 items-center justify-center transition-all duration-200 ease-in-out group-hover:translate-x-0">
