@@ -13,7 +13,7 @@ import "yet-another-react-lightbox/styles.css";
 import SocialButton from "@/components/kokonutui/social-button";
 import Image from "next/image";
 import Link from "next/link";
-import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, ChevronRight, Upload as UploadIcon, Home, Zap, Sparkles, Bell, Lock } from "lucide-react";
+import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, ChevronRight, Upload as UploadIcon, Home, Zap, Sparkles, Bell, Lock, ImageIcon, Share2 } from "lucide-react";
 import NameProjectModal from "@/components/NameProjectModal";
 import { HoleBackground } from "@/components/animate-ui/components/backgrounds/hole";
 import { RainbowButton } from "@/components/ui/rainbow-button";
@@ -32,6 +32,25 @@ const STYLES: Record<string, string[]> = {
 
 
 const ROOM_TYPES = ["Living Room", "Bedroom", "Kitchen", "Bathroom", "Office", "Dining Room", "Studio", "Hallway", "Kids Room"];
+
+function SpeedDialTooltip({ label, children }: { label: string; children: import("react").ReactNode }) {
+  const [visible, setVisible] = useState(false);
+  return (
+    <div onMouseEnter={() => setVisible(true)} onMouseLeave={() => setVisible(false)} style={{ position: "relative", display: "inline-block" }}>
+      {children}
+      {visible && (
+        <div style={{
+          position: "absolute", left: "100%", top: "50%", transform: "translateY(-50%)",
+          marginLeft: "10px", background: "#1e293b", color: "#fff",
+          padding: "4px 10px", borderRadius: "6px", fontSize: "0.75rem",
+          whiteSpace: "nowrap", zIndex: 100, pointerEvents: "none",
+        }}>
+          {label}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function VisualizerClient({ embeddedId, frames, defaultType, isAdminView }: { embeddedId?: string; frames?: FramesData; defaultType?: string; isAdminView?: boolean } = {}) {
   const FALLBACK_IMAGES = Object.fromEntries(
@@ -65,6 +84,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [modalType, setModalType] = useState<"error" | "credits" | "suspended" | null>(null);
+  const [speedDialOpen, setSpeedDialOpen] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
 
   // Sidebar state
@@ -555,6 +575,69 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                 <p className="viz-stat-label">Navigate</p>
                 <p className="viz-stat-value" style={{ color: "#ec5b13" }}>Back to Dashboard</p>
               </div>
+            </div>
+
+            {/* Speed Dial — Generated Renders */}
+            <div
+              style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center" }}
+              onMouseLeave={() => setSpeedDialOpen(false)}
+            >
+              {/* Action buttons expanding upward */}
+              <div style={{
+                position: "absolute", bottom: "100%", left: "50%",
+                transform: speedDialOpen ? "translateX(-50%) scale(1)" : "translateX(-50%) scale(0)",
+                transformOrigin: "bottom center",
+                opacity: speedDialOpen ? 1 : 0,
+                transition: "transform 0.4s ease, opacity 0.4s ease",
+                display: "flex", flexDirection: "column", alignItems: "center",
+                gap: "0.5rem", paddingBottom: "0.6rem", zIndex: 50,
+              }}>
+                {[
+                  { icon: <Share2 size={18} />,    label: "Share",      action: () => {}, disabled: false },
+                  { icon: <Maximize2 size={18} />, label: "Fullscreen", action: () => setLightboxOpen(true), disabled: !currentImage && !guestResult },
+                  { icon: <Download size={18} />,  label: "Download",   action: () => handleFreeDownload("png"), disabled: !currentImage && !guestResult },
+                ].map((btn, i) => (
+                  <SpeedDialTooltip key={i} label={btn.label}>
+                    <button
+                      onClick={btn.disabled ? undefined : btn.action}
+                      style={{
+                        backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+                        background: "rgba(255,255,255,0.85)", border: "1px solid rgba(255,255,255,0.7)",
+                        borderRadius: "12px", boxShadow: "0 4px 24px rgba(0,0,0,0.1), 0 1px 4px rgba(0,0,0,0.06)",
+                        padding: "0.65rem", cursor: btn.disabled ? "not-allowed" : "pointer",
+                        color: btn.disabled ? "#cbd5e1" : "#334155",
+                        transition: "all 0.3s", display: "flex", alignItems: "center", justifyContent: "center",
+                      }}
+                      onMouseEnter={e => { if (!btn.disabled) (e.currentTarget as HTMLButtonElement).style.background = "rgba(241,245,249,0.95)"; }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.85)"; }}
+                    >
+                      {btn.icon}
+                    </button>
+                  </SpeedDialTooltip>
+                ))}
+              </div>
+
+              {/* Main trigger */}
+              <button
+                onMouseEnter={() => setSpeedDialOpen(true)}
+                style={{
+                  backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+                  background: "rgba(255,255,255,0.85)", border: "1px solid rgba(255,255,255,0.7)",
+                  borderRadius: "12px", boxShadow: "0 4px 24px rgba(0,0,0,0.1), 0 1px 4px rgba(0,0,0,0.06)",
+                  padding: "0.65rem 1rem", cursor: "pointer", color: "#334155",
+                  transition: "all 0.3s", display: "flex", alignItems: "center",
+                  gap: "0.5rem", fontSize: "0.8rem", fontWeight: 600, whiteSpace: "nowrap",
+                }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.85)"; }}
+              >
+                <ImageIcon size={16} />
+                Generated Renders
+                {(project?.generationCount ?? 0) > 0 && (
+                  <span style={{ background: "#f1f5f9", borderRadius: "999px", padding: "1px 7px", fontSize: "0.7rem", fontWeight: 700, color: "#ec5b13" }}>
+                    {project.generationCount}
+                  </span>
+                )}
+              </button>
             </div>
             <div className="viz-stat-card" style={{ gap: "0.75rem" }}>
               <div style={{ display: "flex", gap: "0.5rem" }}>
