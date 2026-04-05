@@ -13,8 +13,8 @@ import "yet-another-react-lightbox/styles.css";
 import SocialButton from "@/components/kokonutui/social-button";
 import Image from "next/image";
 import Link from "next/link";
-import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, ChevronRight, Upload as UploadIcon, Home, Zap, Sparkles, Bell, Lock, LayoutDashboard } from "lucide-react";
-import Speeddial from "@/components/animata/fabs/speed-dial";
+import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, ChevronRight, Upload as UploadIcon, Home, Zap, Sparkles, Bell, Lock } from "lucide-react";
+import GetStartedButton from "@/components/animata/button/get-started-button";
 import NameProjectModal from "@/components/NameProjectModal";
 import { HoleBackground } from "@/components/animate-ui/components/backgrounds/hole";
 import { RainbowButton } from "@/components/ui/rainbow-button";
@@ -565,17 +565,9 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
               </div>
             </div>
 
-            {/* Speed Dial — Generated Renders */}
-            <Speeddial
-              direction="up"
-              actionButtons={[
-                {
-                  key: "studio",
-                  icon: <LayoutDashboard size={20} />,
-                  label: "Go to Studio",
-                  action: () => router.push("/dashboard"),
-                },
-              ]}
+            <GetStartedButton
+              text="Generated Renders"
+              onClick={() => router.push("/dashboard")}
             />
             <div className="viz-stat-card" style={{ gap: "0.75rem" }}>
               <div style={{ display: "flex", gap: "0.5rem" }}>
