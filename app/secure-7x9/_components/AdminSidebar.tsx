@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
-import { LayoutDashboard, Users, Building2, FileText, Settings, ImageIcon, Home, PenSquare, Cpu, ScrollText } from "lucide-react";
+import { LayoutDashboard, Users, Building2, FileText, Settings, ImageIcon, Home, PenSquare, Cpu, ScrollText, Tag } from "lucide-react";
 
 const links = [
   { href: "/secure-7x9", label: "Overview", icon: LayoutDashboard },
@@ -16,6 +16,7 @@ const links = [
   { href: "/secure-7x9/floor-plan-generator", label: "Floor Plan Gen", icon: PenSquare },
   { href: "/secure-7x9/models", label: "AI Models", icon: Cpu },
   { href: "/secure-7x9/logs", label: "Logs", icon: ScrollText },
+  { href: "/secure-7x9/pricing", label: "Pricing", icon: Tag },
 ];
 
 const systemLinks = [

@@ -10,6 +10,7 @@ import SiteSettings from "./models/SiteSettings";
 import AppFrames from "./models/AppFrames";
 import GenerationLog from "./models/GenerationLog";
 import Order from "./models/Order";
+import PricingSettings from "./models/PricingSettings";
 
 async function requireAdmin() {
   const { userId, sessionClaims } = await auth();
@@ -269,5 +270,23 @@ export async function getAnalytics(period: string) {
     recentRenders, recentErrors, recentPurchases,
     recentlyActive,
   }));
+}
+
+export async function getPricingSettings() {
+  await connectDb();
+  let settings = await PricingSettings.findOne().lean() as any;
+  if (!settings) settings = await PricingSettings.create({});
+  return JSON.parse(JSON.stringify(settings));
+}
+
+export async function savePricingSettings(data: {
+  starterPrice: number; starterCredits: number; starterDescription: string; starterFeatures: string[];
+  proPrice: number; proCredits: number; proDescription: string; proFeatures: string[];
+}) {
+  await requireAdmin();
+  await connectDb();
+  await PricingSettings.findOneAndUpdate({}, data, { upsert: true, new: true });
+  revalidatePath("/pricing");
+  revalidatePath("/secure-7x9/pricing");
 }
 

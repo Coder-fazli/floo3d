@@ -18,75 +18,40 @@ import { motion } from 'framer-motion';
 import { useClerk, useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 
-const plans = [
-  {
-    id: 'free',
-    name: 'Free',
-    icon: Star,
-    price: {
-      oneTime: 'Free forever',
-    },
-    description: 'Perfect for trying out MyHomeStyler. No credit card required.',
-    features: [
-      '10 credits — 5 AI renders',
-      'All 4 AI tools included',
-      'Standard quality (1024px)',
-      'Download as PNG / JPG',
-      'Personal use only',
-    ],
-    lockedFeatures: [
-      'HD quality export',
-      'PDF export',
-      'No watermark',
-    ],
-    cta: 'Get started free',
-    href: '/sign-up',
-  },
-  {
-    id: 'starter',
-    name: 'Starter',
-    icon: Zap,
-    price: {
-      oneTime: 9,
-    },
-    credits: 100,
-    description: 'Great for homeowners and designers working on a project.',
-    features: [
-      '100 credits — 50 AI renders',
-      'All 4 AI tools included',
-      'HD quality renders',
-      'PNG, JPG & PDF export',
-      'No watermark',
-      'Commercial usage rights',
-      'Priority support',
-    ],
-    cta: 'Buy Starter',
-    popular: true,
-  },
-  {
-    id: 'pro',
-    name: 'Pro',
-    icon: Shield,
-    price: {
-      oneTime: 24,
-    },
-    credits: 300,
-    description: 'Highest accuracy AI renders powered by StyleAI Pro — for architects, agencies and real estate professionals.',
-    features: [
-      '300 credits — 150 AI renders',
-      'All Starter features',
-      'Isometric & cross-section views',
-      'StyleAI Pro — highest accuracy',
-      'Superior detail & realism',
-      'PNG, JPG & PDF export',
-      'Commercial usage rights',
-      'Priority support',
-    ],
-    cta: 'Buy Pro',
-  },
-];
 
-export default function PricingClient() {
+type PricingSettings = {
+  starterPrice: number; starterCredits: number; starterDescription: string; starterFeatures: string[];
+  proPrice: number; proCredits: number; proDescription: string; proFeatures: string[];
+};
+
+export default function PricingClient({ pricingSettings }: { pricingSettings?: PricingSettings }) {
+  const plans = [
+    {
+      id: 'free', name: 'Free', icon: Star,
+      price: { oneTime: 'Free forever' },
+      description: 'Perfect for trying out MyHomeStyler. No credit card required.',
+      features: ['10 credits — 5 AI renders', 'All 4 AI tools included', 'Standard quality (1024px)', 'Download as PNG / JPG', 'Personal use only'],
+      lockedFeatures: ['HD quality export', 'PDF export', 'No watermark'],
+      cta: 'Get started free', href: '/sign-up',
+    },
+    {
+      id: 'starter', name: 'Starter', icon: Zap,
+      price: { oneTime: pricingSettings?.starterPrice ?? 9 },
+      credits: pricingSettings?.starterCredits ?? 100,
+      description: pricingSettings?.starterDescription ?? 'Great for homeowners and designers working on a project.',
+      features: pricingSettings?.starterFeatures ?? ['100 credits — 50 AI renders', 'All 4 AI tools included', 'HD quality renders', 'PNG, JPG & PDF export', 'No watermark', 'Commercial usage rights', 'Priority support'],
+      cta: 'Buy Starter', popular: true,
+    },
+    {
+      id: 'pro', name: 'Pro', icon: Shield,
+      price: { oneTime: pricingSettings?.proPrice ?? 24 },
+      credits: pricingSettings?.proCredits ?? 300,
+      description: pricingSettings?.proDescription ?? 'Highest accuracy AI renders powered by StyleAI Pro — for architects, agencies and real estate professionals.',
+      features: pricingSettings?.proFeatures ?? ['300 credits — 150 AI renders', 'All Starter features', 'Isometric & cross-section views', 'StyleAI Pro — highest accuracy', 'Superior detail & realism', 'PNG, JPG & PDF export', 'Commercial usage rights', 'Priority support'],
+      cta: 'Buy Pro',
+    },
+  ];
+
   const [mounted, setMounted] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const { openSignUp } = useClerk();

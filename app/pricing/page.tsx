@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PricingClient from "./PricingClient";
+import { getPricingSettings } from "@/lib/actions.admin";
 
 export const metadata = {
   title: "Pricing — MyHomeStyler",
@@ -10,12 +11,13 @@ export const metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const pricingSettings = await getPricingSettings();
   return (
     <>
       <Navbar />
       <Suspense>
-        <PricingClient />
+        <PricingClient pricingSettings={pricingSettings} />
       </Suspense>
       <Footer />
     </>

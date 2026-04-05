@@ -103,22 +103,18 @@ export default async function AdminOverview({ searchParams }: { searchParams: Pr
           <p style={{ margin: 0, fontSize: "0.75rem", color: "#94a3b8" }}>failed generations</p>
         </div>
 
-        {/* SMALL: Total Users */}
-        <div className="adm-card" style={{ gridColumn: "span 2", padding: "1.25rem", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-          <p style={{ margin: 0, fontSize: "0.7rem", fontWeight: 600, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.06em" }}>Total Users</p>
-          <h3 style={{ margin: 0, fontSize: "1.75rem", fontWeight: 800, color: "#0f172a" }}>{d.totalUsers}</h3>
-        </div>
-
-        {/* SMALL: Total Projects */}
-        <div className="adm-card" style={{ gridColumn: "span 2", padding: "1.25rem", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-          <p style={{ margin: 0, fontSize: "0.7rem", fontWeight: 600, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.06em" }}>Total Projects</p>
-          <h3 style={{ margin: 0, fontSize: "1.75rem", fontWeight: 800, color: "#0f172a" }}>{d.totalProjects}</h3>
-        </div>
-
-        {/* SMALL: Orders */}
-        <div className="adm-card" style={{ gridColumn: "span 2", padding: "1.25rem", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-          <p style={{ margin: 0, fontSize: "0.7rem", fontWeight: 600, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.06em" }}>Orders</p>
-          <h3 style={{ margin: 0, fontSize: "1.75rem", fontWeight: 800, color: "#0f172a" }}>{d.recentPurchases?.length ?? 0}</h3>
+        {/* SMALL stats row — inline horizontal card */}
+        <div className="adm-card" style={{ gridColumn: "span 6", padding: "1rem 1.5rem", display: "flex", alignItems: "center", gap: 0 }}>
+          {[
+            { label: "Total Users", value: d.totalUsers },
+            { label: "Total Projects", value: d.totalProjects },
+            { label: "Orders", value: d.recentPurchases?.length ?? 0 },
+          ].map((item, i) => (
+            <div key={item.label} style={{ flex: 1, textAlign: "center", borderRight: i < 2 ? "1px solid #f1f5f9" : "none", padding: "0.25rem 0" }}>
+              <p style={{ margin: 0, fontSize: "0.7rem", fontWeight: 600, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.06em" }}>{item.label}</p>
+              <h3 style={{ margin: "0.2rem 0 0", fontSize: "1.5rem", fontWeight: 800, color: "#0f172a" }}>{item.value}</h3>
+            </div>
+          ))}
         </div>
 
         {/* Recently Active Users */}
