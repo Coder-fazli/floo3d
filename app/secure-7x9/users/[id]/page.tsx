@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Calendar, Lock, RotateCcw, Trash2, ChevronLeft, ShoppingBag, Activity } from "lucide-react";
 import { getUserByClerkId, getProjects } from "@/lib/actions";
-import { updateUserCredits, deleteUSer, getOrdersByUser, getLogsByUser } from "@/lib/actions.admin";
+import { updateUserCredits, deleteUSer, getOrdersByUser, getLogsByUser, suspendUser } from "@/lib/actions.admin";
 import AdminViewButton from "./AdminViewButton";
 
 const MODEL_COSTS: Record<string, number> = {
@@ -51,6 +51,12 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
     redirect("/secure-7x9/users");
   }
 
+  async function handleSuspend() {
+    "use server";
+    await suspendUser(id, !user.suspended);
+    redirect(`/secure-7x9/users/${id}`);
+  }
+
   return (
     <div className="adm-content">
 
@@ -70,7 +76,7 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
           <div className="adm-user-header-info">
             <div className="adm-user-header-name-row">
               <h3 className="adm-user-header-name">{user.name || "No Name"}</h3>
-              <span className="adm-badge adm-badge-green">Active</span>
+              <span className={`adm-badge ${user.suspended ? "adm-badge-red" : "adm-badge-green"}`}>{user.suspended ? "Suspended" : "Active"}</span>
             </div>
             <p className="adm-user-header-email">{user.email}</p>
             <div className="adm-user-header-meta">
@@ -101,7 +107,7 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
         </div>
         <div className="adm-user-stat">
           <p className="adm-user-stat-label">Credits Used</p>
-          <p className="adm-user-stat-value">{totalGenerations * 3}</p>
+          <p className="adm-user-stat-value">{totalGenerations * 2}</p>
         </div>
         <div className="adm-user-stat">
           <p className="adm-user-stat-label">Downloads</p>
@@ -317,7 +323,11 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
         </div>
         <p className="adm-danger-desc">These actions are destructive and cannot be undone. Please proceed with caution.</p>
         <div className="adm-danger-btns">
-          <button className="adm-danger-btn"><Lock size={14} /> Suspend Account</button>
+          <form action={handleSuspend} style={{ display: "inline" }}>
+            <button type="submit" className={`adm-danger-btn${user.suspended ? " adm-danger-btn-solid" : ""}`}>
+              <Lock size={14} /> {user.suspended ? "Unsuspend Account" : "Suspend Account"}
+            </button>
+          </form>
           <button className="adm-danger-btn"><RotateCcw size={14} /> Reset Credits</button>
           <form action={handleDelete} style={{ display: "inline" }}>
             <button type="submit" className="adm-danger-btn adm-danger-btn-solid"><Trash2 size={14} /> Delete Account</button>

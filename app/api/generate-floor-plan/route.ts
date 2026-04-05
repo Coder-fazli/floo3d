@@ -2,6 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 import { uploadImage } from "@/lib/cloudinary";
 import { getCredits, deductCredit, getModelSettings, getUserInfo } from "@/lib/actions";
+import User from "@/lib/models/User";
 import { buildFloorPlanGeneratorPrompt, FloorPlanGeneratorConfig }
  from "@/lib/prompts/floor-plan-generator";
 import { connectDb } from "@/lib/db";
@@ -22,6 +23,10 @@ export async function POST(request: Request) {
         if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         const body = await request.json();
         const { config }: { config: FloorPlanGeneratorConfig } = body;
+
+        await connectDb();
+        const userDoc = await User.findOne({ clerkId: userId }, { suspended: 1 }).lean() as any;
+        if (userDoc?.suspended) return NextResponse.json({ error: "suspended" }, { status: 403 });
 
        // We Check Credits
         const credits = await getCredits(userId);

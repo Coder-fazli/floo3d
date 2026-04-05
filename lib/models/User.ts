@@ -8,7 +8,8 @@ const UserSchema = new Schema({
     email: { type: String, default: "" },
     imageUrl: { type: String, default: "" },
     hasPurchased: { type: Boolean, default: false },
-    }, 
+    suspended: { type: Boolean, default: false },
+    },
 { timestamps: true });
 
 const User = models.User || model("User", UserSchema);

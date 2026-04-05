@@ -64,7 +64,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [modalType, setModalType] = useState<"error" | "credits" | null>(null);
+  const [modalType, setModalType] = useState<"error" | "credits" | "suspended" | null>(null);
   const [zoomLevel, setZoomLevel] = useState(1);
 
   // Sidebar state
@@ -222,8 +222,12 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
         }),
       });
 
-      if (!res.ok) throw new Error(`Request failed with status ${res.status}`);
       const data = await res.json();
+      if (!res.ok) {
+        if (data?.error === "suspended") { setModalType("suspended"); return; }
+        if (res.status === 403) { setModalType("credits"); return; }
+        throw new Error(data.error || "Generation failed");
+      }
       if (!data?.renderedImageUrl) throw new Error("Invalid response from API");
       setCurrentImage(data.renderedImageUrl);
       if (user) getCredits(
@@ -232,11 +236,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
         user.emailAddresses?.[0]?.emailAddress ?? ""
       ).then(setCredits);
     } catch (error: any) {
-      if (res?.status === 403) {
-        setModalType("credits");
-      } else {
-        setModalType("error");
-      }
+      setModalType("error");
       console.error("Generation failed", error);
     } finally {
       setIsProcessing(false);
@@ -950,16 +950,27 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                 )}
               </div>
               <h3 className="viz-modal-title">
-                {modalType === "credits" ? "Out of Credits" : "Generation Failed"}
+                {modalType === "suspended" ? "Account Suspended" : modalType === "credits" ? "Out of Credits" : "Generation Failed"}
               </h3>
               <p className="viz-modal-text">
-                {modalType === "credits"
+                {modalType === "suspended"
+                  ? "Your account has been suspended and you cannot generate new renders. For more information please contact us at myhomestylercom@gmail.com"
+                  : modalType === "credits"
                   ? "You have reached your limit of 3D renders. Upgrade your plan to continue transforming floor plans."
                   : "Something went wrong while processing your render. Please try again or contact support if the problem persists."}
               </p>
             </div>
             <div className="viz-modal-actions">
-              {modalType === "credits" ? (
+              {modalType === "suspended" ? (
+                <>
+                  <a className="viz-modal-btn-primary" href="mailto:myhomestylercom@gmail.com">
+                    Contact Support
+                  </a>
+                  <button className="viz-modal-btn-secondary" onClick={() => router.push("/dashboard")}>
+                    Back to Dashboard
+                  </button>
+                </>
+              ) : modalType === "credits" ? (
                 <>
                   <button className="viz-modal-btn-primary" onClick={() => window.open("/pricing", "_blank")}>
                     Upgrade Now

@@ -70,6 +70,12 @@ export async function deleteUSer(clerkId: string) {
   await User.findOneAndDelete({ clerkId });
 }
 
+export async function suspendUser(clerkId: string, suspended: boolean) {
+  await requireAdmin();
+  await connectDb();
+  await User.findOneAndUpdate({ clerkId }, { suspended });
+}
+
 // ─── SEO Settings ─────────────────────────────────────────────────────────────
 
 export async function saveSiteSettings(metaTitle: string, metaDescription: string) {

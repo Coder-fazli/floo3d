@@ -2,6 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 import { uploadImage } from "@/lib/cloudinary";
 import { updateProject, getCredits, deductCredit, getModelSettings, getUserInfo } from "@/lib/actions";
+import User from "@/lib/models/User";
 import { buildPrompt } from "@/lib/prompts";
 import Project from "@/lib/models/Project";
 import GenerationLog from "@/lib/models/GenerationLog";
@@ -31,6 +32,10 @@ export async function POST(request: Request) {
     // Validate ImageUrl
     if (!imageUrl || !imageUrl.startsWith("https://res.cloudinary.com/"))
       return NextResponse.json({ error: "Invalid image URL" }, { status: 400 });
+
+    await connectDb();
+    const userDoc = await User.findOne({ clerkId: userId }, { suspended: 1, credits: 1 }).lean() as any;
+    if (userDoc?.suspended) return NextResponse.json({ error: "suspended" }, { status: 403 });
 
     const credits = await getCredits(userId);
     const isUnlimited = credits >= 99999;
