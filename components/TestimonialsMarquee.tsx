@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import { Marquee } from "@/components/ui/marquee";
 
-function Highlight({ children, className }: { children: React.ReactNode; className?: string }) {
+export function Highlight({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
     <span className={cn("bg-blue-500/10 p-1 py-0.5 font-bold text-blue-500", className)}>
       {children}
@@ -105,9 +105,17 @@ const testimonials = [
   },
 ];
 
-export default function TestimonialsMarquee() {
+export type Testimonial = {
+  name: string;
+  role: string;
+  img?: string;
+  description: React.ReactNode;
+};
+
+export default function TestimonialsMarquee({ items }: { items?: Testimonial[] }) {
+  const data = items ?? testimonials;
   return (
-    <section className="relative container py-10">
+    <section className="relative mx-auto w-full max-w-7xl px-4 py-10">
       <div className="absolute top-20 -left-20 z-10 h-64 w-64 rounded-full bg-blue-500/5 blur-3xl" />
       <div className="absolute -right-20 bottom-20 z-10 h-64 w-64 rounded-full bg-blue-500/5 blur-3xl" />
 
@@ -131,7 +139,7 @@ export default function TestimonialsMarquee() {
 
       <div className="relative mt-6 max-h-screen overflow-hidden">
         <div className="gap-4 md:columns-2 xl:columns-3 2xl:columns-4">
-          {Array(Math.ceil(testimonials.length / 3))
+          {Array(Math.ceil(data.length / 3))
             .fill(0)
             .map((_, i) => (
               <Marquee
@@ -144,7 +152,7 @@ export default function TestimonialsMarquee() {
                   "[--duration:70s]": i === 3,
                 })}
               >
-                {testimonials.slice(i * 3, (i + 1) * 3).map((card, idx) => (
+                {data.slice(i * 3, (i + 1) * 3).map((card, idx) => (
                   <TestimonialCard key={idx} {...card} />
                 ))}
               </Marquee>

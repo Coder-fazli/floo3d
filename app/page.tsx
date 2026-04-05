@@ -7,7 +7,7 @@ import Blog from "@/components/Blog";
 import RecentProjects from "@/components/RecentProjects";
 import Footer from "@/components/Footer";
 import FAQ from "@/components/FAQ";
-import { Marquee } from "@/components/ui/marquee";
+import TestimonialsMarquee from "@/components/TestimonialsMarquee";
 import { getHomeImages } from "@/lib/actions";
 const reviews = [
   { name: "David M.", handle: "@davidm", avatar: "/avatars/av1.jpg", text: "I rendered my entire apartment floor plan in under 2 minutes. The 3D output is stunning, clients love it." },
@@ -103,43 +103,7 @@ export default async function Home() {
 
       <RecentProjects />
 
-      <section className="marquee-section" id="reviews">
-        <div className="marquee-header">
-          <span className="marquee-eyebrow">Real Stories</span>
-          <h2 className="marquee-title">
-            Loved by <em className="marquee-accent">Thousands</em> of Professionals
-          </h2>
-          <p className="marquee-subtitle">Architects, interior designers, real estate agents, and homeowners — all transforming spaces with MyHomeStyler.</p>
-        </div>
-        <Marquee pauseOnHover repeat={3} className="marquee-strip">
-          {reviews.slice(0, 4).map((r) => (
-            <div key={r.handle} className="review-card">
-              <div className="review-header">
-                <Image src={r.avatar} alt={r.name} className="review-avatar" width={40} height={40} />
-                <div>
-                  <p className="review-name">{r.name}</p>
-                  <p className="review-handle">{r.handle}</p>
-                </div>
-              </div>
-              <p className="review-text">{r.text}</p>
-            </div>
-          ))}
-        </Marquee>
-        <Marquee reverse pauseOnHover repeat={3} className="marquee-strip">
-          {reviews.slice(4).map((r) => (
-            <div key={r.handle} className="review-card">
-              <div className="review-header">
-                <Image src={r.avatar} alt={r.name} className="review-avatar" width={40} height={40} />
-                <div>
-                  <p className="review-name">{r.name}</p>
-                  <p className="review-handle">{r.handle}</p>
-                </div>
-              </div>
-              <p className="review-text">{r.text}</p>
-            </div>
-          ))}
-        </Marquee>
-      </section>
+      <TestimonialsMarquee />
 
       <Blog />
 

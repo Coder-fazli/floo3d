@@ -9,7 +9,7 @@ import Footer from "@/components/Footer";
 import { Suspense } from "react";
 import VisualizerClient from "@/app/visualizer/[id]/VisualizerClient";
 import FAQ from "@/components/FAQ";
-import { Marquee } from "@/components/ui/marquee";
+import TestimonialsMarquee, { type Testimonial, Highlight } from "@/components/TestimonialsMarquee";
 import { getSiteSettings, getAppFrames } from "@/lib/actions";
 
 const DEFAULT_TITLE = "2D to 3D Floor Plan Converter — Convert 2D Floor Plan to 3D Model Free Online";
@@ -123,6 +123,63 @@ const jsonLd = {
   ],
 };
 
+const converterTestimonials: Testimonial[] = [
+  {
+    name: "James Okafor",
+    role: "Real Estate Agent",
+    img: "https://randomuser.me/api/portraits/men/32.jpg",
+    description: <p>I used this to <Highlight>convert blueprint to 3D model</Highlight> for every listing. Buyers can now visualize the space before visiting. Our conversion rate went up noticeably.</p>,
+  },
+  {
+    name: "Sarah Mitchell",
+    role: "Interior Designer",
+    img: "https://randomuser.me/api/portraits/women/44.jpg",
+    description: <p>I needed a <Highlight>floor plan to 3D model free online</Highlight> solution for client presentations. MyHomeStyler delivered photorealistic results in seconds.</p>,
+  },
+  {
+    name: "Carlos Rivera",
+    role: "Architect",
+    img: "https://randomuser.me/api/portraits/men/55.jpg",
+    description: <p>The best tool to <Highlight>convert blueprint to 3D model</Highlight> I have used. Shockingly accurate — I show clients their space before detailed plans are done.</p>,
+  },
+  {
+    name: "Lena Bauer",
+    role: "Homeowner",
+    img: "https://randomuser.me/api/portraits/women/68.jpg",
+    description: <p>Found this searching for <Highlight>floor plan to 3D model free</Highlight> tools. Uploaded my renovation sketch and got a stunning render instantly. Saved me from an expensive mistake.</p>,
+  },
+  {
+    name: "Amina Hassan",
+    role: "Property Developer",
+    img: "https://randomuser.me/api/portraits/women/12.jpg",
+    description: <p>We generate renders for all floor plan variations using this <Highlight>floor plan to 3D model free online</Highlight> tool. What used to take a week now takes an afternoon.</p>,
+  },
+  {
+    name: "Tom Eriksson",
+    role: "Renovation Contractor",
+    img: "https://randomuser.me/api/portraits/men/14.jpg",
+    description: <p>Clients bring their blueprints and I <Highlight>convert blueprint to 3D model</Highlight> on the spot. It closes deals faster than anything else I have tried.</p>,
+  },
+  {
+    name: "Priya Kapoor",
+    role: "Urban Planner",
+    img: "https://randomuser.me/api/portraits/women/90.jpg",
+    description: <p>The easiest <Highlight>floor plan to 3D model free</Highlight> converter online. Upload, pick a style, and the result is ready in under 30 seconds.</p>,
+  },
+  {
+    name: "Marco Rossi",
+    role: "Furniture Retailer",
+    img: "https://randomuser.me/api/portraits/men/76.jpg",
+    description: <p>We use this <Highlight>floor plan to 3D model free online</Highlight> tool to show customers how spaces will look furnished. Returns dropped significantly since we started.</p>,
+  },
+  {
+    name: "Yuki Tanaka",
+    role: "Freelance Designer",
+    img: "https://randomuser.me/api/portraits/women/28.jpg",
+    description: <p>The isometric view when you <Highlight>convert blueprint to 3D model</Highlight> here is stunning. Gives clients a real sense of depth that flat plans simply cannot.</p>,
+  },
+];
+
 export default async function FloorPlanConverterPage() {
   const frames = await getAppFrames();
   return (
@@ -145,43 +202,7 @@ export default async function FloorPlanConverterPage() {
 
       <RecentProjects />
 
-      <section className="marquee-section" id="reviews">
-        <div className="marquee-header">
-          <span className="marquee-eyebrow">Real Stories</span>
-          <h2 className="marquee-title">
-            Loved by <em className="marquee-accent">Thousands</em> of Professionals
-          </h2>
-          <p className="marquee-subtitle">Architects, interior designers, real estate agents, and homeowners — all converting 2D floor plans to 3D models free online with MyHomeStyler.</p>
-        </div>
-        <Marquee pauseOnHover repeat={3} className="marquee-strip">
-          {reviews.slice(0, 4).map((r) => (
-            <div key={r.handle} className="review-card">
-              <div className="review-header">
-                <Image src={r.avatar} alt={r.name} className="review-avatar" width={40} height={40} />
-                <div>
-                  <p className="review-name">{r.name}</p>
-                  <p className="review-handle">{r.handle}</p>
-                </div>
-              </div>
-              <p className="review-text">{r.text}</p>
-            </div>
-          ))}
-        </Marquee>
-        <Marquee reverse pauseOnHover repeat={3} className="marquee-strip">
-          {reviews.slice(4).map((r) => (
-            <div key={r.handle} className="review-card">
-              <div className="review-header">
-                <Image src={r.avatar} alt={r.name} className="review-avatar" width={40} height={40} />
-                <div>
-                  <p className="review-name">{r.name}</p>
-                  <p className="review-handle">{r.handle}</p>
-                </div>
-              </div>
-              <p className="review-text">{r.text}</p>
-            </div>
-          ))}
-        </Marquee>
-      </section>
+      <TestimonialsMarquee items={converterTestimonials} />
 
       <FAQ faqs={[
         {
