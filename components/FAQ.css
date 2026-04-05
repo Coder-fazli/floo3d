@@ -161,6 +161,23 @@
   color: rgba(255,255,255,0.92);
 }
 
+/* ─── Native <details> FAQ (server-rendered, Google-readable) ─── */
+.faq-details { list-style: none; }
+.faq-details summary { list-style: none; }
+.faq-details summary::-webkit-details-marker { display: none; }
+.faq-details[open] {
+  background: #ec5b13;
+  border-color: #ec5b13;
+  box-shadow: 0 12px 32px rgba(236,91,19,0.3);
+}
+.faq-details[open] .faq-q { color: #ffffff; }
+.faq-details[open] .faq-arrow {
+  background: rgba(255,255,255,0.2);
+  color: #ffffff;
+  box-shadow: none;
+  transform: rotate(90deg);
+}
+
 /* ─── Right side ─────────────────────────────────── */
 .faq-right {
   flex: 1;

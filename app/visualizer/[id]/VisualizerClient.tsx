@@ -357,8 +357,8 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
       const ctx = canvas.getContext("2d")!;
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      // Watermark — only for free users
-      if (!hasPurchased) {
+      // Watermark — only for free users, never for admin
+      if (!hasPurchased && !isAdminView) {
         const wFontSize = Math.max(12, Math.round(canvas.width * 0.022));
         ctx.save();
         ctx.globalAlpha = 0.18;

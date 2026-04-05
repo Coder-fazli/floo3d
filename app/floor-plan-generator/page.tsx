@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import FloorPlanGeneratorHero from "@/components/FloorPlanGeneratorHero";
 import HowItWorks2 from "@/components/HowItWorks2";
 import DesignOptions from "@/components/DesignOptions";
 import RecentProjects from "@/components/RecentProjects";
 import Footer from "@/components/Footer";
-import FAQ from "@/components/FAQ";
+import FaqServer from "@/components/FaqServer";
+import "@/components/FAQ.css";
+import TestimonialsMarquee from "@/components/TestimonialsMarquee";
 import { Suspense } from "react";
 import VisualizerClient from "@/app/visualizer/[id]/VisualizerClient";
-import { Marquee } from "@/components/ui/marquee";
 import { getSiteSettings, getFpgImages, getAppFrames } from "@/lib/actions";
 
 const DEFAULT_TITLE = "AI Floor Plan Generator — Create Custom Floor Plans Free Online";
@@ -31,16 +31,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const reviews = [
-  { name: "David M.", handle: "@davidm", avatar: "/avatars/av1.jpg", text: "Generated a full house floor plan in under a minute. The blueprint style looks completely professional." },
-  { name: "Jessica K.", handle: "@jessicak", avatar: "/avatars/av2.jpg", text: "I used this to plan my home renovation before hiring an architect. Saved me hours of back and forth." },
-  { name: "Sophie R.", handle: "@sophier", avatar: "/avatars/av3.jpg", text: "The isometric output is stunning. My clients could immediately visualize the space layout." },
-  { name: "Omar T.", handle: "@omart", avatar: "/avatars/av4.jpg", text: "Finally a tool that lets non-designers create proper floor plans. Simple, fast, and accurate." },
-  { name: "Priya S.", handle: "@priyas", avatar: "/avatars/av5.jpg", text: "I generated 4 different layouts in one afternoon to compare options. Incredible time saver." },
-  { name: "Chris L.", handle: "@chrisl", avatar: "/avatars/av6.jpg", text: "Used it for a client presentation. The colored floor plan looked like it came from a design studio." },
-  { name: "Marcus F.", handle: "@marcusf", avatar: "/avatars/av7.jpg", text: "No design skills needed at all. Just pick your rooms and the AI handles everything." },
-  { name: "Dev P.", handle: "@devp", avatar: "/avatars/av8.jpg", text: "Best AI floor plan tool I've tried. Fast, clean output, and the blueprint style is spot on." },
-];
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -64,12 +54,12 @@ const jsonLd = {
         "bestRating": "5",
         "worstRating": "1",
       },
-      "review": reviews.map((r) => ({
-        "@type": "Review",
-        "author": { "@type": "Person", "name": r.name },
-        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-        "reviewBody": r.text,
-      })),
+      "review": [
+        { "@type": "Review", "author": { "@type": "Person", "name": "Sarah Mitchell" }, "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }, "reviewBody": "I upload a floor plan and get a photorealistic 3D render in seconds. MyHomeStyler completely replaced our old rendering pipeline." },
+        { "@type": "Review", "author": { "@type": "Person", "name": "James Okafor" }, "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }, "reviewBody": "We use it for every listing now. Buyers can visualize the space in different styles without visiting." },
+        { "@type": "Review", "author": { "@type": "Person", "name": "Carlos Rivera" }, "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }, "reviewBody": "The blueprint-to-3D conversion is shockingly accurate. I use it to quickly show clients what their space will look like." },
+        { "@type": "Review", "author": { "@type": "Person", "name": "Priya Kapoor" }, "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }, "reviewBody": "I generated a full apartment floor plan in under a minute just by describing the rooms. No design software needed at all." },
+      ],
       "description": DEFAULT_DESC,
       "screenshot": "https://myhomestyler.com/og-floor-plan-generator.jpg",
     },
@@ -138,45 +128,9 @@ export default async function FloorPlanGeneratorPage() {
 
       <RecentProjects />
 
-      <section className="marquee-section" id="reviews">
-        <div className="marquee-header">
-          <span className="marquee-eyebrow">Real Stories</span>
-          <h2 className="marquee-title">
-            Loved by <em className="marquee-accent">Thousands</em> of Professionals
-          </h2>
-          <p className="marquee-subtitle">Architects, interior designers, real estate agents, and homeowners — all creating floor plans with MyHomeStyler.</p>
-        </div>
-        <Marquee pauseOnHover repeat={3} className="marquee-strip">
-          {reviews.slice(0, 4).map((r) => (
-            <div key={r.handle} className="review-card">
-              <div className="review-header">
-                <Image src={r.avatar} alt={r.name} className="review-avatar" width={40} height={40} />
-                <div>
-                  <p className="review-name">{r.name}</p>
-                  <p className="review-handle">{r.handle}</p>
-                </div>
-              </div>
-              <p className="review-text">{r.text}</p>
-            </div>
-          ))}
-        </Marquee>
-        <Marquee reverse pauseOnHover repeat={3} className="marquee-strip">
-          {reviews.slice(4).map((r) => (
-            <div key={r.handle} className="review-card">
-              <div className="review-header">
-                <Image src={r.avatar} alt={r.name} className="review-avatar" width={40} height={40} />
-                <div>
-                  <p className="review-name">{r.name}</p>
-                  <p className="review-handle">{r.handle}</p>
-                </div>
-              </div>
-              <p className="review-text">{r.text}</p>
-            </div>
-          ))}
-        </Marquee>
-      </section>
+      <TestimonialsMarquee />
 
-      <FAQ twoColumns faqs={[
+      <FaqServer twoColumns faqs={[
         { q: "Is the AI floor plan generator free to use?", a: "Yes — our AI floor plan generator free tool lets you create professional floor plans without a credit card. New accounts receive free credits instantly so you can start generating right away." },
         { q: "What is an AI floor plan generator?", a: "An AI floor plan generator is a tool that automatically creates architectural floor plans based on your inputs — property type, room count, size, and style. Instead of drawing manually, the AI blueprint generator handles the layout and design for you in seconds." },
         { q: "What can the AI blueprint generator create?", a: "The AI blueprint generator can produce three types of floor plans: black and white architectural blueprints, soft colored room plans with furniture icons, and isometric 3D-style views. It works for houses, apartments, villas, studios, and offices." },
@@ -195,6 +149,7 @@ export default async function FloorPlanGeneratorPage() {
         { q: "Can I generate a multi-floor house plan?", a: "Yes. You can set the number of floors up to 5. The AI takes the floor count into account when generating the layout and distributing rooms across levels." },
         { q: "Does it work on mobile?", a: "Yes. The AI floor plan generator is fully responsive and works on any device — phone, tablet, or desktop. No app download needed." },
       ]} />
+
 
       <Footer />
     </div>
