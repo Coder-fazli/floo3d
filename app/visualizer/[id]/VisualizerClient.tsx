@@ -87,7 +87,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
 
   // Welcome popup
   const WELCOME_POPUP_META: Record<string, { title: string; body: string; img?: string | null } | null> = {
-    "floor-plan":      { title: "You need a floor plan drawing", body: "Upload a top-down architectural drawing — like the example below. Hand-drawn sketches, digital plans, or scanned blueprints all work great.\n\nPhotos of rooms or furniture will NOT work here.", img: "/example-blueprint.jpg" },
+    "floor-plan":      { title: "You need a floor plan drawing", body: "Upload a top-down architectural drawing — like the example above. Hand-drawn sketches, digital plans, or scanned blueprints all work great.\n\nPhotos of interiors or separate furniture will NOT work here.", img: "/example-blueprint.jpg" },
     "interior-design": { title: "Upload an interior photo", body: "Upload any photo of an interior space — kitchen, living room, bedroom, bathroom, anything inside.\n\nDo NOT upload floor plan drawings or blueprints here. This tool is for interior photos only.", img: "/example-interior.jpg" },
     "outdoor":         { title: "You need a photo of your outdoor space", body: "Upload a photo of your garden, yard, or exterior. The AI will transform it with a new landscape design.\n\nMake sure the outdoor area is clearly visible.", img: null },
     "empty-room":      { title: "You need a photo of an empty room", body: "Upload a photo of a room with no furniture. The AI will virtually stage it with beautiful furniture and decor.\n\nRooms with existing furniture may give unexpected results.", img: null },
@@ -421,8 +421,8 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
           <div style={{ position: "fixed", inset: 0, zIndex: 9999, background: "rgba(0,0,0,0.55)", display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }} onClick={() => setWelcomeOpen(false)}>
             <div style={{ background: "#fff", borderRadius: "1.25rem", maxWidth: "480px", width: "100%", overflow: "hidden", boxShadow: "0 25px 60px rgba(0,0,0,0.25)" }} onClick={e => e.stopPropagation()}>
               {meta.img && (
-                <div style={{ background: "#eef2ff", padding: "1.5rem 1.5rem 0" }}>
-                  <img src={meta.img} alt="Example" style={{ width: "100%", borderRadius: "0.75rem", display: "block", maxHeight: "220px", objectFit: "cover", objectPosition: "top" }} />
+                <div style={{ background: "#f8fafc", padding: "1.25rem", borderBottom: "1px solid #f1f5f9" }}>
+                  <img src={meta.img} alt="Example" style={{ width: "100%", borderRadius: "0.75rem", display: "block", maxHeight: "240px", objectFit: "contain" }} />
                 </div>
               )}
               <div style={{ padding: "1.5rem" }}>
