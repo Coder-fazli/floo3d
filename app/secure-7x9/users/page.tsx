@@ -2,11 +2,6 @@ import { Search } from "lucide-react";
 import Link from "next/link";
 import { getAllUSers, getAllProjects } from "@/lib/actions.admin";
 
-const MODEL_LABELS: Record<string, { label: string; color: string; bg: string }> = {
-  "gemini-3-pro-image-preview":     { label: "StyleAI Pro",   color: "#7c3aed", bg: "#ede9fe" },
-  "gemini-3.1-flash-image-preview": { label: "StyleAI Flash", color: "#0369a1", bg: "#e0f2fe" },
-  "gemini-2.5-flash-image":         { label: "StyleAI Lite",  color: "#64748b", bg: "#f1f5f9" },
-};
 
 
 export default async function AdminUsers() {
@@ -62,11 +57,9 @@ export default async function AdminUsers() {
                     </span>
                   </td>
                   <td>
-                    {u.lastModel ? (
-                      <span style={{ fontSize: "0.72rem", fontWeight: 700, padding: "0.2rem 0.55rem", borderRadius: "999px", background: MODEL_LABELS[u.lastModel]?.bg ?? "#f1f5f9", color: MODEL_LABELS[u.lastModel]?.color ?? "#64748b" }}>
-                        {MODEL_LABELS[u.lastModel]?.label ?? u.lastModel}
-                      </span>
-                    ) : <span style={{ color: "#94a3b8", fontSize: "0.78rem" }}>—</span>}
+                    {u.lastModel
+                      ? <span style={{ fontSize: "0.72rem", fontFamily: "monospace", color: "#0f172a" }}>{u.lastModel}</span>
+                      : <span style={{ color: "#94a3b8", fontSize: "0.78rem" }}>—</span>}
                   </td>
                   <td>
                     <input className="adm-credits-input" type="number" defaultValue={u.credits} />

@@ -10,12 +10,12 @@ import AutoCompareSlider from "@/components/AutoCompareSlider";
 import { type FramesData } from "@/lib/actions";
 import { DEFAULT_FALLBACKS } from "@/lib/frameDefaults";
 
-const INPUT_TYPE_META: Record<string, { label: string; desc: string }> = {
-  "floor-plan":      { label: "2D Floor Plan → 3D",  desc: "Turn blueprints into photorealistic 3D renders" },
-  "interior-design": { label: "Interior Redesign",    desc: "Reimagine any room with AI-powered styling" },
-  "outdoor":         { label: "Garden & Yard Design", desc: "Transform your exterior with stunning landscape AI" },
-  "empty-room":           { label: "Virtual Staging",        desc: "Stage empty spaces with beautiful AI furniture" },
-  "floor-plan-generator": { label: "Floor Plan Generator",   desc: "Generate a custom floor plan from scratch with AI" },
+const INPUT_TYPE_META: Record<string, { label: string; desc: string; hint: string }> = {
+  "floor-plan":           { label: "Blueprint → 3D",       desc: "Upload a floor plan blueprint to get a photorealistic 3D render", hint: "📐 Upload: a blueprint or floor plan drawing" },
+  "floor-plan-generator": { label: "Floor Plan Generator",  desc: "Generate a custom floor plan from scratch with AI",              hint: "✏️ No upload needed — just describe your space" },
+  "interior-design":      { label: "Interior Redesign",     desc: "Reimagine any room with AI-powered styling",                    hint: "📷 Upload: a photo of an existing room" },
+  "outdoor":              { label: "Garden & Yard Design",  desc: "Transform your exterior with stunning landscape AI",             hint: "📷 Upload: a photo of your garden or yard" },
+  "empty-room":           { label: "Virtual Staging",       desc: "Stage empty spaces with beautiful AI furniture",                 hint: "📷 Upload: a photo of an empty room" },
 };
 
 export default function DashboardClient({ frames, displayName }: { frames: FramesData; displayName: string | null }) {
@@ -123,7 +123,7 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
               const saved = frames.fallbacks[id] ?? {};
               const imgBefore = saved.before ?? def.before;
               const imgAfter  = saved.after  ?? def.after;
-              const { label, desc } = INPUT_TYPE_META[id];
+              const { label, desc, hint } = INPUT_TYPE_META[id];
               return (
                 <div
                   key={id}
@@ -147,6 +147,7 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
                     <div>
                       <h3 className="nr-type-label">{label}</h3>
                       <p className="nr-type-desc">{desc}</p>
+                      <span style={{ display: "inline-block", marginTop: "0.5rem", fontSize: "0.7rem", color: "#64748b", background: "#f1f5f9", borderRadius: "999px", padding: "0.2rem 0.6rem", fontWeight: 500 }}>{hint}</span>
                     </div>
                     <span className="nr-type-cta">Try it →</span>
                   </div>

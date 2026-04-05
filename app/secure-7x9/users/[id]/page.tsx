@@ -5,10 +5,10 @@ import { getUserByClerkId, getProjects } from "@/lib/actions";
 import { updateUserCredits, deleteUSer, getOrdersByUser, getLogsByUser } from "@/lib/actions.admin";
 import AdminViewButton from "./AdminViewButton";
 
-const MODEL_LABELS: Record<string, { label: string; color: string; bg: string }> = {
-  "gemini-3-pro-image-preview":     { label: "StyleAI Pro",   color: "#7c3aed", bg: "#ede9fe" },
-  "gemini-3.1-flash-image-preview": { label: "StyleAI Flash", color: "#0369a1", bg: "#e0f2fe" },
-  "gemini-2.5-flash-image":         { label: "StyleAI Lite",  color: "#64748b", bg: "#f1f5f9" },
+const MODEL_COSTS: Record<string, number> = {
+  "gemini-3-pro-image-preview":     0.134,
+  "gemini-3.1-flash-image-preview": 0.067,
+  "gemini-2.5-flash-image":         0.039,
 };
 
 export default async function AdminUserDetail({ params }: { params: Promise<{ id: string }> }) {
@@ -28,9 +28,13 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
 
   // Tracking Generations Count
   const totalGenerations = projects.reduce((sum: number, p: any) => sum + (p.generationCount ?? 0), 0);
- // Tracking Downloads Count
- const totalDownloads = projects.filter((p: any) => 
- p.downloadedAt).length;
+  // Tracking Downloads Count
+  const totalDownloads = projects.filter((p: any) => p.downloadedAt).length;
+  // AI cost this user generated
+  const successLogs = logs.filter((l: any) => l.status === "success");
+  const totalCost = successLogs.reduce((sum: number, l: any) => sum + (MODEL_COSTS[l.model] ?? 0.067), 0);
+  const totalRevenue = orders.reduce((s: number, o: any) => s + (o.amount ?? 0), 0) / 100;
+  const netProfit = totalRevenue - totalCost;
 
 
 
@@ -108,6 +112,30 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
           <p className="adm-user-stat-value" style={{ fontSize: "1.25rem" }}>
             {user.createdAt ? new Date(user.createdAt).toLocaleDateString("en-US", { month: "short", year: "numeric" }) : "—"}
           </p>
+        </div>
+      </div>
+
+      {/* Cost card */}
+      <div className="adm-card" style={{ padding: "1.25rem 1.5rem", marginBottom: "1.5rem", display: "flex", gap: "0", borderRadius: "1rem", overflow: "hidden" }}>
+        <div style={{ flex: 1, padding: "0.5rem 1.5rem 0.5rem 0", borderRight: "1px solid #f1f5f9" }}>
+          <p style={{ margin: "0 0 0.25rem", fontSize: "0.72rem", fontWeight: 600, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.06em" }}>AI Cost</p>
+          <p style={{ margin: 0, fontSize: "1.5rem", fontWeight: 800, color: "#ef4444" }}>${totalCost.toFixed(3)}</p>
+          <p style={{ margin: "0.25rem 0 0", fontSize: "0.72rem", color: "#94a3b8" }}>{successLogs.length} successful generations</p>
+        </div>
+        <div style={{ flex: 1, padding: "0.5rem 1.5rem", borderRight: "1px solid #f1f5f9" }}>
+          <p style={{ margin: "0 0 0.25rem", fontSize: "0.72rem", fontWeight: 600, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.06em" }}>Revenue</p>
+          <p style={{ margin: 0, fontSize: "1.5rem", fontWeight: 800, color: "#16a34a" }}>${totalRevenue.toFixed(2)}</p>
+          <p style={{ margin: "0.25rem 0 0", fontSize: "0.72rem", color: "#94a3b8" }}>{orders.length} purchase{orders.length !== 1 ? "s" : ""}</p>
+        </div>
+        <div style={{ flex: 1, padding: "0.5rem 1.5rem", borderRight: "1px solid #f1f5f9" }}>
+          <p style={{ margin: "0 0 0.25rem", fontSize: "0.72rem", fontWeight: 600, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.06em" }}>Net Profit</p>
+          <p style={{ margin: 0, fontSize: "1.5rem", fontWeight: 800, color: netProfit >= 0 ? "#16a34a" : "#ef4444" }}>{netProfit >= 0 ? "+" : ""}${netProfit.toFixed(2)}</p>
+          <p style={{ margin: "0.25rem 0 0", fontSize: "0.72rem", color: "#94a3b8" }}>revenue − AI cost</p>
+        </div>
+        <div style={{ flex: 1, padding: "0.5rem 0 0.5rem 1.5rem" }}>
+          <p style={{ margin: "0 0 0.25rem", fontSize: "0.72rem", fontWeight: 600, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.06em" }}>User Type</p>
+          <p style={{ margin: 0, fontSize: "1.5rem", fontWeight: 800, color: user.hasPurchased ? "#7c3aed" : "#64748b" }}>{user.hasPurchased ? "Paid" : "Free"}</p>
+          <p style={{ margin: "0.25rem 0 0", fontSize: "0.72rem", color: "#94a3b8" }}>{user.hasPurchased ? "contributing revenue" : "costs only, no revenue"}</p>
         </div>
       </div>
 
@@ -263,13 +291,7 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
                   <tr key={l._id}>
                     <td style={{ color: "#94a3b8", fontSize: "0.78rem" }}>{new Date(l.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
                     <td style={{ fontSize: "0.78rem" }}>{l.inputType}</td>
-                    <td>
-                      {l.model ? (
-                        <span style={{ fontSize: "0.72rem", fontWeight: 700, padding: "0.2rem 0.5rem", borderRadius: "999px", background: MODEL_LABELS[l.model]?.bg ?? "#f1f5f9", color: MODEL_LABELS[l.model]?.color ?? "#64748b" }}>
-                          {MODEL_LABELS[l.model]?.label ?? l.model}
-                        </span>
-                      ) : "—"}
-                    </td>
+                    <td style={{ fontSize: "0.72rem", fontFamily: "monospace", color: "#0f172a" }}>{l.model ?? "—"}</td>
                     <td style={{ fontSize: "0.78rem", color: "#94a3b8" }}>{l.duration ? `${(l.duration / 1000).toFixed(1)}s` : "—"}</td>
                     <td>
                       <span className={`adm-badge ${l.status === "success" ? "adm-badge-green" : "adm-badge-red"}`}>
