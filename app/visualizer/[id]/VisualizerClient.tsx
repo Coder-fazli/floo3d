@@ -571,7 +571,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
             />
             <div className="viz-stat-card" style={{ gap: "0.75rem" }}>
               <div style={{ display: "flex", gap: "0.5rem" }}>
-                <SocialButton shareUrl={shareUrl} />
+                <SocialButton shareUrl={shareUrl} imageUrl={currentImage || guestResult || undefined} />
               </div>
             </div>
             <RainbowButton variant="outline" className="viz-homegen-btn">
