@@ -43,7 +43,7 @@
   }
 
         if (evt.type === "user.created" || evt.type === "user.updated") {
-            const { id, first_name, last_name, username, email_addresses } = evt.data;
+            const { id, first_name, last_name, username, email_addresses, image_url } = evt.data;
             const name = [first_name, last_name].filter(Boolean).join(" ") || username || "";
             const email = email_addresses?.[0]?.email_address ?? "";
 
@@ -52,7 +52,11 @@
             await User.findOneAndUpdate(
                 { clerkId: id },
                 {
-                    $set: { ...(name && { name }), ...(email && { email }) },
+                    $set: {
+                        ...(name && { name }),
+                        ...(email && { email }),
+                        ...(image_url && { imageUrl: image_url }),
+                    },
                     $setOnInsert: { clerkId: id, credits: 10 },
                 },
                 { upsert: true, new: true }

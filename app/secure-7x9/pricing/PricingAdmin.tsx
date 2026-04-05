@@ -33,8 +33,10 @@ function PlanEditor({
           <input
             className="adm-credits-adjust-input"
             type="number"
+            step="0.01"
+            min="0"
             value={price}
-            onChange={e => onChange("price", Number(e.target.value))}
+            onChange={e => onChange("price", parseFloat(e.target.value))}
             style={{ width: "100%" }}
           />
         </div>

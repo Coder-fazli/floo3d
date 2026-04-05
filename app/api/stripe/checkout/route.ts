@@ -17,8 +17,8 @@ export async function POST(request: Request) {
     await connectDb();
     const pricing: any = await PricingSettings.findOne().lean() ?? {};
     const PLANS = {
-      starter: { credits: pricing.starterCredits ?? 100, amount: Math.round((pricing.starterPrice ?? 9) * 100), label: `Starter — ${pricing.starterCredits ?? 100} Credits` },
-      pro:     { credits: pricing.proCredits ?? 300,     amount: Math.round((pricing.proPrice ?? 24) * 100),    label: `Pro — ${pricing.proCredits ?? 300} Credits` },
+      starter: { credits: pricing.starterCredits ?? 100, amount: Math.round((pricing.starterPrice ?? 9.99) * 100), label: `Starter — ${pricing.starterCredits ?? 100} Credits` },
+      pro:     { credits: pricing.proCredits ?? 300,     amount: Math.round((pricing.proPrice ?? 24.99) * 100),   label: `Pro — ${pricing.proCredits ?? 300} Credits` },
     };
     const planData = PLANS[plan as keyof typeof PLANS];
 

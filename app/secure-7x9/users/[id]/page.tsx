@@ -51,8 +51,11 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
       {/* User header card */}
       <div className="adm-card" style={{ padding: "1.5rem", marginBottom: "1.5rem" }}>
         <div className="adm-user-header">
-          <div className="adm-user-header-avatar">
-            {user.name?.[0]?.toUpperCase() ?? "?"}
+          <div className="adm-user-header-avatar" style={{ overflow: "hidden", padding: 0 }}>
+            {user.imageUrl
+              ? <img src={user.imageUrl} alt={user.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              : <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>{user.name?.[0]?.toUpperCase() ?? "?"}</span>
+            }
           </div>
           <div className="adm-user-header-info">
             <div className="adm-user-header-name-row">

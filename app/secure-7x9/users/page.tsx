@@ -38,7 +38,10 @@ export default async function AdminUsers() {
                   <td>
                     <div className="adm-user-cell">
                       <div className="adm-user-avatar">
-                        <span>{u.name?.[0] ?? "?"}</span>
+                        {u.imageUrl
+                          ? <img src={u.imageUrl} alt={u.name} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }} />
+                          : <span>{u.name?.[0] ?? "?"}</span>
+                        }
                       </div>
                       <div>
                         <p className="adm-user-name">{u.name}</p>
