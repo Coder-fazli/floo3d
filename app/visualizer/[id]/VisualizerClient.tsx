@@ -86,7 +86,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   const zoomOut = () => setZoomLevel(z => parseFloat(Math.max(z - 0.25, 0.5).toFixed(2)));
 
   // Welcome popup
-  const WELCOME_POPUP_META: Record<string, { title: string; body: string; img?: string } | null> = {
+  const WELCOME_POPUP_META: Record<string, { title: string; body: string; img?: string | null } | null> = {
     "floor-plan":      { title: "You need a floor plan drawing", body: "Upload a top-down architectural drawing — like the example below. Hand-drawn sketches, digital plans, or scanned blueprints all work great.\n\nPhotos of rooms or furniture will NOT work here.", img: "/example-blueprint.jpg" },
     "interior-design": { title: "Upload an interior photo", body: "Upload any photo of an interior space — kitchen, living room, bedroom, bathroom, anything inside.\n\nDo NOT upload floor plan drawings or blueprints here. This tool is for interior photos only.", img: "/example-interior.jpg" },
     "outdoor":         { title: "You need a photo of your outdoor space", body: "Upload a photo of your garden, yard, or exterior. The AI will transform it with a new landscape design.\n\nMake sure the outdoor area is clearly visible.", img: null },
