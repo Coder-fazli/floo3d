@@ -267,61 +267,39 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                 </CardContent>
 
                 <CardFooter style={{ flexDirection: 'column', gap: '0.5rem' }}>
-                  {plan.href ? (
-                    <Link href={plan.href} className="w-full">
-                      <button
-                        className="w-full rounded-lg border py-2.5 px-4 text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2"
-                        style={{ borderColor: '#e2e8f0', color: '#0f172a', background: '#fff' }}
-                        onMouseEnter={e => {
-                          (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(236,91,19,0.3)';
-                          (e.currentTarget as HTMLButtonElement).style.color = '#e5484d';
-                        }}
-                        onMouseLeave={e => {
-                          (e.currentTarget as HTMLButtonElement).style.borderColor = '#e2e8f0';
-                          (e.currentTarget as HTMLButtonElement).style.color = '#0f172a';
-                        }}
-                      >
-                        {plan.cta}
-                        <ArrowRight className="h-4 w-4" />
-                      </button>
-                    </Link>
-                  ) : (
-                    <button
-                      className="w-full rounded-lg py-2.5 px-4 text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2"
-                      style={plan.popular
-                        ? { background: '#e5484d', color: '#fff', border: 'none' }
-                        : { background: '#fff', color: '#0f172a', border: '1px solid #e2e8f0' }}
-                      disabled={loadingPlan === plan.id}
-                      onClick={() => handleBuy(plan.id)}
-                      onMouseEnter={e => {
-                        if (!plan.popular) {
-                          (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(236,91,19,0.3)';
-                          (e.currentTarget as HTMLButtonElement).style.color = '#e5484d';
-                        } else {
-                          (e.currentTarget as HTMLButtonElement).style.background = '#cc2f34';
-                        }
-                      }}
-                      onMouseLeave={e => {
-                        if (!plan.popular) {
-                          (e.currentTarget as HTMLButtonElement).style.borderColor = '#e2e8f0';
-                          (e.currentTarget as HTMLButtonElement).style.color = '#0f172a';
-                        } else {
-                          (e.currentTarget as HTMLButtonElement).style.background = '#e5484d';
-                        }
-                      }}
-                    >
-                      {loadingPlan === plan.id ? "Redirecting..." : plan.cta}
-                      <ArrowRight className="h-4 w-4" />
-                    </button>
-                  )}
-                  {!plan.href && (
-                    <p style={{ fontSize: '0.68rem', color: '#cbd5e1', textAlign: 'center', margin: 0 }}>
-                      By purchasing you agree to our{' '}
-                      <Link href="/terms-of-service" style={{ color: '#94a3b8', textDecoration: 'underline' }}>Terms</Link>
-                      {' '}&{' '}
-                      <Link href="/privacy-policy" style={{ color: '#94a3b8', textDecoration: 'underline' }}>Privacy Policy</Link>
-                    </p>
-                  )}
+                  <button
+                    className="w-full rounded-lg py-2.5 px-4 text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2"
+                    style={plan.popular
+                      ? { background: '#e5484d', color: '#fff', border: 'none' }
+                      : { background: '#fff', color: '#0f172a', border: '1px solid #e2e8f0' }}
+                    disabled={loadingPlan === plan.id}
+                    onClick={() => handleBuy(plan.id)}
+                    onMouseEnter={e => {
+                      if (!plan.popular) {
+                        (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(236,91,19,0.3)';
+                        (e.currentTarget as HTMLButtonElement).style.color = '#e5484d';
+                      } else {
+                        (e.currentTarget as HTMLButtonElement).style.background = '#cc2f34';
+                      }
+                    }}
+                    onMouseLeave={e => {
+                      if (!plan.popular) {
+                        (e.currentTarget as HTMLButtonElement).style.borderColor = '#e2e8f0';
+                        (e.currentTarget as HTMLButtonElement).style.color = '#0f172a';
+                      } else {
+                        (e.currentTarget as HTMLButtonElement).style.background = '#e5484d';
+                      }
+                    }}
+                  >
+                    {loadingPlan === plan.id ? "Redirecting..." : plan.cta}
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                  <p style={{ fontSize: '0.68rem', color: '#cbd5e1', textAlign: 'center', margin: 0 }}>
+                    By purchasing you agree to our{' '}
+                    <Link href="/terms-of-service" style={{ color: '#94a3b8', textDecoration: 'underline' }}>Terms</Link>
+                    {' '}&{' '}
+                    <Link href="/privacy-policy" style={{ color: '#94a3b8', textDecoration: 'underline' }}>Privacy Policy</Link>
+                  </p>
                 </CardFooter>
 
                 {plan.popular && (
