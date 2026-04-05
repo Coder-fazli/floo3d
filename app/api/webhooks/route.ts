@@ -34,6 +34,20 @@
               { $inc: { credits }, $set: { hasPurchased: true } }
             );
 
+            // Fetch charge details from payment intent
+            let country = null, paymentMethod = null, receiptUrl = null, paymentIntent = null, currency = null;
+            try {
+              if (session.payment_intent) {
+                const pi = await stripe.paymentIntents.retrieve(session.payment_intent as string, { expand: ["latest_charge"] });
+                const charge = pi.latest_charge as any;
+                country = charge?.billing_details?.address?.country ?? null;
+                paymentMethod = charge?.payment_method_details?.type ?? null;
+                receiptUrl = charge?.receipt_url ?? null;
+                currency = charge?.currency ?? null;
+                paymentIntent = pi.id;
+              }
+            } catch {}
+
             await Order.create({
                    userId,
                    email: session.customer_details?.email,
@@ -41,6 +55,11 @@
                    amount: session.amount_total,
                    credits,
                    stripeSessionId: session.id,
+                   paymentIntent,
+                   paymentMethod,
+                   country,
+                   receiptUrl,
+                   currency,
             })
       }
     }   

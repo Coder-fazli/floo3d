@@ -391,7 +391,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   const styleList = STYLES[activeInputType] ?? STYLES["floor-plan"];
 
   return (
-    <div className="viz-page">
+    <div className="viz-page" onContextMenu={isAdminView ? undefined : e => e.preventDefault()}>
 
       {/* Admin View Banner */}
       {isAdminView && (

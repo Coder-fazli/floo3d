@@ -5,8 +5,28 @@ import { buildPrompt } from "@/lib/prompts";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 export const maxDuration = 60;
 
+// Simple in-memory rate limiter: 5 requests per IP per hour
+const ipRequests = new Map<string, { count: number; resetAt: number }>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = ipRequests.get(ip);
+  if (!entry || now > entry.resetAt) {
+    ipRequests.set(ip, { count: 1, resetAt: now + 60 * 60 * 1000 });
+    return false;
+  }
+  if (entry.count >= 5) return true;
+  entry.count++;
+  return false;
+}
+
 export async function POST(request: Request) {
   try {
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+    if (isRateLimited(ip)) {
+      return NextResponse.json({ error: "Too many requests. Try again in an hour." }, { status: 429 });
+    }
+
     const {
       base64Image,
       renderStyle = "Modern",

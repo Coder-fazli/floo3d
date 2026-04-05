@@ -272,6 +272,99 @@ export async function getAnalytics(period: string) {
   }));
 }
 
+const MODEL_COSTS: Record<string, number> = {
+  "gemini-3-pro-image-preview":     0.134,
+  "gemini-3.1-flash-image-preview": 0.067,
+  "gemini-2.5-flash-image":         0.039,
+};
+
+function getDateRange(period: string) {
+  const now = new Date();
+  let from: Date | null = null;
+  let to: Date = now;
+  if (period === "today") {
+    from = new Date(now); from.setHours(0, 0, 0, 0);
+  } else if (period === "yesterday") {
+    from = new Date(now); from.setDate(from.getDate() - 1); from.setHours(0, 0, 0, 0);
+    to = new Date(now); to.setHours(0, 0, 0, 0);
+  } else if (period === "week") {
+    from = new Date(now); from.setDate(from.getDate() - 7);
+  } else if (period === "month") {
+    from = new Date(now); from.setDate(from.getDate() - 30);
+  }
+  return { from, to, dateFilter: from ? { createdAt: { $gte: from, $lte: to } } : {} };
+}
+
+export async function getBusinessAnalytics(period: string) {
+  await connectDb();
+  const { from, to, dateFilter } = getDateRange(period);
+
+  // Get all paid user IDs
+  const paidUsers = await User.find({ hasPurchased: true }).distinct("clerkId");
+  const paidSet = new Set(paidUsers);
+
+  // Get all successful logs in period
+  const logs = await GenerationLog.find({ ...dateFilter, status: "success" }).lean() as any[];
+
+  // Split by free vs paid
+  const paidLogs = logs.filter((l: any) => paidSet.has(l.userId));
+  const freeLogs = logs.filter((l: any) => !paidSet.has(l.userId));
+
+  // Calculate AI costs
+  const calcCost = (ls: any[]) => ls.reduce((sum, l) => sum + (MODEL_COSTS[l.model] ?? 0.067), 0);
+  const paidCost = calcCost(paidLogs);
+  const freeCost = calcCost(freeLogs);
+  const totalCost = paidCost + freeCost;
+
+  // Revenue
+  const orders = await Order.find(dateFilter).lean() as any[];
+  const revenue = orders.reduce((s: number, o: any) => s + (o.amount ?? 0), 0) / 100;
+
+  // Net profit & margin
+  const netProfit = revenue - totalCost;
+  const margin = revenue > 0 ? (netProfit / revenue) * 100 : 0;
+
+  // Tool usage breakdown
+  const toolCounts: Record<string, number> = {};
+  for (const l of logs) {
+    toolCounts[l.inputType] = (toolCounts[l.inputType] ?? 0) + 1;
+  }
+  const toolUsage = Object.entries(toolCounts)
+    .map(([tool, count]) => ({ tool, count }))
+    .sort((a, b) => b.count - a.count);
+
+  // Conversion rate
+  const totalUsers = await User.countDocuments();
+  const paidUsersCount = await User.countDocuments({ hasPurchased: true });
+  const conversionRate = totalUsers > 0 ? (paidUsersCount / totalUsers) * 100 : 0;
+
+  // Daily revenue chart (last 30 days regardless of filter for chart)
+  const chartDays = period === "month" ? 30 : period === "week" ? 7 : 7;
+  const chartFrom = new Date(); chartFrom.setDate(chartFrom.getDate() - chartDays); chartFrom.setHours(0,0,0,0);
+  const chartOrders = await Order.find({ createdAt: { $gte: chartFrom } }).lean() as any[];
+  const dailyRevenue: Record<string, number> = {};
+  for (let i = 0; i < chartDays; i++) {
+    const d = new Date(chartFrom); d.setDate(d.getDate() + i);
+    const key = d.toISOString().slice(0, 10);
+    dailyRevenue[key] = 0;
+  }
+  for (const o of chartOrders) {
+    const key = new Date(o.createdAt).toISOString().slice(0, 10);
+    if (key in dailyRevenue) dailyRevenue[key] += (o.amount ?? 0) / 100;
+  }
+  const revenueChart = Object.entries(dailyRevenue).map(([date, amount]) => ({ date, amount }));
+
+  // All orders in period
+  const allOrders = await Order.find(dateFilter).sort({ createdAt: -1 }).lean() as any[];
+
+  return JSON.parse(JSON.stringify({
+    revenue, totalCost, paidCost, freeCost, netProfit, margin,
+    totalRenders: logs.length, paidRenders: paidLogs.length, freeRenders: freeLogs.length,
+    toolUsage, conversionRate, totalUsers, paidUsersCount,
+    revenueChart, allOrders,
+  }));
+}
+
 export async function getPricingSettings() {
   await connectDb();
   let settings = await PricingSettings.findOne().lean() as any;

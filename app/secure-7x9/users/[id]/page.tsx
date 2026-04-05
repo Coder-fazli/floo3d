@@ -196,12 +196,14 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
                 <th>Plan</th>
                 <th>Credits</th>
                 <th>Amount</th>
-                <th>Session ID</th>
+                <th>Method</th>
+                <th>Country</th>
+                <th>Receipt</th>
               </tr>
             </thead>
             <tbody>
               {orders.length === 0 ? (
-                <tr><td colSpan={5} style={{ color: "#94a3b8", textAlign: "center" }}>No purchases yet</td></tr>
+                <tr><td colSpan={7} style={{ color: "#94a3b8", textAlign: "center" }}>No purchases yet</td></tr>
               ) : (
                 orders.map((o: any) => (
                   <tr key={o._id}>
@@ -213,7 +215,9 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
                     </td>
                     <td>+{o.credits ?? "—"}</td>
                     <td style={{ fontWeight: 700, color: "#16a34a" }}>${((o.amount ?? 0) / 100).toFixed(2)}</td>
-                    <td style={{ color: "#94a3b8", fontSize: "0.72rem" }}>{o.stripeSessionId ? `${o.stripeSessionId.slice(0, 24)}...` : "—"}</td>
+                    <td style={{ fontSize: "0.78rem", color: "#64748b" }}>{o.paymentMethod ?? "—"}</td>
+                    <td style={{ fontSize: "0.78rem", color: "#64748b" }}>{o.country ?? "—"}</td>
+                    <td>{o.receiptUrl ? <a href={o.receiptUrl} target="_blank" style={{ color: "#ec5b13", fontSize: "0.78rem", fontWeight: 600 }}>View ↗</a> : "—"}</td>
                   </tr>
                 ))
               )}
