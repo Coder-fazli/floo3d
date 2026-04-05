@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Sparkles, ArrowRight, Check, Star, Zap, Shield, Lock } from 'lucide-react';
+import { Sparkles, ArrowRight, Check, Zap, Shield, Lock } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useClerk, useUser } from '@clerk/nextjs';
@@ -26,14 +26,6 @@ type PricingSettings = {
 
 export default function PricingClient({ pricingSettings }: { pricingSettings?: PricingSettings }) {
   const plans = [
-    {
-      id: 'free', name: 'Free', icon: Star,
-      price: { oneTime: 'Free forever' },
-      description: 'Perfect for trying out MyHomeStyler. No credit card required.',
-      features: ['10 credits — 5 AI renders', 'All 4 AI tools included', 'Standard quality (1024px)', 'Download as PNG / JPG', 'Personal use only'],
-      lockedFeatures: ['HD quality export', 'PDF export', 'No watermark'],
-      cta: 'Get started free', href: '/sign-up',
-    },
     {
       id: 'starter', name: 'Starter', icon: Zap,
       price: { oneTime: pricingSettings?.starterPrice ?? 9 },
@@ -133,7 +125,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
         </div>
 
         {/* Cards */}
-        <div className="mt-8 grid w-full max-w-6xl grid-cols-1 gap-6 md:grid-cols-3" style={{ paddingTop: '2rem', overflow: 'visible' }}>
+        <div className="mt-8 grid w-full max-w-3xl grid-cols-1 gap-6 md:grid-cols-2" style={{ paddingTop: '2rem', overflow: 'visible' }}>
           {plans.map((plan, index) => (
             <motion.div
               key={plan.id}
@@ -351,25 +343,23 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
             <thead>
               <tr style={{ borderBottom: '1.5px solid #f1f5f9' }}>
                 <th style={{ padding: '0.9rem 1.25rem', textAlign: 'left', color: '#94a3b8', fontWeight: 700, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Feature</th>
-                <th style={{ padding: '0.9rem 1rem', textAlign: 'center', color: '#64748b', fontWeight: 700, fontSize: '0.72rem', textTransform: 'uppercase' }}>Free</th>
                 <th style={{ padding: '0.9rem 1rem', textAlign: 'center', color: '#e5484d', fontWeight: 700, fontSize: '0.72rem', textTransform: 'uppercase' }}>Starter</th>
                 <th style={{ padding: '0.9rem 1rem', textAlign: 'center', color: '#6366f1', fontWeight: 700, fontSize: '0.72rem', textTransform: 'uppercase' }}>Pro</th>
               </tr>
             </thead>
             <tbody>
               {[
-                { label: 'AI renders',         free: '5',               starter: '50',              pro: '150' },
-                { label: 'Quality',            free: 'Standard 1024px', starter: 'HD',              pro: 'HD + StyleAI Pro' },
-                { label: 'Cost per render',    free: '—',               starter: '$0.20',           pro: '$0.17' },
-                { label: 'No watermark',       free: '✗',               starter: '✓',               pro: '✓' },
-                { label: 'PDF export',         free: '✗',               starter: '✓',               pro: '✓' },
-                { label: 'Isometric views',    free: '✗',               starter: '✗',               pro: '✓' },
-                { label: 'Commercial use',     free: '✗',               starter: '✓',               pro: '✓' },
-                { label: 'Credits expire',     free: 'No',              starter: 'No',              pro: 'No' },
+                { label: 'AI renders',      starter: '50',    pro: '150' },
+                { label: 'Quality',         starter: 'HD',    pro: 'HD + StyleAI Pro' },
+                { label: 'Cost per render', starter: '$0.20', pro: '$0.17' },
+                { label: 'No watermark',    starter: '✓',     pro: '✓' },
+                { label: 'PDF export',      starter: '✓',     pro: '✓' },
+                { label: 'Isometric views', starter: '✗',     pro: '✓' },
+                { label: 'Commercial use',  starter: '✓',     pro: '✓' },
+                { label: 'Credits expire',  starter: 'No',    pro: 'No' },
               ].map((row, i) => (
                 <tr key={i} style={{ borderBottom: i < 7 ? '1px solid #f8fafc' : 'none', background: i % 2 === 0 ? '#fafafa' : '#fff' }}>
                   <td style={{ padding: '0.75rem 1.25rem', color: '#334155', fontWeight: 600 }}>{row.label}</td>
-                  <td style={{ padding: '0.75rem 1rem', textAlign: 'center', color: '#94a3b8' }}>{row.free}</td>
                   <td style={{ padding: '0.75rem 1rem', textAlign: 'center', color: '#e5484d', fontWeight: 600 }}>{row.starter}</td>
                   <td style={{ padding: '0.75rem 1rem', textAlign: 'center', color: '#6366f1', fontWeight: 700 }}>{row.pro}</td>
                 </tr>
