@@ -25,7 +25,7 @@ export default async function AdminUsers() {
             <thead>
               <tr>
                 <th>User</th>
-                <th>User ID</th>
+                <th>Plan</th>
                 <th>Credits</th>
                 <th>Projects</th>
                 <th>Joined</th>
@@ -46,7 +46,11 @@ export default async function AdminUsers() {
                       </div>
                     </div>
                   </td>
-                  <td style={{ color: "#94a3b8", fontSize: "0.8rem" }}>{u.clerkId}</td>
+                  <td>
+                    <span style={{ fontSize: "0.75rem", fontWeight: 600, padding: "0.2rem 0.55rem", borderRadius: "999px", background: u.hasPurchased ? "#ede9fe" : "#f1f5f9", color: u.hasPurchased ? "#7c3aed" : "#64748b" }}>
+                      {u.hasPurchased ? "Pro" : "Free"}
+                    </span>
+                  </td>
                   <td>
                     <input className="adm-credits-input" type="number" defaultValue={u.credits} />
                   </td>

@@ -9,6 +9,7 @@ import Project from "./models/Project";
 import SiteSettings from "./models/SiteSettings";
 import AppFrames from "./models/AppFrames";
 import GenerationLog from "./models/GenerationLog";
+import Order from "./models/Order";
 
 async function requireAdmin() {
   const { userId, sessionClaims } = await auth();
@@ -201,10 +202,72 @@ export async function saveModelSettings(models: Record<string, string>) {
   await requireAdmin();
   await connectDb();
   await SiteSettings.findOneAndUpdate(
-    { key: "home" },                               
-    { models },       
-    { upsert: true, new: true }   
+    { key: "home" },
+    { models },
+    { upsert: true, new: true }
   );
   revalidatePath("/secure-7x9/models");
+}
+
+export async function getOrdersByUser(userId: string) {
+  await connectDb();
+  const orders = await Order.find({ userId }).sort({ createdAt: -1 }).lean();
+  return JSON.parse(JSON.stringify(orders));
+}
+
+export async function getLogsByUser(userId: string) {
+  await connectDb();
+  const logs = await GenerationLog.find({ userId }).sort({ createdAt: -1 }).limit(50).lean();
+  return JSON.parse(JSON.stringify(logs));
+}
+
+export async function getAnalytics(period: string) {
+  await connectDb();
+
+  const now = new Date();
+  let from: Date | null = null;
+  let to: Date = now;
+
+  if (period === "today") {
+    from = new Date(now); from.setHours(0, 0, 0, 0);
+  } else if (period === "yesterday") {
+    from = new Date(now); from.setDate(from.getDate() - 1); from.setHours(0, 0, 0, 0);
+    to = new Date(now); to.setHours(0, 0, 0, 0);
+  } else if (period === "week") {
+    from = new Date(now); from.setDate(from.getDate() - 7);
+  } else if (period === "month") {
+    from = new Date(now); from.setDate(from.getDate() - 30);
+  }
+
+  const dateFilter = from ? { createdAt: { $gte: from, $lte: to } } : {};
+
+  const [
+    totalUsers, newUsers,
+    totalProjects, newRenders,
+    errors, orders,
+    recentRenders, recentErrors, recentPurchases,
+    recentlyActive,
+  ] = await Promise.all([
+    User.countDocuments(),
+    User.countDocuments(dateFilter),
+    Project.countDocuments(),
+    GenerationLog.countDocuments({ ...dateFilter, status: "success" }),
+    GenerationLog.countDocuments({ ...dateFilter, status: "error" }),
+    Order.find(dateFilter).lean(),
+    GenerationLog.find({ ...dateFilter, status: "success" }).sort({ createdAt: -1 }).limit(8).lean(),
+    GenerationLog.find({ ...dateFilter, status: "error" }).sort({ createdAt: -1 }).limit(5).lean(),
+    Order.find(dateFilter).sort({ createdAt: -1 }).limit(5).lean(),
+    User.find({}).sort({ updatedAt: -1 }).limit(8).lean(),
+  ]);
+
+  const revenue = orders.reduce((s: number, o: any) => s + (o.amount ?? 0), 0);
+
+  return JSON.parse(JSON.stringify({
+    totalUsers, newUsers,
+    totalProjects, newRenders,
+    errors, revenue,
+    recentRenders, recentErrors, recentPurchases,
+    recentlyActive,
+  }));
 }
 

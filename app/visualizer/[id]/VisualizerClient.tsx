@@ -33,7 +33,7 @@ const STYLES: Record<string, string[]> = {
 
 const ROOM_TYPES = ["Living Room", "Bedroom", "Kitchen", "Bathroom", "Office", "Dining Room", "Studio", "Hallway", "Kids Room"];
 
-export default function VisualizerClient({ embeddedId, frames, defaultType }: { embeddedId?: string; frames?: FramesData; defaultType?: string } = {}) {
+export default function VisualizerClient({ embeddedId, frames, defaultType, isAdminView }: { embeddedId?: string; frames?: FramesData; defaultType?: string; isAdminView?: boolean } = {}) {
   const FALLBACK_IMAGES = Object.fromEntries(
     Object.entries(DEFAULT_FALLBACKS).map(([k, v]) => [k, { ...v, ...(frames?.fallbacks?.[k] ?? {}) }])
   );
@@ -48,7 +48,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
   const { user } = useUser();
   const { openUserProfile, openSignUp, signOut } = useClerk();
   const [credits, setCredits] = useState<number | null>(null);
-  const [hasPurchased, setHasPurchased] = useState(false);
+  const [hasPurchased, setHasPurchased] = useState(isAdminView ? true : false);
 
   const [isNewMode, setIsNewMode] = useState(id === "new");
 
@@ -392,6 +392,13 @@ export default function VisualizerClient({ embeddedId, frames, defaultType }: { 
 
   return (
     <div className="viz-page">
+
+      {/* Admin View Banner */}
+      {isAdminView && (
+        <div style={{ background: "#7c3aed", color: "#fff", textAlign: "center", padding: "0.5rem", fontSize: "0.8rem", fontWeight: 600, letterSpacing: "0.03em" }}>
+          👁 Admin View — you are viewing this project as the user
+        </div>
+      )}
 
       {/* Navbar */}
       {!embeddedId && <header className="viz-nav">

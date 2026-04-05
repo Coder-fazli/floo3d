@@ -2,6 +2,7 @@
   import { NextResponse } from "next/server";
   import { connectDb } from "@/lib/db";
   import User from "@/lib/models/User";
+  import Order from "@/lib/models/Order";
 
   export const runtime = "nodejs";
 
@@ -32,6 +33,15 @@
               { clerkId: userId },
               { $inc: { credits }, $set: { hasPurchased: true } }
             );
+
+            await Order.create({
+                   userId,
+                   email: session.customer_details?.email,
+                   plan: session.metadata?.plan,
+                   amount: session.amount_total,
+                   credits,
+                   stripeSessionId: session.id,
+            })
       }
     }   
 

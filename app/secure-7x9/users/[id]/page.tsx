@@ -1,13 +1,18 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Calendar, Lock, RotateCcw, Trash2, ChevronLeft } from "lucide-react";
+import { Calendar, Lock, RotateCcw, Trash2, ChevronLeft, ShoppingBag, Activity } from "lucide-react";
 import { getUserByClerkId, getProjects } from "@/lib/actions";
-import { updateUserCredits, deleteUSer } from "@/lib/actions.admin";
+import { updateUserCredits, deleteUSer, getOrdersByUser, getLogsByUser } from "@/lib/actions.admin";
+import AdminViewButton from "./AdminViewButton";
 
 export default async function AdminUserDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const user = await getUserByClerkId(id);
-  const projects = await getProjects(id);
+  const [user, projects, orders, logs] = await Promise.all([
+    getUserByClerkId(id),
+    getProjects(id),
+    getOrdersByUser(id),
+    getLogsByUser(id),
+  ]);
 
   if (!user) return <div className="adm-content">User not found: {id}</div>;
 
@@ -129,6 +134,8 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
               <thead>
                 <tr>
                   <th>Project</th>
+                  <th>Type</th>
+                  <th>Style</th>
                   <th>Status</th>
                   <th>Created</th>
                   <th className="right">Action</th>
@@ -151,14 +158,16 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
                           </div>
                         </div>
                       </td>
+                      <td style={{ color: "#94a3b8", fontSize: "0.78rem" }}>{p.inputType ?? "—"}</td>
+                      <td style={{ color: "#94a3b8", fontSize: "0.78rem" }}>{p.renderStyle ?? "—"}</td>
                       <td>
                         <span className={`adm-badge ${p.renderedImageUrl ? "adm-badge-green" : "adm-badge-orange"}`}>
                           {p.renderedImageUrl ? "Completed" : "Processing"}
                         </span>
                       </td>
                       <td style={{ color: "#94a3b8" }}>{new Date(p.createdAt).toLocaleDateString()}</td>
-                      <td className="right">
-                        <Link href={`/visualizer/${p._id}`} className="adm-action-link">View</Link>
+                      <td className="right" style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end" }}>
+                        <AdminViewButton projectId={p._id} />
                       </td>
                     </tr>
                   ))
@@ -166,6 +175,96 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
               </tbody>
             </table>
           </div>
+        </div>
+      </div>
+
+      {/* Order History */}
+      <div className="adm-card" style={{ overflow: "hidden", marginBottom: "1.5rem" }}>
+        <div className="adm-table-head">
+          <h4 className="adm-table-title" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <ShoppingBag size={16} /> Purchase History
+          </h4>
+          <span style={{ fontSize: "0.8rem", color: "#94a3b8" }}>
+            Total spent: ${((orders.reduce((s: number, o: any) => s + (o.amount ?? 0), 0)) / 100).toFixed(2)}
+          </span>
+        </div>
+        <div style={{ overflowX: "auto" }}>
+          <table className="adm-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Plan</th>
+                <th>Credits</th>
+                <th>Amount</th>
+                <th>Session ID</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.length === 0 ? (
+                <tr><td colSpan={5} style={{ color: "#94a3b8", textAlign: "center" }}>No purchases yet</td></tr>
+              ) : (
+                orders.map((o: any) => (
+                  <tr key={o._id}>
+                    <td style={{ color: "#94a3b8" }}>{new Date(o.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</td>
+                    <td>
+                      <span style={{ fontSize: "0.75rem", fontWeight: 700, padding: "0.2rem 0.55rem", borderRadius: "999px", background: o.plan === "pro" ? "#ede9fe" : "#fef3c7", color: o.plan === "pro" ? "#7c3aed" : "#d97706" }}>
+                        {o.plan ? o.plan.charAt(0).toUpperCase() + o.plan.slice(1) : "—"}
+                      </span>
+                    </td>
+                    <td>+{o.credits ?? "—"}</td>
+                    <td style={{ fontWeight: 700, color: "#16a34a" }}>${((o.amount ?? 0) / 100).toFixed(2)}</td>
+                    <td style={{ color: "#94a3b8", fontSize: "0.72rem" }}>{o.stripeSessionId ? `${o.stripeSessionId.slice(0, 24)}...` : "—"}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Generation Logs */}
+      <div className="adm-card" style={{ overflow: "hidden", marginBottom: "1.5rem" }}>
+        <div className="adm-table-head">
+          <h4 className="adm-table-title" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <Activity size={16} /> Generation Logs
+          </h4>
+          <span style={{ fontSize: "0.8rem", color: "#94a3b8" }}>Last 50 generations</span>
+        </div>
+        <div style={{ overflowX: "auto" }}>
+          <table className="adm-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Model</th>
+                <th>Duration</th>
+                <th>Status</th>
+                <th>Error</th>
+              </tr>
+            </thead>
+            <tbody>
+              {logs.length === 0 ? (
+                <tr><td colSpan={6} style={{ color: "#94a3b8", textAlign: "center" }}>No generations yet</td></tr>
+              ) : (
+                logs.map((l: any) => (
+                  <tr key={l._id}>
+                    <td style={{ color: "#94a3b8", fontSize: "0.78rem" }}>{new Date(l.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
+                    <td style={{ fontSize: "0.78rem" }}>{l.inputType}</td>
+                    <td style={{ fontSize: "0.72rem", color: "#64748b" }}>{l.model}</td>
+                    <td style={{ fontSize: "0.78rem", color: "#94a3b8" }}>{l.duration ? `${(l.duration / 1000).toFixed(1)}s` : "—"}</td>
+                    <td>
+                      <span className={`adm-badge ${l.status === "success" ? "adm-badge-green" : "adm-badge-red"}`}>
+                        {l.status}
+                      </span>
+                    </td>
+                    <td style={{ fontSize: "0.72rem", color: "#ef4444", maxWidth: "200px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      {l.errorMessage ?? "—"}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
 
