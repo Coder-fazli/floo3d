@@ -1,7 +1,8 @@
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import { getPricingSettings } from "@/lib/actions.admin";
+import { connectDb } from "@/lib/db";
+import PricingSettings from "@/lib/models/PricingSettings";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -13,10 +14,11 @@ export async function POST(request: Request) {
     const { plan, returnUrl } = await request.json();
     if (!["starter", "pro"].includes(plan)) return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
 
-    const pricing = await getPricingSettings();
+    await connectDb();
+    const pricing: any = await PricingSettings.findOne().lean() ?? {};
     const PLANS = {
-      starter: { credits: pricing.starterCredits, amount: Math.round(pricing.starterPrice * 100), label: `Starter — ${pricing.starterCredits} Credits` },
-      pro:     { credits: pricing.proCredits,     amount: Math.round(pricing.proPrice * 100),     label: `Pro — ${pricing.proCredits} Credits` },
+      starter: { credits: pricing.starterCredits ?? 100, amount: Math.round((pricing.starterPrice ?? 9) * 100), label: `Starter — ${pricing.starterCredits ?? 100} Credits` },
+      pro:     { credits: pricing.proCredits ?? 300,     amount: Math.round((pricing.proPrice ?? 24) * 100),    label: `Pro — ${pricing.proCredits ?? 300} Credits` },
     };
     const planData = PLANS[plan as keyof typeof PLANS];
 
