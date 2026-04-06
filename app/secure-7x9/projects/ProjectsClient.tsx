@@ -301,7 +301,10 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
 
                     {/* Action */}
                     <td className="right">
-                      <Link href={`/visualizer/${p._id}`} className="adm-action-link">View</Link>
+                      <button className="adm-action-link" onClick={async () => {
+                        await fetch("/api/admin/view-project", { method: "POST" });
+                        window.open(`/visualizer/${p._id}`, "_blank");
+                      }}>View</button>
                     </td>
                   </tr>
                 ))
