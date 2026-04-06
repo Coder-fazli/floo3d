@@ -351,7 +351,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
     const img = document.createElement("img");
     img.crossOrigin = "anonymous";
     img.onload = () => {
-      const maxW = 1024;
+      const maxW = (hasPurchased || isAdminView) ? img.width : 1024;
       const scale = Math.min(1, maxW / img.width);
       const canvas = document.createElement("canvas");
       canvas.width = img.width * scale;
