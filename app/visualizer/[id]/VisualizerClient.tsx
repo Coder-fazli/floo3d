@@ -647,7 +647,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                   <div className="viz-style-grid">
                     {Object.keys(DEFAULT_ANGLES).map((angle) => {
                       const isProAngle = angle === "isometric" || angle === "crossSection";
-                      const locked = isProAngle && !hasPurchased;
+                      const locked = false;
                       return (
                         <div
                           key={angle}
