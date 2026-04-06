@@ -84,12 +84,12 @@ const jsonLd = {
         {
           "@type": "Question",
           "name": "Is it really free? Do you need a credit card?",
-          "acceptedAnswer": { "@type": "Answer", "text": "100% free to start — no credit card required, ever. We don't ask for payment details to try the tool. You get 6 free generations as a guest. Sign up free and get 10 more credits instantly, still no credit card needed." },
+          "acceptedAnswer": { "@type": "Answer", "text": "100% free to start — no credit card required, ever. We don't ask for payment details to try the tool. You get 6 free generations as a guest. Sign up free and get 4 credits instantly, still no credit card needed." },
         },
         {
           "@type": "Question",
           "name": "How many free conversions do I get?",
-          "acceptedAnswer": { "@type": "Answer", "text": "As a guest you get 6 free 2D to 3D conversions right on this page. Create a free account and get 10 more credits added to your balance immediately. No credit card, no subscription required." },
+          "acceptedAnswer": { "@type": "Answer", "text": "As a guest you get 6 free 2D to 3D conversions right on this page. Create a free account and get 4 credits added to your balance immediately. No credit card, no subscription required." },
         },
         {
           "@type": "Question",
@@ -211,15 +211,15 @@ export default async function FloorPlanConverterPage() {
         },
         {
           q: "Is it really free? Do you need a credit card?",
-          a: "100% free to start — no credit card required, ever. We don't ask for payment details to try the tool. You get 6 free generations as a guest. Sign up free and get 10 more credits instantly, still no credit card needed.",
+          a: "100% free to start — no credit card required, ever. We don't ask for payment details to try the tool. You get 6 free generations as a guest. Sign up free and get 4 credits instantly, still no credit card needed.",
         },
         {
           q: "How many free conversions do I get?",
-          a: "As a guest you get 6 free 2D to 3D conversions right on this page. Create a free account and get 10 more credits added to your balance immediately. No credit card, no subscription required.",
+          a: "As a guest you get 6 free 2D to 3D conversions right on this page. Create a free account and get 4 credits added to your balance immediately. No credit card, no subscription required.",
         },
         {
           q: "What happens when I run out of free credits?",
-          a: "When your free credits run out you'll see a prompt to sign up. Creating a free account gives you 10 fresh credits instantly. After that, you can purchase more credit packs — still no subscription, pay only for what you use.",
+          a: "When your free credits run out you'll see a prompt to sign up. Creating a free account gives you 4 credits instantly. After that, you can purchase more credit packs — still no subscription, pay only for what you use.",
         },
         {
           q: "What types of floor plans does it accept?",

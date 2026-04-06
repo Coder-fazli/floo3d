@@ -69,7 +69,7 @@ const Navbar = () => {
               {/* Desktop only */}
               <div className="navbar-credits navbar-desktop-only">
                 <Zap className="credits-icon" />
-                <span>{credits ?? 10}</span>
+                <span>{credits ?? 4}</span>
               </div>
               <a href="/dashboard/profile" className="navbar-profile navbar-desktop-only" title="Profile">
                 <User className="w-4 h-4" />

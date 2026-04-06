@@ -57,7 +57,7 @@
                         ...(email && { email }),
                         ...(image_url && { imageUrl: image_url }),
                     },
-                    $setOnInsert: { clerkId: id, credits: 10 },
+                    $setOnInsert: { clerkId: id, credits: 4 },
                 },
                 { upsert: true, new: true }
             );

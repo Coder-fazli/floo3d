@@ -53,7 +53,7 @@ export async function updateProject(id: string, renderedImageUrl: string) {
 
 export async function getCredits(userId: string, name?: string, email?: string) {
     await connectDb();
-    const update: any = { $setOnInsert: { credits: 10 } };
+    const update: any = { $setOnInsert: { credits: 4 } };
     if (name) update.$set = { ...(update.$set ?? {}), name };
     if (email) update.$set = { ...(update.$set ?? {}), email };
     const user = await User.findOneAndUpdate(
@@ -67,7 +67,7 @@ export async function getCredits(userId: string, name?: string, email?: string) 
 export async function getUserInfo(userId: string): Promise<{ credits: number; hasPurchased: boolean }> {
     await connectDb();
     const user = await User.findOne({ clerkId: userId });
-    return { credits: user?.credits ?? 10, hasPurchased: user?.hasPurchased ?? false };
+    return { credits: user?.credits ?? 4, hasPurchased: user?.hasPurchased ?? false };
 }
 
 export async function deductCredit(userId:string) {
