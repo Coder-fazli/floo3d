@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import VisualizerClient from "./VisualizerClient";
 import { getProject, getAppFrames } from "@/lib/actions";
-import { cookies } from "next/headers";
+import { auth } from "@clerk/nextjs/server";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 }
 
 export default async function Page() {
-  const [frames, cookieStore] = await Promise.all([getAppFrames(), cookies()]);
-  const isAdminView = cookieStore.get("adminView")?.value === "1";
+  const [frames, { userId }] = await Promise.all([getAppFrames(), auth()]);
+  const isAdminView = userId === process.env.ADMIN_USER_ID;
   return <Suspense><VisualizerClient frames={frames} isAdminView={isAdminView} /></Suspense>;
 }
