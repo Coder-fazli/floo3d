@@ -123,12 +123,12 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   useEffect(() => {
     if (!user) return;
     getCredits(user.id, user.fullName ?? user.firstName ?? "", user.emailAddresses?.[0]?.emailAddress ?? "").then(setCredits);
-    getUserInfo(user.id).then(d => setHasPurchased(d.hasPurchased));
+    if (!isAdminView) getUserInfo(user.id).then(d => setHasPurchased(d.hasPurchased));
   }, [user]);
 
   // Poll credits + hasPurchased after successful payment
   useEffect(() => {
-    if (!user || !window.location.search.includes("success=1")) return;
+    if (!user || isAdminView || !window.location.search.includes("success=1")) return;
     let attempts = 0;
     let lastCredits: number | null = null;
     const interval = setInterval(async () => {
