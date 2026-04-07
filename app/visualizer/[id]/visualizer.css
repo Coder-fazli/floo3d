@@ -1548,7 +1548,7 @@
     /* Nav: hide verbose items, keep only logo + avatar */
     .viz-breadcrumb { display: none; }
     .viz-nav-bell { display: none; }
-    .viz-nav-credits { display: none; }
+    .viz-nav-credits { padding: 0.3rem 0.5rem; font-size: 0.7rem; }
     .viz-nav-divider { display: none; }
     .viz-nav-user-info { display: none; }
     .viz-nav-inner { padding: 0 1rem; }

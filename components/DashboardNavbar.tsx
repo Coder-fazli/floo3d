@@ -54,7 +54,8 @@ export default function DashboardNavbar() {
 
           <div className="dbnav-credits">
             <Zap size={14} className="dbnav-credits-icon" />
-            <span>{credits !== null ? `${credits} Credits` : "Loading…"}</span>
+            <span className="dbnav-credits-full">{credits !== null ? `${credits} Credits` : "Loading…"}</span>
+            <span className="dbnav-credits-short">{credits ?? "—"}</span>
           </div>
 
           <div className="dbnav-divider" />

@@ -253,11 +253,16 @@
 
 @media (max-width: 480px) {
     .dbnav-search { display: none; }
-    .dbnav-credits { display: none; }
+    .dbnav-credits { padding: 0.25rem 0.5rem; font-size: 0.7rem; }
+    .dbnav-credits-full { display: none; }
     .dbnav-bell { display: none; }
     .dbnav-divider { display: none; }
     .dbnav-signout { display: flex; font-size: 0.75rem; padding: 0.3rem 0.5rem; }
-    .dbnav { overflow: hidden; }
+}
+
+.dbnav-credits-short { display: none; }
+@media (max-width: 480px) {
+    .dbnav-credits-short { display: inline; }
 }
 
 
