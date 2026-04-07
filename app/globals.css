@@ -1,11 +1,9 @@
 @import "tailwindcss";
 
-html {
+html, body {
   scroll-behavior: smooth;
-}
-
-body {
   overflow-x: hidden;
+  max-width: 100%;
 }
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";

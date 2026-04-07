@@ -5,7 +5,6 @@
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid #e2e8f0;
-    overflow: hidden;
 }
 
 .navbar-inner {
@@ -239,8 +238,14 @@
     opacity: 0.9;
 }
 
-.navbar-credits-mobile {
+.navbar-mobile-group {
     display: none;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.navbar-credits-mobile {
+    display: flex;
     align-items: center;
     gap: 0.25rem;
     font-size: 0.78rem;
@@ -264,6 +269,6 @@
     .navbar-desktop-only { display: none !important; }
 
     .navbar-mobile-only  { display: flex !important; }
+    .navbar-mobile-group { display: flex; }
     .navbar-icon-btn     { display: flex; }
-    .navbar-credits-mobile { display: flex; }
 }

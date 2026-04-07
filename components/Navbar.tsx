@@ -78,7 +78,7 @@ const Navbar = () => {
               <button className="navbar-btn-ghost navbar-desktop-only" onClick={handleSignOut}>Log Out</button>
 
               {/* Mobile only: credits + dashboard icon */}
-              <div className="navbar-mobile-only" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <div className="navbar-mobile-group">
                 <div className="navbar-credits-mobile">
                   <Zap size={13} />
                   <span>{credits ?? 4}</span>
