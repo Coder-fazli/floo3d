@@ -23,6 +23,7 @@ import { type FramesData } from "@/lib/actions";
 import { DEFAULT_FALLBACKS, DEFAULT_STYLES, DEFAULT_ANGLES, ANGLE_LABELS } from "@/lib/frameDefaults";
 import FpgSidebarSection, { type FpgConfig } from "../components/FpgSidebarSection";
 import AITextLoading, { LOADING_TEXTS } from "@/components/kokonutui/ai-text-loading";
+import RateRender from "@/components/RateRender";
 
 const STYLES: Record<string, string[]> = {
   "floor-plan":           ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
@@ -748,6 +749,9 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
           <div className="viz-output-card" ref={previewCardRef}>
             <div className="viz-output-head">
               <span className="viz-output-title">Preview</span>
+              {project?._id && currentImage && (
+                <RateRender projectId={project._id} initialRating={project.rating ?? null} />
+              )}
               <div className="viz-output-actions">
                 <div className="viz-export-wrapper">
                   <button className="viz-download-btn" onClick={() => setExportDropdownOpen(o => !o)} disabled={!currentImage && !guestResult}>

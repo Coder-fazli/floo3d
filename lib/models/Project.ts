@@ -11,6 +11,7 @@ const ProjectSchema = new Schema({
     errorMessage: { type: String, default: null },
     generationCount: { type: Number, default: 0 },
     downloadedAt: { type: Date, default: null },
+    rating: { type: String, enum: ["like", "dislike", null], default: null },
     createdAt: { type: Date, default: Date.now },
   });
 
