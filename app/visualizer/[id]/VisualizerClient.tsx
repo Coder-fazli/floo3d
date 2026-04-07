@@ -63,6 +63,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   const [guestCredits, setGuestCredits] = useState(GUEST_CREDITS_DEFAULT);
 
   const hasInitialGenerated = useRef(false);
+  const previewCardRef = useRef<HTMLDivElement>(null);
   const [project, setProject] = useState<any>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentImage, setCurrentImage] = useState<string | null>(null);
@@ -254,6 +255,16 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
     }
   }, [project]);
 
+  // Auto-scroll to preview when a new render is ready (not on initial page load)
+  const isFirstImageLoad = useRef(true);
+  useEffect(() => {
+    if (!currentImage) return;
+    if (isFirstImageLoad.current) { isFirstImageLoad.current = false; return; }
+    setTimeout(() => {
+      previewCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+  }, [currentImage]);
+
   // Handle upload in sidebar
   const sidebarFileRef = useRef<HTMLInputElement>(null);
 
@@ -362,16 +373,16 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
 
       // Watermark — only for free users, never for admin
       if (!hasPurchased && !isAdminView) {
-        const wFontSize = Math.max(12, Math.round(canvas.width * 0.022));
+        const wFontSize = Math.max(14, Math.round(canvas.width * 0.028));
         ctx.save();
-        ctx.globalAlpha = 0.18;
+        // Shadow for contrast on any background
+        ctx.shadowColor = "rgba(0,0,0,0.55)";
+        ctx.shadowBlur = wFontSize * 0.6;
+        ctx.globalAlpha = 0.55;
         ctx.fillStyle = "#ffffff";
-        ctx.strokeStyle = "rgba(0,0,0,0.25)";
-        ctx.lineWidth = wFontSize * 0.04;
-        ctx.font = `600 ${wFontSize}px sans-serif`;
+        ctx.font = `700 ${wFontSize}px sans-serif`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.strokeText("MyHomeStyler.com", canvas.width * 0.5, canvas.height * 0.5);
         ctx.fillText("MyHomeStyler.com", canvas.width * 0.5, canvas.height * 0.5);
         ctx.restore();
       }
@@ -740,7 +751,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
           </aside>
 
           {/* Output card */}
-          <div className="viz-output-card">
+          <div className="viz-output-card" ref={previewCardRef}>
             <div className="viz-output-head">
               <span className="viz-output-title">Preview</span>
               <div className="viz-output-actions">
