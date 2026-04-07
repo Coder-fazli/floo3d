@@ -23,30 +23,80 @@ export default function CookieBanner() {
 
   return (
     <div style={{
-      position: "fixed", bottom: "1.25rem", left: "50%", transform: "translateX(-50%)",
-      zIndex: 9999, width: "calc(100% - 2rem)", maxWidth: "560px",
-      background: "#0f172a", borderRadius: "1rem",
-      padding: "1rem 1.25rem", boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
-      display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap",
+      position: "fixed",
+      bottom: "1rem",
+      left: "50%",
+      transform: "translateX(-50%)",
+      zIndex: 9999,
+      width: "calc(100% - 1.5rem)",
+      maxWidth: "520px",
+      background: "#ffffff",
+      borderRadius: "1.25rem",
+      border: "1.5px solid rgba(236,91,19,0.18)",
+      padding: "1rem 1.25rem",
+      boxShadow: "0 8px 40px rgba(236,91,19,0.12), 0 2px 12px rgba(0,0,0,0.07)",
+      display: "flex",
+      flexDirection: "column",
+      gap: "0.875rem",
     }}>
-      <p style={{ flex: 1, fontSize: "0.8rem", color: "#94a3b8", margin: 0, minWidth: "200px", lineHeight: 1.5 }}>
-        🍪 We use cookies to improve your experience. See our{" "}
-        <Link href="/privacy-policy" style={{ color: "#ec5b13", textDecoration: "underline" }}>Privacy Policy</Link>.
-      </p>
-      <div style={{ display: "flex", gap: "0.5rem" }}>
+
+      {/* Icon + text */}
+      <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
+        <div style={{
+          width: "2rem", height: "2rem", borderRadius: "0.625rem", flexShrink: 0,
+          background: "rgba(236,91,19,0.1)", display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: "1rem",
+        }}>
+          🍪
+        </div>
+        <div>
+          <p style={{ margin: "0 0 0.25rem", fontSize: "0.82rem", fontWeight: 700, color: "#0f172a" }}>
+            We use cookies
+          </p>
+          <p style={{ margin: 0, fontSize: "0.76rem", color: "#64748b", lineHeight: 1.5 }}>
+            To improve your experience and analyse traffic. See our{" "}
+            <Link href="/privacy-policy" style={{ color: "#ec5b13", fontWeight: 600, textDecoration: "none" }}>
+              Privacy Policy
+            </Link>.
+          </p>
+        </div>
+      </div>
+
+      {/* Buttons */}
+      <div style={{ display: "flex", gap: "0.625rem" }}>
         <button onClick={decline} style={{
-          padding: "0.45rem 1rem", borderRadius: "0.5rem", border: "1px solid rgba(255,255,255,0.1)",
-          background: "transparent", color: "#64748b", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer",
+          flex: 1,
+          padding: "0.5rem 1rem",
+          borderRadius: "0.75rem",
+          border: "1.5px solid #e2e8f0",
+          background: "#f8fafc",
+          color: "#64748b",
+          fontSize: "0.8rem",
+          fontWeight: 600,
+          cursor: "pointer",
+          fontFamily: "inherit",
+          transition: "border-color 0.15s",
         }}>
           Decline
         </button>
         <button onClick={accept} style={{
-          padding: "0.45rem 1rem", borderRadius: "0.5rem", border: "none",
-          background: "#ec5b13", color: "#fff", fontSize: "0.8rem", fontWeight: 700, cursor: "pointer",
+          flex: 2,
+          padding: "0.5rem 1rem",
+          borderRadius: "0.75rem",
+          border: "none",
+          background: "#ec5b13",
+          color: "#fff",
+          fontSize: "0.8rem",
+          fontWeight: 700,
+          cursor: "pointer",
+          fontFamily: "inherit",
+          boxShadow: "0 4px 14px rgba(236,91,19,0.3)",
+          transition: "opacity 0.15s",
         }}>
-          Accept
+          Accept All
         </button>
       </div>
+
     </div>
   );
 }
