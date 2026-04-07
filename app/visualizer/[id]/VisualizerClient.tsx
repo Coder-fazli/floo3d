@@ -22,6 +22,7 @@ import { SparklesText } from "@/components/ui/sparkles-text";
 import { type FramesData } from "@/lib/actions";
 import { DEFAULT_FALLBACKS, DEFAULT_STYLES, DEFAULT_ANGLES, ANGLE_LABELS } from "@/lib/frameDefaults";
 import FpgSidebarSection, { type FpgConfig } from "../components/FpgSidebarSection";
+import AITextLoading, { LOADING_TEXTS } from "@/components/kokonutui/ai-text-loading";
 
 const STYLES: Record<string, string[]> = {
   "floor-plan":           ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
@@ -933,11 +934,8 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                     <div className="viz-processing-icon">
                       <Sparkles size={28} />
                     </div>
-                    <p className="viz-processing-title">Generating your render…</p>
+                    <AITextLoading texts={LOADING_TEXTS[activeInputType] ?? LOADING_TEXTS["floor-plan"]} />
                     <p className="viz-processing-sub">This usually takes under a minute</p>
-                    <div className="viz-processing-dots">
-                      <span /><span /><span />
-                    </div>
                   </div>
                 </div>
               )}
