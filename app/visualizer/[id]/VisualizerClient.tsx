@@ -255,15 +255,6 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
     }
   }, [project]);
 
-  // Auto-scroll to preview when a new render is ready (not on initial page load)
-  const isFirstImageLoad = useRef(true);
-  useEffect(() => {
-    if (!currentImage) return;
-    if (isFirstImageLoad.current) { isFirstImageLoad.current = false; return; }
-    setTimeout(() => {
-      previewCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 100);
-  }, [currentImage]);
 
   // Handle upload in sidebar
   const sidebarFileRef = useRef<HTMLInputElement>(null);
@@ -313,6 +304,9 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
     setIsNewMode(false);
     hasInitialGenerated.current = false;
     window.history.replaceState(null, "", `/visualizer/${newProject._id}`);
+    setTimeout(() => {
+      previewCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 150);
   };
 
   const handleNameCancel = () => {

@@ -77,10 +77,16 @@ const Navbar = () => {
               <a href="/dashboard" className="navbar-btn-primary navbar-desktop-only">Dashboard</a>
               <button className="navbar-btn-ghost navbar-desktop-only" onClick={handleSignOut}>Log Out</button>
 
-              {/* Mobile only: dashboard icon */}
-              <a href="/dashboard" className="navbar-icon-btn navbar-mobile-only" title="Go to Dashboard">
-                <LogIn size={22} />
-              </a>
+              {/* Mobile only: credits + dashboard icon */}
+              <div className="navbar-mobile-only" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <div className="navbar-credits-mobile">
+                  <Zap size={13} />
+                  <span>{credits ?? 4}</span>
+                </div>
+                <a href="/dashboard" className="navbar-icon-btn" title="Go to Dashboard">
+                  <LogIn size={20} />
+                </a>
+              </div>
             </>
           ) : (
             <>
