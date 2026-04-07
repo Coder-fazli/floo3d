@@ -220,6 +220,7 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
                     <Download size={11} /> DL
                   </span>
                 </th>
+                <th style={{ textAlign: "center" }}>Rating</th>
                 <th>Created</th>
                 <th className="right">Action</th>
               </tr>
@@ -227,7 +228,7 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
             <tbody>
               {paginated.length === 0 ? (
                 <tr>
-                  <td colSpan={8} style={{ textAlign: "center", color: "#94a3b8", padding: "3rem" }}>
+                  <td colSpan={9} style={{ textAlign: "center", color: "#94a3b8", padding: "3rem" }}>
                     No projects found
                   </td>
                 </tr>
@@ -292,6 +293,13 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
                       ) : (
                         <span style={{ color: "#cbd5e1" }}>—</span>
                       )}
+                    </td>
+
+                    {/* Rating */}
+                    <td style={{ textAlign: "center", fontSize: "1rem" }}>
+                      {p.rating === "like"    && <span title="Liked">👍</span>}
+                      {p.rating === "dislike" && <span title="Disliked">👎</span>}
+                      {!p.rating             && <span style={{ color: "#cbd5e1" }}>—</span>}
                     </td>
 
                     {/* Created */}

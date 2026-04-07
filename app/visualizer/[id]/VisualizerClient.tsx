@@ -749,7 +749,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
           <div className="viz-output-card" ref={previewCardRef}>
             <div className="viz-output-head">
               <span className="viz-output-title">Preview</span>
-              {project?._id && currentImage && (
+              {project?._id && (
                 <RateRender projectId={project._id} initialRating={project.rating ?? null} />
               )}
               <div className="viz-output-actions">
