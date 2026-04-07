@@ -929,7 +929,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
 
               {isProcessing && (
                 <div className="viz-processing">
-                  <HoleBackground className="absolute inset-0" />
+                  <HoleBackground className="absolute inset-0 before:![background:radial-gradient(ellipse_at_50%_55%,transparent_10%,black_50%)]" />
                   <div style={{ position: "relative", zIndex: 40, display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem" }}>
                     <AITextLoading texts={LOADING_TEXTS[activeInputType] ?? LOADING_TEXTS["floor-plan"]} />
                     <p style={{ margin: 0, fontSize: "0.8rem", color: "rgba(255,255,255,0.45)", letterSpacing: "0.03em" }}>This usually takes under a minute</p>
