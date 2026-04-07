@@ -78,7 +78,7 @@ export default function AITextLoading({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.38, ease: "easeInOut" }}
-          className="bg-gradient-to-r from-neutral-300 via-white to-neutral-200 bg-clip-text text-transparent text-lg font-semibold tracking-wide"
+          className="bg-gradient-to-r from-neutral-300 via-white to-neutral-200 bg-clip-text text-transparent text-3xl font-bold tracking-wide text-center"
           style={{
             backgroundSize: "200% auto",
             animation: "shimmer 2.2s linear infinite",
