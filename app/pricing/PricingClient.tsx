@@ -1,23 +1,13 @@
 'use client';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import NumberFlow from '@number-flow/react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/Button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Sparkles, ArrowRight, Check, Zap, Shield, Lock, Star } from 'lucide-react';
+import NumberFlow from '@number-flow/react';
+import { CheckCheck, Zap, Shield, Star, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { useClerk, useUser } from '@clerk/nextjs';
 import Link from 'next/link';
-
 
 type PricingSettings = {
   starterPrice: number; starterCredits: number; starterDescription: string; starterFeatures: string[];
@@ -25,55 +15,282 @@ type PricingSettings = {
   elitePrice: number; eliteCredits: number; eliteDescription: string; eliteFeatures: string[];
 };
 
-export default function PricingClient({ pricingSettings }: { pricingSettings?: PricingSettings }) {
-  const plans = [
-    {
-      id: 'starter', name: 'Starter', icon: Zap,
-      price: { oneTime: pricingSettings?.starterPrice ?? 9 },
-      credits: pricingSettings?.starterCredits ?? 100,
-      description: pricingSettings?.starterDescription ?? 'Great for homeowners and designers working on a project.',
-      features: pricingSettings?.starterFeatures ?? ['100 credits — 50 AI renders', 'All 4 AI tools included', 'HD quality renders', 'PNG, JPG & PDF export', 'No watermark', 'Commercial usage rights', 'Priority support'],
-      cta: 'Buy Starter', popular: true,
-    },
-    {
-      id: 'pro', name: 'Pro', icon: Shield,
-      price: { oneTime: pricingSettings?.proPrice ?? 24 },
-      credits: pricingSettings?.proCredits ?? 300,
-      description: pricingSettings?.proDescription ?? 'Great value for homeowners and designers who need professional results fast.',
-      features: pricingSettings?.proFeatures ?? ['300 credits — 150 AI renders', 'All Starter features', 'Isometric & cross-section views', 'StyleAI Pro — highest accuracy', 'Superior detail & realism', 'PNG, JPG & PDF export', 'Commercial usage rights', 'Priority support'],
-      cta: 'Buy Pro',
-    },
-    {
-      id: 'elite', name: 'Elite', icon: Star,
-      price: { oneTime: pricingSettings?.elitePrice ?? 49.99 },
-      credits: pricingSettings?.eliteCredits ?? 300,
-      description: pricingSettings?.eliteDescription ?? 'Highest accuracy AI — for architects, agencies and real estate professionals who demand the best.',
-      features: pricingSettings?.eliteFeatures ?? ['300 credits — 150 AI renders', 'All Pro features included', 'Highest accuracy AI model', 'Superior material & texture detail', 'More realistic lighting & shadows', 'Sharper architectural lines', 'Best for client presentations', 'Commercial usage rights', 'Priority support'],
-      cta: 'Buy Elite',
-    },
-  ];
+// ── Tab Switch (exact 21st.dev style) ──────────────────────────────────────
+function PricingSwitch({ selected, onSwitch }: { selected: string; onSwitch: (v: string) => void }) {
+  return (
+    <div className="flex justify-center">
+      <div className="relative z-10 mx-auto flex w-fit rounded-xl bg-neutral-50 border border-gray-200 p-1">
+        {[
+          { value: '0', label: 'Credit Plans' },
+          { value: '1', label: 'Custom Pack', badge: 'New' },
+        ].map((tab) => (
+          <button
+            key={tab.value}
+            onClick={() => onSwitch(tab.value)}
+            className={cn(
+              'relative z-10 w-fit cursor-pointer h-12 rounded-xl sm:px-6 px-4 sm:py-2 py-1 font-medium transition-colors sm:text-base text-sm flex items-center gap-2',
+              selected === tab.value ? 'text-white' : 'text-muted-foreground hover:text-black',
+            )}
+          >
+            {selected === tab.value && (
+              <motion.span
+                layoutId="pricingSwitch"
+                className="absolute top-0 left-0 h-12 w-full rounded-xl border-4 shadow-sm shadow-orange-600 border-orange-600 bg-gradient-to-t from-orange-500 via-orange-400 to-orange-600"
+                transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+              />
+            )}
+            <span className="relative">{tab.label}</span>
+            {tab.badge && (
+              <span className="relative rounded-full bg-orange-50 px-2 py-0.5 text-xs font-semibold text-orange-600">
+                {tab.badge}
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-  const [mounted, setMounted] = useState(false);
+// ── Custom credit slider ────────────────────────────────────────────────────
+const STEPS = [50, 100, 150, 200, 300, 400, 500, 750, 1000];
+
+function getPrice(credits: number): number {
+  if (credits < 100)  return Math.round(credits * 0.12 * 100) / 100;
+  if (credits < 300)  return Math.round(credits * 0.10 * 100) / 100;
+  if (credits < 600)  return Math.round(credits * 0.085 * 100) / 100;
+  return Math.round(credits * 0.069 * 100) / 100;
+}
+
+function CustomPlan({ onBuy, loading }: { onBuy: (credits: number, price: number) => void; loading: boolean }) {
+  const [stepIdx, setStepIdx] = useState(2); // default 150 credits
+  const credits = STEPS[stepIdx];
+  const price   = getPrice(credits);
+  const renders = Math.floor(credits / 2);
+
+  const perRender = (price / renders).toFixed(3);
+  const pct = (stepIdx / (STEPS.length - 1)) * 100;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="w-full max-w-xl mx-auto"
+    >
+      <Card className="border border-neutral-200 bg-white shadow-lg">
+        <CardHeader className="text-left pb-2">
+          <div className="flex items-center gap-2 mb-1">
+            <div className="h-9 w-9 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center">
+              <Zap size={18} className="text-orange-500" />
+            </div>
+            <div>
+              <h3 className="text-2xl font-semibold text-gray-900">Custom Pack</h3>
+              <p className="text-xs text-gray-500">Pay exactly what you need — no subscription</p>
+            </div>
+          </div>
+        </CardHeader>
+
+        <CardContent className="pt-4 space-y-6">
+          {/* Price display */}
+          <div className="flex items-baseline gap-2">
+            <span className="text-5xl font-semibold text-gray-900">
+              $<NumberFlow value={price} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
+            </span>
+            <div className="text-sm text-gray-500 leading-tight">
+              <div className="font-semibold text-orange-500">{credits} credits</div>
+              <div>{renders} renders · ${perRender}/render</div>
+            </div>
+          </div>
+
+          {/* Slider */}
+          <div className="space-y-3">
+            <div className="flex justify-between text-xs text-gray-400 font-medium">
+              <span>50 cr</span>
+              <span>1,000 cr</span>
+            </div>
+            <div className="relative">
+              <input
+                type="range"
+                min={0}
+                max={STEPS.length - 1}
+                step={1}
+                value={stepIdx}
+                onChange={e => setStepIdx(Number(e.target.value))}
+                className="w-full h-2 rounded-full appearance-none cursor-pointer"
+                style={{
+                  background: `linear-gradient(to right, #ec5b13 ${pct}%, #e2e8f0 ${pct}%)`,
+                  accentColor: '#ec5b13',
+                }}
+              />
+            </div>
+            {/* Step labels */}
+            <div className="flex justify-between text-xs text-gray-400">
+              {STEPS.map((s, i) => (
+                <button
+                  key={s}
+                  onClick={() => setStepIdx(i)}
+                  className={cn(
+                    'font-medium transition-colors',
+                    i === stepIdx ? 'text-orange-500' : 'hover:text-gray-600'
+                  )}
+                >
+                  {s >= 1000 ? '1k' : s}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Volume discount badge */}
+          <div className="flex items-center gap-2 bg-orange-50 border border-orange-100 rounded-xl px-4 py-2.5">
+            <Sparkles size={14} className="text-orange-500 flex-shrink-0" />
+            <span className="text-sm font-medium text-orange-700">
+              {credits < 100  && 'Standard rate — $0.12/credit'}
+              {credits >= 100 && credits < 300  && '10% volume discount applied — $0.10/credit'}
+              {credits >= 300 && credits < 600  && '15% volume discount applied — $0.085/credit'}
+              {credits >= 600 && '31% volume discount applied — $0.069/credit'}
+            </span>
+          </div>
+
+          {/* What you get */}
+          <div className="space-y-2 pt-2 border-t border-neutral-100">
+            <h4 className="text-sm font-semibold uppercase text-gray-400 tracking-wide mb-3">Includes</h4>
+            {[
+              `${credits} credits (${renders} AI renders)`,
+              'All 4 AI tools — floor plan, interior, outdoor, staging',
+              'HD quality renders + no watermark',
+              'PNG, JPG & PDF export',
+              'Credits never expire',
+              'Commercial usage rights',
+            ].map((f, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <span className="h-5 w-5 bg-white border border-orange-500 rounded-full grid place-content-center flex-shrink-0">
+                  <CheckCheck className="h-3 w-3 text-orange-500" />
+                </span>
+                <span className="text-sm text-gray-600 font-medium">{f}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Buy button */}
+          <button
+            onClick={() => onBuy(credits, price)}
+            disabled={loading}
+            className="w-full p-4 text-base font-semibold rounded-xl text-white transition-opacity disabled:opacity-60"
+            style={{
+              background: 'linear-gradient(to bottom, #f97316, #ea580c)',
+              boxShadow: '0 4px 14px rgba(236,91,19,0.35)',
+              border: '1px solid rgba(236,91,19,0.4)',
+            }}
+          >
+            {loading ? 'Redirecting…' : `Buy ${credits} Credits — $${price.toFixed(2)}`}
+          </button>
+
+          <p className="text-xs text-gray-400 text-center">
+            Secure checkout via Stripe ·{' '}
+            <Link href="/terms-of-service" className="underline hover:text-gray-600">Terms</Link>
+            {' '}&{' '}
+            <Link href="/privacy-policy" className="underline hover:text-gray-600">Privacy</Link>
+          </p>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+}
+
+// ── Main Component ──────────────────────────────────────────────────────────
+export default function PricingClient({ pricingSettings }: { pricingSettings?: PricingSettings }) {
+  const [tab, setTab] = useState('0');
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
   const { openSignUp } = useClerk();
   const { isSignedIn } = useUser();
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
+
+  const plans = [
+    {
+      id: 'starter', name: 'Starter', Icon: Zap,
+      price: pricingSettings?.starterPrice ?? 9.99,
+      credits: pricingSettings?.starterCredits ?? 100,
+      description: pricingSettings?.starterDescription ?? 'Great for homeowners and designers working on a single project.',
+      includes: [
+        'Free includes:',
+        '100 credits — 50 AI renders',
+        'All 4 AI tools included',
+        'HD quality renders',
+        'PNG, JPG & PDF export',
+        'No watermark',
+        'Commercial usage rights',
+      ],
+      cta: 'Get Starter',
+    },
+    {
+      id: 'pro', name: 'Pro', Icon: Shield,
+      price: pricingSettings?.proPrice ?? 24.99,
+      credits: pricingSettings?.proCredits ?? 300,
+      description: pricingSettings?.proDescription ?? 'Best value for designers who need results fast.',
+      popular: true,
+      includes: [
+        'Everything in Starter, plus:',
+        '300 credits — 150 AI renders',
+        'Isometric & cross-section views',
+        'More design styles',
+        'Priority generation queue',
+        'Up to 3 active projects',
+        '$0.17 per render',
+      ],
+      cta: 'Get Pro',
+    },
+    {
+      id: 'elite', name: 'Elite', Icon: Star,
+      price: pricingSettings?.elitePrice ?? 49.99,
+      credits: pricingSettings?.eliteCredits ?? 300,
+      description: pricingSettings?.eliteDescription ?? 'Highest accuracy AI — for architects, agencies and real estate professionals.',
+      includes: [
+        'Everything in Pro, plus:',
+        'Highest accuracy AI model',
+        'Superior material & texture detail',
+        'Sharper architectural lines',
+        'Best for client presentations',
+        'Priority support',
+        'Commercial usage rights',
+      ],
+      cta: 'Get Elite',
+    },
+  ];
 
   const handleBuy = async (planId: string) => {
     if (!isSignedIn) {
-      localStorage.setItem("pendingPlan", planId);
-      openSignUp({ fallbackRedirectUrl: "/pricing" });
+      localStorage.setItem('pendingPlan', planId);
+      openSignUp({ fallbackRedirectUrl: '/pricing' });
       return;
     }
     setLoadingPlan(planId);
     try {
-      const res = await fetch("/api/stripe/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ plan: planId, returnUrl: `${window.location.origin}/dashboard` }),
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } finally {
+      setLoadingPlan(null);
+    }
+  };
+
+  const handleCustomBuy = async (credits: number, price: number) => {
+    if (!isSignedIn) {
+      openSignUp({ fallbackRedirectUrl: '/pricing' });
+      return;
+    }
+    setLoadingPlan('custom');
+    try {
+      const res = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: 'custom', credits, price, returnUrl: `${window.location.origin}/dashboard` }),
       });
       const data = await res.json();
       if (data.url) window.location.href = data.url;
@@ -84,325 +301,169 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
 
   useEffect(() => {
     if (!isSignedIn) return;
-    const pending = localStorage.getItem("pendingPlan");
-    if (pending) {
-      localStorage.removeItem("pendingPlan");
-      handleBuy(pending);
-    }
+    const pending = localStorage.getItem('pendingPlan');
+    if (pending) { localStorage.removeItem('pendingPlan'); handleBuy(pending); }
   }, [isSignedIn]);
 
   if (!mounted) return null;
 
   return (
-    <div className="not-prose relative flex w-full flex-col gap-16 px-4 py-24 text-center sm:px-8" style={{ overflow: 'visible' }}>
-      {/* Background blobs */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-[10%] left-[50%] h-[40%] w-[60%] -translate-x-1/2 rounded-full blur-3xl" style={{ background: 'rgba(229,72,77,0.08)' }} />
-        <div className="absolute -right-[10%] -bottom-[10%] h-[40%] w-[40%] rounded-full blur-3xl" style={{ background: 'rgba(229,72,77,0.05)' }} />
-        <div className="absolute -bottom-[10%] -left-[10%] h-[40%] w-[40%] rounded-full blur-3xl" style={{ background: 'rgba(229,72,77,0.05)' }} />
-      </div>
+    <div className="px-4 pt-16 pb-24 min-h-screen max-w-7xl mx-auto relative">
 
-      <div className="flex flex-col items-center justify-center gap-8">
-        {/* Header */}
-        <div className="flex flex-col items-center space-y-2">
-          <Badge
-            variant="outline"
-            className="mb-4 rounded-full px-4 py-1 text-sm font-medium"
-            style={{ borderColor: 'rgba(229,72,77,0.2)', background: 'rgba(229,72,77,0.05)', color: '#e5484d' }}
-          >
-            <Sparkles className="mr-1 h-3.5 w-3.5 animate-pulse" style={{ color: '#e5484d' }} />
-            Pricing Plans
-          </Badge>
-          <motion.h1
+      {/* Header */}
+      <article className="text-left mb-10 space-y-4 max-w-2xl">
+        <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 leading-tight">
+          We've got a plan that's<br />perfect for you
+        </h2>
+        <p className="text-base text-gray-500 max-w-lg">
+          One-time credit purchases — no subscriptions, no hidden fees. Use credits across all 4 AI tools. They never expire.
+        </p>
+        <PricingSwitch selected={tab} onSwitch={setTab} />
+      </article>
+
+      {/* Plans tab */}
+      <AnimatePresence mode="wait">
+        {tab === '0' && (
+          <motion.div
+            key="plans"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-4xl font-bold sm:text-5xl"
-            style={{ color: '#0f172a', letterSpacing: '-0.03em' }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
           >
-            Pick the perfect plan for your needs
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="max-w-md pt-2 text-lg"
-            style={{ color: '#64748b' }}
-          >
-            One-time credit purchases. No subscriptions, no hidden fees, no surprises.
-          </motion.p>
-        </div>
+            <div className="grid md:grid-cols-3 gap-5 py-4">
+              {plans.map((plan) => (
+                <Card
+                  key={plan.id}
+                  className={cn(
+                    'relative border text-left transition-all duration-200 hover:shadow-md',
+                    plan.popular
+                      ? 'ring-2 ring-orange-500 bg-orange-50'
+                      : 'border-neutral-200 bg-white',
+                  )}
+                >
+                  <CardHeader className="text-left">
+                    <div className="flex justify-between items-start">
+                      <h3 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-1">
+                        {plan.name} Plan
+                      </h3>
+                      {plan.popular && (
+                        <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap">
+                          Popular
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-500 mb-3">{plan.description}</p>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-4xl font-semibold text-gray-900">
+                        $<NumberFlow value={plan.price} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} className="text-4xl font-semibold" />
+                      </span>
+                      <span className="text-gray-500 ml-1 text-sm">one-time · {plan.credits} credits</span>
+                    </div>
+                  </CardHeader>
 
-        {/* Cards */}
-        <div className="mt-8 grid w-full max-w-6xl grid-cols-1 gap-6 md:grid-cols-3" style={{ paddingTop: '2rem', overflow: 'visible' }}>
-          {plans.map((plan, index) => (
+                  <CardContent className="pt-0 space-y-4">
+                    {/* Buy button */}
+                    <button
+                      onClick={() => handleBuy(plan.id)}
+                      disabled={!!loadingPlan}
+                      className="w-full p-4 text-lg font-semibold rounded-xl text-white transition-opacity disabled:opacity-60"
+                      style={
+                        plan.popular
+                          ? { background: 'linear-gradient(to bottom, #f97316, #ea580c)', boxShadow: '0 4px 14px rgba(236,91,19,0.35)', border: '1px solid rgba(236,91,19,0.4)' }
+                          : { background: 'linear-gradient(to bottom, #1e293b, #0f172a)', boxShadow: '0 4px 14px rgba(0,0,0,0.2)', border: '1px solid #334155' }
+                      }
+                    >
+                      {loadingPlan === plan.id ? 'Redirecting…' : plan.cta}
+                    </button>
+
+                    {/* Features */}
+                    <div className="space-y-2.5 pt-3 border-t border-neutral-200">
+                      <h4 className="text-sm font-semibold uppercase text-gray-400 tracking-wide mb-3">
+                        Features
+                      </h4>
+                      <p className="font-semibold text-sm text-gray-800">{plan.includes[0]}</p>
+                      <ul className="space-y-2">
+                        {plan.includes.slice(1).map((f, i) => (
+                          <li key={i} className="flex items-center gap-3">
+                            <span className="h-5 w-5 bg-white border border-orange-500 rounded-full grid place-content-center flex-shrink-0">
+                              <CheckCheck className="h-3 w-3 text-orange-500" />
+                            </span>
+                            <span className="text-sm text-gray-600 font-medium">{f}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <p className="text-xs text-gray-400 text-center pt-1">
+                      <Link href="/terms-of-service" className="underline">Terms</Link>
+                      {' '}&{' '}
+                      <Link href="/privacy-policy" className="underline">Privacy Policy</Link>
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Comparison table */}
             <motion.div
-              key={plan.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
-              whileHover={{ y: -5 }}
-              className="flex"
-              style={{ overflow: 'visible', position: 'relative' }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="mt-10 w-full max-w-3xl mx-auto bg-white rounded-2xl border border-neutral-200 overflow-hidden shadow-sm"
             >
-              {plan.popular && (
-                <div style={{ position: 'absolute', top: '-14px', left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 20 }}>
-                  <Badge className="rounded-full px-4 py-1 shadow-sm" style={{ background: '#e5484d', color: '#fff', whiteSpace: 'nowrap' }}>
-                    <Sparkles className="mr-1 h-3.5 w-3.5" />
-                    Fan Favorite
-                  </Badge>
-                </div>
-              )}
-              {plan.id === 'pro' && (
-                <div style={{ position: 'absolute', top: '-14px', left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 20 }}>
-                  <Badge className="rounded-full px-4 py-1 shadow-sm" style={{ background: '#ec5b13', color: '#fff', whiteSpace: 'nowrap' }}>
-                    <Sparkles className="mr-1 h-3.5 w-3.5" />
-                    Best Value
-                  </Badge>
-                </div>
-              )}
-              {plan.id === 'elite' && (
-                <div style={{ position: 'absolute', top: '-14px', left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 20 }}>
-                  <Badge className="rounded-full px-4 py-1 shadow-sm" style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#fff', whiteSpace: 'nowrap' }}>
-                    <Star className="mr-1 h-3.5 w-3.5" />
-                    Highest Accuracy
-                  </Badge>
-                </div>
-              )}
-              <Card
-                className={cn(
-                  'relative h-full w-full text-left transition-all duration-300 hover:shadow-lg',
-                  plan.popular ? 'shadow-md' : '',
-                )}
-                style={
-                  plan.id === 'elite' ? {
-                    outline: '2px solid rgba(245,158,11,0.5)',
-                    outlineOffset: '0px',
-                    background: 'linear-gradient(135deg, rgba(245,158,11,0.05), rgba(217,119,6,0.03))',
-                    boxShadow: '0 0 40px rgba(245,158,11,0.12), 0 8px 32px rgba(0,0,0,0.08)',
-                  } : plan.id === 'pro' ? {
-                    outline: '2px solid rgba(236,91,19,0.4)',
-                    outlineOffset: '0px',
-                    background: 'linear-gradient(135deg, rgba(236,91,19,0.04), rgba(217,119,6,0.03))',
-                    boxShadow: '0 0 40px rgba(236,91,19,0.10), 0 8px 32px rgba(0,0,0,0.08)',
-                  } : plan.popular ? {
-                    outline: '2px solid rgba(229,72,77,0.5)',
-                    outlineOffset: '0px',
-                    background: 'linear-gradient(to bottom, rgba(236,91,19,0.03), transparent)',
-                  } : {}
-                }
-              >
-
-                <CardHeader className={cn('pb-4', plan.popular && 'pt-6')}>
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="flex h-8 w-8 items-center justify-center rounded-full"
-                      style={plan.id === 'elite'
-                        ? { background: 'rgba(245,158,11,0.12)', color: '#f59e0b' }
-                        : plan.id === 'pro'
-                        ? { background: 'rgba(236,91,19,0.1)', color: '#ec5b13' }
-                        : plan.popular
-                        ? { background: 'rgba(229,72,77,0.1)', color: '#e5484d' }
-                        : { background: '#f1f5f9', color: '#475569' }}
-                    >
-                      <plan.icon className="h-4 w-4" />
-                    </div>
-                    <CardTitle
-                      className="text-xl font-bold"
-                      style={{ color: plan.id === 'elite' ? '#d97706' : plan.popular ? '#e5484d' : '#0f172a' }}
-                    >
-                      {plan.name}
-                      {plan.id === 'pro' && (
-                        <span style={{ display: 'block', fontSize: '0.72rem', fontWeight: 500, color: '#94a3b8', marginTop: '0.2rem', letterSpacing: '0.01em' }}>
-                          ☕ Less than a coffee a week
-                        </span>
-                      )}
-                    </CardTitle>
-                  </div>
-
-                  <CardDescription className="mt-3 space-y-2">
-                    <p className="text-sm" style={{ color: '#334155', fontWeight: 600 }}>{plan.description}</p>
-                    <div className="pt-2">
-                      {typeof plan.price.oneTime === 'number' ? (
-                        <div className="flex flex-col gap-1">
-                          <div className="flex items-baseline gap-1">
-                            <NumberFlow
-                              className="text-3xl font-bold"
-                              style={{ color: plan.id === 'elite' ? '#f59e0b' : plan.id === 'pro' ? '#ec5b13' : plan.popular ? '#e5484d' : '#0f172a' }}
-                              format={{ style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 }}
-                              value={plan.price.oneTime}
-                            />
-                            <span className="text-sm" style={{ color: '#94a3b8' }}>one-time · {plan.credits} credits</span>
-                          </div>
-                          {plan.id === 'pro' && (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
-                              <span style={{ fontSize: '0.75rem', color: '#ec5b13', fontWeight: 700 }}>☕ Less than a coffee a week</span>
-                              <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>$0.17 per render · 150 renders total</span>
-                            </div>
-                          )}
-                          {plan.id === 'starter' && (
-                            <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>$0.20 per render · 50 renders total</span>
-                          )}
-                          {plan.id === 'elite' && (
-                            <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>$0.33 per render · 150 renders · best AI model</span>
-                          )}
-                        </div>
-                      ) : (
-                        <span className="text-2xl font-bold" style={{ color: '#0f172a' }}>
-                          {plan.price.oneTime}
-                        </span>
-                      )}
-                    </div>
-                  </CardDescription>
-                </CardHeader>
-
-                <CardContent className="grid gap-3 pb-6">
-                  {plan.features.map((feature, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: -5 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: 0.5 + i * 0.05 }}
-                      className="flex items-center gap-2 text-sm"
-                    >
-                      <div
-                        className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full"
-                        style={plan.id === 'elite'
-                          ? { background: 'rgba(245,158,11,0.12)', color: '#f59e0b' }
-                          : plan.popular
-                          ? { background: 'rgba(229,72,77,0.1)', color: '#e5484d' }
-                          : { background: '#f1f5f9', color: '#64748b' }}
-                      >
-                        <Check className="h-3.5 w-3.5" />
-                      </div>
-                      <span style={{ color: plan.id === 'elite' || plan.popular ? '#0f172a' : '#64748b' }}>{feature}</span>
-                    </motion.div>
+              <table className="w-full text-sm border-collapse">
+                <thead>
+                  <tr className="border-b border-neutral-100">
+                    <th className="py-3 px-5 text-left text-xs font-bold uppercase text-gray-400 tracking-wider">Feature</th>
+                    <th className="py-3 px-4 text-center text-xs font-bold uppercase text-gray-700">Starter</th>
+                    <th className="py-3 px-4 text-center text-xs font-bold uppercase text-orange-500">Pro</th>
+                    <th className="py-3 px-4 text-center text-xs font-bold uppercase text-amber-500">Elite</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { label: 'AI renders',      starter: '50',        pro: '150',              elite: '150' },
+                    { label: 'AI model',        starter: 'Standard',  pro: 'Standard',         elite: 'Highest accuracy' },
+                    { label: 'Cost per render', starter: '$0.20',     pro: '$0.17',            elite: '$0.33' },
+                    { label: 'No watermark',    starter: '✓',         pro: '✓',               elite: '✓' },
+                    { label: 'PDF export',      starter: '✓',         pro: '✓',               elite: '✓' },
+                    { label: 'Isometric views', starter: '✗',         pro: '✓',               elite: '✓' },
+                    { label: 'Material detail', starter: 'HD',        pro: 'HD',               elite: 'Superior' },
+                    { label: 'Commercial use',  starter: '✓',         pro: '✓',               elite: '✓' },
+                    { label: 'Credits expire',  starter: 'Never',     pro: 'Never',            elite: 'Never' },
+                  ].map((row, i) => (
+                    <tr key={i} className={i % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                      <td className="py-3 px-5 font-semibold text-gray-700">{row.label}</td>
+                      <td className="py-3 px-4 text-center text-gray-600 font-medium">{row.starter}</td>
+                      <td className="py-3 px-4 text-center text-orange-500 font-bold">{row.pro}</td>
+                      <td className="py-3 px-4 text-center text-amber-500 font-bold">{row.elite}</td>
+                    </tr>
                   ))}
-                  {'lockedFeatures' in plan && (plan as any).lockedFeatures.map((feature: string, i: number) => (
-                    <motion.div
-                      key={`locked-${i}`}
-                      initial={{ opacity: 0, x: -5 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: 0.5 + (plan.features.length + i) * 0.05 }}
-                      className="flex items-center gap-2 text-sm"
-                    >
-                      <div
-                        className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full"
-                        style={{ background: '#f1f5f9', color: '#cbd5e1' }}
-                      >
-                        <Lock className="h-3 w-3" />
-                      </div>
-                      <span style={{ color: '#cbd5e1', textDecoration: 'line-through' }}>{feature}</span>
-                    </motion.div>
-                  ))}
-                </CardContent>
-
-                <CardFooter style={{ flexDirection: 'column', gap: '0.5rem' }}>
-                  <button
-                    className="w-full rounded-lg py-2.5 px-4 text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2"
-                    style={plan.id === 'elite'
-                      ? { background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#fff', border: 'none' }
-                      : plan.id === 'pro'
-                      ? { background: '#ec5b13', color: '#fff', border: 'none' }
-                      : plan.popular
-                      ? { background: '#e5484d', color: '#fff', border: 'none' }
-                      : { background: '#fff', color: '#0f172a', border: '1px solid #e2e8f0' }}
-                    disabled={loadingPlan === plan.id}
-                    onClick={() => handleBuy(plan.id)}
-                    onMouseEnter={e => {
-                      if (plan.id === 'elite') {
-                        (e.currentTarget as HTMLButtonElement).style.background = 'linear-gradient(135deg, #d97706, #b45309)';
-                      } else if (plan.id === 'pro') {
-                        (e.currentTarget as HTMLButtonElement).style.background = '#d44e0f';
-                      } else if (!plan.popular) {
-                        (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(236,91,19,0.3)';
-                        (e.currentTarget as HTMLButtonElement).style.color = '#e5484d';
-                      } else {
-                        (e.currentTarget as HTMLButtonElement).style.background = '#cc2f34';
-                      }
-                    }}
-                    onMouseLeave={e => {
-                      if (plan.id === 'elite') {
-                        (e.currentTarget as HTMLButtonElement).style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
-                      } else if (plan.id === 'pro') {
-                        (e.currentTarget as HTMLButtonElement).style.background = '#ec5b13';
-                      } else if (!plan.popular) {
-                        (e.currentTarget as HTMLButtonElement).style.borderColor = '#e2e8f0';
-                        (e.currentTarget as HTMLButtonElement).style.color = '#0f172a';
-                      } else {
-                        (e.currentTarget as HTMLButtonElement).style.background = '#e5484d';
-                      }
-                    }}
-                  >
-                    {loadingPlan === plan.id ? "Redirecting..." : plan.cta}
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
-                  <p style={{ fontSize: '0.68rem', color: '#cbd5e1', textAlign: 'center', margin: 0 }}>
-                    By purchasing you agree to our{' '}
-                    <Link href="/terms-of-service" style={{ color: '#94a3b8', textDecoration: 'underline' }}>Terms</Link>
-                    {' '}&{' '}
-                    <Link href="/privacy-policy" style={{ color: '#94a3b8', textDecoration: 'underline' }}>Privacy Policy</Link>
-                  </p>
-                </CardFooter>
-
-                {plan.popular && (
-                  <div className="pointer-events-none absolute inset-0 rounded-lg" style={{ border: '1px solid rgba(229,72,77,0.2)' }} />
-                )}
-              </Card>
+                </tbody>
+              </table>
             </motion.div>
-          ))}
-        </div>
 
-        {/* Comparison table */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          style={{ width: '100%', maxWidth: '900px', background: '#fff', borderRadius: '1rem', border: '1.5px solid #e2e8f0', overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,0,0,0.06)' }}
-        >
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
-            <thead>
-              <tr style={{ borderBottom: '1.5px solid #f1f5f9' }}>
-                <th style={{ padding: '0.9rem 1.25rem', textAlign: 'left', color: '#94a3b8', fontWeight: 700, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Feature</th>
-                <th style={{ padding: '0.9rem 1rem', textAlign: 'center', color: '#e5484d', fontWeight: 700, fontSize: '0.72rem', textTransform: 'uppercase' }}>Starter</th>
-                <th style={{ padding: '0.9rem 1rem', textAlign: 'center', color: '#ec5b13', fontWeight: 700, fontSize: '0.72rem', textTransform: 'uppercase' }}>Pro</th>
-                <th style={{ padding: '0.9rem 1rem', textAlign: 'center', color: '#d97706', fontWeight: 700, fontSize: '0.72rem', textTransform: 'uppercase' }}>Elite</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                { label: 'AI renders',      starter: '50',    pro: '150',              elite: '150' },
-                { label: 'AI model',        starter: 'Standard', pro: 'Standard',      elite: 'Highest accuracy' },
-                { label: 'Cost per render', starter: '$0.20', pro: '$0.17',            elite: '$0.33' },
-                { label: 'No watermark',    starter: '✓',     pro: '✓',               elite: '✓' },
-                { label: 'PDF export',      starter: '✓',     pro: '✓',               elite: '✓' },
-                { label: 'Isometric views', starter: '✗',     pro: '✓',               elite: '✓' },
-                { label: 'Material detail', starter: 'HD',    pro: 'HD',               elite: 'Superior' },
-                { label: 'Commercial use',  starter: '✓',     pro: '✓',               elite: '✓' },
-                { label: 'Credits expire',  starter: 'No',    pro: 'No',               elite: 'No' },
-              ].map((row, i) => (
-                <tr key={i} style={{ borderBottom: i < 8 ? '1px solid #f8fafc' : 'none', background: i % 2 === 0 ? '#fafafa' : '#fff' }}>
-                  <td style={{ padding: '0.75rem 1.25rem', color: '#334155', fontWeight: 600 }}>{row.label}</td>
-                  <td style={{ padding: '0.75rem 1rem', textAlign: 'center', color: '#e5484d', fontWeight: 600 }}>{row.starter}</td>
-                  <td style={{ padding: '0.75rem 1rem', textAlign: 'center', color: '#ec5b13', fontWeight: 700 }}>{row.pro}</td>
-                  <td style={{ padding: '0.75rem 1rem', textAlign: 'center', color: '#d97706', fontWeight: 700 }}>{row.elite}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </motion.div>
+            <p className="text-sm text-gray-400 text-center mt-8">
+              All plans include access to all 4 AI tools · 2 credits per render · Credits never expire · Secure checkout via Stripe
+            </p>
+          </motion.div>
+        )}
 
-        {/* Bottom note */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="text-sm"
-          style={{ color: '#94a3b8' }}
-        >
-          All plans include access to all 4 AI tools. 2 credits per render. Credits never expire. Secure checkout via Stripe.
-        </motion.p>
-      </div>
+        {/* Custom tab */}
+        {tab === '1' && (
+          <motion.div
+            key="custom"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className="py-4"
+          >
+            <CustomPlan onBuy={handleCustomBuy} loading={loadingPlan === 'custom'} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

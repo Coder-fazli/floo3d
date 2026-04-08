@@ -11,8 +11,32 @@ export async function POST(request: Request) {
     const { userId } = await auth();
     if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const { plan, returnUrl } = await request.json();
-    if (!["starter", "pro", "elite"].includes(plan)) return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
+    const { plan, returnUrl, price: customPrice, credits: customCredits } = await request.json();
+    if (!["starter", "pro", "elite", "custom"].includes(plan)) return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
+
+    if (plan === "custom") {
+      const origin = request.headers.get("origin") ?? "http://localhost:3000";
+      const session = await stripe.checkout.sessions.create({
+         mode: "payment",
+         line_items: [{
+         quantity: 1,
+         price_data: {
+         currency: "usd",
+         unit_amount: Math.round(customPrice * 100),
+         product_data: {
+         name: `Custom Pack — ${customCredits} Credits`,
+         description: `${customCredits} AI credits = ${Math.floor(customCredits / 2)} renders. Never expire.`,
+          },
+        },
+      }],
+      metadata: { userId, plan: "custom", credits:
+  customCredits.toString() },
+      success_url: `${returnUrl ??
+  origin}?success=1&plan=custom`,
+      cancel_url: `${origin}/pricing?canceled=1`,
+    });
+    return NextResponse.json({ url: session.url });
+    }
 
     await connectDb();
     const pricing: any = await PricingSettings.findOne().lean() ?? {};
