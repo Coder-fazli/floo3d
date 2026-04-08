@@ -304,13 +304,14 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
 
   return (
     <div className="px-4 pt-16 pb-24 min-h-screen max-w-7xl mx-auto relative">
+      <div className="w-full absolute inset-0 h-full z-0 bg-[radial-gradient(circle,_black_1px,_transparent_1px)] dark:bg-[radial-gradient(circle,_white_1px,_transparent_1px)] opacity-10 [background-size:20px_20px] pointer-events-none" />
 
       {/* Header */}
-      <article className="text-left mb-10 space-y-4 max-w-2xl">
+      <article className="text-center mb-10 space-y-4">
         <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 leading-tight">
-          We've got a plan that's<br />perfect for you
+          We've got a plan that's perfect for you
         </h2>
-        <p className="text-base text-gray-500 max-w-lg">
+        <p className="text-base text-gray-500 max-w-lg mx-auto">
           One-time credit purchases — no subscriptions, no hidden fees. Use credits across all 4 AI tools. They never expire.
         </p>
         <PricingSwitch selected={tab} onSwitch={setTab} />
