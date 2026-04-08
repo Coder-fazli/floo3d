@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { useClerk, useUser } from '@clerk/nextjs';
 import Link from 'next/link';
+import { Component as GlowButton } from '@/components/ui/glow-button';
 
 type PricingSettings = {
   starterPrice: number; starterCredits: number; starterDescription: string; starterFeatures: string[];
@@ -152,39 +153,33 @@ function CustomPlan({ onBuy, loading }: { onBuy: (credits: number, price: number
             </span>
           </div>
 
-          {/* What you get */}
-          <div className="space-y-2 pt-2 border-t border-neutral-100">
+          {/* What you get — 2 columns */}
+          <div className="pt-2 border-t border-neutral-100">
             <h4 className="text-sm font-semibold uppercase text-gray-400 tracking-wide mb-3">Includes</h4>
-            {[
-              `${credits} credits (${renders} AI renders)`,
-              'All 4 AI tools — floor plan, interior, outdoor, staging',
-              'HD quality renders + no watermark',
-              'PNG, JPG & PDF export',
-              'Credits never expire',
-              'Commercial usage rights',
-            ].map((f, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <span className="h-5 w-5 bg-white border border-orange-500 rounded-full grid place-content-center flex-shrink-0">
-                  <CheckCheck className="h-3 w-3 text-orange-500" />
-                </span>
-                <span className="text-sm text-gray-600 font-medium">{f}</span>
-              </div>
-            ))}
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+              {[
+                `${credits} credits (${renders} AI renders)`,
+                'HD quality renders + no watermark',
+                'All 4 AI tools included',
+                'PNG, JPG & PDF export',
+                'Credits never expire',
+                'Commercial usage rights',
+              ].map((f, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <span className="h-5 w-5 bg-white border border-orange-500 rounded-full grid place-content-center flex-shrink-0">
+                    <CheckCheck className="h-3 w-3 text-orange-500" />
+                  </span>
+                  <span className="text-xs text-gray-600 font-medium">{f}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Buy button */}
-          <button
+          <GlowButton
+            label={loading ? 'Redirecting…' : `Buy ${credits} Credits — $${price.toFixed(2)}`}
             onClick={() => onBuy(credits, price)}
-            disabled={loading}
-            className="w-full p-4 text-base font-semibold rounded-xl text-white transition-opacity disabled:opacity-60"
-            style={{
-              background: 'linear-gradient(to bottom, #f97316, #ea580c)',
-              boxShadow: '0 4px 14px rgba(236,91,19,0.35)',
-              border: '1px solid rgba(236,91,19,0.4)',
-            }}
-          >
-            {loading ? 'Redirecting…' : `Buy ${credits} Credits — $${price.toFixed(2)}`}
-          </button>
+          />
 
           <p className="text-xs text-gray-400 text-center">
             Secure checkout via Stripe ·{' '}
@@ -364,18 +359,11 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
 
                   <CardContent className="pt-0 space-y-4">
                     {/* Buy button */}
-                    <button
+                    <GlowButton
+                      label={loadingPlan === plan.id ? 'Redirecting…' : plan.cta}
                       onClick={() => handleBuy(plan.id)}
-                      disabled={!!loadingPlan}
-                      className="w-full p-4 text-lg font-semibold rounded-xl text-white transition-opacity disabled:opacity-60"
-                      style={
-                        plan.popular
-                          ? { background: 'linear-gradient(to bottom, #f97316, #ea580c)', boxShadow: '0 4px 14px rgba(236,91,19,0.35)', border: '1px solid rgba(236,91,19,0.4)' }
-                          : { background: 'linear-gradient(to bottom, #1e293b, #0f172a)', boxShadow: '0 4px 14px rgba(0,0,0,0.2)', border: '1px solid #334155' }
-                      }
-                    >
-                      {loadingPlan === plan.id ? 'Redirecting…' : plan.cta}
-                    </button>
+                      className={plan.popular ? '' : 'glow-btn-dark'}
+                    />
 
                     {/* Features */}
                     <div className="space-y-2.5 pt-3 border-t border-neutral-200">
