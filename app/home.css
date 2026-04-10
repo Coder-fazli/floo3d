@@ -1,0 +1,169 @@
+/* ── Brand color variable ── */
+:root {
+  --brand-color: #00CEC8;
+}
+
+/* ── Hide original hero blobs ── */
+.hph-blob-orange,
+.hph-blob-blue {
+  display: none !important;
+}
+
+/* ── Hero: transparent bg, spacious padding ── */
+.hph-section {
+  background: transparent !important;
+  padding-top: 8rem !important;
+  padding-bottom: 10rem !important;
+}
+
+/* ── Remove white border & glow from slider ── */
+.hph-slider-container {
+  border: none !important;
+  box-shadow: 0 24px 56px -12px rgba(0,0,0,0.22) !important;
+}
+.hph-slider-glow {
+  display: none !important;
+}
+
+/* ── Corner bracket frame on slider ── */
+.hph-slider-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  z-index: 40;
+  pointer-events: none;
+  background-image:
+    linear-gradient(#FCEFC3, #FCEFC3),
+    linear-gradient(#FCEFC3, #FCEFC3),
+    linear-gradient(#FCEFC3, #FCEFC3),
+    linear-gradient(#FCEFC3, #FCEFC3),
+    linear-gradient(#FCEFC3, #FCEFC3),
+    linear-gradient(#FCEFC3, #FCEFC3),
+    linear-gradient(#FCEFC3, #FCEFC3),
+    linear-gradient(#FCEFC3, #FCEFC3);
+  background-size:
+    36px 3px, 3px 36px,
+    36px 3px, 3px 36px,
+    36px 3px, 3px 36px,
+    36px 3px, 3px 36px;
+  background-position:
+    top left,    top left,
+    top right,   top right,
+    bottom left, bottom left,
+    bottom right, bottom right;
+  background-repeat: no-repeat;
+  border-radius: 2.25rem;
+}
+
+/* ── Hero text ── */
+.hph-badge {
+  margin-bottom: 2.25rem !important;
+}
+.hph-heading {
+  color: #ffffff !important;
+  margin-bottom: 2rem !important;
+  line-height: 1.2 !important;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.18), 0 1px 3px rgba(0,0,0,0.12) !important;
+}
+.hph-heading-accent {
+  color: inherit !important;
+  background: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  transform: none !important;
+  display: inline-block !important;
+  text-shadow: none !important;
+}
+.hph-sub {
+  color: rgba(255,255,255,0.82) !important;
+  margin-bottom: 2.75rem !important;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.18), 0 1px 3px rgba(0,0,0,0.12) !important;
+}
+.hph-btns {
+  margin-bottom: 2.75rem !important;
+  gap: 1rem !important;
+}
+
+/* ── Navbar: transparent, blends into gradient ── */
+.navbar {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  border-bottom: none !important;
+}
+.navbar-credits {
+  color: #ffffff !important;
+}
+.navbar-credits-mobile {
+  background: #00CEC8 !important;
+  color: #ffffff !important;
+}
+
+/* ── Badge ── */
+.hph-badge {
+  background: rgba(255,255,255,0.15) !important;
+  border-color: rgba(255,255,255,0.25) !important;
+}
+.hph-badge-text {
+  color: rgba(255,255,255,0.9) !important;
+}
+.hph-badge-dot {
+  background: #FCEFC3 !important;
+}
+
+/* ── Buttons ── */
+.hph-btn-primary {
+  background: #EB4203 !important;
+  box-shadow: 0 12px 28px -4px rgba(235,66,3,0.4) !important;
+}
+.hph-btn-primary:hover {
+  background: #D13A02 !important;
+}
+.hph-btn-secondary {
+  background: rgba(255,255,255,0.15) !important;
+  border-color: rgba(255,255,255,0.35) !important;
+  color: #ffffff !important;
+  padding: 0.6rem 1.25rem !important;
+  font-size: 0.85rem !important;
+}
+.hph-btn-secondary:hover {
+  background: rgba(255,255,255,0.25) !important;
+}
+
+/* ── CTA buttons everywhere ── */
+.navbar-btn-primary,
+.blg-cta-btn,
+.ftr-subscribe-btn,
+.do-label-after,
+.rp-badge {
+  background: #EB4203 !important;
+  border-color: #EB4203 !important;
+}
+
+/* ── Hide feature cards (replaced by marquee) ── */
+.hph-features {
+  display: none !important;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .hph-section {
+    padding-top: 3rem !important;
+    padding-bottom: 4rem !important;
+  }
+  .hph-badge {
+    display: none !important;
+  }
+  .hph-slider-wrap {
+    order: -1 !important;
+  }
+  .hph-sub {
+    margin-bottom: 1rem !important;
+  }
+  .hph-btns {
+    margin-bottom: 1.25rem !important;
+  }
+  .hph-btns a,
+  .hph-btns a > button {
+    width: 100% !important;
+  }
+}

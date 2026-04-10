@@ -57,7 +57,7 @@
 }
 
 .dbnav-logo-accent {
-    color: #ec5b13;
+    color: var(--brand-color);
 }
 
 .dbnav-links {
@@ -75,11 +75,11 @@
 }
 
 .dbnav-link:hover {
-    color: #ec5b13;
+    color: var(--brand-color);
 }
 
 .dbnav-link-active {
-    color: #ec5b13;
+    color: var(--brand-color);
 }
 
 /* ── Right ── */
@@ -151,7 +151,7 @@
     right: 0.4rem;
     width: 0.45rem;
     height: 0.45rem;
-    background: #ec5b13;
+    background: var(--brand-color);
     border-radius: 9999px;
     border: 2px solid #f8f6f6;
 }
@@ -171,7 +171,7 @@
 }
 
 .dbnav-credits-icon {
-    color: #ec5b13;
+    color: var(--brand-color);
 }
 
 /* Divider */
@@ -240,7 +240,7 @@
 .dbnav-avatar-fallback {
     font-size: 0.8rem;
     font-weight: 700;
-    color: #ec5b13;
+    color: var(--brand-color);
 }
 
 /* ── Responsive ── */

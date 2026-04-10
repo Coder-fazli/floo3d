@@ -113,7 +113,7 @@
   flex: 2;
   padding: 0.7rem;
   border-radius: 10px;
-  background: #ec5b13;
+  background: var(--brand-color);
   border: none;
   color: #fff;
   font-size: 0.85rem;

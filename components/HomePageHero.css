@@ -103,7 +103,7 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 9999px;
-  background: #ec5b13;
+  background: var(--brand-color);
 }
 
 .hph-badge-text {
@@ -127,7 +127,7 @@
 }
 
 .hph-heading-accent {
-  color: #ec5b13;
+  color: var(--brand-color);
 }
 
 /* Subtext */
@@ -154,7 +154,7 @@
 
 .hph-btn-primary {
   padding: 1.1rem 2.25rem;
-  background: #ec5b13;
+  background: var(--brand-color);
   color: #ffffff;
   border: none;
   border-radius: 1rem;
@@ -193,7 +193,7 @@
 }
 
 .hph-btn-secondary:hover {
-  border-color: #ec5b13;
+  border-color: var(--brand-color);
   background: rgba(251, 146, 60, 0.04);
 }
 
@@ -321,7 +321,7 @@
 .hph-float-bar-fill {
   height: 100%;
   width: 85%;
-  background: #ec5b13;
+  background: var(--brand-color);
   border-radius: 9999px;
 }
 
@@ -395,7 +395,7 @@
   justify-content: center;
   margin-bottom: 1.5rem;
   transition: background 0.2s;
-  color: #ec5b13;
+  color: var(--brand-color);
 }
 
 .hph-feat-card:hover .hph-feat-icon {

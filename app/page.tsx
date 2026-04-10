@@ -1,6 +1,5 @@
-import Image from "next/image";
-import Navbar from "@/components/Navbar";
-import HomePageHero from "@/components/HomePageHero";
+import "./home.css";
+import MainHero from "@/components/MainHero";
 import DesignOptions from "@/components/DesignOptions";
 import HowItWorks2 from "@/components/HowItWorks2";
 import Blog from "@/components/Blog";
@@ -93,9 +92,7 @@ export default async function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Navbar />
-
-      <HomePageHero heroBeforeUrl={homeImages.heroBeforeUrl} heroAfterUrl={homeImages.heroAfterUrl} />
+      <MainHero heroBeforeUrl={homeImages.heroBeforeUrl} heroAfterUrl={homeImages.heroAfterUrl} />
 
       <DesignOptions transformImages={homeImages.transformImages} />
 

@@ -54,7 +54,7 @@
     font-weight: 900;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #ec5b13;
+    color: var(--brand-color);
     margin-bottom: 1rem;
 }
 
@@ -89,7 +89,7 @@
 }
 
 .blg-accent {
-    color: #ec5b13;
+    color: var(--brand-color);
     font-style: italic;
 }
 
@@ -190,7 +190,7 @@
     font-weight: 900;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    background: #ec5b13;
+    background: var(--brand-color);
     color: #ffffff;
     padding: 0.3rem 0.75rem;
     border-radius: 9999px;
@@ -228,7 +228,7 @@
 }
 
 .blg-article:hover .blg-card-title {
-    color: #ec5b13;
+    color: var(--brand-color);
 }
 
 .blg-card-title-sm {
@@ -266,7 +266,7 @@
     display: inline-flex;
     align-items: center;
     gap: 1rem;
-    color: #ec5b13;
+    color: var(--brand-color);
     font-size: 1rem;
     font-weight: 900;
     letter-spacing: -0.02em;
@@ -277,7 +277,7 @@
     display: inline-block;
     height: 1px;
     width: 3rem;
-    background: #ec5b13;
+    background: var(--brand-color);
     transition: width 0.3s;
 }
 
@@ -315,13 +315,13 @@
     font-weight: 900;
     color: #0f172a;
     text-decoration: none;
-    border-bottom: 2px solid #ec5b13;
+    border-bottom: 2px solid var(--brand-color);
     padding-bottom: 0.25rem;
     transition: color 0.2s;
 }
 
 .blg-view-link:hover {
-    color: #ec5b13;
+    color: var(--brand-color);
 }
 
 /* ── Article 03 — Full width ── */
@@ -340,7 +340,7 @@
 .blg-big-num {
     font-size: clamp(4rem, 8vw, 6rem);
     font-weight: 900;
-    color: #ec5b13;
+    color: var(--brand-color);
     opacity: 0.2;
     margin: 0 0 1.5rem;
     line-height: 1;
@@ -353,7 +353,7 @@
 }
 
 .blg-cta-btn {
-    background: #ec5b13;
+    background: var(--brand-color);
     color: #ffffff;
     font-size: 1rem;
     font-weight: 900;
@@ -435,7 +435,7 @@
 .blg-av2 { background: #94a3b8; }
 
 .blg-av-count {
-    background: #ec5b13;
+    background: var(--brand-color);
     color: #ffffff;
     font-size: 0.6rem;
     font-weight: 700;
@@ -468,7 +468,7 @@
 .blg-footer-glow {
     position: absolute;
     inset: 0;
-    background: #ec5b13;
+    background: var(--brand-color);
     filter: blur(48px);
     opacity: 0.15;
     border-radius: 9999px;

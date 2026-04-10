@@ -1,0 +1,180 @@
+/* ══════════════════════════════════════════════
+   COLOR TEST — Tropical Heat
+   ══════════════════════════════════════════════ */
+
+.color-test-root {
+  --brand-color: #00CEC8;
+}
+
+/* ── Hide original hero blobs (BackgroundGradientGlow has its own) ── */
+.color-test-root .hph-blob-orange,
+.color-test-root .hph-blob-blue {
+  display: none !important;
+}
+
+/* ── Hero: transparent bg, tall, spacious ── */
+.color-test-root .hph-section {
+  background: transparent !important;
+  padding-top: 8rem !important;
+  padding-bottom: 10rem !important;
+}
+
+@media (max-width: 768px) {
+  .color-test-root .hph-section {
+    padding-top: 3rem !important;
+    padding-bottom: 4rem !important;
+  }
+  .color-test-root .hph-badge {
+    display: none !important;
+  }
+  .color-test-root .hph-slider-wrap {
+    order: -1 !important;
+  }
+  .color-test-root .hph-sub {
+    margin-bottom: 1rem !important;
+  }
+  .color-test-root .hph-btns {
+    margin-bottom: 1.25rem !important;
+  }
+  .color-test-root .hph-btns a,
+  .color-test-root .hph-btns a > button {
+    width: 100% !important;
+  }
+}
+
+/* ── Remove white border & glow from slider ── */
+.color-test-root .hph-slider-container {
+  border: none !important;
+  box-shadow: 0 24px 56px -12px rgba(0,0,0,0.22) !important;
+}
+.color-test-root .hph-slider-glow {
+  display: none !important;
+}
+
+/* ── Corner bracket frame ── */
+.color-test-root .hph-slider-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  z-index: 40;
+  pointer-events: none;
+  background-image:
+    linear-gradient(#FCEFC3, #FCEFC3),
+    linear-gradient(#FCEFC3, #FCEFC3),
+    linear-gradient(#FCEFC3, #FCEFC3),
+    linear-gradient(#FCEFC3, #FCEFC3),
+    linear-gradient(#FCEFC3, #FCEFC3),
+    linear-gradient(#FCEFC3, #FCEFC3),
+    linear-gradient(#FCEFC3, #FCEFC3),
+    linear-gradient(#FCEFC3, #FCEFC3);
+  background-size:
+    36px 3px, 3px 36px,
+    36px 3px, 3px 36px,
+    36px 3px, 3px 36px,
+    36px 3px, 3px 36px;
+  background-position:
+    top left,    top left,
+    top right,   top right,
+    bottom left, bottom left,
+    bottom right, bottom right;
+  background-repeat: no-repeat;
+  border-radius: 2.25rem;
+}
+
+/* ── Space between hero content elements ── */
+.color-test-root .hph-badge {
+  margin-bottom: 2.25rem !important;
+}
+.color-test-root .hph-heading {
+  color: #ffffff !important;
+  margin-bottom: 2rem !important;
+  line-height: 1.2 !important;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.18), 0 1px 3px rgba(0,0,0,0.12) !important;
+}
+.color-test-root .hph-heading-accent {
+  color: inherit !important;
+  background: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  transform: none !important;
+  display: inline-block !important;
+  text-shadow: none !important;
+}
+.color-test-root .hph-sub {
+  color: rgba(255,255,255,0.82) !important;
+  margin-bottom: 2.75rem !important;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.18), 0 1px 3px rgba(0,0,0,0.12) !important;
+}
+.color-test-root .hph-btns {
+  margin-bottom: 2.75rem !important;
+  gap: 1rem !important;
+}
+
+/* ── Navbar sits inside gradient — remove white bg and border ── */
+.color-test-root .navbar {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  border-bottom: none !important;
+}
+.color-test-root .navbar-credits {
+  color: #ffffff !important;
+}
+.color-test-root .navbar-credits-mobile {
+  background: rgba(255,255,255,0.25) !important;
+  color: #ffffff !important;
+}
+
+/* ── Badge ── */
+.color-test-root .hph-badge {
+  background: rgba(255,255,255,0.15) !important;
+  border-color: rgba(255,255,255,0.25) !important;
+}
+.color-test-root .hph-badge-text {
+  color: rgba(255,255,255,0.9) !important;
+}
+.color-test-root .hph-badge-dot {
+  background: #FCEFC3 !important;
+}
+
+/* ── Buttons ── */
+.color-test-root .hph-btn-primary {
+  background: #EB4203 !important;
+  box-shadow: 0 12px 28px -4px rgba(235,66,3,0.4) !important;
+}
+.color-test-root .hph-btn-primary:hover {
+  background: #D13A02 !important;
+}
+.color-test-root .hph-btn-secondary {
+  background: rgba(255,255,255,0.15) !important;
+  border-color: rgba(255,255,255,0.35) !important;
+  color: #ffffff !important;
+  padding: 0.6rem 1.25rem !important;
+  font-size: 0.85rem !important;
+}
+.color-test-root .hph-btn-secondary:hover {
+  background: rgba(255,255,255,0.25) !important;
+}
+
+/* ── Push feature cards down away from hero ── */
+.color-test-root .do-section {
+  margin-top: 3rem !important;
+}
+
+/* ── CTA buttons everywhere else ── */
+.color-test-root .navbar-btn-primary,
+.color-test-root .blg-cta-btn,
+.color-test-root .ftr-subscribe-btn,
+.color-test-root .do-label-after,
+.color-test-root .rp-badge {
+  background: #EB4203 !important;
+  border-color: #EB4203 !important;
+}
+
+.color-test-root .navbar-credits-mobile {
+  background: #00CEC8 !important;
+}
+
+/* ── Hide feature cards (replaced by marquee) ── */
+.color-test-root .hph-features {
+  display: none !important;
+}

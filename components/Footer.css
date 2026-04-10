@@ -83,7 +83,7 @@
     font-weight: 700;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #ec5b13;
+    color: var(--brand-color);
     background: rgba(236, 91, 19, 0.08);
     border: 1px solid rgba(236, 91, 19, 0.2);
     padding: 0.3rem 0.75rem;
@@ -136,7 +136,7 @@
 }
 
 .ftr-input:focus {
-    border-color: #ec5b13;
+    border-color: var(--brand-color);
     box-shadow: 0 0 0 3px rgba(236, 91, 19, 0.12);
 }
 
@@ -144,7 +144,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: #ec5b13;
+    background: var(--brand-color);
     color: #ffffff;
     font-size: 0.875rem;
     font-weight: 700;
@@ -189,7 +189,7 @@
     font-weight: 900;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #ec5b13;
+    color: var(--brand-color);
     margin: 0;
 }
 
@@ -211,7 +211,7 @@
 }
 
 .ftr-nav-link:hover {
-    color: #ec5b13;
+    color: var(--brand-color);
 }
 
 /* ── Bottom bar ── */
@@ -247,7 +247,7 @@
 }
 
 .ftr-social-link:hover {
-    color: #ec5b13;
+    color: var(--brand-color);
     transform: translateY(-2px);
 }
 

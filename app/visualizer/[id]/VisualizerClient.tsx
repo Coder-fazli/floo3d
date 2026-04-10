@@ -368,7 +368,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
 
       // Watermark — only for free users, never for admin
       if (!hasPurchased && !isAdminView) {
-        const wFontSize = Math.max(14, Math.round(canvas.width * 0.028));
+        const wFontSize = Math.max(20, Math.round(canvas.width * 0.048));
         ctx.save();
         // Shadow for contrast on any background
         ctx.shadowColor = "rgba(0,0,0,0.55)";

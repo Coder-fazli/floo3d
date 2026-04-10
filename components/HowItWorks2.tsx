@@ -1,8 +1,8 @@
 "use client";
 
 import "./HowItWorks2.css";
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { motion, useMotionValue, animate } from "framer-motion";
+import { useRef } from "react";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -13,217 +13,178 @@ const fadeUp = {
   }),
 };
 
-const steps = [
-  {
-    icon: "cloud_upload",
-    title: "1. Upload Your Image",
-    desc: "Upload a floor plan to create a 3D render, a room photo for AI interior design, or an outdoor photo for free AI landscape design. Any format works.",
-    extraType: "tags" as const,
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuB_xi8r8nBtXqawhpIG57tMWouq7LS6Fdv1R3JqRL8MBCK-aSCRiF6nF0xiXeZhcuUhOOmzzZmE7mpQljjV_wJfYNTCmPIH0LI4YlA9VpJ9nOGH-h9Lzni0SAn5gskZOPORDMv_ARttkqs7HFOxeP-7fodrdRNJxdyf2e7JzLfDB2hpK_Z6HeuZPR-TWb6FxAB_5KCEret400nZ3DIs7Yy097zMbwGISJ9mxKGM-VK2HrwjgbmgawropYR345kaNAsy6kb-nS1aEu9x",
-    imgAlt: "Technical 2D floor plan blueprint drawing",
-    badge: null,
-  },
-  {
-    icon: "memory",
-    title: "2. AI Neural Processing",
-    desc: "Our AI interior design tool identifies your space and applies the right transformation — 3D rendering, style transfer, virtual staging, or AI backyard design — with precision.",
-    extraType: "speed" as const,
-    img: null,
-    imgAlt: null,
-    badge: null,
-  },
-  {
-    icon: "vrpano",
-    title: "3. Download Your Visual",
-    desc: "Get a photorealistic result in seconds. Download in HD, share with clients via a single link, and impress with studio-quality output — no design software needed.",
-    extraType: "checks" as const,
-    img: "/hiw-render.png",
-    imgAlt: "Modern high-end living room interior 3D render",
-    badge: "Final Render",
-  },
+const pairs = [
+  { before: "/hiw-sketch.jpg",   after: "/hiw-living.jpg" },
+  { before: "/hiw-3drender.png", after: "/hiw-floorplan.jpg" },
+  { before: "/hiw-sketch2.jpg",  after: "/hiw-dark3d.jpg" },
 ];
+
+const cardRotations = ["-2deg", "3deg", "-1.5deg"];
+
+// Triple for seamless infinite loop
+const allPairs = [...pairs, ...pairs, ...pairs];
+
+const CARD_W = 480;
+const GAP = 40;
+const STEP = CARD_W + GAP;
 
 const stats = [
-  { num: "< 60s", title: "Blazing Fast",   desc: "From upload to finished visual in less than a minute. Save hours of manual design work." },
-  { num: "99.9%", title: "High Accuracy",  desc: "Proprietary AI captures every dimension with precision. Expect professional-grade results every time." },
-  { num: "1-Click", title: "Zero Effort", desc: "No complex software to learn. If you can upload a file, you can create a 3D masterpiece." },
+  { num: "< 60s",   title: "Blazing Fast",  desc: "From upload to finished visual in less than a minute. Save hours of manual design work." },
+  { num: "99.9%",   title: "High Accuracy", desc: "Proprietary AI captures every dimension with precision. Expect professional-grade results every time." },
+  { num: "1-Click", title: "Zero Effort",   desc: "No complex software to learn. If you can upload a file, you can create a 3D masterpiece." },
 ];
 
+function ArrowBtn({ direction, onClick }: { direction: "left" | "right"; onClick: () => void }) {
+  return (
+    <motion.button
+      onClick={onClick}
+      whileHover={{ scale: 1.08, boxShadow: "0 6px 24px rgba(0,0,0,0.13)" }}
+      whileTap={{ scale: 0.94 }}
+      style={{
+        width: 48, height: 48, borderRadius: "50%",
+        border: "1.5px solid #e2e8f0",
+        background: "#ffffff",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        cursor: "pointer", boxShadow: "0 2px 10px rgba(0,0,0,0.07)",
+        outline: "none", flexShrink: 0,
+      }}
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0f172a" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        {direction === "left"
+          ? <polyline points="15 18 9 12 15 6" />
+          : <polyline points="9 18 15 12 9 6" />}
+      </svg>
+    </motion.button>
+  );
+}
+
 export default function HowItWorks2() {
-  const stepsRef = useRef<HTMLDivElement>(null);
-  const [activeStep, setActiveStep] = useState(-1);
+  const x = useMotionValue(-(pairs.length * STEP));
 
-  const { scrollYProgress } = useScroll({
-    target: stepsRef,
-    offset: ["start 80%", "end 20%"],
-  });
+  const loop = (val: number) => {
+    const setW = pairs.length * STEP;
+    if (val > -(setW - STEP / 2)) return val - setW;
+    if (val < -(setW * 2 - STEP / 2)) return val + setW;
+    return val;
+  };
 
-  const smooth = useSpring(scrollYProgress, { stiffness: 80, damping: 25, restDelta: 0.001 });
-  const progressHeight = useTransform(smooth, [0, 1], ["0%", "100%"]);
-
-  useEffect(() => {
-    return scrollYProgress.on("change", (v) => {
-      setActiveStep(v <= 0.05 ? -1 : v < 0.42 ? 0 : v < 0.78 ? 1 : 2);
+  const moveTo = (newX: number) => {
+    animate(x, newX, { type: "spring", stiffness: 280, damping: 30 }).then(() => {
+      const looped = loop(x.get());
+      if (looped !== x.get()) x.set(looped);
     });
-  }, [scrollYProgress]);
+  };
+
+  const goNext = () => moveTo(x.get() - STEP);
+  const goPrev = () => moveTo(x.get() + STEP);
+
+  const handleDragEnd = (_: unknown, info: { offset: { x: number } }) => {
+    const snapped = Math.round(x.get() / STEP) * STEP;
+    moveTo(snapped);
+  };
 
   return (
-    <>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-        rel="stylesheet"
-      />
-      <section className="hiw2-section" id="magic">
-        <div className="hiw2-inner">
+    <section className="hiw2-section" id="magic">
+      <div className="hiw2-inner">
 
-          {/* Header */}
-          <motion.div
-            className="hiw2-header"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={fadeUp}
-            custom={0}
-          >
+        {/* Header + Arrows row */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeUp}
+          custom={0}
+          style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "2.5rem" }}
+        >
+          <div style={{ maxWidth: "36rem" }}>
             <p className="hiw2-eyebrow">Best AI Interior Design Tools · Free to Use</p>
-            <h2 className="hiw2-title">Upload Any Space.<br />Get a Pro Visual.</h2>
-            <p className="hiw2-sub">
-              The best AI app for interior design, floor plan rendering, virtual staging, and AI landscape design — all in three simple steps.
+            <h2 className="hiw2-title" style={{ margin: "0 0 0.75rem" }}>Upload Any Space.<br />Get a Pro Visual.</h2>
+            <p className="hiw2-sub" style={{ margin: 0 }}>
+              The best AI app for interior design, floor plan rendering, virtual staging, and AI landscape design.
             </p>
-          </motion.div>
+          </div>
 
-          {/* Steps */}
-          <div className="hiw2-steps" ref={stepsRef}>
+          <div style={{ display: "flex", gap: "0.75rem", flexShrink: 0 }}>
+            <ArrowBtn direction="left" onClick={goPrev} />
+            <ArrowBtn direction="right" onClick={goNext} />
+          </div>
+        </motion.div>
 
-            {/* Background gray track */}
-            <div className="hiw2-line">
-              <div className="hiw2-line-fade-top" />
-              <div className="hiw2-line-fade-bottom" />
-            </div>
+      </div>
 
-            {/* Animated orange fill */}
-            <motion.div className="hiw2-line-progress" style={{ height: progressHeight }} />
-
-            {/* Traveling comet at the head */}
-            <motion.div className="hiw2-comet-wrap" style={{ top: progressHeight }}>
-              <motion.div
-                className="hiw2-comet"
-                animate={{ scale: [1, 1.45, 1] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              />
-            </motion.div>
-
-            {steps.map((step, i) => (
-              <div key={i} className={`hiw2-tl-row${i % 2 === 1 ? " hiw2-tl-row-alt" : ""}`}>
-
-                {/* Content card */}
-                <motion.div
-                  className="hiw2-tl-card"
-                  initial={{ opacity: 0, x: i % 2 === 0 ? -56 : 56 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-80px" }}
-                  transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] as const }}
-                >
-                  <div className="hiw2-tl-card-inner">
-                    <span className="hiw2-tl-ghost">{String(i + 1).padStart(2, "0")}</span>
-                    <div className="hiw2-icon-box">
-                      <span className="material-symbols-outlined hiw2-icon">{step.icon}</span>
-                    </div>
-                    <h3 className="hiw2-step-title">{step.title}</h3>
-                    <p className="hiw2-step-desc">{step.desc}</p>
-
-                    {step.extraType === "tags" && (
-                      <div className="hiw2-tags">
-                        <span className="hiw2-tag">Floor Plan</span>
-                        <span className="hiw2-tag">Room Photo</span>
-                        <span className="hiw2-tag">Backyard / Garden</span>
-                      </div>
-                    )}
-                    {step.extraType === "speed" && (
-                      <div className="hiw2-speed">
-                        <span className="material-symbols-outlined hiw2-speed-icon">speed</span>
-                        Processing in under 60 seconds
-                      </div>
-                    )}
-                    {step.extraType === "checks" && (
-                      <div className="hiw2-checks">
-                        <div className="hiw2-check">
-                          <svg className="hiw2-check-icon" width="20" height="20" viewBox="0 0 24 24" fill="#22c55e">
-                            <path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm4.71 7.71-5.5 5.5a1 1 0 0 1-1.42 0l-2.5-2.5a1 1 0 1 1 1.42-1.42L10.5 13.09l4.79-4.8a1 1 0 0 1 1.42 1.42z" />
-                          </svg>
-                          HD PNG Export
-                        </div>
-                        <div className="hiw2-check">
-                          <svg className="hiw2-check-icon" width="20" height="20" viewBox="0 0 24 24" fill="#22c55e">
-                            <path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm4.71 7.71-5.5 5.5a1 1 0 0 1-1.42 0l-2.5-2.5a1 1 0 1 1 1.42-1.42L10.5 13.09l4.79-4.8a1 1 0 0 1 1.42 1.42z" />
-                          </svg>
-                          Instant Share Link
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
-
-                {/* Center dot on the line */}
-                <div className="hiw2-tl-center">
-                  <motion.div
-                    className={`hiw2-tl-dot${activeStep >= i ? " hiw2-tl-dot-active" : ""}`}
-                    animate={activeStep >= i ? {
-                      scale: [1, 1.35, 1],
-                      boxShadow: [
-                        "0 0 0px rgba(236,91,19,0)",
-                        "0 0 18px rgba(236,91,19,0.75)",
-                        "0 0 0px rgba(236,91,19,0)",
-                      ],
-                    } : {}}
-                    transition={{ duration: 1.2, repeat: Infinity, repeatDelay: 2.5 }}
-                  />
+      {/* Carousel */}
+      <div style={{
+        overflow: "hidden",
+        maskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
+        WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
+        paddingBottom: "1rem",
+      }}>
+        <motion.div
+          drag="x"
+          style={{ x, display: "flex", gap: `${GAP}px`, paddingTop: "2.5rem", paddingBottom: "2.5rem", paddingLeft: "8vw", width: "max-content", cursor: "grab" }}
+          dragConstraints={{ left: -(pairs.length * 2 * STEP), right: -(pairs.length * STEP - STEP) }}
+          dragElastic={0.05}
+          whileDrag={{ cursor: "grabbing" }}
+          onDragEnd={handleDragEnd}
+        >
+          {allPairs.map((pair, i) => (
+            <div
+              key={i}
+              style={{
+                position: "relative",
+                width: `${CARD_W}px`,
+                height: "340px",
+                flexShrink: 0,
+                transform: `rotate(${cardRotations[i % cardRotations.length]})`,
+              }}
+            >
+              {/* Sketch — wrapper for brackets, inner clips image */}
+              <div className="hiw2-pair-sketch" style={{
+                position: "absolute", top: "8%", left: "0%", width: "56%", height: "80%",
+                transform: "rotate(-4deg)", zIndex: 2,
+              }}>
+                <div style={{ borderRadius: "1.25rem", overflow: "hidden", width: "100%", height: "100%", boxShadow: "0 16px 48px rgba(0,0,0,0.14), 0 4px 12px rgba(0,0,0,0.08)", position: "relative" }}>
+                  <img src={pair.before} alt="Input" style={{ width: "100%", height: "100%", objectFit: "contain", display: "block", background: "#ffffff" }} draggable={false} />
+                  <div style={{ position: "absolute", bottom: 10, left: 10, background: "#EB4203", borderRadius: "9999px", padding: "4px 12px", color: "#fff", fontSize: "0.6rem", fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" }}>Input</div>
                 </div>
-
-                {/* Image side */}
-                <div className="hiw2-tl-img-side">
-                  {step.img && (
-                    <motion.div
-                      className="hiw2-img-card"
-                      initial={{ opacity: 0, x: i % 2 === 0 ? 56 : -56 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true, margin: "-80px" }}
-                      transition={{ duration: 0.7, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] as const }}
-                    >
-                      <img src={step.img} alt={step.imgAlt ?? ""} />
-                      <div className="hiw2-img-overlay" />
-                      {step.badge && <div className="hiw2-render-badge">{step.badge}</div>}
-                    </motion.div>
-                  )}
-                </div>
-
               </div>
-            ))}
-          </div>
-        </div>
 
-        {/* Stats */}
-        <div className="hiw2-stats">
-          <div className="hiw2-stats-grid">
-            {stats.map((s, i) => (
-              <motion.div
-                key={i}
-                className="hiw2-stat-card"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.3 }}
-                variants={fadeUp}
-                custom={i + 1}
-              >
-                <p className="hiw2-stat-num">{s.num}</p>
-                <h4 className="hiw2-stat-title">{s.title}</h4>
-                <p className="hiw2-stat-desc">{s.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+              {/* Result — wrapper for brackets, inner clips image */}
+              <div className="hiw2-pair-result" style={{
+                position: "absolute", top: "0%", right: "0%", width: "56%", height: "92%",
+                transform: "rotate(2deg)", zIndex: 3,
+              }}>
+                <div style={{ borderRadius: "1.25rem", overflow: "hidden", width: "100%", height: "100%", boxShadow: "0 16px 48px rgba(0,0,0,0.14), 0 4px 12px rgba(0,0,0,0.08)", position: "relative", border: "2.5px solid rgba(0,206,200,0.75)" }}>
+                  <img src={pair.after} alt="AI Result" style={{ width: "100%", height: "100%", objectFit: "contain", display: "block", background: "#ffffff" }} draggable={false} />
+                  <div style={{ position: "absolute", bottom: 10, left: 10, background: "rgba(0,206,200,0.92)", borderRadius: "9999px", padding: "4px 12px", color: "#fff", fontSize: "0.6rem", fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" }}>AI Result</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
 
-      </section>
-    </>
+      {/* Stats */}
+      <div className="hiw2-stats">
+        <div className="hiw2-stats-grid">
+          {stats.map((s, i) => (
+            <motion.div
+              key={i}
+              className="hiw2-stat-card"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={fadeUp}
+              custom={i + 1}
+            >
+              <p className="hiw2-stat-num">{s.num}</p>
+              <h4 className="hiw2-stat-title">{s.title}</h4>
+              <p className="hiw2-stat-desc">{s.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+    </section>
   );
 }

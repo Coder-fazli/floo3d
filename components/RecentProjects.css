@@ -34,7 +34,7 @@
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #ec5b13;
+  color: var(--brand-color);
   margin: 0 0 0.75rem;
 }
 
@@ -91,7 +91,7 @@
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 9999px;
-  border: 2px solid #ec5b13;
+  border: 2px solid var(--brand-color);
   padding: 2px;
   flex-shrink: 0;
 }
@@ -128,7 +128,7 @@
 .rp-user-role {
   font-size: 0.65rem;
   font-weight: 700;
-  color: #ec5b13;
+  color: var(--brand-color);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin: 0;
@@ -175,7 +175,7 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: #ec5b13;
+  background: var(--brand-color);
   color: #ffffff;
   font-size: 0.6rem;
   font-weight: 900;
@@ -255,7 +255,7 @@
   top: -0.5rem;
   left: -0.5rem;
   background: #ffffff;
-  color: #ec5b13;
+  color: var(--brand-color);
   border-radius: 9999px;
   padding: 2px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
@@ -307,7 +307,7 @@
 }
 
 .rp-icon:hover { color: #334155; }
-.rp-icon-like { color: #ec5b13; font-variation-settings: 'FILL' 1; }
+.rp-icon-like { color: var(--brand-color); font-variation-settings: 'FILL' 1; }
 .rp-icon-right { margin-left: auto; }
 
 .rp-likes {

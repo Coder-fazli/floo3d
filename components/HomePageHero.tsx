@@ -49,7 +49,7 @@ const features = [
   },
 ];
 
-export default function HomePageHero({ heroBeforeUrl, heroAfterUrl }: { heroBeforeUrl?: string | null; heroAfterUrl?: string | null }) {
+export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride, headingAccent }: { heroBeforeUrl?: string | null; heroAfterUrl?: string | null; ctaOverride?: React.ReactNode; headingAccent?: React.ReactNode }) {
   const heroBefore = heroBeforeUrl || "/hero-before.jpg";
   const heroAfter  = heroAfterUrl  || "/hero-after.jpg";
   const { isSignedIn } = useUser();
@@ -115,7 +115,7 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl }: { heroBefo
           {/* Heading */}
           <h1 className="hph-heading">
             AI-Powered<br />
-            <span className="hph-heading-accent">Interior Styler</span><br />
+            <span className="hph-heading-accent">{headingAccent ?? "Interior Styler"}</span><br />
             for Any Space.
           </h1>
 
@@ -126,10 +126,10 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl }: { heroBefo
 
           {/* CTAs */}
           <div className="hph-btns">
-            {isSignedIn
+            {ctaOverride ?? (isSignedIn
               ? <Link href="/dashboard" className="hph-btn-primary">Try It Free</Link>
               : <button className="hph-btn-primary" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>Try It Free</button>
-            }
+            )}
             <Link href="/#reviews" className="hph-btn-secondary">See Examples</Link>
           </div>
 

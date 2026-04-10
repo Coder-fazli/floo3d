@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyHomeStyler Hero</title>
+    <style>
+        :root {
+            --accent-teal: #00cec8;
+            --cream: #fcefc3;
+            --orange-soft: #ff9c5f;
+            --orange: #eb4203;
+            --white: #ffffff;
+            --text-gray: rgba(252, 239, 195, 0.78);
+            --bg-deep: #0d5d59;
+            --bg-mid: #116c67;
+            --bg-dark: #0a4744;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            background:
+                radial-gradient(circle at 18% 12%, rgba(252, 239, 195, 0.08) 0, rgba(252, 239, 195, 0) 20%),
+                radial-gradient(circle at 82% 14%, rgba(255, 156, 95, 0.16) 0, rgba(255, 156, 95, 0) 22%),
+                radial-gradient(circle at 70% 72%, rgba(0, 206, 200, 0.18) 0, rgba(0, 206, 200, 0) 28%),
+                linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-deep) 42%, var(--bg-mid) 100%);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 80px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .btn-dashboard {
+            background: var(--orange);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 10px 24px rgba(235, 66, 3, 0.28);
+        }
+
+        .btn-logout {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .hero {
+            position: relative;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            padding: 0 80px;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 60px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .hero-text {
+            flex: 1;
+            z-index: 2;
+        }
+
+        .hero-text h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .text-cream { color: var(--cream); }
+        .text-orange { color: var(--orange); }
+
+        .hero-text p {
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 500px;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--orange) 0%, var(--orange-soft) 100%);
+            border: none;
+            padding: 15px 35px;
+            border-radius: 12px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(235, 66, 3, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--cream);
+            border: none;
+            padding: 15px 35px;
+            border-radius: 12px;
+            color: #333;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .social-proof {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatars {
+            display: flex;
+            padding-left: 10px;
+        }
+
+        .avatars img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid #005f5b;
+            margin-left: -10px;
+            object-fit: cover;
+            background: #0d4f4c;
+        }
+
+        .stars {
+            color: #ffcc00;
+            font-size: 0.8rem;
+        }
+
+        .rating p {
+            font-size: 0.8rem;
+        }
+
+        .rating span {
+            color: var(--accent-teal);
+            text-decoration: underline;
+        }
+
+        .hero-visual {
+            flex: 1;
+            min-width: 460px;
+            position: relative;
+        }
+
+        .main-card {
+            background:
+                linear-gradient(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08)),
+                url("./public/hero-after.jpg") center center / cover no-repeat,
+                #fff;
+            min-height: 560px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+            border: 10px solid rgba(255, 255, 255, 0.95);
+        }
+
+        .slider-labels {
+            position: absolute;
+            top: 20px;
+            width: 90%;
+            left: 5%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.6rem;
+            font-weight: bold;
+            color: white;
+            opacity: 0.9;
+            z-index: 2;
+        }
+
+        .slider-handle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.55);
+        }
+
+        .status-card {
+            position: absolute;
+            bottom: -30px;
+            left: -20px;
+            background: var(--cream);
+            padding: 15px 20px;
+            border-radius: 16px;
+            color: #333;
+            width: 240px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .status-header {
+            font-weight: 800;
+            font-size: 0.75rem;
+            margin-bottom: 8px;
+        }
+
+        .check {
+            color: #2ecc71;
+            margin-right: 5px;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 6px;
+            border-radius: 3px;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--orange) 0%, var(--orange-soft) 100%);
+            width: 70%;
+            height: 100%;
+            border-radius: 3px;
+        }
+
+        .status-card p {
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(252, 239, 195, 0.12);
+            border-radius: 20%;
+            filter: blur(4px);
+            transform: rotate(45deg);
+        }
+
+        .s1 {
+            width: 120px;
+            height: 120px;
+            top: 16%;
+            right: 36%;
+        }
+
+        .s2 {
+            width: 72px;
+            height: 72px;
+            bottom: 18%;
+            left: 46%;
+            background: rgba(255, 156, 95, 0.14);
+        }
+
+        @media (max-width: 1100px) {
+            .navbar,
+            .hero {
+                padding-left: 32px;
+                padding-right: 32px;
+            }
+
+            .container {
+                gap: 32px;
+            }
+
+            .nav-links {
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 860px) {
+            .navbar {
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+
+            .nav-links,
+            .nav-right {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .container {
+                flex-direction: column;
+                padding: 48px 0 64px;
+            }
+
+            .hero-text h1 {
+                font-size: 3rem;
+            }
+
+            .hero-btns {
+                flex-wrap: wrap;
+            }
+
+            .hero-visual {
+                min-width: 0;
+                width: 100%;
+            }
+
+            .main-card {
+                min-height: 420px;
+            }
+
+            .status-card {
+                position: static;
+                margin-top: 20px;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 540px) {
+            .navbar,
+            .hero {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .hero-text h1 {
+                font-size: 2.4rem;
+            }
+
+            .btn-primary,
+            .btn-secondary,
+            .btn-dashboard {
+                width: 100%;
+                text-align: center;
+            }
+
+            .hero-btns {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <span class="icon">🏠</span> MyHomeStyler
+        </div>
+        <ul class="nav-links">
+            <li><a href="#">Gallery</a></li>
+            <li><a href="#">Magic</a></li>
+            <li><a href="#">Love</a></li>
+            <li><a href="#">Journal</a></li>
+            <li><a href="#">Answers</a></li>
+            <li><a href="#">Pricing</a></li>
+        </ul>
+        <div class="nav-right">
+            <span class="credits">✨ 99999</span>
+            <span class="user-icon">👤</span>
+            <a href="#" class="btn-logout">Log-out</a>
+            <a href="#" class="btn-dashboard">Dashboard</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-text">
+                <h1>
+                    <span class="text-cream">AI-Powered</span> <br>
+                    <span class="text-orange">Interior Styler</span> <br>
+                    <span class="text-cream">for Any Space.</span>
+                </h1>
+                <p>The best AI app for interior design, floor plan rendering, virtual staging, and AI landscape design, free to try, no login required.</p>
+
+                <div class="hero-btns">
+                    <button class="btn-primary">Try It Free</button>
+                    <button class="btn-secondary">See Examples</button>
+                </div>
+
+                <div class="social-proof">
+                    <div class="avatars">
+                        <img src="public/avatars/female1.jpg" alt="user">
+                        <img src="public/avatars/female2.jpg" alt="user">
+                        <img src="public/avatars/female3.jpg" alt="user">
+                    </div>
+                    <div class="rating">
+                        <div class="stars">★★★★★</div>
+                        <p>Trusted by 2,500+ architects & <span>happy users</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="main-card">
+                    <div class="slider-labels">
+                        <span>BEFORE CONCEPTUAL</span>
+                        <span>AFTER REALISTIC</span>
+                    </div>
+                    <div class="slider-handle"></div>
+                </div>
+
+                <div class="status-card">
+                    <div class="status-header">
+                        <span class="check">✓</span> PRO RENDERED
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <p>Processing complete in 1.2s</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="shape s1"></div>
+        <div class="shape s2"></div>
+    </section>
+</body>
+</html>

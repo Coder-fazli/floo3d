@@ -36,7 +36,7 @@
 
 /* MorphingText */
 .preloader-text {
-    color: #ec5b13 !important;
+    color: var(--brand-color) !important;
     font-size: clamp(3.5rem, 14vw, 9rem) !important;
     height: clamp(4.5rem, 16vw, 11rem) !important;
     width: 100% !important;
@@ -47,6 +47,6 @@
 }
 
 .preloader-text span {
-    color: #ec5b13 !important;
+    color: var(--brand-color) !important;
     font-weight: 900 !important;
 }

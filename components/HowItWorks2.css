@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap');
 
-.hiw2-section * {
+.hiw2-section *:not(.material-symbols-outlined) {
   font-family: "Public Sans", sans-serif !important;
   box-sizing: border-box;
 }
 
 /* ── Section ── */
 .hiw2-section {
-  background: #f8f6f6;
+  background: linear-gradient(160deg, #f0fdfb 0%, #f8fafc 100%);
   padding: 5rem 1.5rem 0;
 }
 
@@ -28,7 +28,7 @@
   font-weight: 900;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #ec5b13;
+  color: var(--brand-color);
   margin: 0 0 1rem;
 }
 
@@ -71,14 +71,14 @@
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 5rem;
-  background: linear-gradient(to bottom, #f8f6f6, transparent);
+  background: linear-gradient(to bottom, #ffffff, transparent);
 }
 
 .hiw2-line-fade-bottom {
   position: absolute;
   bottom: 0; left: 0; right: 0;
   height: 5rem;
-  background: linear-gradient(to top, #f8f6f6, transparent);
+  background: linear-gradient(to top, #ffffff, transparent);
 }
 
 /* ── Animated orange fill ── */
@@ -89,7 +89,7 @@
   width: 3px;
   transform: translateX(-50%);
   z-index: 1;
-  background: linear-gradient(to bottom, #ec5b13, #f97316, #ea580c);
+  background: linear-gradient(to bottom, var(--brand-color), #f97316, #ea580c);
   box-shadow: 0 0 10px rgba(236,91,19,0.55), 0 0 22px rgba(236,91,19,0.25);
   border-radius: 9999px;
   pointer-events: none;
@@ -142,14 +142,15 @@
   background: #ffffff;
   border-radius: 1.5rem;
   padding: 2rem 2.5rem 2.25rem;
-  border: 1px solid #f1f5f9;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+  border: 1.5px solid rgba(0, 206, 200, 0.25);
+  box-shadow: 0 8px 30px rgba(0, 206, 200, 0.1), 0 2px 8px rgba(0,0,0,0.05);
   overflow: hidden;
   transition: box-shadow 0.3s, transform 0.3s;
 }
 
 .hiw2-tl-card-inner:hover {
-  box-shadow: 0 16px 50px rgba(236,91,19,0.1);
+  box-shadow: 0 16px 50px rgba(0, 206, 200, 0.18), 0 4px 12px rgba(0,0,0,0.06);
+  border-color: rgba(0, 206, 200, 0.5);
   transform: translateY(-3px);
 }
 
@@ -181,8 +182,8 @@
 }
 
 .hiw2-tl-dot-active {
-  background: #ec5b13;
-  border-color: #ec5b13;
+  background: var(--brand-color);
+  border-color: var(--brand-color);
 }
 
 /* ── Icon box ── */
@@ -194,7 +195,7 @@
   height: 3.5rem;
   border-radius: 1rem;
   background: rgba(236,91,19,0.1);
-  color: #ec5b13;
+  color: var(--brand-color);
   margin-bottom: 1.25rem;
 }
 
@@ -242,7 +243,7 @@
   gap: 0.5rem;
   font-size: 0.875rem;
   font-weight: 900;
-  color: #ec5b13;
+  color: var(--brand-color);
 }
 
 .hiw2-speed-icon {
@@ -290,6 +291,15 @@
 }
 
 .hiw2-tl-row:hover .hiw2-img-card img { opacity: 1; }
+
+.hiw2-img-pair {
+  aspect-ratio: 16/9;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  border-radius: 1.25rem;
+  padding: 0.75rem;
+}
 
 .hiw2-img-overlay {
   position: absolute;
@@ -343,7 +353,7 @@
 .hiw2-stat-num {
   font-size: 2.5rem;
   font-weight: 900;
-  color: #ec5b13;
+  color: var(--brand-color);
   margin: 0 0 1rem;
 }
 
@@ -453,3 +463,37 @@
     font-size: 0.8rem;
   }
 }
+
+/* ── Carousel card corner frames ── */
+.hiw2-pair-sketch,
+.hiw2-pair-result {
+  position: relative;
+}
+
+/* Orange frame corners for sketch/input */
+.hiw2-pair-sketch::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  border-radius: 1.6rem;
+  pointer-events: none;
+  z-index: 10;
+  background-repeat: no-repeat;
+  background-size:
+    38px 5px, 5px 38px,
+    38px 5px, 5px 38px,
+    38px 5px, 5px 38px,
+    38px 5px, 5px 38px;
+  background-position:
+    top left,    top left,
+    top right,   top right,
+    bottom left, bottom left,
+    bottom right, bottom right;
+  background-image:
+    linear-gradient(#EB4203, #EB4203), linear-gradient(#EB4203, #EB4203),
+    linear-gradient(#EB4203, #EB4203), linear-gradient(#EB4203, #EB4203),
+    linear-gradient(#EB4203, #EB4203), linear-gradient(#EB4203, #EB4203),
+    linear-gradient(#EB4203, #EB4203), linear-gradient(#EB4203, #EB4203);
+  filter: drop-shadow(0 2px 6px rgba(235,66,3,0.35));
+}
+

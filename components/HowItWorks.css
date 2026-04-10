@@ -18,7 +18,7 @@
     font-weight: 900;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #ec5b13;
+    color: var(--brand-color);
     margin: 0 0 1rem;
 }
 
@@ -98,7 +98,7 @@
 
 /* Step 04 render */
 .hiw-card-render {
-    background: #ec5b13;
+    background: var(--brand-color);
     box-shadow: 0 20px 40px rgba(236, 91, 19, 0.3);
 }
 
@@ -149,7 +149,7 @@
     width: 5rem;
     height: 5rem;
     background: rgba(236, 91, 19, 0.1);
-    color: #ec5b13;
+    color: var(--brand-color);
     border-radius: 1.5rem;
     margin-bottom: 2rem;
 }
@@ -190,7 +190,7 @@
     text-transform: uppercase;
 }
 
-.hiw-step-primary { color: #ec5b13; }
+.hiw-step-primary { color: var(--brand-color); }
 .hiw-step-blue    { color: #3b82f6; }
 .hiw-step-purple  { color: #9333ea; }
 .hiw-step-white   { color: #ffffff; }
@@ -318,7 +318,7 @@
 .hiw-stat-value {
     font-size: 3rem;
     font-weight: 900;
-    color: #ec5b13;
+    color: var(--brand-color);
     margin-bottom: 0.75rem;
     font-family: var(--font-sans), "Public Sans", sans-serif;
 }
@@ -389,7 +389,7 @@
 }
 
 .hiw-cta-btn-primary {
-    background: #ec5b13;
+    background: var(--brand-color);
     color: #ffffff;
     box-shadow: 0 10px 30px rgba(236, 91, 19, 0.4);
 }
