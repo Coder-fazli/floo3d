@@ -235,7 +235,7 @@
   }
   .hph-btns {
     margin-bottom: 1.25rem !important;
-    gap: 0.75rem !important;
+    gap: 1.25rem !important;
   }
   .hph-btns a,
   .hph-btns a > button {
