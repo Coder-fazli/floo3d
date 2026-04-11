@@ -135,7 +135,7 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride,
           </div>
 
           {/* Trusted users */}
-          <div className="hph-trusted-row" style={{ display: "flex", alignItems: "center", gap: "1rem", marginTop: "0.5rem" }}>
+          <div className="hph-trusted-row" style={{ display: "flex", alignItems: "center", gap: "1rem", marginTop: "1.25rem" }}>
             <div style={{ display: "flex" }}>
               {["/avatars/female1.jpg", "/avatars/female3.jpg", "/avatars/av2.jpg", "/avatars/female2.jpg", "/avatars/av5.jpg"].map((src, i) => (
                 <div key={i} style={{
