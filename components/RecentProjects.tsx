@@ -20,13 +20,12 @@ const TestimonialCard = ({ profileImage, name, feedback, mainImage, beforeImage 
     <img src={mainImage} alt={feedback} className="w-full h-auto object-cover" />
 
     {/* Top gradient + user info */}
-    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-transparent" />
     <div className="absolute top-0 left-0 p-4 text-white">
-      <div className="flex items-center gap-3 mb-2">
-        <img src={profileImage} className="w-8 h-8 rounded-full border-2 border-white/80 object-cover" alt={name} />
-        <span className="font-semibold text-sm drop-shadow-md">{name}</span>
+      <div className="flex items-center gap-2 mb-1">
+        <img src={profileImage} className="w-7 h-7 rounded-full border border-white/60 object-cover flex-shrink-0" style={{ filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.4))" }} alt={name} />
+        <span className="font-bold text-sm" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>{name}</span>
       </div>
-      <p className="text-sm font-medium leading-tight drop-shadow-md">{feedback}</p>
+      <p className="text-xs font-medium" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>{feedback}</p>
     </div>
 
     {/* Before image thumbnail — bottom right */}
@@ -50,7 +49,7 @@ export default function RecentProjects() {
 
   React.useEffect(() => {
     const getColumns = (w: number) => {
-      if (w < 640) return 1;
+      if (w < 640) return 2;
       if (w < 1024) return 2;
       if (w < 1280) return 3;
       return 4;
@@ -62,7 +61,7 @@ export default function RecentProjects() {
   }, []);
 
   return (
-    <section className="w-full py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{ background: "linear-gradient(160deg, #FCEFC3 0%, #fdf8ec 40%, #f8fafc 100%)" }} id="reviews">
+    <section className="w-full py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{ background: "linear-gradient(to bottom, #ffffff 0%, #fdf8ec 8%, #FCEFC3 30%, #fdf8ec 70%, #f8fafc 100%)" }} id="reviews">
       {/* Dot grid */}
       <div className="absolute inset-0 z-0 pointer-events-none" style={{
         backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px)",

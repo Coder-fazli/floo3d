@@ -184,8 +184,8 @@
 /* ── Mobile ── */
 @media (max-width: 768px) {
   .hph-section {
-    padding-top: 3rem !important;
-    padding-bottom: 4rem !important;
+    padding-top: 1.5rem !important;
+    padding-bottom: 2rem !important;
   }
   .hph-btn-primary,
   .hph-btn-secondary {
@@ -193,10 +193,12 @@
     font-size: 0.85rem !important;
   }
   .hph-heading {
-    margin-bottom: 0.75rem !important;
+    font-size: 2rem !important;
+    margin-bottom: 0.5rem !important;
   }
   .hph-sub {
-    margin-bottom: 1.25rem !important;
+    font-size: 0.9rem !important;
+    margin-bottom: 1rem !important;
   }
   .hph-badge {
     display: none !important;
