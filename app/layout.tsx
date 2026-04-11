@@ -3,7 +3,6 @@ import { Inter, Instrument_Serif, Geist, Playfair_Display, Cormorant_Garamond } 
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { getSiteSettings } from "@/lib/actions";
-import PagePreloader from "@/components/PagePreloader";
 import CrispChat from "@/components/CrispChat";
 import CookieBanner from "@/components/CookieBanner";
 import Script from "next/script";
@@ -55,8 +54,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <ClerkProvider>
       <html lang="en" className={cn("font-sans", geist.variable)}>
         <body className={`${inter.variable} ${instrumentSerif.variable} ${playfair.variable} ${cormorant.variable}`}>
-          {/* Hide page until preloader is ready — prevents flash of content */}
-          <script dangerouslySetInnerHTML={{ __html: `try{if(!sessionStorage.getItem('preloader_shown'))document.documentElement.style.visibility='hidden'}catch(e){}` }} />
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
@@ -116,7 +113,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <img src="https://mc.yandex.ru/watch/108254799" style={{ position: "absolute", left: -9999 }} alt="" />
           </noscript>
           <CrispChat />
-          <PagePreloader />
           {children}
           <CookieBanner />
         </body>

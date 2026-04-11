@@ -116,9 +116,9 @@ function CustomPlan({ onBuy, loading }: { onBuy: (credits: number, price: number
           </div>
 
           {/* Price display */}
-          <div className="flex items-baseline gap-3 mb-6">
-            <span className="text-5xl font-bold" style={{ color: "#28030F" }}>
-              $<NumberFlow value={price} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
+          <div className="flex items-baseline gap-3 mb-6" style={{ flexWrap: "nowrap" }}>
+            <span className="font-bold whitespace-nowrap" style={{ color: "#28030F", display: "inline-flex", alignItems: "baseline", fontSize: "3rem", flexShrink: 0 }}>
+              <span>$</span><NumberFlow value={price} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
             </span>
             <div className="text-sm leading-tight">
               <div className="font-bold" style={{ color: "#EB4203" }}>{credits} credits</div>
@@ -391,8 +391,8 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                     </div>
                     <p className="text-sm mb-4" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.6)" : "#755760" }}>{plan.description}</p>
                     <div className="flex items-baseline gap-1 mb-5">
-                      <span className="text-5xl font-bold" style={{ color: plan.id === 'elite' ? "#FDF6F2" : "#28030F" }}>
-                        $<NumberFlow value={plan.price} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
+                      <span className="text-5xl font-bold whitespace-nowrap" style={{ color: plan.id === 'elite' ? "#FDF6F2" : "#28030F", display: "inline-flex", alignItems: "baseline" }}>
+                        <span>$</span><NumberFlow value={plan.price} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
                       </span>
                       <span className="text-sm ml-1" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.5)" : "#755760" }}>one-time · {plan.credits} credits</span>
                     </div>
