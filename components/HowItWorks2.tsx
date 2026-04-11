@@ -155,9 +155,9 @@ export default function HowItWorks2() {
                 position: "absolute", top: "0%", right: "0%", width: "56%", height: "92%",
                 transform: "rotate(2deg)", zIndex: 3,
               }}>
-                <div style={{ borderRadius: "1.25rem", overflow: "hidden", width: "100%", height: "100%", boxShadow: "0 16px 48px rgba(0,0,0,0.14), 0 4px 12px rgba(0,0,0,0.08)", position: "relative", border: "2.5px solid rgba(0,206,200,0.75)" }}>
+                <div style={{ borderRadius: "1.25rem", overflow: "hidden", width: "100%", height: "100%", boxShadow: "0 16px 48px rgba(0,0,0,0.14), 0 4px 12px rgba(0,0,0,0.08)", position: "relative" }}>
                   <img src={pair.after} alt="AI Result" style={{ width: "100%", height: "100%", objectFit: "contain", display: "block", background: "#ffffff" }} draggable={false} />
-                  <div style={{ position: "absolute", bottom: 10, left: 10, background: "rgba(0,206,200,0.92)", borderRadius: "9999px", padding: "4px 12px", color: "#fff", fontSize: "0.6rem", fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" }}>AI Result</div>
+                  <div style={{ position: "absolute", bottom: 10, left: 10, background: "#EB4203", borderRadius: "9999px", padding: "4px 12px", color: "#fff", fontSize: "0.6rem", fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" }}>AI Result</div>
                 </div>
               </div>
             </div>

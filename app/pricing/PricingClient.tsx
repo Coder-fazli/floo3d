@@ -16,6 +16,30 @@ type PricingSettings = {
   elitePrice: number; eliteCredits: number; eliteDescription: string; eliteFeatures: string[];
 };
 
+// ── Pricing FAQ Item ───────────────────────────────────────────────────────
+function PricingFAQItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div
+      className="rounded-xl overflow-hidden cursor-pointer"
+      style={{ background: "#ffffff", border: "1px solid rgba(117,87,96,0.15)" }}
+      onClick={() => setOpen(o => !o)}
+    >
+      <div className="flex items-center justify-between px-5 py-4">
+        <span className="font-semibold text-sm pr-4" style={{ color: "#28030F" }}>{q}</span>
+        <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center transition-transform" style={{ background: "rgba(235,66,3,0.08)", color: "#EB4203", transform: open ? "rotate(45deg)" : "none" }}>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v8M1 5h8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
+        </span>
+      </div>
+      {open && (
+        <div className="px-5 pb-4 text-sm leading-relaxed" style={{ color: "#755760", borderTop: "1px solid rgba(117,87,96,0.08)" }}>
+          {a}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Tab Switch (exact 21st.dev style) ──────────────────────────────────────
 function PricingSwitch({ selected, onSwitch }: { selected: string; onSwitch: (v: string) => void }) {
   return (
@@ -79,63 +103,50 @@ function CustomPlan({ onBuy, loading }: { onBuy: (credits: number, price: number
       transition={{ duration: 0.4 }}
       className="w-full max-w-xl mx-auto"
     >
-      <Card className="border border-neutral-200 bg-white shadow-lg">
-        <CardHeader className="text-left pb-2">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="h-9 w-9 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center">
-              <Zap size={18} className="text-orange-500" />
+      <div className="rounded-2xl overflow-hidden" style={{ background: "#ffffff", border: "2px solid #EB4203", boxShadow: "0 20px 60px rgba(235,66,3,0.12)" }}>
+        <div className="p-6 pb-4">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="h-10 w-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(235,66,3,0.08)", border: "1px solid rgba(235,66,3,0.2)" }}>
+              <Zap size={18} style={{ color: "#EB4203" }} />
             </div>
             <div>
-              <h3 className="text-2xl font-semibold text-gray-900">Custom Pack</h3>
-              <p className="text-xs text-gray-500">Pay exactly what you need — no subscription</p>
+              <h3 className="text-2xl font-bold" style={{ color: "#28030F", fontFamily: "var(--font-playfair), Georgia, serif" }}>Custom Pack</h3>
+              <p className="text-xs" style={{ color: "#755760" }}>Pay exactly what you need — no subscription</p>
             </div>
           </div>
-        </CardHeader>
 
-        <CardContent className="pt-4 space-y-6">
           {/* Price display */}
-          <div className="flex items-baseline gap-2">
-            <span className="text-5xl font-semibold text-gray-900">
+          <div className="flex items-baseline gap-3 mb-6">
+            <span className="text-5xl font-bold" style={{ color: "#28030F" }}>
               $<NumberFlow value={price} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
             </span>
-            <div className="text-sm text-gray-500 leading-tight">
-              <div className="font-semibold text-orange-500">{credits} credits</div>
-              <div>{renders} renders · ${perRender}/render</div>
+            <div className="text-sm leading-tight">
+              <div className="font-bold" style={{ color: "#EB4203" }}>{credits} credits</div>
+              <div style={{ color: "#755760" }}>{renders} renders · ${perRender}/render</div>
             </div>
           </div>
 
           {/* Slider */}
-          <div className="space-y-3">
-            <div className="flex justify-between text-xs text-gray-400 font-medium">
+          <div className="space-y-3 mb-6">
+            <div className="flex justify-between text-xs font-medium" style={{ color: "#a08888" }}>
               <span>50 cr</span>
               <span>1,000 cr</span>
             </div>
-            <div className="relative">
-              <input
-                type="range"
-                min={0}
-                max={STEPS.length - 1}
-                step={1}
-                value={stepIdx}
-                onChange={e => setStepIdx(Number(e.target.value))}
-                className="w-full h-2 rounded-full appearance-none cursor-pointer"
-                style={{
-                  background: `linear-gradient(to right, #ec5b13 ${pct}%, #e2e8f0 ${pct}%)`,
-                  accentColor: '#ec5b13',
-                }}
-              />
-            </div>
-            {/* Step labels */}
-            <div className="flex justify-between text-xs text-gray-400">
+            <input
+              type="range"
+              min={0}
+              max={STEPS.length - 1}
+              step={1}
+              value={stepIdx}
+              onChange={e => setStepIdx(Number(e.target.value))}
+              className="w-full h-2 rounded-full appearance-none cursor-pointer"
+              style={{ background: `linear-gradient(to right, #EB4203 ${pct}%, rgba(117,87,96,0.2) ${pct}%)`, accentColor: '#EB4203' }}
+            />
+            <div className="flex justify-between text-xs">
               {STEPS.map((s, i) => (
-                <button
-                  key={s}
-                  onClick={() => setStepIdx(i)}
-                  className={cn(
-                    'font-medium transition-colors',
-                    i === stepIdx ? 'text-orange-500' : 'hover:text-gray-600'
-                  )}
-                >
+                <button key={s} onClick={() => setStepIdx(i)}
+                  className="font-medium transition-colors"
+                  style={{ color: i === stepIdx ? "#EB4203" : "#a08888" }}>
                   {s >= 1000 ? '1k' : s}
                 </button>
               ))}
@@ -143,36 +154,14 @@ function CustomPlan({ onBuy, loading }: { onBuy: (credits: number, price: number
           </div>
 
           {/* Volume discount badge */}
-          <div className="flex items-center gap-2 bg-orange-50 border border-orange-100 rounded-xl px-4 py-2.5">
-            <Sparkles size={14} className="text-orange-500 flex-shrink-0" />
-            <span className="text-sm font-medium text-orange-700">
+          <div className="flex items-center gap-2 rounded-xl px-4 py-2.5 mb-6" style={{ background: "rgba(235,66,3,0.06)", border: "1px solid rgba(235,66,3,0.15)" }}>
+            <Sparkles size={14} style={{ color: "#EB4203", flexShrink: 0 }} />
+            <span className="text-sm font-medium" style={{ color: "#EB4203" }}>
               {credits < 100  && 'Standard rate — $0.12/credit'}
-              {credits >= 100 && credits < 300  && '10% volume discount applied — $0.10/credit'}
-              {credits >= 300 && credits < 600  && '15% volume discount applied — $0.085/credit'}
-              {credits >= 600 && '31% volume discount applied — $0.069/credit'}
+              {credits >= 100 && credits < 300  && '10% volume discount — $0.10/credit'}
+              {credits >= 300 && credits < 600  && '15% volume discount — $0.085/credit'}
+              {credits >= 600 && '31% volume discount — $0.069/credit'}
             </span>
-          </div>
-
-          {/* What you get — 2 columns */}
-          <div className="pt-2 border-t border-neutral-100">
-            <h4 className="text-sm font-semibold uppercase text-gray-400 tracking-wide mb-3">Includes</h4>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-              {[
-                `${credits} credits (${renders} AI renders)`,
-                'HD quality renders + no watermark',
-                'All 4 AI tools included',
-                'PNG, JPG & PDF export',
-                'Credits never expire',
-                'Commercial usage rights',
-              ].map((f, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <span className="h-5 w-5 bg-white border border-orange-500 rounded-full grid place-content-center flex-shrink-0">
-                    <CheckCheck className="h-3 w-3 text-orange-500" />
-                  </span>
-                  <span className="text-xs text-gray-600 font-medium">{f}</span>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* Buy button */}
@@ -181,14 +170,36 @@ function CustomPlan({ onBuy, loading }: { onBuy: (credits: number, price: number
             onClick={() => onBuy(credits, price)}
           />
 
-          <p className="text-xs text-gray-400 text-center">
-            Secure checkout via Stripe ·{' '}
-            <Link href="/terms-of-service" className="underline hover:text-gray-600">Terms</Link>
+          <p className="text-xs text-center mt-3" style={{ color: "#a08888" }}>
+            🔒 Secure via Stripe ·{' '}
+            <Link href="/terms-of-service" className="underline">Terms</Link>
             {' '}&{' '}
-            <Link href="/privacy-policy" className="underline hover:text-gray-600">Privacy</Link>
+            <Link href="/privacy-policy" className="underline">Privacy</Link>
           </p>
-        </CardContent>
-      </Card>
+        </div>
+
+        {/* What you get */}
+        <div className="px-6 pb-6 pt-4" style={{ borderTop: "1px solid rgba(117,87,96,0.12)" }}>
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: "#EB4203" }}>Includes</p>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-2.5">
+            {[
+              `${credits} credits (${renders} AI renders)`,
+              'HD quality renders + no watermark',
+              'All 4 AI tools included',
+              'PNG, JPG & PDF export',
+              'Credits never expire',
+              'Commercial usage rights',
+            ].map((f, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <span className="h-5 w-5 rounded-full grid place-content-center flex-shrink-0" style={{ background: "rgba(235,66,3,0.08)", border: "1px solid rgba(235,66,3,0.3)" }}>
+                  <CheckCheck className="h-3 w-3" style={{ color: "#EB4203" }} />
+                </span>
+                <span className="text-xs font-medium" style={{ color: "#755760" }}>{f}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </motion.div>
   );
 }
@@ -304,17 +315,32 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
 
   return (
     <div className="px-4 pt-16 pb-24 min-h-screen max-w-7xl mx-auto relative">
-      <div className="w-full absolute inset-0 h-full z-0 bg-[radial-gradient(circle,_black_1px,_transparent_1px)] dark:bg-[radial-gradient(circle,_white_1px,_transparent_1px)] opacity-10 [background-size:20px_20px] pointer-events-none" />
 
       {/* Header */}
       <article className="text-center mb-10 space-y-4">
-        <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 leading-tight">
-          We've got a plan that's perfect for you
+        <span className="inline-block text-xs font-black tracking-widest uppercase mb-2" style={{ color: "#EB4203" }}>Pricing</span>
+        <h2 className="text-4xl md:text-5xl font-bold leading-tight" style={{ color: "#28030F", fontFamily: "var(--font-playfair), Georgia, serif" }}>
+          One-time credits.<br />No subscription ever.
         </h2>
-        <p className="text-base text-gray-500 max-w-lg mx-auto">
-          One-time credit purchases — no subscriptions, no hidden fees. Use credits across all 4 AI tools. They never expire.
+        <p className="text-base max-w-lg mx-auto" style={{ color: "#755760" }}>
+          Pay once, use across all 4 AI tools. Credits never expire — no monthly fees, no surprises.
         </p>
         <PricingSwitch selected={tab} onSwitch={setTab} />
+
+        {/* Trust bar */}
+        <div className="flex flex-wrap justify-center gap-3 mt-6">
+          {[
+            { icon: "★", text: "2,547 architects & designers" },
+            { icon: "🔒", text: "Secure checkout via Stripe" },
+            { icon: "∞", text: "Credits never expire" },
+            { icon: "⚡", text: "All 4 AI tools included" },
+          ].map((t, i) => (
+            <div key={i} className="flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold" style={{ background: "#ffffff", border: "1px solid rgba(117,87,96,0.2)", color: "#28030F" }}>
+              <span style={{ color: "#EB4203" }}>{t.icon}</span>
+              {t.text}
+            </div>
+          ))}
+        </div>
       </article>
 
       {/* Plans tab */}
@@ -327,115 +353,113 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="grid md:grid-cols-3 gap-5 py-4">
+            <div className="grid md:grid-cols-3 gap-5 py-4 items-start">
               {plans.map((plan) => (
-                <Card
+                <div
                   key={plan.id}
-                  className={cn(
-                    'relative border text-left transition-all duration-200 hover:shadow-md',
-                    plan.popular
-                      ? 'ring-2 ring-orange-500 bg-orange-50'
-                      : 'border-neutral-200 bg-white',
-                  )}
+                  className={cn('relative rounded-2xl text-left transition-all duration-200', plan.popular ? 'md:-mt-4 md:mb-4' : '')}
+                  style={plan.popular ? {
+                    background: "#ffffff",
+                    border: "2px solid #EB4203",
+                    boxShadow: "0 20px 60px rgba(235,66,3,0.18), 0 4px 20px rgba(235,66,3,0.1)",
+                  } : plan.id === 'elite' ? {
+                    background: "#28030F",
+                    border: "1px solid rgba(235,66,3,0.3)",
+                  } : {
+                    background: "#ffffff",
+                    border: "1px solid rgba(117,87,96,0.2)",
+                  }}
                 >
-                  <CardHeader className="text-left">
-                    <div className="flex justify-between items-start">
-                      <h3 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-1">
-                        {plan.name} Plan
+                  {plan.popular && (
+                    <div className="absolute -top-4 left-0 right-0 flex justify-center">
+                      <span className="px-4 py-1.5 rounded-full text-xs font-black tracking-widest uppercase text-white" style={{ background: "#EB4203" }}>
+                        ★ Most Popular
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="p-6 pb-4">
+                    <div className="flex justify-between items-start mb-1">
+                      <h3 className="text-2xl font-bold" style={{ color: plan.id === 'elite' ? "#FDF6F2" : "#28030F", fontFamily: "var(--font-playfair), Georgia, serif" }}>
+                        {plan.name}
                       </h3>
-                      {plan.popular && (
-                        <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap">
-                          Popular
+                      {plan.id === 'elite' && (
+                        <span className="px-2 py-1 rounded-full text-xs font-bold" style={{ background: "rgba(235,66,3,0.2)", color: "#EB4203" }}>
+                          Best AI
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-500 mb-3">{plan.description}</p>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-4xl font-semibold text-gray-900">
-                        $<NumberFlow value={plan.price} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} className="text-4xl font-semibold" />
+                    <p className="text-sm mb-4" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.6)" : "#755760" }}>{plan.description}</p>
+                    <div className="flex items-baseline gap-1 mb-5">
+                      <span className="text-5xl font-bold" style={{ color: plan.id === 'elite' ? "#FDF6F2" : "#28030F" }}>
+                        $<NumberFlow value={plan.price} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
                       </span>
-                      <span className="text-gray-500 ml-1 text-sm">one-time · {plan.credits} credits</span>
+                      <span className="text-sm ml-1" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.5)" : "#755760" }}>one-time · {plan.credits} credits</span>
                     </div>
-                  </CardHeader>
 
-                  <CardContent className="pt-0 space-y-4">
-                    {/* Buy button */}
+                    {/* CTA */}
                     <GlowButton
                       label={loadingPlan === plan.id ? 'Redirecting…' : plan.cta}
                       onClick={() => handleBuy(plan.id)}
-                      className={plan.popular ? '' : 'glow-btn-dark'}
                     />
 
-                    {/* Features */}
-                    <div className="space-y-2.5 pt-3 border-t border-neutral-200">
-                      <h4 className="text-sm font-semibold uppercase text-gray-400 tracking-wide mb-3">
-                        Features
-                      </h4>
-                      <p className="font-semibold text-sm text-gray-800">{plan.includes[0]}</p>
-                      <ul className="space-y-2">
-                        {plan.includes.slice(1).map((f, i) => (
-                          <li key={i} className="flex items-center gap-3">
-                            <span className="h-5 w-5 bg-white border border-orange-500 rounded-full grid place-content-center flex-shrink-0">
-                              <CheckCheck className="h-3 w-3 text-orange-500" />
-                            </span>
-                            <span className="text-sm text-gray-600 font-medium">{f}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <p className="text-xs text-gray-400 text-center pt-1">
-                      <Link href="/terms-of-service" className="underline">Terms</Link>
-                      {' '}&{' '}
-                      <Link href="/privacy-policy" className="underline">Privacy Policy</Link>
+                    {/* Trust signal */}
+                    <p className="text-xs text-center mt-3" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.4)" : "#a08888" }}>
+                      🔒 Secure via Stripe · Credits never expire
                     </p>
-                  </CardContent>
-                </Card>
+                  </div>
+
+                  {/* Features */}
+                  <div className="px-6 pb-6 pt-3" style={{ borderTop: plan.id === 'elite' ? "1px solid rgba(253,246,242,0.1)" : "1px solid rgba(117,87,96,0.12)" }}>
+                    <p className="font-bold text-xs uppercase tracking-widest mb-3" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.5)" : "#EB4203" }}>{plan.includes[0]}</p>
+                    <ul className="space-y-2.5">
+                      {plan.includes.slice(1).map((f, i) => (
+                        <li key={i} className="flex items-center gap-3">
+                          <span className="h-5 w-5 rounded-full grid place-content-center flex-shrink-0" style={{ background: plan.id === 'elite' ? "rgba(235,66,3,0.2)" : "rgba(235,66,3,0.08)", border: "1px solid rgba(235,66,3,0.4)" }}>
+                            <CheckCheck className="h-3 w-3" style={{ color: "#EB4203" }} />
+                          </span>
+                          <span className="text-sm font-medium" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.8)" : "#755760" }}>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
               ))}
             </div>
 
-            {/* Comparison table */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="mt-10 w-full max-w-3xl mx-auto bg-white rounded-2xl border border-neutral-200 overflow-hidden shadow-sm"
-            >
-              <table className="w-full text-sm border-collapse">
-                <thead>
-                  <tr className="border-b border-neutral-100">
-                    <th className="py-3 px-5 text-left text-xs font-bold uppercase text-gray-400 tracking-wider">Feature</th>
-                    <th className="py-3 px-4 text-center text-xs font-bold uppercase text-gray-700">Starter</th>
-                    <th className="py-3 px-4 text-center text-xs font-bold uppercase text-orange-500">Pro</th>
-                    <th className="py-3 px-4 text-center text-xs font-bold uppercase text-amber-500">Elite</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    { label: 'AI renders',      starter: '50',        pro: '150',              elite: '150' },
-                    { label: 'AI model',        starter: 'Standard',  pro: 'Standard',         elite: 'Highest accuracy' },
-                    { label: 'Cost per render', starter: '$0.20',     pro: '$0.17',            elite: '$0.33' },
-                    { label: 'No watermark',    starter: '✓',         pro: '✓',               elite: '✓' },
-                    { label: 'PDF export',      starter: '✓',         pro: '✓',               elite: '✓' },
-                    { label: 'Isometric views', starter: '✗',         pro: '✓',               elite: '✓' },
-                    { label: 'Material detail', starter: 'HD',        pro: 'HD',               elite: 'Superior' },
-                    { label: 'Commercial use',  starter: '✓',         pro: '✓',               elite: '✓' },
-                    { label: 'Credits expire',  starter: 'Never',     pro: 'Never',            elite: 'Never' },
-                  ].map((row, i) => (
-                    <tr key={i} className={i % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                      <td className="py-3 px-5 font-semibold text-gray-700">{row.label}</td>
-                      <td className="py-3 px-4 text-center text-gray-600 font-medium">{row.starter}</td>
-                      <td className="py-3 px-4 text-center text-orange-500 font-bold">{row.pro}</td>
-                      <td className="py-3 px-4 text-center text-amber-500 font-bold">{row.elite}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </motion.div>
 
-            <p className="text-sm text-gray-400 text-center mt-8">
-              All plans include access to all 4 AI tools · 2 credits per render · Credits never expire · Secure checkout via Stripe
-            </p>
+{/* FAQ */}
+            <div className="w-full max-w-3xl mx-auto mt-14">
+              <h3 className="text-center text-2xl font-bold mb-8" style={{ color: "#28030F", fontFamily: "var(--font-playfair), Georgia, serif" }}>
+                Common Questions
+              </h3>
+              <div className="space-y-3">
+                {[
+                  {
+                    q: "What if I don't use all my credits?",
+                    a: "Credits never expire — ever. Buy today, use them 2 years from now. No pressure, no deadline."
+                  },
+                  {
+                    q: "Is it really a one-time payment?",
+                    a: "Yes. No monthly fees, no subscriptions, no hidden charges. You pay once and own those credits."
+                  },
+                  {
+                    q: "What quality renders do I get?",
+                    a: "All plans output HD renders with no watermark. Elite uses our highest-accuracy AI model for sharper lines and superior material detail — ideal for client presentations."
+                  },
+                  {
+                    q: "Can I use the renders commercially?",
+                    a: "Yes. Every plan includes full commercial usage rights. Use them in proposals, listings, presentations, or sell them to clients."
+                  },
+                  {
+                    q: "How many credits does one render cost?",
+                    a: "Every render costs 2 credits regardless of which tool you use — floor plan to 3D, room redesign, virtual staging, or outdoor design."
+                  },
+                ].map((item, i) => (
+                  <PricingFAQItem key={i} q={item.q} a={item.a} />
+                ))}
+              </div>
+            </div>
           </motion.div>
         )}
 

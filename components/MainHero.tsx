@@ -5,7 +5,6 @@ import WetPaintButton from "@/components/ui/wet-paint-button";
 import { BackgroundGradientGlow } from "@/components/ui/background-gradient-glow";
 import HeroMarquee from "@/components/HeroMarquee";
 import Navbar from "@/components/Navbar";
-import { AnimatedUnderlineText } from "@/components/ui/animated-underline-text";
 
 export default function MainHero({ heroBeforeUrl, heroAfterUrl }: { heroBeforeUrl?: string | null; heroAfterUrl?: string | null }) {
   return (
@@ -15,7 +14,7 @@ export default function MainHero({ heroBeforeUrl, heroAfterUrl }: { heroBeforeUr
         <HomePageHero
           heroBeforeUrl={heroBeforeUrl}
           heroAfterUrl={heroAfterUrl}
-          headingAccent={<AnimatedUnderlineText text="Home Styler" className="text-[#EB4203]" underlineClassName="text-white" />}
+          headingAccent={<span style={{ color: "#EB4203" }}>Home Styler</span>}
           ctaOverride={
             <a href="/dashboard">
               <WetPaintButton>Try It Free</WetPaintButton>

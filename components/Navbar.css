@@ -45,9 +45,10 @@
 
 .navbar-name {
     font-size: 1.1rem;
-    font-weight: 900;
-    color: #0f172a;
+    font-weight: 700;
+    color: #28030F;
     letter-spacing: -0.02em;
+    font-family: var(--font-playfair), Georgia, serif;
 }
 
 /* Links */
@@ -64,21 +65,21 @@
 
 .navbar-links a {
     font-size: 0.875rem;
-    font-weight: 500;
-    color: #475569;
+    font-weight: 600;
+    color: #755760;
     text-decoration: none;
     transition: color 0.15s;
 }
 
 .navbar-links a:hover {
-    color: var(--brand-color);
+    color: #EB4203;
 }
 
 /* NavigationMenu link style */
 .navbar-nav-link {
     font-size: 0.875rem;
-    font-weight: 500;
-    color: #475569;
+    font-weight: 600;
+    color: #755760;
     text-decoration: none;
     padding: 0.4rem 0.85rem;
     border-radius: 0.5rem;
@@ -87,8 +88,8 @@
 }
 
 .navbar-nav-link:hover {
-    color: var(--brand-color) !important;
-    background: rgba(0, 206, 200, 0.07) !important;
+    color: #EB4203 !important;
+    background: rgba(235, 66, 3, 0.06) !important;
 }
 
 /* Actions */
@@ -120,30 +121,75 @@
     width: 2rem;
     height: 2rem;
     border-radius: 9999px;
-    background: #f1f5f9;
-    color: #475569;
+    background: rgba(117, 87, 96, 0.1);
+    color: #755760;
     text-decoration: none;
     transition: background 0.15s;
 }
 
 .navbar-profile:hover {
-    background: #e2e8f0;
+    background: rgba(117, 87, 96, 0.18);
 }
 
-.navbar-btn-ghost {
-    font-size: 0.875rem;
-    font-weight: 700;
-    color: #334155;
+.navbar-profile-wrap {
+    position: relative;
+}
+
+.navbar-profile-dropdown {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    background: #ffffff;
+    border: 1px solid rgba(117, 87, 96, 0.15);
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 24px rgba(40, 3, 15, 0.1);
+    min-width: 140px;
+    overflow: hidden;
+    z-index: 100;
+}
+
+.navbar-profile-item {
+    display: block;
+    width: 100%;
+    padding: 0.65rem 1rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #755760;
+    text-decoration: none;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0.4rem 0.75rem;
+    text-align: left;
+    transition: background 0.15s;
+}
+
+.navbar-profile-item:hover {
+    background: rgba(117, 87, 96, 0.06);
+}
+
+.navbar-profile-item--danger {
+    color: #c0392b;
+}
+
+.navbar-profile-item--danger:hover {
+    background: rgba(192, 57, 43, 0.06);
+}
+
+.navbar-btn-ghost {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #a08888;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.4rem 0.5rem;
     border-radius: 0.5rem;
     transition: color 0.15s;
+    letter-spacing: 0.01em;
 }
 
 .navbar-btn-ghost:hover {
-    color: #0f172a;
+    color: #755760;
 }
 
 .navbar-btn-primary {
@@ -188,12 +234,12 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: var(--brand-color);
+    color: #755760;
     text-decoration: none;
     transition: background 0.15s;
 }
 
-.navbar-icon-btn:hover { background: #fff3ee; }
+.navbar-icon-btn:hover { background: rgba(117, 87, 96, 0.1); }
 
 .navbar-desktop-only { display: flex; }
 .navbar-mobile-only  { display: none; }
@@ -218,16 +264,16 @@
     display: block;
     padding: 0.6rem 0.5rem;
     font-size: 0.95rem;
-    font-weight: 500;
-    color: #334155;
+    font-weight: 600;
+    color: #755760;
     text-decoration: none;
     border-radius: 0.5rem;
     transition: background 0.15s;
 }
 
 .navbar-mobile a:hover {
-    background: #f8fafc;
-    color: var(--brand-color);
+    background: rgba(235, 66, 3, 0.05);
+    color: #EB4203;
 }
 
 .navbar-btn-primary[href] {

@@ -1,6 +1,6 @@
 /* ── Brand color variable ── */
 :root {
-  --brand-color: #00CEC8;
+  --brand-color: #EB4203;
 }
 
 /* ── Hide original hero blobs ── */
@@ -14,7 +14,9 @@
   background: transparent !important;
   padding-top: 8rem !important;
   padding-bottom: 10rem !important;
+  position: relative !important;
 }
+
 
 /* ── Remove white border & glow from slider ── */
 .hph-slider-container {
@@ -25,118 +27,121 @@
   display: none !important;
 }
 
-/* ── Corner bracket frame on slider ── */
-.hph-slider-wrap::before {
-  content: "";
-  position: absolute;
-  inset: -10px;
-  z-index: 40;
-  pointer-events: none;
-  background-image:
-    linear-gradient(#FCEFC3, #FCEFC3),
-    linear-gradient(#FCEFC3, #FCEFC3),
-    linear-gradient(#FCEFC3, #FCEFC3),
-    linear-gradient(#FCEFC3, #FCEFC3),
-    linear-gradient(#FCEFC3, #FCEFC3),
-    linear-gradient(#FCEFC3, #FCEFC3),
-    linear-gradient(#FCEFC3, #FCEFC3),
-    linear-gradient(#FCEFC3, #FCEFC3);
-  background-size:
-    56px 5px, 5px 56px,
-    56px 5px, 5px 56px,
-    56px 5px, 5px 56px,
-    56px 5px, 5px 56px;
-  background-position:
-    top left,    top left,
-    top right,   top right,
-    bottom left, bottom left,
-    bottom right, bottom right;
-  background-repeat: no-repeat;
-  border-radius: 2.25rem;
-}
 
 /* ── Hero text ── */
 .hph-badge {
   margin-bottom: 2.25rem !important;
 }
 .hph-heading {
-  color: #ffffff !important;
+  color: #28030F !important;
   margin-bottom: 2rem !important;
-  line-height: 1.2 !important;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.18), 0 1px 3px rgba(0,0,0,0.12) !important;
+  line-height: 1.1 !important;
+  font-size: clamp(3rem, 5.5vw, 5.75rem) !important;
+  letter-spacing: -0.01em !important;
+
+  /* ── FONT OPTIONS — uncomment one to test ── */
+  /* font-family: var(--font-instrument-serif), Georgia, serif !important; font-weight: 400 !important; */ /* Option 1: Instrument Serif — elegant, light */
+  font-family: var(--font-playfair), Georgia, serif !important; font-weight: 700 !important; /* Option 2: Playfair Display — classic luxury, bolder */
+  /* font-family: var(--font-cormorant), Georgia, serif !important; font-weight: 600 !important; */ /* Option 3: Cormorant Garamond — ultra elegant, fashion */
 }
 .hph-heading-accent {
-  color: inherit !important;
+  color: var(--brand-color) !important;
   background: none !important;
   padding: 0 !important;
   border-radius: 0 !important;
   transform: none !important;
   display: inline-block !important;
-  text-shadow: none !important;
 }
 .hph-sub {
-  color: rgba(255,255,255,0.82) !important;
+  color: #755760 !important;
   margin-bottom: 2.75rem !important;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.18), 0 1px 3px rgba(0,0,0,0.12) !important;
 }
 .hph-btns {
   margin-bottom: 2.75rem !important;
   gap: 1rem !important;
 }
 
-/* ── Navbar: transparent, blends into gradient ── */
+/* ── Navbar: transparent, blends into creamy bg ── */
 .navbar {
   background: transparent !important;
   backdrop-filter: none !important;
   border-bottom: none !important;
 }
 .navbar-credits {
-  color: #ffffff !important;
+  color: #0f172a !important;
 }
 .navbar-nav-link {
-  color: rgba(255,255,255,0.85) !important;
+  color: rgba(15,23,42,0.7) !important;
 }
 .navbar-nav-link:hover {
-  color: #ffffff !important;
-  background: rgba(255,255,255,0.1) !important;
+  color: #0f172a !important;
+  background: rgba(0,0,0,0.05) !important;
 }
 .navbar-credits-mobile {
-  background: #00CEC8 !important;
+  background: var(--brand-color) !important;
   color: #ffffff !important;
 }
 
 /* ── Badge ── */
 .hph-badge {
-  background: rgba(255,255,255,0.15) !important;
-  border-color: rgba(255,255,255,0.25) !important;
+  background: rgba(255,255,255,0.7) !important;
+  border-color: rgba(209,213,219,0.8) !important;
 }
 .hph-badge-text {
-  color: rgba(255,255,255,0.9) !important;
+  color: rgba(15,23,42,0.7) !important;
 }
 .hph-badge-dot {
-  background: #FCEFC3 !important;
+  background: var(--brand-color) !important;
+}
+
+/* ── Try It Free shimmer ── */
+.wet-paint-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.55s ease;
+  pointer-events: none;
+}
+
+.wet-paint-btn:hover::after {
+  left: 160%;
 }
 
 /* ── Buttons ── */
 .hph-btn-primary {
-  background: #EB4203 !important;
-  box-shadow: 0 12px 28px -4px rgba(235,66,3,0.4) !important;
+  background: linear-gradient(145deg, #FF8A70, #EB4203) !important;
+  border-radius: 0.75rem !important;
+  border: none !important;
+  box-shadow:
+    0 0 16px 4px rgba(235, 66, 3, 0.18),
+    0 6px 16px rgba(235, 66, 3, 0.15) !important;
+  transition: all 0.2s ease !important;
 }
 .hph-btn-primary:hover {
-  background: #D13A02 !important;
+  background: linear-gradient(145deg, #FF9880, #D13A02) !important;
+  box-shadow:
+    0 0 22px 6px rgba(235, 66, 3, 0.25),
+    0 8px 18px rgba(235, 66, 3, 0.2) !important;
+  transform: translateY(-1px) !important;
 }
 .hph-btn-secondary {
-  background: #FCEFC3 !important;
-  border: none !important;
-  color: #EB4203 !important;
+  background: transparent !important;
+  border: 1.5px solid #755760 !important;
+  color: #755760 !important;
   font-weight: 800 !important;
   padding: 1.1rem 2.25rem !important;
   border-radius: 1rem !important;
-  box-shadow: 0 8px 20px -4px rgba(252,239,195,0.3) !important;
+  box-shadow: none !important;
 }
 .hph-btn-secondary:hover {
-  background: #fae8a8 !important;
-  transform: translateY(-2px) !important;
+  background: rgba(117, 87, 96, 0.06) !important;
+  border-color: #5C3F47 !important;
+  color: #5C3F47 !important;
 }
 
 /* ── CTA buttons everywhere ── */
@@ -165,22 +170,19 @@
 
 /* ── Mobile navbar icon always visible ── */
 .navbar-icon-btn {
-  color: #ffffff !important;
-  background: rgba(255,255,255,0.15) !important;
+  color: #0f172a !important;
+  background: rgba(0,0,0,0.06) !important;
 }
 .navbar-icon-btn:hover {
-  background: rgba(255,255,255,0.25) !important;
+  background: rgba(0,0,0,0.1) !important;
 }
 .navbar-credits-mobile {
   color: #ffffff !important;
 }
 
-/* ── Float card: center bottom ── */
+/* ── Float card: hidden ── */
 .hph-float-card {
-  left: 50% !important;
-  right: auto !important;
-  bottom: -5rem !important;
-  transform: translateX(-50%) !important;
+  display: none !important;
 }
 
 /* ── Hide feature cards (replaced by marquee) ── */
@@ -209,6 +211,10 @@
     height: 100% !important;
     object-fit: cover !important;
     display: block !important;
+  }
+  .hph-trusted-row div[style] {
+    width: 28px !important;
+    height: 28px !important;
   }
   .hph-trusted-row img {
     width: 28px !important;
@@ -248,4 +254,18 @@
   .hph-btns a > button {
     width: 100% !important;
   }
+}
+
+/* ── Section-to-section smooth transitions ── */
+
+/* Marquee (white) — fade top from cream in, fade bottom to cream */
+.marquee-section {
+  background: linear-gradient(to bottom, #FDF6F2 0%, #ffffff 7%, #ffffff 93%, #FDF6F2 100%) !important;
+  border-bottom: none !important;
+}
+
+/* TestimonialsMarquee — white section, fade cream edges */
+.tm-section {
+  background: linear-gradient(to bottom, #FDF6F2 0%, #ffffff 7%, #ffffff 93%, #FDF6F2 100%) !important;
+  max-width: 100% !important;
 }

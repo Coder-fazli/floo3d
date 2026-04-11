@@ -51,8 +51,8 @@ export default function DesignOptions({ transformImages = {} }: { transformImage
         <div>
           <span className="do-eyebrow">Visual Storytelling</span>
           <h2 className="do-heading">
-            LIMITLESS<br />
-            <span className="do-heading-accent">TRANSFORMATIONS</span>
+            Limitless<br />
+            <span className="do-heading-accent">Transformations</span>
           </h2>
         </div>
         <p className="do-header-desc">
@@ -76,12 +76,7 @@ export default function DesignOptions({ transformImages = {} }: { transformImage
                 <p className="do-item-desc">
                   The easiest way to convert 2D floor plans to 3D online — free AI floor plan generator with no software needed. Upload a blueprint, get a photorealistic render instantly.
                 </p>
-                <Link href="/dashboard" className="do-item-link">
-                  <span className="do-item-link-text">Explore Now</span>
-                  <span className="do-item-link-arrow">
-                    <svg width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                  </span>
-                </Link>
+                <Link href="/dashboard" className="do-cta-btn">Try It Now</Link>
               </div>
             </div>
           </div>
@@ -97,12 +92,7 @@ export default function DesignOptions({ transformImages = {} }: { transformImage
                 <p className="do-item-desc">
                   The best AI interior design tool for room redesign. Upload any room photo, pick a style, and our AI interior design generator reimagines the space with new furniture, materials, and lighting.
                 </p>
-                <Link href="/dashboard" className="do-item-link">
-                  <span className="do-item-link-text">View Concepts</span>
-                  <span className="do-item-link-arrow">
-                    <svg width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                  </span>
-                </Link>
+                <Link href="/dashboard" className="do-cta-btn">Try It Now</Link>
               </div>
             </div>
             <div className="do-col-img-right">
@@ -121,12 +111,13 @@ export default function DesignOptions({ transformImages = {} }: { transformImage
               </div>
             </div>
             <div className="do-flex-text">
-              <span className="do-num-large">03</span>
-              <h3 className="do-item-title">Empty the Room</h3>
-              <p className="do-item-desc">
-                AI virtual staging made simple — remove all furniture and decor instantly to reveal a clean, empty space. Perfect for real estate listings and planning fresh layouts.
-              </p>
-              <Link href="/dashboard" className="do-cta-btn">Try It Now</Link>
+              <div className="do-text-card">
+                <h3 className="do-item-title">Empty the Room</h3>
+                <p className="do-item-desc">
+                  AI virtual staging made simple — remove all furniture and decor instantly to reveal a clean, empty space. Perfect for real estate listings and planning fresh layouts.
+                </p>
+                <Link href="/dashboard" className="do-cta-btn">Try It Now</Link>
+              </div>
             </div>
           </div>
         </div>
@@ -138,20 +129,12 @@ export default function DesignOptions({ transformImages = {} }: { transformImage
               <ImgCard before={img("04","before","/card-outdoor-before.avif")} after={img("04","after","/card-outdoor-after.avif")} />
             </div>
             <div className="do-flex-text-40">
-              <span className="do-eyebrow-sm">Final Chapter</span>
-              <h3 className="do-title-italic">OUTDOOR<br />VISUALS</h3>
-              <p className="do-item-desc">
-                Free AI landscape design for any outdoor space. AI backyard design, garden design, and home exterior design — visualize your dream outdoor space with realistic materials and lighting.
-              </p>
-              <div className="do-stats">
-                <div className="do-stat-row">
-                  <span className="do-stat-val">HD</span>
-                  <span className="do-stat-label">Ultra-High Resolution Output</span>
-                </div>
-                <div className="do-stat-row">
-                  <span className="do-stat-val">6</span>
-                  <span className="do-stat-label">Outdoor Design Styles</span>
-                </div>
+              <div className="do-text-card">
+                <h3 className="do-item-title">Outdoor &amp; Garden</h3>
+                <p className="do-item-desc">
+                  Free AI landscape design for any outdoor space. AI backyard design, garden design, and home exterior design — visualize your dream outdoor space with realistic materials and lighting.
+                </p>
+                <Link href="/dashboard" className="do-cta-btn">Try It Now</Link>
               </div>
             </div>
           </div>

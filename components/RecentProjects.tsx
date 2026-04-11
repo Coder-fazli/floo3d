@@ -61,14 +61,7 @@ export default function RecentProjects() {
   }, []);
 
   return (
-    <section className="w-full py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{ background: "linear-gradient(to bottom, #ffffff 0%, #fdf8ec 8%, #FCEFC3 30%, #fdf8ec 70%, #f8fafc 100%)" }} id="reviews">
-      {/* Dot grid */}
-      <div className="absolute inset-0 z-0 pointer-events-none" style={{
-        backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px)",
-        backgroundSize: "22px 22px",
-        WebkitMaskImage: "radial-gradient(70vw circle at 50% 50%, white, transparent)",
-        maskImage: "radial-gradient(70vw circle at 50% 50%, white, transparent)",
-      }} />
+    <section className="w-full py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{ background: "#FDF6F2" }} id="reviews">
       <div className="max-w-7xl mx-auto relative z-10">
 
         <motion.div
@@ -78,13 +71,13 @@ export default function RecentProjects() {
           transition={{ duration: 0.7 }}
           className="text-center mb-10"
         >
-          <p className="text-xs font-black tracking-widest uppercase text-[#00CEC8] mb-3">
+          <p className="text-xs font-black tracking-widest uppercase mb-3" style={{ color: "#EB4203" }}>
             Community Showcase
           </p>
-          <h2 className="text-4xl md:text-5xl font-black text-foreground tracking-tight mb-4">
+          <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4" style={{ color: "#28030F", fontFamily: "var(--font-playfair), Georgia, serif" }}>
             Real Results from Real Users
           </h2>
-          <p className="text-muted-foreground text-base leading-relaxed max-w-2xl mx-auto">
+          <p className="text-base leading-relaxed max-w-2xl mx-auto" style={{ color: "#755760" }}>
             See how architects, interior designers, and homeowners use our AI tools — from virtual staging to AI landscape design.
           </p>
         </motion.div>

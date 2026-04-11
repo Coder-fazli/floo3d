@@ -1,13 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap');
 
 .faq-section * {
-  font-family: "Public Sans", sans-serif !important;
   box-sizing: border-box;
 }
 
 /* Section */
 .faq-section {
-  background: #ffffff;
+  background: #FDF6F2;
   padding: 5rem 1.5rem;
 }
 

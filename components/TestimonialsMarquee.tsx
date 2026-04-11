@@ -7,7 +7,7 @@ import { Marquee } from "@/components/ui/marquee";
 
 export function Highlight({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <span className={cn("bg-blue-500/10 p-1 py-0.5 font-bold text-blue-500", className)}>
+    <span className={cn("p-1 py-0.5 font-bold", className)} style={{ background: "rgba(235,66,3,0.08)", color: "#EB4203" }}>
       {children}
     </span>
   );
@@ -19,15 +19,14 @@ function TestimonialCard({ description, name, img, role, className }: {
   return (
     <div className={cn(
       "mb-4 flex w-full cursor-pointer break-inside-avoid flex-col items-center justify-between gap-6 rounded-xl p-4",
-      "border border-border bg-card/50 shadow-sm",
-      "transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md",
+      "shadow-sm border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md",
       className,
-    )}>
-      <div className="text-sm font-normal text-muted-foreground select-none">
+    )} style={{ background: "#FDF6F2", borderColor: "rgba(117,87,96,0.15)" }}>
+      <div className="text-sm font-normal select-none" style={{ color: "#755760" }}>
         {description}
         <div className="flex flex-row py-1">
           {[...Array(5)].map((_, i) => (
-            <Star key={i} className="size-4 fill-blue-500 text-blue-500" />
+            <Star key={i} className="size-4" style={{ fill: "#EB4203", color: "#EB4203" }} />
           ))}
         </div>
       </div>
@@ -37,11 +36,12 @@ function TestimonialCard({ description, name, img, role, className }: {
           height={40}
           src={img || ""}
           alt={name}
-          className="size-10 rounded-full ring-1 ring-blue-500/20 ring-offset-2"
+          className="size-10 rounded-full ring-offset-2"
+          style={{ outline: "1px solid rgba(235,66,3,0.2)" }}
         />
         <div>
-          <p className="font-medium text-foreground">{name}</p>
-          <p className="text-xs font-normal text-muted-foreground">{role}</p>
+          <p className="font-medium" style={{ color: "#28030F" }}>{name}</p>
+          <p className="text-xs font-normal" style={{ color: "#755760" }}>{role}</p>
         </div>
       </div>
     </div>
@@ -115,25 +115,25 @@ export type Testimonial = {
 export default function TestimonialsMarquee({ items }: { items?: Testimonial[] }) {
   const data = items ?? testimonials;
   return (
-    <section className="relative mx-auto w-full max-w-7xl px-4 py-10">
-      <div className="absolute top-20 -left-20 z-10 h-64 w-64 rounded-full bg-blue-500/5 blur-3xl" />
-      <div className="absolute -right-20 bottom-20 z-10 h-64 w-64 rounded-full bg-blue-500/5 blur-3xl" />
+    <section className="tm-section relative mx-auto w-full max-w-7xl px-4 py-10">
+      <div className="absolute top-20 -left-20 z-10 h-64 w-64 rounded-full blur-3xl" style={{ background: "rgba(235,66,3,0.05)" }} />
+      <div className="absolute -right-20 bottom-20 z-10 h-64 w-64 rounded-full blur-3xl" style={{ background: "rgba(235,66,3,0.05)" }} />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="text-foreground mb-4 text-center text-4xl leading-[1.2] font-bold tracking-tighter md:text-5xl">
+        <h2 className="mb-4 text-center text-4xl leading-[1.2] font-bold tracking-tighter md:text-5xl" style={{ color: "#28030F", fontFamily: "var(--font-playfair), Georgia, serif" }}>
           What Our Users Are Saying
         </h2>
-        <h3 className="text-muted-foreground mx-auto mb-8 max-w-lg text-center text-lg font-medium tracking-tight text-balance">
+        <h3 className="mx-auto mb-8 max-w-lg text-center text-lg font-medium tracking-tight text-balance" style={{ color: "#755760" }}>
           Don&apos;t just take our word for it. Here&apos;s what{" "}
-          <span className="bg-gradient-to-r from-blue-500 to-sky-500 bg-clip-text text-transparent">
-            homeowners & designers
+          <span style={{ color: "#EB4203", fontWeight: 700 }}>
+            homeowners &amp; designers
           </span>{" "}
           are saying about{" "}
-          <span className="font-semibold text-blue-500">MyHomeStyler</span>
+          <span style={{ fontWeight: 700, color: "#28030F" }}>MyHomeStyler</span>
         </h3>
       </motion.div>
 
@@ -158,8 +158,7 @@ export default function TestimonialsMarquee({ items }: { items?: Testimonial[] }
               </Marquee>
             ))}
         </div>
-        <div className="from-background pointer-events-none absolute inset-x-0 bottom-0 h-1/4 w-full bg-gradient-to-t from-20%" />
-        <div className="from-background pointer-events-none absolute inset-x-0 top-0 h-1/4 w-full bg-gradient-to-b from-20%" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 w-full" style={{ background: "linear-gradient(to top, #ffffff, transparent)" }} />
       </div>
     </section>
   );

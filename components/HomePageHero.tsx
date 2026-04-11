@@ -142,16 +142,17 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride,
               {["/avatars/female1.jpg", "/avatars/female3.jpg", "/avatars/av2.jpg", "/avatars/female2.jpg", "/avatars/av5.jpg"].map((src, i) => (
                 <div key={i} style={{
                   width: 42, height: 42, borderRadius: "9999px", overflow: "hidden",
-                  border: "2.5px solid #ffffff",
+                  border: "2.5px solid #fdfbf7",
                   marginLeft: i === 0 ? 0 : -6,
                   boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
                   position: "relative", zIndex: 5 - i,
+                  flexShrink: 0,
                 }}>
-                  <Image src={src} alt="user" width={42} height={42} style={{ objectFit: "cover", width: "100%", height: "100%" }} />
+                  <img src={src} alt="user" style={{ width: "42px", height: "42px", objectFit: "cover", display: "block", borderRadius: "9999px" }} />
                 </div>
               ))}
             </div>
-            <p style={{ fontSize: "0.95rem", color: "#ffffff", margin: 0, fontWeight: 600, textShadow: "0 1px 6px rgba(0,0,0,0.4)" }}>
+            <p style={{ fontSize: "0.95rem", color: "#755760", margin: 0, fontWeight: 600 }}>
               Trusted by <strong style={{ fontWeight: 900, color: "#EB4203" }}>2,500+</strong> architects &amp; designers
             </p>
           </div>
@@ -208,16 +209,6 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride,
 
       </div>
 
-      {/* ── Feature cards ── */}
-      <div className="hph-features">
-        {features.map((f) => (
-          <Link href="/dashboard" key={f.title} className="hph-feat-card">
-            <div className="hph-feat-icon">{f.icon}</div>
-            <h3 className="hph-feat-title">{f.title}</h3>
-            <p className="hph-feat-desc">{f.desc}</p>
-          </Link>
-        ))}
-      </div>
 
     </section>
   );

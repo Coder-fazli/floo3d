@@ -27,6 +27,7 @@ const Navbar = () => {
   const { signOut, openSignIn, openSignUp } = useClerk();
   const [credits, setCredits] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -87,11 +88,18 @@ const Navbar = () => {
                 <Zap className="credits-icon" />
                 <span>{credits ?? 4}</span>
               </div>
-              <a href="/dashboard/profile" className="navbar-profile navbar-desktop-only" title="Profile">
-                <User className="w-4 h-4" />
-              </a>
+              <div className="navbar-profile-wrap navbar-desktop-only">
+                <button className="navbar-profile" onClick={() => setProfileOpen(p => !p)} title="Account">
+                  <User className="w-4 h-4" />
+                </button>
+                {profileOpen && (
+                  <div className="navbar-profile-dropdown">
+                    <a href="/dashboard/profile" className="navbar-profile-item" onClick={() => setProfileOpen(false)}>Profile</a>
+                    <button className="navbar-profile-item navbar-profile-item--danger" onClick={() => { setProfileOpen(false); handleSignOut(); }}>Sign Out</button>
+                  </div>
+                )}
+              </div>
               <a href="/dashboard" className="navbar-btn-primary navbar-desktop-only">Dashboard</a>
-              <button className="navbar-btn-ghost navbar-desktop-only" onClick={handleSignOut}>Log Out</button>
 
               <div className="navbar-mobile-group">
                 <div className="navbar-credits-mobile">

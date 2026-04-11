@@ -14,12 +14,12 @@ export const metadata = {
 export default async function PricingPage() {
   const pricingSettings = await getPricingSettings();
   return (
-    <>
+    <div style={{ background: "#FDF6F2", minHeight: "100vh" }}>
       <Navbar />
       <Suspense>
         <PricingClient pricingSettings={pricingSettings} />
       </Suspense>
       <Footer />
-    </>
+    </div>
   );
 }

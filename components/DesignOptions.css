@@ -13,7 +13,7 @@
 /* ── DesignOptions Section (do-) ── */
 
 .do-section {
-  background: #f8f6f6;
+  background: linear-gradient(to bottom, #FDF6F2 0%, #ffffff 6%, #ffffff 94%, #FDF6F2 100%);
   padding: 3rem 0 0;
 }
 
@@ -48,11 +48,12 @@
 
 .do-heading {
   font-size: clamp(1.75rem, 5vw, 3.25rem);
-  font-weight: 900;
+  font-weight: 700;
   line-height: 0.9;
-  letter-spacing: -0.03em;
-  color: #0f172a;
+  letter-spacing: -0.02em;
+  color: #28030F;
   margin: 0;
+  text-transform: none;
 }
 
 .do-heading-accent {
@@ -64,9 +65,9 @@
 .do-header-desc {
   max-width: 18rem;
   font-size: 0.8rem;
-  color: #64748b;
+  color: #755760;
   line-height: 1.6;
-  font-weight: 300;
+  font-weight: 400;
   margin: 0;
 }
 
@@ -220,24 +221,11 @@
   color: #ffffff;
 }
 
-/* ── Text card ── */
-.do-text-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-bottom: 3px solid var(--brand-color);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-  padding: 1.5rem;
-}
-
-@media (min-width: 768px) {
-  .do-text-card { padding: 2rem; }
-}
-
 .do-item-title {
   font-size: 1.25rem;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: -0.02em;
-  color: #0f172a;
+  color: #28030F;
   margin: 0 0 0.625rem;
 }
 
@@ -247,43 +235,23 @@
 
 .do-item-desc {
   font-size: 0.8rem;
-  color: #64748b;
+  color: #755760;
   line-height: 1.65;
   margin: 0 0 1.25rem;
-  font-weight: 300;
+  font-weight: 400;
 }
 
-.do-item-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.625rem;
-  text-decoration: none;
-  color: #0f172a;
+/* ── Text card ── */
+.do-text-card {
+  background: #FDF6F2;
+  border: 1px solid rgba(117, 87, 96, 0.15);
+  border-bottom: 3px solid var(--brand-color);
+  box-shadow: 0 8px 32px rgba(40, 3, 15, 0.06);
+  padding: 1.5rem;
 }
 
-.do-item-link-text {
-  font-size: 0.5625rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-}
-
-.do-item-link-arrow {
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 9999px;
-  border: 1px solid var(--brand-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--brand-color);
-  transition: background 0.2s, color 0.2s;
-  flex-shrink: 0;
-}
-
-.do-item-link:hover .do-item-link-arrow {
-  background: var(--brand-color);
-  color: #ffffff;
+@media (min-width: 768px) {
+  .do-text-card { padding: 2rem; }
 }
 
 /* ── Layout 03: flex row ── */
@@ -305,6 +273,7 @@
 
 @media (min-width: 1024px) {
   .do-flex-img { width: 66%; }
+  .do-flex-text { margin-left: -3rem; position: relative; z-index: 2; }
 }
 
 .do-corner-thumb {
@@ -315,7 +284,7 @@
   height: 7rem;
   border-radius: 0.5rem;
   overflow: hidden;
-  border: 3px solid #f8f6f6;
+  border: 3px solid #ffffff;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
   display: none;
 }
@@ -351,21 +320,25 @@
 
 .do-cta-btn {
   display: inline-block;
-  background: #0f172a;
+  background: var(--brand-color);
   color: #ffffff;
-  padding: 0.625rem 1.5rem;
-  font-size: 0.5625rem;
-  font-weight: 900;
+  padding: 0.75rem 1.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   border: none;
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.2s;
   text-decoration: none;
+  box-shadow: 0 4px 14px rgba(235, 66, 3, 0.25);
 }
 
-.do-cta-btn:hover { background: var(--brand-color); }
+.do-cta-btn:hover {
+  background: #D13A02;
+  transform: translateY(-1px);
+}
 
 /* ── Layout 04: row-reverse ── */
 .do-flex-row-rev {
@@ -384,7 +357,7 @@
 
 @media (min-width: 1024px) {
   .do-flex-img-60 { width: 60%; }
-  .do-flex-text-40 { width: 40%; }
+  .do-flex-text-40 { width: 40%; margin-right: -3rem; position: relative; z-index: 2; }
 }
 
 .do-eyebrow-sm {
@@ -399,12 +372,11 @@
 
 .do-title-italic {
   font-size: clamp(1.5rem, 3.5vw, 2rem);
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  line-height: 1;
-  color: #0f172a;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #28030F;
   font-style: italic;
-  text-transform: uppercase;
   margin: 0 0 0.75rem;
 }
 
@@ -434,5 +406,5 @@
 .do-stat-label {
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #94a3b8;
+  color: #755760;
 }

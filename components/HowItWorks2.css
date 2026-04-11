@@ -1,13 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap');
 
 .hiw2-section *:not(.material-symbols-outlined) {
-  font-family: "Public Sans", sans-serif !important;
   box-sizing: border-box;
 }
 
 /* ── Section ── */
 .hiw2-section {
-  background: linear-gradient(160deg, #FCEFC3 0%, #fdf8ec 40%, #f8fafc 100%);
+  background: #FDF6F2;
   padding: 5rem 1.5rem 0;
 }
 
@@ -34,16 +33,17 @@
 
 .hiw2-title {
   font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 900;
-  color: #0f172a;
+  font-weight: 700;
+  color: #28030F;
   line-height: 1.1;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   margin: 0 0 1.25rem;
+  font-family: var(--font-playfair), Georgia, serif;
 }
 
 .hiw2-sub {
   font-size: 1.05rem;
-  color: #64748b;
+  color: #755760;
   line-height: 1.7;
   margin: 0;
 }
@@ -468,32 +468,5 @@
 .hiw2-pair-sketch,
 .hiw2-pair-result {
   position: relative;
-}
-
-/* Orange frame corners for sketch/input */
-.hiw2-pair-sketch::before {
-  content: "";
-  position: absolute;
-  inset: -12px;
-  border-radius: 1.6rem;
-  pointer-events: none;
-  z-index: 10;
-  background-repeat: no-repeat;
-  background-size:
-    38px 5px, 5px 38px,
-    38px 5px, 5px 38px,
-    38px 5px, 5px 38px,
-    38px 5px, 5px 38px;
-  background-position:
-    top left,    top left,
-    top right,   top right,
-    bottom left, bottom left,
-    bottom right, bottom right;
-  background-image:
-    linear-gradient(#EB4203, #EB4203), linear-gradient(#EB4203, #EB4203),
-    linear-gradient(#EB4203, #EB4203), linear-gradient(#EB4203, #EB4203),
-    linear-gradient(#EB4203, #EB4203), linear-gradient(#EB4203, #EB4203),
-    linear-gradient(#EB4203, #EB4203), linear-gradient(#EB4203, #EB4203);
-  filter: drop-shadow(0 2px 6px rgba(235,66,3,0.35));
 }
 

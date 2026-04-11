@@ -4,7 +4,7 @@
   position: relative;
   padding: 5rem 0 0;
   overflow: hidden;
-  background: #fcfcfd;
+  background: #FDF6F2;
 }
 
 /* Ambient blobs */
@@ -251,10 +251,7 @@
   overflow: hidden;
   border-radius: 2rem;
   aspect-ratio: 4/3;
-  border: 10px solid #ffffff;
-  box-shadow:
-    0 32px 64px -16px rgba(0,0,0,0.12),
-    0 0 0 1px rgba(209,213,219,0.5);
+  box-shadow: 0 32px 64px -16px rgba(0,0,0,0.12);
 }
 
 /* Floating glass card */
