@@ -28,14 +28,14 @@ const TestimonialCard = ({ profileImage, name, feedback, mainImage, beforeImage 
       <p className="text-xs font-medium" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>{feedback}</p>
     </div>
 
-    {/* Before image thumbnail — bottom right */}
-    <div className="absolute bottom-3 right-3" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.25rem" }}>
-      <span style={{ fontSize: "0.48rem", fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", background: "#EB4203", borderRadius: 9999, padding: "2px 7px" }}>Input</span>
+    {/* Before image thumbnail — bottom right corner */}
+    <div style={{ position: "absolute", bottom: 0, right: 0 }}>
+      <span style={{ position: "absolute", top: -14, right: 4, fontSize: "0.42rem", fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "#fff", background: "#EB4203", borderRadius: 9999, padding: "2px 6px", whiteSpace: "nowrap" }}>Input</span>
       <div style={{
-        width: 64, height: 56, borderRadius: "0.65rem",
-        background: "#FCEFC3",
-        border: "2px solid rgba(255,255,255,0.85)",
-        boxShadow: "0 4px 14px rgba(0,0,0,0.3)",
+        width: 52, height: 46,
+        borderRadius: "0.75rem 0 0.75rem 0",
+        border: "2px solid rgba(255,255,255,0.9)",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
         overflow: "hidden",
       }}>
         <img src={beforeImage} alt="Input" style={{ width: "100%", height: "100%", objectFit: "contain", background: "#fff", display: "block" }} />
