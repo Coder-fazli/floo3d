@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 const WetPaintButton = ({ children, className }: { className?: string; children: React.ReactNode }) => {
   return (
-    <button className={cn("group relative rounded-xl bg-[#EB4203] px-8 py-4 text-xl font-black text-white tracking-wide transition-colors hover:bg-[#D13A02] drop-shadow-lg", className)}>
+    <button className={cn("group relative rounded-xl bg-[#EB4203] px-8 py-4 text-xl font-black text-white tracking-wide transition-colors hover:bg-[#D13A02] drop-shadow-lg cursor-pointer", className)}>
       {children}
       <Drip left="10%" height={24} delay={0.5} />
       <Drip left="30%" height={20} delay={3} />
