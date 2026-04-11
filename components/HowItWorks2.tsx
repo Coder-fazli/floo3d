@@ -24,8 +24,8 @@ const cardRotations = ["-2deg", "3deg", "-1.5deg"];
 // Triple for seamless infinite loop
 const allPairs = [...pairs, ...pairs, ...pairs];
 
-const CARD_W = 480;
-const GAP = 40;
+const CARD_W = 340;
+const GAP = 32;
 const STEP = CARD_W + GAP;
 
 const stats = [
@@ -59,12 +59,13 @@ function ArrowBtn({ direction, onClick }: { direction: "left" | "right"; onClick
 }
 
 export default function HowItWorks2() {
-  const x = useMotionValue(-(pairs.length * STEP));
+  const OFFSET = typeof window !== "undefined" ? window.innerWidth * 0.08 : 120;
+  const x = useMotionValue(-(pairs.length * STEP) + OFFSET);
 
   const loop = (val: number) => {
     const setW = pairs.length * STEP;
-    if (val > -(setW - STEP / 2)) return val - setW;
-    if (val < -(setW * 2 - STEP / 2)) return val + setW;
+    if (val > -(setW / 2)) return val - setW;
+    if (val < -(setW * 2.5)) return val + setW;
     return val;
   };
 
@@ -78,9 +79,14 @@ export default function HowItWorks2() {
   const goNext = () => moveTo(x.get() - STEP);
   const goPrev = () => moveTo(x.get() + STEP);
 
-  const handleDragEnd = (_: unknown, info: { offset: { x: number } }) => {
-    const snapped = Math.round(x.get() / STEP) * STEP;
-    moveTo(snapped);
+  const handleDragEnd = (_: unknown, info: { velocity: { x: number }; offset: { x: number } }) => {
+    const velocity = info.velocity.x;
+    if (Math.abs(velocity) > 300) {
+      moveTo(x.get() + (velocity > 0 ? STEP : -STEP));
+    } else {
+      const snapped = Math.round(x.get() / STEP) * STEP;
+      moveTo(snapped);
+    }
   };
 
   return (
@@ -121,9 +127,9 @@ export default function HowItWorks2() {
       }}>
         <motion.div
           drag="x"
-          style={{ x, display: "flex", gap: `${GAP}px`, paddingTop: "2.5rem", paddingBottom: "2.5rem", paddingLeft: "8vw", width: "max-content", cursor: "grab" }}
-          dragConstraints={{ left: -(pairs.length * 2 * STEP), right: -(pairs.length * STEP - STEP) }}
-          dragElastic={0.05}
+          style={{ x, display: "flex", gap: `${GAP}px`, paddingTop: "2.5rem", paddingBottom: "2.5rem", width: "max-content", cursor: "grab", touchAction: "pan-y" }}
+          dragConstraints={{ left: -(allPairs.length * STEP), right: 0 }}
+          dragElastic={0.12}
           whileDrag={{ cursor: "grabbing" }}
           onDragEnd={handleDragEnd}
         >
@@ -133,7 +139,7 @@ export default function HowItWorks2() {
               style={{
                 position: "relative",
                 width: `${CARD_W}px`,
-                height: "340px",
+                height: "260px",
                 flexShrink: 0,
                 transform: `rotate(${cardRotations[i % cardRotations.length]})`,
               }}

@@ -70,7 +70,7 @@ export const BackgroundGradientGlow = ({ className, children, noBackground }: Ba
       {/* Fade to white at the bottom */}
       <div
         className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none"
-        style={{ height: "120px", background: "linear-gradient(to bottom, transparent, #ffffff)" }}
+        style={{ height: "60px", background: "linear-gradient(to bottom, transparent, #ffffff)" }}
       />
     </div>
   );

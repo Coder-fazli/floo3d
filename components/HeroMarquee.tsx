@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
 
 const images = [
@@ -28,11 +27,18 @@ export default function HeroMarquee() {
         WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
       }}
     >
-      <motion.div
-        className="flex gap-8 w-max"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 40, ease: "linear", repeat: Infinity }}
-      >
+      <style>{`
+        @keyframes marquee-scroll {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .marquee-track {
+          animation: marquee-scroll 40s linear infinite;
+          will-change: transform;
+        }
+      `}</style>
+
+      <div className="marquee-track flex gap-8 w-max">
         {allImages.map((img, i) => (
           <div
             key={i}
@@ -51,8 +57,6 @@ export default function HeroMarquee() {
               sizes="280px"
               className="object-cover"
             />
-
-            {/* Style badge */}
             <div
               className="absolute bottom-4 left-4"
               style={{
@@ -70,7 +74,7 @@ export default function HeroMarquee() {
             </div>
           </div>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }
