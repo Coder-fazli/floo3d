@@ -55,6 +55,7 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride,
   const { isSignedIn } = useUser();
   const { openSignUp } = useClerk();
   const [sliderPos, setSliderPos] = useState(40);
+  const sliderPosRef = useRef(40);
   const rafRef = useRef<number | null>(null);
   const isDragging = useRef(false);
 
@@ -73,8 +74,8 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride,
       t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
     const loop = (now: number) => {
-      if (isDragging.current) { segStart = now; rafRef.current = requestAnimationFrame(loop); return; }
-      if (segStart === 0) segStart = now;
+      if (isDragging.current) { segStart = 0; rafRef.current = requestAnimationFrame(loop); return; }
+      if (segStart === 0) { segStart = now; fromPos = sliderPosRef.current; toPos = pickNext(fromPos); segDuration = 1200; }
       const progress = Math.min((now - segStart) / segDuration, 1);
       setSliderPos(Math.round(fromPos + ease(progress) * (toPos - fromPos)));
       if (progress >= 1) {
@@ -86,7 +87,7 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride,
       rafRef.current = requestAnimationFrame(loop);
     };
 
-    const t = setTimeout(() => { segStart = 0; rafRef.current = requestAnimationFrame(loop); }, 400);
+    const t = setTimeout(() => { segStart = 0; rafRef.current = requestAnimationFrame(loop); }, 1600);
     return () => { clearTimeout(t); if (rafRef.current) cancelAnimationFrame(rafRef.current); };
   }, []);
 
@@ -121,7 +122,7 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride,
 
           {/* Sub */}
           <p className="hph-sub">
-            The best AI app for interior design, floor plan rendering, virtual staging, and AI landscape design — free to try, no login required.
+            Upload a photo → get a fully redesigned room in seconds. No software, no designer, no waiting.
           </p>
 
           {/* CTAs */}
@@ -134,35 +135,23 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride,
           </div>
 
           {/* Trusted users */}
-          <div style={{ display: "flex", alignItems: "center", gap: "0.875rem", marginTop: "0.25rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginTop: "0.5rem" }}>
             <div style={{ display: "flex" }}>
               {["/avatars/female1.jpg", "/avatars/female3.jpg", "/avatars/av2.jpg", "/avatars/female2.jpg", "/avatars/av5.jpg"].map((src, i) => (
                 <div key={i} style={{
-                  width: 38, height: 38, borderRadius: "9999px", overflow: "hidden",
-                  border: "2px solid #ffffff",
-                  marginLeft: i === 0 ? 0 : -10,
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.12)",
+                  width: 42, height: 42, borderRadius: "9999px", overflow: "hidden",
+                  border: "2.5px solid #ffffff",
+                  marginLeft: i === 0 ? 0 : -6,
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
                   position: "relative", zIndex: 5 - i,
                 }}>
-                  <Image src={src} alt="user" width={38} height={38} style={{ objectFit: "cover", width: "100%", height: "100%" }} />
+                  <Image src={src} alt="user" width={42} height={42} style={{ objectFit: "cover", width: "100%", height: "100%" }} />
                 </div>
               ))}
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem" }}>
-              <div style={{ display: "flex", gap: "0.2rem" }}>
-                {[1,2,3,4,5].map((s) => (
-                  <Star key={s} size={13} fill="#ec5b13" stroke="none" />
-                ))}
-              </div>
-              <p style={{ fontSize: "0.78rem", color: "#475569", margin: 0, fontWeight: 500 }}>
-                Trusted by{" "}
-                <CountUp value={2500} duration={2} separator="," suffix="+" colorScheme="gradient" className="font-bold" />
-                {" "}architects &{" "}
-                <a href="/#reviews" style={{ color: "#ec5b13", fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "2px" }}>
-                  happy users
-                </a>
-              </p>
-            </div>
+            <p style={{ fontSize: "0.95rem", color: "#ffffff", margin: 0, fontWeight: 600, textShadow: "0 1px 6px rgba(0,0,0,0.4)" }}>
+              Trusted by <strong style={{ fontWeight: 900, color: "#EB4203" }}>2,500+</strong> architects &amp; designers
+            </p>
           </div>
         </div>
 
@@ -173,25 +162,16 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride,
           <div className="hph-slider-container">
             <ReactCompareSlider
               position={sliderPos}
-              onPositionChange={setSliderPos}
+              onPositionChange={(p) => { setSliderPos(p); sliderPosRef.current = p; }}
               onPointerDown={() => { isDragging.current = true; }}
               onPointerUp={() => { isDragging.current = false; }}
               onPointerLeave={() => { isDragging.current = false; }}
-              onMouseEnter={() => { isDragging.current = true; }}
-              onMouseLeave={() => { isDragging.current = false; }}
+              onPointerCancel={() => { isDragging.current = false; }}
               style={{ width: "100%", height: "100%" }}
               handle={
                 <ReactCompareSliderHandle
-                  buttonStyle={{
-                    background: "rgba(255,255,255,0.9)",
-                    backdropFilter: "blur(12px)",
-                    border: "1px solid #ffffff",
-                    boxShadow: "0 10px 25px -5px rgba(0,0,0,0.15)",
-                    color: "#ec5b13",
-                    width: "3.5rem",
-                    height: "3.5rem",
-                  }}
-                  linesStyle={{ background: "rgba(255,255,255,0.3)", width: 1 }}
+                  buttonStyle={{ display: "none" }}
+                  linesStyle={{ background: "rgba(255,255,255,0.2)", width: 1 }}
                 />
               }
               itemOne={<ReactCompareSliderImage src={heroBefore} alt="Before" style={{ objectFit: "cover" }} />}
@@ -199,11 +179,11 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride,
             />
 
             {/* Labels */}
-            <span style={{ position:"absolute", top:24, left:24, zIndex:20, padding:"8px 16px", background:"rgba(255,255,255,0.15)", color:"#fff", fontWeight:700, fontSize:"0.65rem", letterSpacing:"0.15em", borderRadius:100, backdropFilter:"blur(20px)", border:"1px solid rgba(255,255,255,0.2)", pointerEvents:"none", textTransform:"uppercase" }}>
-              Before: Conceptual
+            <span style={{ position:"absolute", top:12, left:12, zIndex:20, padding:"5px 10px", background:"rgba(255,255,255,0.15)", color:"#fff", fontWeight:700, fontSize:"0.55rem", letterSpacing:"0.12em", borderRadius:100, backdropFilter:"blur(20px)", border:"1px solid rgba(255,255,255,0.2)", pointerEvents:"none", textTransform:"uppercase", whiteSpace:"nowrap" }}>
+              Before
             </span>
-            <span style={{ position:"absolute", top:24, right:24, zIndex:20, padding:"8px 16px", background:"rgba(255,255,255,0.15)", color:"#fff", fontWeight:700, fontSize:"0.65rem", letterSpacing:"0.15em", borderRadius:100, backdropFilter:"blur(20px)", border:"1px solid rgba(255,255,255,0.2)", pointerEvents:"none", textTransform:"uppercase" }}>
-              After: Realistic
+            <span style={{ position:"absolute", top:12, right:12, zIndex:20, padding:"5px 10px", background:"rgba(255,255,255,0.15)", color:"#fff", fontWeight:700, fontSize:"0.55rem", letterSpacing:"0.12em", borderRadius:100, backdropFilter:"blur(20px)", border:"1px solid rgba(255,255,255,0.2)", pointerEvents:"none", textTransform:"uppercase", whiteSpace:"nowrap" }}>
+              After
             </span>
           </div>
 

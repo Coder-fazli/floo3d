@@ -1,181 +1,102 @@
 "use client";
 
-import "./RecentProjects.css";
-import Image from "next/image";
+import * as React from "react";
 import { motion } from "framer-motion";
+import { MasonryGrid } from "@/components/ui/image-testimonial-grid";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] as const, delay: i * 0.15 },
-  }),
-};
-
-const BADGE_ICONS: Record<string, string> = {
-  "Real Result": "auto_awesome",
-  "Epic Result": "verified",
-  "Trending Now": "trending_up",
-};
-
-const PROJECTS = [
-  {
-    id: 1,
-    user: "Emma Wilson",
-    role: "Pro Architect",
-    avatar: "/avatars/female1.jpg",
-    avatarInitials: null,
-    resultImage: "/real-3d-render.jpg",
-    thumbImage: "/real-2d-plan.jpg",
-    peekIcon: "description",
-    peekLabel: "Peek at Plan",
-    peekArrow: false,
-    title: "London Loft Conversion",
-    badge: "Real Result",
-    likes: "1,204",
-    caption: "This transformation is insane! From a dusty warehouse plan to a premium high-end loft.",
-    tags: "#MyHomeStylerMagic #InteriorDesign",
-    time: "2 hours ago",
-  },
-  {
-    id: 2,
-    user: "Sarah Chen",
-    role: "Rising Creator",
-    avatar: "/avatars/female2.jpg",
-    avatarInitials: null,
-    resultImage: "/hero-after.jpg",
-    thumbImage: "/hero-before.jpg",
-    peekIcon: "map",
-    peekLabel: "View Source Plan",
-    peekArrow: true,
-    title: "Coastal Villa Masterpiece",
-    badge: "Epic Result",
-    likes: "892",
-    caption: "Uploaded my hand-drawn sketch and got a photorealistic 3D render in seconds. Mind blown.",
-    tags: "#CoastalDesign #MyHomeStyler",
-    time: "4 hours ago",
-  },
-  {
-    id: 3,
-    user: "Amara Okafor",
-    role: "Real Estate Visionary",
-    avatar: "/avatars/female3.jpg",
-    avatarInitials: null,
-    resultImage: "/card-outdoor-after.avif",
-    thumbImage: "/hero-before.jpg",
-    peekIcon: "architecture",
-    peekLabel: "Blueprint Snapshot",
-    peekArrow: false,
-    title: "Skyline Office Lounge",
-    badge: "Trending Now",
-    likes: "2,451",
-    caption: "Our entire sales team now uses MyHomeStyler to pitch properties. Conversion rate is through the roof.",
-    tags: "#RealEstate #3DRender",
-    time: "1 day ago",
-  },
+const testimonials = [
+  { profileImage: "/avatars/female1.jpg", name: "Emma Wilson",   feedback: "London Loft Conversion",       mainImage: "/real-3d-render.jpg",      beforeImage: "/real-2d-plan.jpg" },
+  { profileImage: "/avatars/female2.jpg", name: "Sarah Chen",    feedback: "Coastal Villa Masterpiece",    mainImage: "/hero-after.jpg",           beforeImage: "/hero-before.jpg" },
+  { profileImage: "/avatars/female3.jpg", name: "Amara Okafor",  feedback: "Skyline Office Lounge",        mainImage: "/card-outdoor-after.webp",  beforeImage: "/card-outdoor-before.webp" },
+  { profileImage: "/avatars/av2.jpg",     name: "James Patel",   feedback: "Modern Living Room Redesign",  mainImage: "/hiw-living.jpg",           beforeImage: "/hiw-sketch.jpg" },
+  { profileImage: "/avatars/av5.jpg",     name: "Lucas Müller",  feedback: "Dark Luxury 3D Render",        mainImage: "/hiw-dark3d.jpg",           beforeImage: "/hiw-sketch2.jpg" },
+  { profileImage: "/avatars/female1.jpg", name: "Priya Sharma",  feedback: "Virtual Staged Bedroom",       mainImage: "/card-room-after.webp",     beforeImage: "/card-room-before.webp" },
+  { profileImage: "/avatars/av2.jpg",     name: "Omar Tariq",    feedback: "Minimalist Kitchen Render",    mainImage: "/style-minimalist.jpg",     beforeImage: "/hiw-floorplan.jpg" },
+  { profileImage: "/avatars/female3.jpg", name: "Nina Rossi",    feedback: "Scandinavian Living Space",    mainImage: "/style-scandinavian.jpg",   beforeImage: "/fp-before-1.png" },
 ];
 
+const TestimonialCard = ({ profileImage, name, feedback, mainImage, beforeImage }: (typeof testimonials)[0]) => (
+  <div className="relative rounded-2xl overflow-hidden group transition-transform duration-300 ease-in-out hover:scale-[1.02]">
+    <img src={mainImage} alt={feedback} className="w-full h-auto object-cover" />
+
+    {/* Top gradient + user info */}
+    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-transparent" />
+    <div className="absolute top-0 left-0 p-4 text-white">
+      <div className="flex items-center gap-3 mb-2">
+        <img src={profileImage} className="w-8 h-8 rounded-full border-2 border-white/80 object-cover" alt={name} />
+        <span className="font-semibold text-sm drop-shadow-md">{name}</span>
+      </div>
+      <p className="text-sm font-medium leading-tight drop-shadow-md">{feedback}</p>
+    </div>
+
+    {/* Before image thumbnail — bottom right */}
+    <div className="absolute bottom-3 right-3" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.25rem" }}>
+      <span style={{ fontSize: "0.48rem", fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.75)", background: "#EB4203", borderRadius: 9999, padding: "2px 7px" }}>Input</span>
+      <div style={{
+        width: 64, height: 56, borderRadius: "0.65rem",
+        background: "#FCEFC3",
+        border: "2px solid rgba(255,255,255,0.85)",
+        boxShadow: "0 4px 14px rgba(0,0,0,0.3)",
+        overflow: "hidden",
+      }}>
+        <img src={beforeImage} alt="Input" style={{ width: "100%", height: "100%", objectFit: "contain", background: "#fff", display: "block" }} />
+      </div>
+    </div>
+  </div>
+);
+
 export default function RecentProjects() {
+  const [columns, setColumns] = React.useState(4);
+
+  React.useEffect(() => {
+    const getColumns = (w: number) => {
+      if (w < 640) return 1;
+      if (w < 1024) return 2;
+      if (w < 1280) return 3;
+      return 4;
+    };
+    const handle = () => setColumns(getColumns(window.innerWidth));
+    handle();
+    window.addEventListener("resize", handle);
+    return () => window.removeEventListener("resize", handle);
+  }, []);
+
   return (
-    <>
-      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
-      <section className="rp-section" id="gallery">
-        <div className="rp-inner">
-          <motion.div
-            className="rp-header"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={fadeUp}
-            custom={0}
-          >
-            <p className="rp-label">Community Showcase</p>
-            <h2 className="rp-title">Real Results from Real Users</h2>
-            <p className="rp-sub">See how architects, interior designers, and homeowners use the best AI interior design tools — from virtual staging AI to free AI landscape design.</p>
-          </motion.div>
+    <section className="w-full py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{ background: "linear-gradient(160deg, #FCEFC3 0%, #fdf8ec 40%, #f8fafc 100%)" }} id="reviews">
+      {/* Dot grid */}
+      <div className="absolute inset-0 z-0 pointer-events-none" style={{
+        backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px)",
+        backgroundSize: "22px 22px",
+        WebkitMaskImage: "radial-gradient(70vw circle at 50% 50%, white, transparent)",
+        maskImage: "radial-gradient(70vw circle at 50% 50%, white, transparent)",
+      }} />
+      <div className="max-w-7xl mx-auto relative z-10">
 
-          <div className="rp-grid">
-            {PROJECTS.map((p, i) => (
-              <motion.div
-                key={p.id}
-                className="rp-card"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.15 }}
-                variants={fadeUp}
-                custom={i + 1}
-              >
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.7 }}
+          className="text-center mb-10"
+        >
+          <p className="text-xs font-black tracking-widest uppercase text-[#00CEC8] mb-3">
+            Community Showcase
+          </p>
+          <h2 className="text-4xl md:text-5xl font-black text-foreground tracking-tight mb-4">
+            Real Results from Real Users
+          </h2>
+          <p className="text-muted-foreground text-base leading-relaxed max-w-2xl mx-auto">
+            See how architects, interior designers, and homeowners use our AI tools — from virtual staging to AI landscape design.
+          </p>
+        </motion.div>
 
-                {/* User header */}
-                <div className="rp-card-head">
-                  <div className="rp-user">
-                    <div className="rp-avatar-wrap">
-                      {p.avatar ? (
-                        <Image src={p.avatar} alt={p.user} className="rp-avatar" width={36} height={36} />
-                      ) : (
-                        <div className="rp-avatar-initials">{p.avatarInitials}</div>
-                      )}
-                    </div>
-                    <div>
-                      <p className="rp-user-name">{p.user}</p>
-                      <p className="rp-user-role">{p.role}</p>
-                    </div>
-                  </div>
-                  <span className="material-symbols-outlined rp-more">more_horiz</span>
-                </div>
+        <MasonryGrid columns={columns} gap={4}>
+          {testimonials.map((card, i) => (
+            <TestimonialCard key={i} {...card} />
+          ))}
+        </MasonryGrid>
 
-                {/* Image */}
-                <div className="rp-img-wrap">
-                  <Image src={p.resultImage} alt={p.title} className="rp-img" width={340} height={340} unoptimized={p.resultImage.endsWith(".avif")} />
-
-                  {/* Badge */}
-                  <div className="rp-badge">
-                    <span className="material-symbols-outlined rp-badge-icon">{BADGE_ICONS[p.badge]}</span>
-                    {p.badge}
-                  </div>
-
-                  {/* Plan peek */}
-                  <div className="rp-peek">
-                    <div className="rp-peek-card">
-                      <div className="rp-peek-thumb-wrap">
-                        <Image src={p.thumbImage} alt="plan" className="rp-peek-thumb" width={56} height={56} />
-                        <div className="rp-peek-icon-wrap">
-                          <span className="material-symbols-outlined rp-peek-icon">{p.peekIcon}</span>
-                        </div>
-                      </div>
-                      <div className="rp-peek-info">
-                        <p className="rp-peek-label">{p.peekLabel}</p>
-                        <p className="rp-peek-title">{p.title}</p>
-                      </div>
-                      {p.peekArrow && (
-                        <span className="material-symbols-outlined rp-peek-arrow">arrow_forward_ios</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Footer */}
-                <div className="rp-card-footer">
-                  <div className="rp-actions">
-                    <span className="material-symbols-outlined rp-icon rp-icon-like">favorite</span>
-                    <span className="material-symbols-outlined rp-icon">chat_bubble</span>
-                    <span className="material-symbols-outlined rp-icon">send</span>
-                    <span className="material-symbols-outlined rp-icon rp-icon-right">bookmark</span>
-                  </div>
-                  <p className="rp-likes">{p.likes} Likes</p>
-                  <p className="rp-caption">
-                    <span className="rp-caption-user">{p.user.toLowerCase().replace(" ", "_")}</span>{" "}
-                    {p.caption} <span className="rp-tags">{p.tags}</span>
-                  </p>
-                  <p className="rp-time">{p.time}</p>
-                </div>
-
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

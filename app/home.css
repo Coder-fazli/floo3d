@@ -33,19 +33,19 @@
   z-index: 40;
   pointer-events: none;
   background-image:
-    linear-gradient(#FCEFC3, #FCEFC3),
-    linear-gradient(#FCEFC3, #FCEFC3),
-    linear-gradient(#FCEFC3, #FCEFC3),
-    linear-gradient(#FCEFC3, #FCEFC3),
-    linear-gradient(#FCEFC3, #FCEFC3),
-    linear-gradient(#FCEFC3, #FCEFC3),
-    linear-gradient(#FCEFC3, #FCEFC3),
-    linear-gradient(#FCEFC3, #FCEFC3);
+    linear-gradient(#EB4203, #EB4203),
+    linear-gradient(#EB4203, #EB4203),
+    linear-gradient(#EB4203, #EB4203),
+    linear-gradient(#EB4203, #EB4203),
+    linear-gradient(#EB4203, #EB4203),
+    linear-gradient(#EB4203, #EB4203),
+    linear-gradient(#EB4203, #EB4203),
+    linear-gradient(#EB4203, #EB4203);
   background-size:
-    36px 3px, 3px 36px,
-    36px 3px, 3px 36px,
-    36px 3px, 3px 36px,
-    36px 3px, 3px 36px;
+    56px 5px, 5px 56px,
+    56px 5px, 5px 56px,
+    56px 5px, 5px 56px,
+    56px 5px, 5px 56px;
   background-position:
     top left,    top left,
     top right,   top right,
@@ -119,14 +119,17 @@
   background: #D13A02 !important;
 }
 .hph-btn-secondary {
-  background: rgba(255,255,255,0.15) !important;
-  border-color: rgba(255,255,255,0.35) !important;
-  color: #ffffff !important;
-  padding: 0.6rem 1.25rem !important;
-  font-size: 0.85rem !important;
+  background: #FCEFC3 !important;
+  border: none !important;
+  color: #EB4203 !important;
+  font-weight: 800 !important;
+  padding: 1.1rem 2.25rem !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 8px 20px -4px rgba(252,239,195,0.3) !important;
 }
 .hph-btn-secondary:hover {
-  background: rgba(255,255,255,0.25) !important;
+  background: #fae8a8 !important;
+  transform: translateY(-2px) !important;
 }
 
 /* ── CTA buttons everywhere ── */
@@ -137,6 +140,40 @@
 .rp-badge {
   background: #EB4203 !important;
   border-color: #EB4203 !important;
+}
+
+/* ── Float card text orange ── */
+.hph-float-label {
+  color: #EB4203 !important;
+}
+.hph-float-sub {
+  color: #EB4203 !important;
+}
+.hph-float-icon {
+  background: rgba(235,66,3,0.1) !important;
+}
+.hph-float-icon svg {
+  stroke: #EB4203 !important;
+}
+
+/* ── Mobile navbar icon always visible ── */
+.navbar-icon-btn {
+  color: #ffffff !important;
+  background: rgba(255,255,255,0.15) !important;
+}
+.navbar-icon-btn:hover {
+  background: rgba(255,255,255,0.25) !important;
+}
+.navbar-credits-mobile {
+  color: #ffffff !important;
+}
+
+/* ── Float card: center bottom ── */
+.hph-float-card {
+  left: 50% !important;
+  right: auto !important;
+  bottom: -5rem !important;
+  transform: translateX(-50%) !important;
 }
 
 /* ── Hide feature cards (replaced by marquee) ── */

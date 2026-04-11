@@ -2,6 +2,7 @@ import "./home.css";
 import MainHero from "@/components/MainHero";
 import DesignOptions from "@/components/DesignOptions";
 import HowItWorks2 from "@/components/HowItWorks2";
+import StatsBar from "@/components/StatsBar";
 import Blog from "@/components/Blog";
 import RecentProjects from "@/components/RecentProjects";
 import Footer from "@/components/Footer";
@@ -97,6 +98,7 @@ export default async function Home() {
       <DesignOptions transformImages={homeImages.transformImages} />
 
       <HowItWorks2 />
+      <StatsBar />
 
       <RecentProjects />
 
