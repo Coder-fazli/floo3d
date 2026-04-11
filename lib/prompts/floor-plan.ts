@@ -6,10 +6,11 @@ STRICT REQUIREMENTS — DO NOT VIOLATE:
 2) GEOMETRY MUST MATCH: Walls, rooms, doors, and windows must follow the exact lines and positions in the plan. Do not shift or resize.
 3) CLEAN, REALISTIC OUTPUT: Crisp edges, balanced lighting, and realistic materials. No sketch or hand-drawn look.
 4) NO EXTRA CONTENT: Do not add rooms, furniture, or objects that are not clearly indicated by the plan.
+5) IGNORE INPUT COLOURS COMPLETELY: The input is a 2D floor plan and may be blue, black, white or any colour. Do not carry any colour from the input into the output. All colours in the output must come exclusively from the design style defined below — not from the input image.
 
 STRUCTURE & DETAILS:
 - Walls: Extrude precisely from the plan lines. Consistent wall height and thickness.
-- Doors: Convert door swing arcs into open doors, aligned to the plan.
+- Doors: In top-down view, convert door swing arcs into open doors aligned to the plan. In isometric, exterior or cross-section views, render doors as closed — do not show swing arcs.
 - Windows: Convert thin perimeter lines into realistic glass windows.
 
 FURNITURE & ROOM MAPPING (only where icons/fixtures are clearly shown):
@@ -29,7 +30,7 @@ STYLE & LIGHTING:
 `.trim();
 
 const floorPlanStyles: Record<string, string> = {
-  Modern: "large-format light grey or white polished concrete or stone floors, white smooth walls, sleek low-profile furniture with clean straight lines, recessed ceiling lighting, open-plan feel, neutral palette of white/grey/black with one warm accent",
+  Modern: "large-format light grey or white polished concrete or stone tile floors, pure white smooth walls, sleek low-profile furniture with clean straight lines and flat surfaces — no carvings, no curves, no patterns, recessed ceiling lighting only, open-plan feel, strict neutral palette of white, grey and black only — no warm wood tones, no plants, no organic textures, no decorative objects",
   Scandinavian: "light natural oak or pale birch wood floors, white walls, cosy wool rugs in muted tones, simple functional furniture with tapered legs, warm pendant lighting, soft textiles — linen cushions and throws, plants, understated and uncluttered",
   Industrial: "polished or raw concrete floors, exposed red brick or dark grey walls, black steel window frames, dark metal-frame furniture with reclaimed wood surfaces, Edison bulb pendant lighting, leather or canvas upholstery, raw and urban atmosphere",
   Rustic: "wide-plank reclaimed oak or pine wood floors, exposed stone or whitewashed walls, heavy wooden ceiling beams, chunky farmhouse furniture in natural wood, wrought-iron fixtures, earthy warm tones — terracotta, cream, brown, cosy and lived-in feel",

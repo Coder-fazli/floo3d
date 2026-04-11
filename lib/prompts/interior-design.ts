@@ -3,12 +3,13 @@ import { StyleDef } from "./types";
 const interiorStyles: Record<string, StyleDef> = {
   Modern: {
     rules: `
-- FURNITURE: Replace or adapt ornate and heavy pieces so they appear as clean straight-lined furniture — no curves, no carvings, no patterns. Keep the furniture count low.
-- SURFACES: Replace or smooth rough and textured surfaces so floors and walls feel refined and flat.
-- CLUTTER: Remove the least important decorative objects first. Keep only 1–2 functional items visible on surfaces while keeping the room believable.
-- LIGHTING: Replace or adapt existing fixtures so they appear as simple geometric or recessed lights.
-- COLOUR: Shift the overall palette toward neutrals — whites, greys, warm beige. Avoid bold colours.`,
-    feel: "Open, clean and effortlessly refined. Not cold — just intentional.",
+- FURNITURE: Replace or adapt all ornate, carved or patterned pieces so they appear as clean straight-lined furniture — flat surfaces, no curves, no decorative legs, no visible patterns. Maximum 3 furniture pieces in the frame. No extra chairs unless the room is clearly a dining room.
+- SURFACES: Adapt the existing floor — do not replace it with a completely different material. If the floor is wood, keep it wood but make it appear cleaner and lighter. If the floor is tile, keep it tile but make it appear more uniform. Walls must be flat, matte and one solid neutral colour — no wallpaper, no texture, no panelling.
+- CLUTTER: Remove all decorative objects entirely. No plants, no vases, no rugs with patterns, no wall art unless it is a single frameless panel. Maximum 1 object per surface, only if it is functional.
+- LIGHTING: Replace or adapt fixtures so they appear as recessed ceiling spots or a single flat geometric pendant. No visible bulbs, no ornate shades.
+- COLOUR: Palette must be white, off-white, cool grey or warm greige only. No warm wood tones, no earth tones, no colour accents. Curtains must be plain and flat — no draping, no patterns.
+- FORBIDDEN: No plants. No organic textures. No linen or woven fabrics. No visible decorative items. Nothing that could be mistaken for Scandinavian or Rustic.`,
+    feel: "Precise, flat and intentional — a room that has been edited down, not decorated up.",
   },
 
   Scandinavian: {
@@ -53,12 +54,13 @@ const interiorStyles: Record<string, StyleDef> = {
 
   Minimalist: {
     rules: `
-- FURNITURE: Reduce furniture to the minimum required for the room's function. Keep only 1–2 essential pieces. Remove the least important items first while keeping the room believable and functional.
-- OBJECTS: Strongly reduce decorative objects. Remove the least important items first. Surfaces should be largely bare — a single object at most per surface.
-- SURFACES: Clean and simplify every surface. Walls should be calm and unadorned. Floors should appear clear and seamless.
-- LIGHTING: Replace or adapt lighting so it appears as one clean overhead light source. Reduce secondary lamps where possible.
-- COLOUR: Reduce the palette to white, off-white and one neutral tone. Avoid patterns.`,
-    feel: "A deliberate act of removal — calm, silent and completely at peace.",
+- FURNITURE: Keep only the single most essential piece of furniture for the room's function — one sofa, or one bed, or one table. Remove everything else. No side tables, no extra chairs, no shelving unless built-in.
+- OBJECTS: Zero decorative objects. No plants, no vases, no candles, no art, no cushions with patterns, no rugs. Surfaces must be completely bare.
+- SURFACES: Adapt the existing floor — do not replace it with a completely different material. Make it appear as clean and seamless as possible. Walls must be a single flat white or off-white — no texture, no panelling, no variation.
+- LIGHTING: One light source only — a recessed ceiling light or a single flush ceiling fixture. Remove all lamps, sconces and secondary fixtures.
+- COLOUR: White and off-white only. One accent neutral (light grey or pale beige) is permitted for a single upholstered surface. Nothing else. No warm tones, no wood, no patterns of any kind.
+- FORBIDDEN: No plants. No rugs. No cushions. No decorative objects of any kind. No curtain patterns. Curtains if present must be plain white or off-white and flat against the wall.`,
+    feel: "Radical emptiness — every object that remains had to earn its place. The room breathes because almost nothing is in it.",
   },
 };
 
@@ -69,7 +71,8 @@ export function buildInteriorDesignPrompt(style: string, roomType?: string): str
   };
 
   return `
-USE THE PROVIDED PHOTO AS THE EXACT STRUCTURAL BASE.
+USE THE PROVIDED PHOTO AS THE EXACT STRUCTU
+RAL BASE.
 
 GLOBAL RULES — DO NOT VIOLATE UNDER ANY CIRCUMSTANCES:
 1) Keep the exact same camera angle and perspective — do not rotate, zoom or shift the viewpoint.

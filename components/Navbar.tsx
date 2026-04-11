@@ -5,7 +5,22 @@ import Image from "next/image";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { getUserInfo } from "@/lib/actions";
+import {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuLink,
+} from "@/components/ui/navigation-menu";
 import "./Navbar.css";
+
+const NAV_LINKS = [
+  { href: "#gallery",  label: "Gallery"  },
+  { href: "#magic",    label: "Magic"    },
+  { href: "#reviews",  label: "Love"     },
+  { href: "#journal",  label: "Journal"  },
+  { href: "#answers",  label: "Answers"  },
+  { href: "/pricing",  label: "Pricing"  },
+];
 
 const Navbar = () => {
   const { isSignedIn, user } = useUser();
@@ -18,7 +33,6 @@ const Navbar = () => {
     getUserInfo(user.id).then(d => setCredits(d.credits));
   }, [user]);
 
-  // Poll credits after successful payment
   useEffect(() => {
     if (!user || !window.location.search.includes("success=1")) return;
     let attempts = 0;
@@ -27,10 +41,7 @@ const Navbar = () => {
       attempts++;
       const d = await getUserInfo(user.id);
       if (lastCredits === null) { lastCredits = d.credits; }
-      if (d.credits > (lastCredits ?? 0)) {
-        setCredits(d.credits);
-        clearInterval(interval);
-      }
+      if (d.credits > (lastCredits ?? 0)) { setCredits(d.credits); clearInterval(interval); }
       if (attempts >= 5) clearInterval(interval);
     }, 2000);
     return () => clearInterval(interval);
@@ -52,21 +63,26 @@ const Navbar = () => {
           <span className="navbar-name">MyHome<span className="navbar-name-accent">Styler</span></span>
         </a>
 
-        {/* Links */}
-        <ul className="navbar-links">
-          <li><a href="#gallery">Gallery</a></li>
-          <li><a href="#magic">Magic</a></li>
-          <li><a href="#reviews">Love</a></li>
-          <li><a href="#journal">Journal</a></li>
-          <li><a href="#answers">Answers</a></li>
-          <li><a href="/pricing">Pricing</a></li>
-        </ul>
+        {/* Desktop nav using NavigationMenu */}
+        <NavigationMenu className="navbar-desktop-only">
+          <NavigationMenuList className="gap-0">
+            {NAV_LINKS.map(({ href, label }) => (
+              <NavigationMenuItem key={href}>
+                <NavigationMenuLink
+                  href={href}
+                  className="navbar-nav-link"
+                >
+                  {label}
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            ))}
+          </NavigationMenuList>
+        </NavigationMenu>
 
         {/* Actions */}
         <div className="navbar-actions">
           {isSignedIn ? (
             <>
-              {/* Desktop only */}
               <div className="navbar-credits navbar-desktop-only">
                 <Zap className="credits-icon" />
                 <span>{credits ?? 4}</span>
@@ -77,7 +93,6 @@ const Navbar = () => {
               <a href="/dashboard" className="navbar-btn-primary navbar-desktop-only">Dashboard</a>
               <button className="navbar-btn-ghost navbar-desktop-only" onClick={handleSignOut}>Log Out</button>
 
-              {/* Mobile only: credits + dashboard icon */}
               <div className="navbar-mobile-group">
                 <div className="navbar-credits-mobile">
                   <Zap size={13} />
@@ -107,11 +122,9 @@ const Navbar = () => {
       {menuOpen && (
         <div className="navbar-mobile">
           <ul>
-            <li><a href="#gallery" onClick={() => setMenuOpen(false)}>Gallery</a></li>
-            <li><a href="#magic" onClick={() => setMenuOpen(false)}>Magic</a></li>
-            <li><a href="#reviews" onClick={() => setMenuOpen(false)}>Love</a></li>
-            <li><a href="#journal" onClick={() => setMenuOpen(false)}>Journal</a></li>
-            <li><a href="#answers" onClick={() => setMenuOpen(false)}>Answers</a></li>
+            {NAV_LINKS.map(({ href, label }) => (
+              <li key={href}><a href={href} onClick={() => setMenuOpen(false)}>{label}</a></li>
+            ))}
             {isSignedIn ? (
               <li><a href="/dashboard/profile" onClick={() => setMenuOpen(false)}>Profile</a></li>
             ) : (

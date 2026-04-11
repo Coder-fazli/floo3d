@@ -74,6 +74,23 @@
     color: var(--brand-color);
 }
 
+/* NavigationMenu link style */
+.navbar-nav-link {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #475569;
+    text-decoration: none;
+    padding: 0.4rem 0.85rem;
+    border-radius: 0.5rem;
+    transition: color 0.15s, background 0.15s;
+    background: transparent !important;
+}
+
+.navbar-nav-link:hover {
+    color: var(--brand-color) !important;
+    background: rgba(0, 206, 200, 0.07) !important;
+}
+
 /* Actions */
 .navbar-actions {
     display: flex;
