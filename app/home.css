@@ -192,13 +192,23 @@
     padding: 0.75rem 1.5rem !important;
     font-size: 0.85rem !important;
   }
+  .hph-trusted-row img {
+    width: 28px !important;
+    height: 28px !important;
+  }
+  .hph-trusted-row p {
+    font-size: 0.72rem !important;
+  }
   .hph-heading {
-    font-size: 2rem !important;
+    font-size: 2.2rem !important;
     margin-bottom: 0.5rem !important;
   }
   .hph-sub {
     font-size: 0.9rem !important;
     margin-bottom: 1rem !important;
+  }
+  .hph-slider-container {
+    aspect-ratio: 5/3 !important;
   }
   .hph-badge {
     display: none !important;

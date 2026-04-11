@@ -20,7 +20,7 @@ const TestimonialCard = ({ profileImage, name, feedback, mainImage, beforeImage 
     <img src={mainImage} alt={feedback} className="w-full h-auto object-cover" />
 
     {/* Top gradient + user info */}
-    <div className="absolute top-0 left-0 p-4 text-white">
+    <div className="absolute top-0 left-0 p-4 text-white hidden sm:block">
       <div className="flex items-center gap-2 mb-1">
         <img src={profileImage} className="w-7 h-7 rounded-full border border-white/60 object-cover flex-shrink-0" style={{ filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.4))" }} alt={name} />
         <span className="font-bold text-sm" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>{name}</span>
