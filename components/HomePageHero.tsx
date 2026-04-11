@@ -126,14 +126,14 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride,
           </p>
 
           {/* CTAs */}
-          <div className="hph-btns">
+          <div className="hph-btns" style={{ display: "flex", flexDirection: "row", gap: "0.625rem", flexWrap: "nowrap", alignItems: "center" }}>
             {ctaOverride ?? (!isLoaded
               ? <button className="hph-btn-primary" style={{ opacity: 0, pointerEvents: "none" }}>Try It Free</button>
               : isSignedIn
                 ? <Link href="/dashboard" className="hph-btn-primary">Try It Free</Link>
                 : <button className="hph-btn-primary" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>Try It Free</button>
             )}
-            <Link href="/#reviews" className="hph-btn-secondary">See Examples</Link>
+            <Link href="/#reviews" className="hph-btn-secondary" style={{ whiteSpace: "nowrap" }}>See Examples</Link>
           </div>
 
           {/* Trusted users */}
