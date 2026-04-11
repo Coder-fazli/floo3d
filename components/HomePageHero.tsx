@@ -52,7 +52,7 @@ const features = [
 export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride, headingAccent }: { heroBeforeUrl?: string | null; heroAfterUrl?: string | null; ctaOverride?: React.ReactNode; headingAccent?: React.ReactNode }) {
   const heroBefore = heroBeforeUrl || "/hero-before.jpg";
   const heroAfter  = heroAfterUrl  || "/hero-after.jpg";
-  const { isSignedIn } = useUser();
+  const { isSignedIn, isLoaded } = useUser();
   const { openSignUp } = useClerk();
   const [sliderPos, setSliderPos] = useState(40);
   const sliderPosRef = useRef(40);
@@ -127,9 +127,11 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride,
 
           {/* CTAs */}
           <div className="hph-btns">
-            {ctaOverride ?? (isSignedIn
-              ? <Link href="/dashboard" className="hph-btn-primary">Try It Free</Link>
-              : <button className="hph-btn-primary" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>Try It Free</button>
+            {ctaOverride ?? (!isLoaded
+              ? <button className="hph-btn-primary" style={{ opacity: 0, pointerEvents: "none" }}>Try It Free</button>
+              : isSignedIn
+                ? <Link href="/dashboard" className="hph-btn-primary">Try It Free</Link>
+                : <button className="hph-btn-primary" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>Try It Free</button>
             )}
             <Link href="/#reviews" className="hph-btn-secondary">See Examples</Link>
           </div>
