@@ -223,22 +223,23 @@
     display: block !important;
   }
   .hph-trusted-row div[style] {
-    width: 28px !important;
-    height: 28px !important;
+    width: 36px !important;
+    height: 36px !important;
   }
   .hph-trusted-row img {
-    width: 28px !important;
-    height: 28px !important;
+    width: 36px !important;
+    height: 36px !important;
   }
   .hph-trusted-row p {
-    font-size: 0.72rem !important;
+    font-size: 0.82rem !important;
   }
   .hph-grid {
     gap: 1rem !important;
   }
   .hph-heading {
     font-size: 2.2rem !important;
-    margin-bottom: 0.5rem !important;
+    margin-bottom: 1rem !important;
+    margin-top: 0.75rem !important;
   }
   .hph-sub {
     font-size: 0.9rem !important;
@@ -283,7 +284,7 @@
   .home .hph-btn-secondary,
   .hph-btns .hph-btn-secondary,
   .hph-btns > a.hph-btn-secondary {
-    padding: 0.45rem 1rem !important;
+    padding: 0.55rem 1rem !important;
     font-size: 0.7rem !important;
     border-radius: 9999px !important;
     width: 100% !important;
