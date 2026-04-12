@@ -102,7 +102,7 @@ export async function POST(request: Request) {
 
     const renderedBase64 = `data:image/png;base64,${imagePart.inlineData!.data}`;
     const renderedImageUrl = await uploadImage(renderedBase64, "floo3d/renders");
-    await updateProject(projectId!, renderedImageUrl);
+    await updateProject(projectId!, renderedImageUrl, style, roomType);
     await connectDb();
     await Promise.all([
       Project.findByIdAndUpdate(projectId, { $inc: { generationCount: 1 } }),

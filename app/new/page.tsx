@@ -4,7 +4,7 @@ import "./new.css";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
-import DashboardNavbar from "@/components/DashboardNavbar";
+import AppSidebar from "@/components/AppSidebar";
 import { ArrowLeft } from "lucide-react";
 
 const INPUT_TYPES = [
@@ -50,7 +50,7 @@ export default function NewProjectPage() {
 
   return (
     <div className="np-page">
-      <DashboardNavbar />
+      <AppSidebar />
       <main className="np-main">
         <div className="np-header">
           <button className="np-back" onClick={() => router.push("/dashboard")}>

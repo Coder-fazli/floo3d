@@ -38,7 +38,7 @@ export default function FloorPlanGeneratorClient() {
   const router = useRouter();
 
   const [propertyType, setPropertyType] = useState("House");
-  const [area, setArea] = useState(100);
+  const [area, setArea] = useState<number | "">(100);
   const [areaUnit, setAreaUnit] = useState<"m2" | "sqft">("m2");
   const [floors, setFloors] = useState(1);
   const [rooms, setRooms] = useState<Record<RoomKey, number>>({
@@ -82,7 +82,7 @@ export default function FloorPlanGeneratorClient() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userId: user.id,
-          config: { propertyType, area, areaUnit, floors, rooms, extras, style },
+          config: { propertyType, area: area || 100, areaUnit, floors, rooms, extras, style },
         }),
       });
       const data = await res.json();
@@ -148,7 +148,8 @@ export default function FloorPlanGeneratorClient() {
                       value={area}
                       min={20}
                       max={2000}
-                      onChange={(e) => setArea(Number(e.target.value))}
+                      onChange={(e) => setArea(e.target.value === "" ? "" : Number(e.target.value))}
+                      onBlur={(e) => { if (e.target.value === "" || Number(e.target.value) < 20) setArea(20); }}
                     />
                     <div className="fpg-unit-toggle">
                       <button

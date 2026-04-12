@@ -2,6 +2,7 @@
   min-height: 100vh;
   background: #f8f6f6;
   font-family: var(--font-sans), "Public Sans", sans-serif;
+  padding-left: 68px;
 }
 
 .np-main {

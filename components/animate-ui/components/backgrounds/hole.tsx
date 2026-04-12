@@ -111,6 +111,7 @@ function HoleBackground({
 
   const setLines = React.useCallback(() => {
     const { width, height } = stateRef.current.rect;
+    if (!width || !height) return;
     stateRef.current.lines = [];
     const linesAngle = (Math.PI * 2) / numberOfLines;
     for (let i = 0; i < numberOfLines; i++) {
@@ -242,8 +243,9 @@ function HoleBackground({
   );
 
   const drawLines = React.useCallback((ctx: CanvasRenderingContext2D) => {
-    if (stateRef.current.linesCanvas) {
-      ctx.drawImage(stateRef.current.linesCanvas, 0, 0);
+    const lc = stateRef.current.linesCanvas;
+    if (lc && lc.width > 0 && lc.height > 0) {
+      ctx.drawImage(lc, 0, 0);
     }
   }, []);
 

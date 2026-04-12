@@ -1,0 +1,118 @@
+"use client";
+
+import "./AppSidebar.css";
+import { useEffect, useState } from "react";
+import { useUser, useClerk } from "@clerk/nextjs";
+import { getUserInfo } from "@/lib/actions";
+import { Home, Zap } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+export default function AppSidebar() {
+  const { user } = useUser();
+  const { openUserProfile, signOut } = useClerk();
+  const pathname = usePathname();
+  const [credits, setCredits] = useState<number | null>(null);
+  const [hasPurchased, setHasPurchased] = useState(false);
+  const [burgerOpen, setBurgerOpen] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    getUserInfo(user.id).then(d => {
+      setCredits(d.credits);
+      setHasPurchased(d.hasPurchased);
+    });
+  }, [user]);
+
+  const isDashboard = pathname === "/dashboard";
+  const isProjects  = pathname === "/projects";
+
+  return (
+    <nav className="viz-icon-nav">
+
+      {/* ── Top: logo + nav links ── */}
+      <div className="viz-icon-nav-top">
+        <Link href="/dashboard" className="viz-icon-nav-logo" title="Dashboard">
+          <div className="viz-icon-nav-logo-icon">
+            <Image src="/favicon.png" alt="logo" width={26} height={26} />
+          </div>
+          <span className="viz-icon-nav-label viz-icon-nav-brand">
+            MyHome<span style={{ color: "#ec5b13" }}>Styler</span>
+          </span>
+        </Link>
+
+        <div className="viz-icon-nav-divider-line" />
+
+        <Link href="/dashboard" className={`viz-icon-nav-item${isDashboard ? " viz-icon-nav-item-active" : ""}`}>
+          <span className="viz-icon-nav-item-icon"><Home size={22} strokeWidth={1.7} /></span>
+          <span className="viz-icon-nav-label">Dashboard</span>
+        </Link>
+
+        <Link href="/projects" className={`viz-icon-nav-item${isProjects ? " viz-icon-nav-item-active" : ""}`}>
+          <span className="viz-icon-nav-item-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
+              <rect x="3" y="3" width="7" height="7" rx="1.2"/>
+              <rect x="14" y="3" width="7" height="7" rx="1.2"/>
+              <rect x="3" y="14" width="7" height="7" rx="1.2"/>
+              <rect x="14" y="14" width="7" height="7" rx="1.2"/>
+            </svg>
+          </span>
+          <span className="viz-icon-nav-label">My Renders</span>
+        </Link>
+      </div>
+
+      {/* ── Bottom: credits + burger ── */}
+      <div className="viz-icon-nav-bottom">
+
+        <div className="viz-icon-nav-credits-card" onClick={() => window.open("/pricing", "_blank")} style={{ cursor: "pointer" }}>
+          <div className="viz-icon-nav-credits-pill">
+            <Zap size={12} strokeWidth={2.5} />
+            <span className="viz-icon-nav-credits-num">{credits ?? "—"}</span>
+          </div>
+          <div className="viz-icon-nav-credits-info">
+            <span className="viz-icon-nav-credits-count">{credits ?? "—"} Credits</span>
+            <span className="viz-icon-nav-credits-action">Upgrade →</span>
+          </div>
+        </div>
+
+        <div className="viz-icon-nav-burger-wrap">
+          <button className="viz-icon-nav-item" onClick={() => setBurgerOpen(o => !o)} title="Menu">
+            <span className="viz-icon-nav-item-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round">
+                <line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/>
+              </svg>
+            </span>
+            <span className="viz-icon-nav-label">Menu</span>
+          </button>
+
+          {burgerOpen && (
+            <>
+              <div className="viz-burger-backdrop" onClick={() => setBurgerOpen(false)} />
+              <div className="viz-burger-menu">
+                <button className="viz-burger-item" onClick={() => { openUserProfile(); setBurgerOpen(false); }}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                  Account Settings
+                </button>
+                <Link href="/privacy" className="viz-burger-item" onClick={() => setBurgerOpen(false)}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  Privacy Policy
+                </Link>
+                <Link href="/support" className="viz-burger-item" onClick={() => setBurgerOpen(false)}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  Support
+                </Link>
+                <div className="viz-burger-divider" />
+                <button className="viz-burger-item viz-burger-item-danger" onClick={() => signOut({ redirectUrl: "/" })}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  Log Out
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+
+      </div>
+    </nav>
+  );
+}

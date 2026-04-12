@@ -1,14 +1,15 @@
 "use client";
 
 import "./dashboard.css";
-import DashboardNavbar from "@/components/DashboardNavbar";
+import AppSidebar from "@/components/AppSidebar";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { ArrowUpRight, FolderOpen, Sparkles, X } from "lucide-react";
 import AutoCompareSlider from "@/components/AutoCompareSlider";
-import { type FramesData } from "@/lib/actions";
+import { type FramesData, getUserInfo } from "@/lib/actions";
 import { DEFAULT_FALLBACKS } from "@/lib/frameDefaults";
+import { Zap } from "lucide-react";
 
 const INPUT_TYPE_META: Record<string, { label: string; desc: string; hint: string }> = {
   "floor-plan":           { label: "Blueprint → 3D",       desc: "Upload a floor plan blueprint to get a photorealistic 3D render", hint: "📐 Upload: a blueprint or floor plan drawing" },
@@ -23,6 +24,12 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
   const searchParams = useSearchParams();
   const { user, isLoaded } = useUser();
   const [showSuccess, setShowSuccess] = useState(false);
+  const [credits, setCredits] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    getUserInfo(user.id).then(d => setCredits(d.credits ?? 0));
+  }, [user]);
 
   useEffect(() => {
     if (isLoaded && !user) router.push("/");
@@ -40,7 +47,7 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
 
   return (
     <div className="db-page">
-      <DashboardNavbar />
+      <AppSidebar />
 
       {showSuccess && (
         <div style={{
@@ -100,14 +107,21 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
             <p className="db-welcome-sub">Ready to transform another space today?</p>
           </div>
           <div className="db-welcome-actions">
-            <button className="db-btn-ghost" onClick={() => router.push("/projects")}>
+            {/* Desktop buttons */}
+            <button className="db-btn-ghost db-desktop-only" onClick={() => router.push("/projects")}>
               <FolderOpen size={16} />
               My Studio
             </button>
-            <button className="db-btn-primary" onClick={() => window.open("/pricing", "_blank")}>
+            <button className="db-btn-primary db-desktop-only" onClick={() => window.open("/pricing", "_blank")}>
               <ArrowUpRight size={16} />
               Upgrade Account
             </button>
+            {/* Mobile: credits + Upgrade word */}
+            <div className="db-mob-credits db-mobile-only">
+              <Zap size={13} />
+              {credits ?? "—"} credits
+            </div>
+            <a className="db-mob-upgrade db-mobile-only" href="/pricing">Upgrade</a>
           </div>
         </div>
 

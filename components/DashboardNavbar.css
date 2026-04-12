@@ -5,9 +5,9 @@
     top: 0;
     z-index: 50;
     width: 100%;
-    border-bottom: 1px solid #e2e8f0;
-    background: rgba(248, 246, 246, 0.85);
-    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(117, 87, 96, 0.12);
+    background: rgba(253, 246, 242, 0.92);
+    backdrop-filter: blur(12px);
 }
 
 .dbnav-inner {
@@ -50,10 +50,10 @@
 
 .dbnav-logo-name {
     font-size: 1.1rem;
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    color: #0f172a;
-    font-family: var(--font-sans), "Public Sans", sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #28030F;
+    font-family: var(--font-playfair), Georgia, serif;
 }
 
 .dbnav-logo-accent {
@@ -69,13 +69,16 @@
 .dbnav-link {
     font-size: 0.875rem;
     font-weight: 600;
-    color: #64748b;
+    color: #755760;
     text-decoration: none;
-    transition: color 0.2s;
+    padding: 0.4rem 0.85rem;
+    border-radius: 0.5rem;
+    transition: color 0.15s, background 0.15s;
 }
 
 .dbnav-link:hover {
     color: var(--brand-color);
+    background: rgba(235, 66, 3, 0.06);
 }
 
 .dbnav-link-active {
@@ -104,13 +107,13 @@
 }
 
 .dbnav-search-input {
-    background: #f1f5f9;
+    background: rgba(117, 87, 96, 0.07);
     border: none;
     border-radius: 0.75rem;
     padding: 0.5rem 1rem 0.5rem 2.25rem;
     font-size: 0.8rem;
     width: 16rem;
-    color: #0f172a;
+    color: #28030F;
     outline: none;
     transition: box-shadow 0.2s;
     font-family: inherit;
@@ -162,11 +165,11 @@
     align-items: center;
     gap: 0.4rem;
     padding: 0.375rem 0.75rem;
-    background: #f1f5f9;
-    border-radius: 0.75rem;
+    background: rgba(235, 66, 3, 0.08);
+    border-radius: 9999px;
     font-size: 0.75rem;
     font-weight: 700;
-    color: #334155;
+    color: var(--brand-color);
     white-space: nowrap;
 }
 
@@ -196,7 +199,7 @@
 }
 
 .dbnav-user:hover {
-    background: #f1f5f9;
+    background: rgba(117, 87, 96, 0.07);
 }
 
 .dbnav-user-info {
@@ -206,14 +209,14 @@
 .dbnav-user-name {
     font-size: 0.75rem;
     font-weight: 700;
-    color: #0f172a;
+    color: #28030F;
     margin: 0;
     line-height: 1.2;
 }
 
 .dbnav-user-plan {
     font-size: 0.65rem;
-    color: #94a3b8;
+    color: #755760;
     font-weight: 500;
     margin: 0;
 }
@@ -269,7 +272,7 @@
 .dbnav-signout {
   font-size: 0.875rem;
   font-weight: 700;
-  color: #334155;
+  color: #755760;
   background: none;
   border: none;
   cursor: pointer;
@@ -279,5 +282,5 @@
 }
 
 .dbnav-signout:hover {
-  color: #0f172a;
+  color: #28030F;
 }

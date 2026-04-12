@@ -6,18 +6,16 @@ import { useUser, useClerk } from "@clerk/nextjs";
 import { getCredits, getUserInfo } from "@/lib/actions";
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
-import { getProject } from "@/lib/actions";
+import { getProject, getProjects } from "@/lib/actions";
 import { ReactCompareSlider, ReactCompareSliderImage, ReactCompareSliderHandle } from "react-compare-slider";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
-import SocialButton from "@/components/kokonutui/social-button";
 import Image from "next/image";
 import Link from "next/link";
-import { Download, RefreshCcw, Maximize2, ZoomIn, ZoomOut, ChevronRight, Upload as UploadIcon, Home, Zap, Sparkles, Bell, Lock } from "lucide-react";
-import GetStartedButton from "@/components/animata/button/get-started-button";
-import NameProjectModal from "@/components/NameProjectModal";
+import { Download, Upload as UploadIcon, Sparkles, X, ExternalLink, Home, Zap } from "lucide-react";
+import ProjectModal from "@/components/ProjectModal";
+import AppSidebar from "@/components/AppSidebar";
 import { HoleBackground } from "@/components/animate-ui/components/backgrounds/hole";
-import { RainbowButton } from "@/components/ui/rainbow-button";
 import { SparklesText } from "@/components/ui/sparkles-text";
 import { type FramesData } from "@/lib/actions";
 import { DEFAULT_FALLBACKS, DEFAULT_STYLES, DEFAULT_ANGLES, ANGLE_LABELS } from "@/lib/frameDefaults";
@@ -35,6 +33,41 @@ const STYLES: Record<string, string[]> = {
 
 
 const ROOM_TYPES = ["Living Room", "Bedroom", "Kitchen", "Bathroom", "Office", "Dining Room", "Studio", "Hallway", "Kids Room"];
+
+const ROOM_TYPE_DATA = [
+  { name: "Living Room",  img: "/room-living.jpg" },
+  { name: "Bedroom",      img: "/room-bedroom.jpg" },
+  { name: "Kitchen",      img: "/room-kitchen.jpg" },
+  { name: "Bathroom",     img: "/room-bathroom.jpg" },
+  { name: "Office",       img: "/room-office.jpg" },
+  { name: "Dining Room",  img: "/room-dining.jpg" },
+  { name: "Studio",       img: "/room-studio.jpg" },
+  { name: "Hallway",      img: "/room-hallway.jpg" },
+  { name: "Kids Room",    img: "/room-kids.jpg" },
+];
+
+const STYLE_TABS: Record<string, Record<string, string[]>> = {
+  "interior-design": {
+    "All":     ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
+    "Popular": ["Modern", "Scandinavian", "Minimalist"],
+    "Modern":  ["Modern", "Industrial", "Minimalist"],
+    "Classic": ["Rustic", "Luxury"],
+    "Nature":  ["Scandinavian", "Rustic"],
+  },
+  "floor-plan": {
+    "All":     ["Modern", "Scandinavian", "Industrial", "Rustic", "Luxury", "Minimalist"],
+    "Popular": ["Modern", "Scandinavian", "Minimalist"],
+    "Modern":  ["Modern", "Industrial", "Minimalist"],
+    "Classic": ["Rustic", "Luxury"],
+    "Nature":  ["Scandinavian", "Rustic"],
+  },
+  "outdoor": {
+    "All":        ["Modern", "Japanese", "Tropical", "Cottage", "Mediterranean", "Desert"],
+    "Popular":    ["Modern", "Japanese", "Tropical"],
+    "Natural":    ["Japanese", "Tropical", "Cottage"],
+    "Warm":       ["Mediterranean", "Desert", "Cottage"],
+  },
+};
 
 
 export default function VisualizerClient({ embeddedId, frames, defaultType, isAdminView }: { embeddedId?: string; frames?: FramesData; defaultType?: string; isAdminView?: boolean } = {}) {
@@ -63,7 +96,6 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   const [guestResult, setGuestResult] = useState<string | null>(null);
   const [guestCredits, setGuestCredits] = useState(GUEST_CREDITS_DEFAULT);
 
-  const hasInitialGenerated = useRef(false);
   const previewCardRef = useRef<HTMLDivElement>(null);
   const [project, setProject] = useState<any>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -77,8 +109,6 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   const [roomType, setRoomType] = useState("Living Room");
   const [viewAngle, setViewAngle] = useState("topDown");
   const [isCreating, setIsCreating] = useState(false);
-  const [nameModalOpen, setNameModalOpen] = useState(false);
-  const pendingFileBase64Ref = useRef<string | null>(null);
   // Read type from URL for new mode (or use defaultType prop)
 
    const [inputTypeNew, setInputTypeNew] = useState(() => {
@@ -127,7 +157,11 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
     if (!user) return;
     getCredits(user.id, user.fullName ?? user.firstName ?? "", user.emailAddresses?.[0]?.emailAddress ?? "").then(setCredits);
     if (!isAdminView) getUserInfo(user.id).then(d => setHasPurchased(d.hasPurchased));
-  }, [user]);
+    // Load all user projects that have a rendered image
+    getProjects(user.id).then(projects =>
+      setUserProjects(projects.filter((p: any) => p.renderedImageUrl))
+    );
+  }, [user?.id]);
 
   // Poll credits + hasPurchased after successful payment
   useEffect(() => {
@@ -172,6 +206,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Generation failed");
         setGuestResult(data.renderedBase64);
+        setMobileTab("history");
         const next = Math.max(0, guestCredits - 1);
         setGuestCredits(next);
         localStorage.setItem(GUEST_CREDITS_KEY, String(next));
@@ -200,7 +235,15 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Generation failed");
         setCurrentImage(data.renderedImageUrl);
-        if (data.projectId) window.history.replaceState(null, "", `/visualizer/${data.projectId}`);
+        setMobileTab("history");
+        if (data.projectId) {
+          window.history.replaceState(null, "", `/visualizer/${data.projectId}`);
+          setUserProjects(prev => {
+            const exists = prev.find(p => p._id === data.projectId);
+            if (exists) return prev.map(p => p._id === data.projectId ? { ...p, renderedImageUrl: data.renderedImageUrl } : p);
+            return [{ _id: data.projectId, renderedImageUrl: data.renderedImageUrl, name: "Floor Plan", renderStyle: fpgConfig.style, createdAt: new Date() }, ...prev];
+          });
+        }
         if (user) getCredits(user.id, user.fullName ?? user.firstName ?? "", user.emailAddresses?.[0]?.emailAddress ?? "").then(setCredits);
       } catch (error: any) {
         setModalType("error");
@@ -235,6 +278,13 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
       }
       if (!data?.renderedImageUrl) throw new Error("Invalid response from API");
       setCurrentImage(data.renderedImageUrl);
+      setMobileTab("history");
+      // Update this project's thumbnail in the user projects gallery
+      setUserProjects(prev => {
+        const exists = prev.find(p => p._id === project._id);
+        if (exists) return prev.map(p => p._id === project._id ? { ...p, renderedImageUrl: data.renderedImageUrl } : p);
+        return [{ ...project, renderedImageUrl: data.renderedImageUrl }, ...prev];
+      });
       if (user) getCredits(
         user.id,
         user.fullName ?? user.firstName ?? "",
@@ -248,13 +298,12 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
     }
   };
 
+  // Set the comparison slider image when the project loads
   useEffect(() => {
-    if (!project || hasInitialGenerated.current) return;
-    hasInitialGenerated.current = true;
-    if (project.renderedImageUrl) {
-      setCurrentImage(project.renderedImageUrl);
-    }
-  }, [project]);
+    if (!project) return;
+    if (project.renderedImageUrl) setCurrentImage(project.renderedImageUrl);
+    else setCurrentImage(null);
+  }, [project?._id]);
 
 
   // Handle upload in sidebar
@@ -280,45 +329,52 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
     if (file.size > MAX_BYTES) return;
 
     const reader = new FileReader();
-    reader.onload = () => {
-      pendingFileBase64Ref.current = reader.result as string;
-      setNameModalOpen(true);
+    reader.onload = async () => {
+      const base64 = reader.result as string;
+      if (!user) return;
+      setIsCreating(true);
+      const inputType = isNewMode ? inputTypeNew : (project?.inputType ?? "floor-plan");
+      // Auto-generate name from style + input type
+      const typeLabel: Record<string, string> = {
+        "interior-design": "Interior",
+        "floor-plan": "Floor Plan",
+        "outdoor": "Outdoor",
+        "empty-room": "Empty Room",
+      };
+      const autoName = `${renderStyle} ${typeLabel[inputType] ?? "Design"}`;
+      const res = await fetch("/api/projects", {
+        method: "POST",
+        body: JSON.stringify({ name: autoName, userId: user.id, base64Image: base64, inputType, renderStyle }),
+      });
+      const newProject = await res.json();
+      setIsCreating(false);
+      setProject(newProject);
+      setCurrentImage(null);
+      setIsNewMode(false);
+      window.history.replaceState(null, "", `/visualizer/${newProject._id}`);
     };
     reader.readAsDataURL(file);
   };
 
-  const handleNameConfirm = async (name: string) => {
-    setNameModalOpen(false);
-    const base64 = pendingFileBase64Ref.current;
-    if (!base64 || !user) return;
-    setIsCreating(true);
-    const inputType = isNewMode ? inputTypeNew : (project?.inputType ?? "floor-plan");
-    const res = await fetch("/api/projects", {
-      method: "POST",
-      body: JSON.stringify({ name, userId: user.id, base64Image: base64, inputType, renderStyle }),
-    });
-    const newProject = await res.json();
-    setIsCreating(false);
-    pendingFileBase64Ref.current = null;
-    setProject(newProject);
-    setCurrentImage(null);
-    setIsNewMode(false);
-    hasInitialGenerated.current = false;
-    window.history.replaceState(null, "", `/visualizer/${newProject._id}`);
-    setTimeout(() => {
-      previewCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 150);
-  };
-
-  const handleNameCancel = () => {
-    setNameModalOpen(false);
-    pendingFileBase64Ref.current = null;
-  };
-
+  const [mobileTab, setMobileTab] = useState<"generator" | "history">("generator");
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
   const [exportFormat, setExportFormat] = useState<"png" | "jpg" | "pdf">("png");
   const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const [roomTypeModalOpen, setRoomTypeModalOpen] = useState(false);
+  const [styleModalOpen, setStyleModalOpen] = useState(false);
+  const [angleModalOpen, setAngleModalOpen] = useState(false);
+  const [styleTab, setStyleTab] = useState("All");
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [uploadTab, setUploadTab] = useState<"upload" | "examples">("upload");
+  const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
+  // Track if user explicitly chose a value (shows thumbnail in card)
+  const [roomTypeChosen, setRoomTypeChosen] = useState(false);
+  const [styleChosen, setStyleChosen] = useState(false);
   const dragCounterRef = useRef(0);
+
+  // All user projects with renders — shown as gallery below preview card
+  const [userProjects, setUserProjects] = useState<any[]>([]);
+  const [historyModal, setHistoryModal] = useState<any | null>(null);
 
   // Floor plan generator config
   const [fpgConfig, setFpgConfig] = useState<FpgConfig>({
@@ -418,13 +474,73 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
     alert("Link copied!");
   };
 
+  const downloadHistoryImage = async (url: string, styleName: string) => {
+    try {
+      const res = await fetch(url);
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = `${styleName.toLowerCase().replace(/\s+/g, "-")}-render.png`;
+      a.click();
+      URL.revokeObjectURL(blobUrl);
+    } catch {
+      window.open(url, "_blank");
+    }
+  };
+
   const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/visualizer/${id}` : "";
+
+  const EXAMPLE_IMAGES: Record<string, Array<{ url: string; label: string }>> = {
+    "interior-design": [
+      { url: "/room-living.jpg",   label: "Living Room" },
+      { url: "/room-bedroom.jpg",  label: "Bedroom" },
+      { url: "/room-kitchen.jpg",  label: "Kitchen" },
+      { url: "/room-office.jpg",   label: "Office" },
+      { url: "/room-dining.jpg",   label: "Dining Room" },
+      { url: "/room-bathroom.jpg", label: "Bathroom" },
+    ],
+    "floor-plan": [
+      { url: "/example-blueprint.jpg", label: "Blueprint" },
+    ],
+    "outdoor": [
+      { url: "/room-living.jpg",  label: "Outdoor 1" },
+      { url: "/room-studio.jpg",  label: "Outdoor 2" },
+    ],
+    "empty-room": [
+      { url: "/room-living.jpg",   label: "Living Room" },
+      { url: "/room-bedroom.jpg",  label: "Bedroom" },
+      { url: "/room-studio.jpg",   label: "Studio" },
+    ],
+  };
+
+  const handleAssetConfirm = async () => {
+    if (!selectedAsset) return;
+    setUploadModalOpen(false);
+    try {
+      const res = await fetch(selectedAsset);
+      const blob = await res.blob();
+      const file = new File([blob], "example.jpg", { type: blob.type || "image/jpeg" });
+      handleSidebarFile(file);
+    } catch (e) {
+      console.error("Failed to use example image", e);
+    } finally {
+      setSelectedAsset(null);
+    }
+  };
+
+  const openUploadModal = () => {
+    if (!user && !embeddedId) { openSignUp({ fallbackRedirectUrl: "/dashboard" }); return; }
+    setUploadTab("upload");
+    setSelectedAsset(null);
+    setUploadModalOpen(true);
+  };
 
   const activeInputType = isNewMode ? inputTypeNew : (project?.inputType ?? "floor-plan");
   const styleList = STYLES[activeInputType] ?? STYLES["floor-plan"];
 
   return (
-    <div className="viz-page" onContextMenu={isAdminView ? undefined : e => e.preventDefault()}>
+    <div className="viz-page">
 
       {/* Welcome popup */}
       {welcomeOpen && (() => {
@@ -455,6 +571,204 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
         );
       })()}
 
+      {/* ── Angle Modal ── */}
+      {angleModalOpen && (
+        <div className="viz-modal-backdrop" onClick={() => setAngleModalOpen(false)}>
+          <div className="viz-modal-box viz-modal-sheet" onClick={e => e.stopPropagation()}>
+            <div className="viz-modal-header">
+              <h2 className="viz-modal-title">Choose Angle</h2>
+              <button className="viz-modal-close" onClick={() => setAngleModalOpen(false)}>✕</button>
+            </div>
+            <div className="viz-modal-grid viz-modal-scroll">
+              {Object.entries(ANGLE_LABELS).map(([key, label]) => (
+                <div
+                  key={key}
+                  className={`viz-modal-item${viewAngle === key ? " viz-modal-item-active" : ""}`}
+                  onClick={() => setViewAngle(key)}
+                >
+                  <div className="viz-modal-item-img">
+                    <img src={getAngleImage(key)} alt={label} onError={(e) => { (e.target as HTMLImageElement).src = "/real-3d-render.jpg"; }} />
+                    {viewAngle === key && <div className="viz-modal-item-check">✓</div>}
+                  </div>
+                  <span className="viz-modal-item-label">{label}</span>
+                </div>
+              ))}
+            </div>
+            <div className="viz-modal-footer viz-modal-footer-sticky">
+              <button className="viz-modal-cancel" onClick={() => setAngleModalOpen(false)}>Cancel</button>
+              <button className="viz-modal-confirm" onClick={() => setAngleModalOpen(false)}>Confirm</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Room Type Modal ── */}
+      {roomTypeModalOpen && (
+        <div className="viz-modal-backdrop" onClick={() => setRoomTypeModalOpen(false)}>
+          <div className="viz-modal-box viz-modal-sheet" onClick={e => e.stopPropagation()}>
+            <div className="viz-modal-header">
+              <h2 className="viz-modal-title">Choose Room Type</h2>
+              <button className="viz-modal-close" onClick={() => setRoomTypeModalOpen(false)}>✕</button>
+            </div>
+            <div className="viz-modal-grid viz-modal-scroll">
+              {ROOM_TYPE_DATA.map(({ name, img }) => (
+                <div
+                  key={name}
+                  className={`viz-modal-item${roomType === name ? " viz-modal-item-active" : ""}`}
+                  onClick={() => { setRoomType(name); setRoomTypeChosen(true); }}
+                >
+                  <div className="viz-modal-item-img">
+                    <img src={img} alt={name} onError={(e) => { (e.target as HTMLImageElement).src = "/card-room-after.webp"; }} />
+                    {roomType === name && <div className="viz-modal-item-check">✓</div>}
+                  </div>
+                  <span className="viz-modal-item-label">{name}</span>
+                </div>
+              ))}
+            </div>
+            <div className="viz-modal-footer viz-modal-footer-sticky">
+              <button className="viz-modal-cancel" onClick={() => setRoomTypeModalOpen(false)}>Cancel</button>
+              <button className="viz-modal-confirm" onClick={() => setRoomTypeModalOpen(false)}>Confirm</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Style Modal ── */}
+      {styleModalOpen && (
+        <div className="viz-modal-backdrop" onClick={() => setStyleModalOpen(false)}>
+          <div className="viz-modal-box viz-modal-sheet" onClick={e => e.stopPropagation()}>
+            <div className="viz-modal-header">
+              <h2 className="viz-modal-title">Choose Style</h2>
+              <button className="viz-modal-close" onClick={() => setStyleModalOpen(false)}>✕</button>
+            </div>
+            <div className="viz-modal-tabs">
+              {Object.keys(STYLE_TABS[activeInputType] ?? STYLE_TABS["interior-design"]).map(tab => (
+                <button
+                  key={tab}
+                  className={`viz-modal-tab${styleTab === tab ? " viz-modal-tab-active" : ""}`}
+                  onClick={() => setStyleTab(tab)}
+                >{tab}</button>
+              ))}
+            </div>
+            <div className="viz-modal-grid viz-modal-scroll">
+              {((STYLE_TABS[activeInputType] ?? STYLE_TABS["interior-design"])[styleTab] ?? styleList).map(s => (
+                <div
+                  key={s}
+                  className={`viz-modal-item${renderStyle === s ? " viz-modal-item-active" : ""}`}
+                  onClick={() => { setRenderStyle(s); setStyleChosen(true); }}
+                >
+                  <div className="viz-modal-item-img">
+                    <img src={getStyleImage(activeInputType, s)} alt={s} />
+                    {renderStyle === s && <div className="viz-modal-item-check">✓</div>}
+                  </div>
+                  <span className="viz-modal-item-label">{s}</span>
+                </div>
+              ))}
+            </div>
+            <div className="viz-modal-footer viz-modal-footer-sticky">
+              <button className="viz-modal-cancel" onClick={() => setStyleModalOpen(false)}>Cancel</button>
+              <button className="viz-modal-confirm" onClick={() => setStyleModalOpen(false)}>Confirm</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Upload Modal ── */}
+      {uploadModalOpen && (
+        <div className="viz-modal-backdrop" onClick={() => { setUploadModalOpen(false); setSelectedAsset(null); }}>
+          <div className="viz-upload-modal-box" onClick={e => e.stopPropagation()}>
+            <div className="viz-modal-header">
+              <h2 className="viz-modal-title">Add Photo</h2>
+              <button className="viz-modal-close" onClick={() => { setUploadModalOpen(false); setSelectedAsset(null); }}>✕</button>
+            </div>
+
+            {/* Tabs */}
+            <div className="viz-upload-modal-tabs">
+              <button
+                className={`viz-upload-modal-tab${uploadTab === "upload" ? " viz-upload-modal-tab-active" : ""}`}
+                onClick={() => { setUploadTab("upload"); setSelectedAsset(null); }}
+              >Upload</button>
+              <button
+                className={`viz-upload-modal-tab${uploadTab === "examples" ? " viz-upload-modal-tab-active" : ""}`}
+                onClick={() => { setUploadTab("examples"); setSelectedAsset(null); }}
+              >Examples</button>
+            </div>
+
+            <div className="viz-upload-modal-body">
+              {uploadTab === "upload" ? (
+                <div className="viz-upload-modal-upload-tab">
+                  {/* Left: dropzone */}
+                  <div
+                    className={`viz-upload-modal-dropzone${isDraggingOver ? " viz-upload-modal-dropzone-active" : ""}`}
+                    onClick={() => { sidebarFileRef.current?.click(); setUploadModalOpen(false); setSelectedAsset(null); }}
+                    onDragEnter={(e) => { e.preventDefault(); dragCounterRef.current++; setIsDraggingOver(true); }}
+                    onDragLeave={(e) => { e.preventDefault(); dragCounterRef.current--; if (dragCounterRef.current === 0) setIsDraggingOver(false); }}
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={(e) => { e.preventDefault(); dragCounterRef.current = 0; setIsDraggingOver(false); const f = e.dataTransfer.files[0]; if (f) { handleSidebarFile(f); setUploadModalOpen(false); } }}
+                  >
+                    <div className="viz-upload-modal-dropzone-icon">
+                      <UploadIcon size={26} strokeWidth={1.6} />
+                    </div>
+                    <span className="viz-upload-modal-dropzone-label">{isCreating ? "Creating…" : "Upload"}</span>
+                    <span className="viz-upload-modal-dropzone-sub">PNG, JPG · Max 10MB</span>
+                  </div>
+
+                  {/* Right: asset thumbnails (project image + examples) */}
+                  <div className="viz-upload-modal-assets">
+                    {project?.originalImageUrl && (
+                      <div
+                        className={`viz-upload-modal-asset${selectedAsset === project.originalImageUrl ? " viz-upload-modal-asset-selected" : ""}`}
+                        onClick={() => setSelectedAsset(prev => prev === project.originalImageUrl ? null : project.originalImageUrl)}
+                      >
+                        <img src={project.originalImageUrl} alt="Current" />
+                        {selectedAsset === project.originalImageUrl && <div className="viz-upload-modal-asset-check">✓</div>}
+                      </div>
+                    )}
+                    {(EXAMPLE_IMAGES[activeInputType] ?? EXAMPLE_IMAGES["interior-design"]).slice(0, project?.originalImageUrl ? 5 : 6).map(({ url, label }) => (
+                      <div
+                        key={url}
+                        className={`viz-upload-modal-asset${selectedAsset === url ? " viz-upload-modal-asset-selected" : ""}`}
+                        onClick={() => setSelectedAsset(prev => prev === url ? null : url)}
+                      >
+                        <img src={url} alt={label} />
+                        {selectedAsset === url && <div className="viz-upload-modal-asset-check">✓</div>}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                /* Examples tab */
+                <div className="viz-upload-modal-examples-grid">
+                  {(EXAMPLE_IMAGES[activeInputType] ?? EXAMPLE_IMAGES["interior-design"]).map(({ url, label }) => (
+                    <div
+                      key={url}
+                      className={`viz-upload-modal-example${selectedAsset === url ? " viz-upload-modal-asset-selected" : ""}`}
+                      onClick={() => setSelectedAsset(prev => prev === url ? null : url)}
+                    >
+                      <div className="viz-upload-modal-example-img">
+                        <img src={url} alt={label} />
+                        {selectedAsset === url && <div className="viz-upload-modal-asset-check">✓</div>}
+                      </div>
+                      <span className="viz-upload-modal-example-label">{label}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="viz-modal-footer">
+              <button className="viz-modal-cancel" onClick={() => { setUploadModalOpen(false); setSelectedAsset(null); }}>Cancel</button>
+              <button
+                className="viz-modal-confirm"
+                onClick={handleAssetConfirm}
+                disabled={!selectedAsset}
+                style={!selectedAsset ? { opacity: 0.45, cursor: "not-allowed" } : {}}
+              >Confirm</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Admin View Banner */}
       {isAdminView && (
         <div style={{ background: "#7c3aed", color: "#fff", textAlign: "center", padding: "0.5rem", fontSize: "0.8rem", fontWeight: 600, letterSpacing: "0.03em" }}>
@@ -462,54 +776,10 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
         </div>
       )}
 
-      {/* Navbar */}
-      {!embeddedId && <header className="viz-nav">
-        <div className="viz-nav-inner">
-          <div className="viz-nav-left">
-            <Link href="/dashboard" className="viz-brand">
-              <div className="viz-brand-icon">
-                <Image src="/favicon.png" alt="MyHomeStyler" width={20} height={20} />
-              </div>
-              <span className="viz-brand-name">MyHome<span className="viz-brand-accent">Styler</span></span>
-            </Link>
-            <nav className="viz-breadcrumb">
-              <Link href="/dashboard" className="viz-breadcrumb-link">Dashboard</Link>
-              <ChevronRight size={14} className="viz-breadcrumb-sep" />
-              <span className="viz-breadcrumb-current">{isNewMode ? "New Project" : (project?.name || "Project")}</span>
-            </nav>
-          </div>
+      <div className="viz-body">
 
-          <div className="viz-nav-right">
-            <button className="viz-nav-bell">
-              <Bell size={17} />
-              <span className="viz-nav-bell-dot" />
-            </button>
-
-            <div className="viz-nav-credits">
-              <Zap size={13} />
-              <span>{credits ?? "—"} Credits</span>
-            </div>
-
-            <div className="viz-nav-divider" />
-
-            <button className="viz-nav-signout" onClick={() => signOut({ redirectUrl: "/" })}>Log Out</button>
-
-            <button className="viz-nav-user" onClick={() => openUserProfile()}>
-              <div className="viz-nav-user-info">
-                <p className="viz-nav-user-name">{user?.username ?? user?.firstName ?? "User"}</p>
-                <p className="viz-nav-user-plan">Pro Plan</p>
-              </div>
-              <div className="viz-nav-avatar">
-                {user?.imageUrl ? (
-                  <NextImage src={user.imageUrl} alt="avatar" width={32} height={32} />
-                ) : (
-                  <span className="viz-nav-avatar-fallback">{user?.firstName?.[0] ?? "U"}</span>
-                )}
-              </div>
-            </button>
-          </div>
-        </div>
-      </header>}
+      {/* ── Left icon nav ── */}
+      {!embeddedId && <AppSidebar />}
 
       <main className="viz-main">
 
@@ -546,178 +816,174 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
           </div>
         )}
 
-        {/* Project header */}
-        {!embeddedId && <div className="viz-project-head">
-          <div>
-            <div className="viz-project-meta">
-              <span className={`viz-status-badge ${!currentImage ? "viz-status-badge-processing" : ""}`}>
-                {isNewMode ? "New Project" : currentImage ? "3D Render Ready" : isProcessing ? "Processing" : "Pending"}
-              </span>
-              {!isNewMode && (
-                <span className="viz-project-date">
-                  Created {project?.createdAt ? new Date(project.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—"}
-                </span>
-              )}
-            </div>
-            <h2 className="viz-project-title">{isNewMode ? "New Project" : (project?.name || "Untitled Project")}</h2>
-            <p className="viz-project-sub">Created by {user?.fullName ?? "You"}</p>
-          </div>
-
-          <div className="viz-stats-row">
-            <div className="viz-stat-card" style={{ cursor: "pointer", borderColor: "#ec5b13" }} onClick={() => router.push("/dashboard")}>
-              <div className="viz-stat-icon" style={{ color: "#ec5b13" }}><RefreshCcw size={18} /></div>
-              <div>
-                <p className="viz-stat-label">Navigate</p>
-                <p className="viz-stat-value" style={{ color: "#ec5b13" }}>Back to Dashboard</p>
-              </div>
-            </div>
-
-            <GetStartedButton
-              text="Generated Renders"
-              onClick={() => router.push("/projects")}
-            />
-            <div className="viz-stat-card" style={{ gap: "0.75rem" }}>
-              <div style={{ display: "flex", gap: "0.5rem" }}>
-                <SocialButton shareUrl={shareUrl} imageUrl={currentImage || guestResult || undefined} />
-              </div>
-            </div>
-            <RainbowButton variant="outline" className="viz-homegen-btn">
-              <Sparkles size={14} />
-              HomeGen™ Engine
-            </RainbowButton>
-          </div>
-        </div>}
 
         {/* Workspace: sidebar + output */}
-        <div className="viz-workspace">
+        {/* ── Mobile top bar (credits + upgrade) ── */}
+        {!embeddedId && (
+          <div className="viz-mob-topbar">
+            <div className="viz-mob-credits">
+              <Zap size={13} strokeWidth={2.5} />
+              <span>{credits ?? "—"} Credits</span>
+            </div>
+            <button className="viz-mob-upgrade" onClick={() => window.open("/pricing", "_blank")}>
+              Upgrade ✦
+            </button>
+          </div>
+        )}
+
+        {/* ── Mobile tab bar ── */}
+        {!embeddedId && (
+          <div className="viz-mob-tabs">
+            <button
+              className={`viz-mob-tab${mobileTab === "generator" ? " viz-mob-tab-active" : ""}`}
+              onClick={() => setMobileTab("generator")}
+            >Generator</button>
+            <button
+              className={`viz-mob-tab${mobileTab === "history" ? " viz-mob-tab-active" : ""}`}
+              onClick={() => setMobileTab("history")}
+            >History</button>
+          </div>
+        )}
+
+        <div className={`viz-workspace viz-workspace--${mobileTab}`}>
 
           {/* Sidebar */}
           <aside className="viz-sidebar">
 
+            {/* Hidden file input — shared by upload card + upload modal */}
+            <input
+              ref={sidebarFileRef}
+              type="file"
+              accept=".jpg,.png"
+              style={{ display: "none" }}
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleSidebarFile(f); e.target.value = ""; }}
+            />
+
             {activeInputType === "floor-plan-generator" ? (
               <FpgSidebarSection config={fpgConfig} onChange={setFpgConfig} getStyleImage={(s) => getStyleImage("floor-plan-generator", s)} />
-            ) : (
-            <div className="viz-sb-section">
-              <div className="viz-sb-section-title">
-                <UploadIcon size={13} strokeWidth={2.5} style={{ color: "#ec5b13" }} />
-                Upload Your Image
-              </div>
+            ) : (<>
+
+              {/* ── Upload card ── */}
               <div
-                className={`viz-sb-upload${isDraggingOver ? " viz-sb-upload-active" : ""}`}
-                onClick={() => (user || embeddedId) ? sidebarFileRef.current?.click() : openSignUp({ fallbackRedirectUrl: "/dashboard" })}
+                className={`viz-upload-card${isDraggingOver ? " viz-upload-card-drag" : ""}`}
                 onDragEnter={(e) => { e.preventDefault(); dragCounterRef.current++; setIsDraggingOver(true); }}
                 onDragLeave={(e) => { e.preventDefault(); dragCounterRef.current--; if (dragCounterRef.current === 0) setIsDraggingOver(false); }}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => { e.preventDefault(); dragCounterRef.current = 0; setIsDraggingOver(false); const f = e.dataTransfer.files[0]; if (f) handleSidebarFile(f); }}
               >
-                <input
-                  ref={sidebarFileRef}
-                  type="file"
-                  accept=".jpg,.png"
-                  style={{ display: "none" }}
-                  onChange={(e) => { const f = e.target.files?.[0]; if (f) handleSidebarFile(f); e.target.value = ""; }}
-                />
-                <UploadIcon size={24} style={{ color: "#ec5b13", strokeWidth: 1.5 }} />
-                <span className="viz-sb-upload-title">
-                  {isCreating ? "Creating project…" : "Click to upload or drag & drop"}
-                </span>
-                <span className="viz-sb-upload-sub">PNG, JPG · Max 10MB</span>
-              </div>
-            </div>
-            )}
-
-            {/* Room Type — only for interior-design and empty-room */}
-            {!embeddedId && activeInputType !== "floor-plan" && activeInputType !== "outdoor" && activeInputType !== "floor-plan-generator" && <div className="viz-sb-section">
-              <div className="viz-sb-section-title">
-                <Home size={13} strokeWidth={2.5} style={{ color: "#ec5b13" }} />
-                Room Type
-              </div>
-              <select
-                className="viz-room-select"
-                value={roomType}
-                onChange={(e) => setRoomType(e.target.value)}
-              >
-                {ROOM_TYPES.map((rt) => (
-                  <option key={rt} value={rt}>{rt}</option>
-                ))}
-              </select>
-            </div>}
-
-            {/* View Angle — only for floor-plan */}
-            {activeInputType === "floor-plan" && activeInputType !== "floor-plan-generator" && (
-              <div className="viz-sb-section">
-                <div className="viz-sb-section-title">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ec5b13" strokeWidth="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                  View Angle
-                </div>
-                <div className="viz-style-scroll">
-                  <div className="viz-style-grid">
-                    {Object.keys(DEFAULT_ANGLES).map((angle) => {
-                      const isProAngle = angle === "isometric" || angle === "crossSection";
-                      const locked = false;
-                      return (
-                        <div
-                          key={angle}
-                          className={`viz-style-card${viewAngle === angle && !locked ? " viz-style-card-active" : ""}${locked ? " viz-style-card-locked" : ""}`}
-                          onClick={() => {
-                            if (locked) { window.open("/pricing", "_blank"); return; }
-                            setViewAngle(angle);
-                          }}
-                          title={locked ? "Pro feature — Upgrade to unlock" : undefined}
-                        >
-                          <div className="viz-style-card-img">
-                            <img src={getAngleImage(angle)} alt={ANGLE_LABELS[angle]} style={locked ? { filter: "blur(3px) brightness(0.6)" } : undefined} />
-                            {locked ? (
-                              <div className="viz-style-card-lock">
-                                <Lock size={14} color="#fff" />
-                                <span>Pro</span>
-                              </div>
-                            ) : viewAngle === angle && (
-                              <div className="viz-style-card-check">
-                                <svg width="8" height="8" viewBox="0 0 12 12" fill="none" stroke="#fff" strokeWidth="2.5"><polyline points="2,6 5,9 10,3"/></svg>
-                              </div>
-                            )}
-                          </div>
-                          <div className="viz-style-card-label" style={locked ? { color: "#64748b" } : undefined}>{ANGLE_LABELS[angle]}</div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Design Style — hidden for floor-plan-generator (handled inside FpgSidebarSection) */}
-            {activeInputType !== "floor-plan-generator" && <div className="viz-sb-section viz-sb-section-grow">
-              <div className="viz-sb-section-title">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ec5b13" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-                Design Style
-              </div>
-              <div className="viz-style-scroll">
-                <div className="viz-style-grid">
-                  {styleList.map((s) => (
-                    <div
-                      key={s}
-                      className={`viz-style-card${renderStyle === s ? " viz-style-card-active" : ""}`}
-                      onClick={() => setRenderStyle(s)}
-                    >
-                      <div className="viz-style-card-img">
-                        <img src={getStyleImage(activeInputType, s)} alt={s} />
-                        {renderStyle === s && (
-                          <div className="viz-style-card-check">
-                            <svg width="8" height="8" viewBox="0 0 12 12" fill="none" stroke="#fff" strokeWidth="2.5"><polyline points="2,6 5,9 10,3"/></svg>
-                          </div>
-                        )}
-                      </div>
-                      <div className="viz-style-card-label">{s}</div>
+                {project?.originalImageUrl ? (
+                  /* Photo already uploaded — show thumbnail */
+                  <div className="viz-upload-preview">
+                    <img src={project.originalImageUrl} alt="Uploaded" className="viz-upload-preview-img" />
+                    <div className="viz-upload-preview-overlay">
+                      <button
+                        className="viz-upload-change-btn"
+                        onClick={openUploadModal}
+                      >
+                        <UploadIcon size={14} />
+                        Change Photo
+                      </button>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ) : (
+                  /* No photo yet */
+                  <>
+                    <div className="viz-upload-card-icon">
+                      <Home size={40} strokeWidth={1.2} style={{ color: "#9aaab8" }} />
+                    </div>
+                    <p className="viz-upload-card-title">Your dream room is one photo away</p>
+                    <p className="viz-upload-card-sub">One photo. Infinite possibilities.</p>
+                    <button
+                      className="viz-upload-card-btn"
+                      onClick={openUploadModal}
+                      disabled={isCreating}
+                    >
+                      <UploadIcon size={16} />
+                      {isCreating ? "Creating…" : "+ Add Photo"}
+                    </button>
+                  </>
+                )}
               </div>
-            </div>}
 
-            {/* Generate */}
+              {/* ── Option cards row ── */}
+              <div className="viz-opt-row">
+
+                {/* Room Type card — interior-design / empty-room only */}
+                {!embeddedId && activeInputType !== "floor-plan" && activeInputType !== "outdoor" && (
+                  <div className="viz-opt-card" onClick={() => setRoomTypeModalOpen(true)}>
+                    <div className={`viz-opt-card-icon${roomTypeChosen ? " viz-opt-card-icon-thumb" : ""}`} style={roomTypeChosen ? { background: "none", padding: 0 } : { background: "none" }}>
+                      {roomTypeChosen ? (
+                        <>
+                          <img
+                            src={ROOM_TYPE_DATA.find(r => r.name === roomType)?.img ?? "/card-room-after.webp"}
+                            alt={roomType}
+                            onError={(e) => { (e.target as HTMLImageElement).src = "/card-room-after.webp"; }}
+                            style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "0.75rem" }}
+                          />
+                          <button
+                            className="viz-opt-card-x"
+                            onClick={(e) => { e.stopPropagation(); setRoomTypeChosen(false); }}
+                          >✕</button>
+                        </>
+                      ) : (
+                        <img src="/icon-room-type.png" alt="Room Type" width={36} height={36} style={{ objectFit: "contain" }} />
+                      )}
+                    </div>
+                    <span className="viz-opt-card-label">Room Type</span>
+                    <span className="viz-opt-card-value">{roomType}</span>
+                    <button className="viz-opt-card-btn">{roomTypeChosen ? "Change" : "Select"}</button>
+                  </div>
+                )}
+
+                {/* View Angle card — floor-plan only */}
+                {activeInputType === "floor-plan" && (
+                  <div className="viz-opt-card" onClick={() => setAngleModalOpen(true)}>
+                    <div className="viz-opt-card-icon">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <span className="viz-opt-card-label">Angle</span>
+                    <span className="viz-opt-card-value">{ANGLE_LABELS[viewAngle] ?? viewAngle}</span>
+                    <button className="viz-opt-card-btn">Select</button>
+                  </div>
+                )}
+
+                {/* Style card */}
+                <div className="viz-opt-card" onClick={() => setStyleModalOpen(true)}>
+                  <div className={`viz-opt-card-icon${styleChosen ? " viz-opt-card-icon-thumb" : ""}`} style={styleChosen ? { background: "none", padding: 0 } : {}}>
+                    {styleChosen ? (
+                      <>
+                        <img
+                          src={getStyleImage(activeInputType, renderStyle)}
+                          alt={renderStyle}
+                          style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "0.75rem" }}
+                        />
+                        <button
+                          className="viz-opt-card-x"
+                          onClick={(e) => { e.stopPropagation(); setStyleChosen(false); }}
+                        >✕</button>
+                      </>
+                    ) : (
+                      <Sparkles size={24} strokeWidth={1.6} />
+                    )}
+                  </div>
+                  <span className="viz-opt-card-label">Style</span>
+                  <span className="viz-opt-card-value">{renderStyle}</span>
+                  <button className="viz-opt-card-btn">{styleChosen ? "Change" : "Select"}</button>
+                </div>
+
+
+              </div>
+
+            </>)}
+
+            {/* ── Generate (always pinned at bottom) ── */}
             <div className="viz-generate-wrap">
+              {!embeddedId && project?.originalImageUrl && (
+                <div className="viz-generate-img-count">
+                  <UploadIcon size={13} />
+                  1 image
+                </div>
+              )}
               <button
                 className="viz-generate-btn"
                 onClick={runGeneration}
@@ -745,97 +1011,9 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
 
           </aside>
 
-          {/* Output card */}
+          {/* Right column: output card + history */}
+          <div className="viz-output-col">
           <div className="viz-output-card" ref={previewCardRef}>
-            <div className="viz-output-head">
-              <span className="viz-output-title">Preview</span>
-              <div className="viz-output-actions">
-                {project?._id && (
-                  <RateRender projectId={project._id} initialRating={project.rating ?? null} />
-                )}
-                <div className="viz-export-wrapper">
-                  <button className="viz-download-btn" onClick={() => setExportDropdownOpen(o => !o)} disabled={!currentImage && !guestResult}>
-                    <Download size={12} strokeWidth={2.5} />
-                    <SparklesText
-                      className="viz-download-sparkles-text"
-                      sparklesCount={4}
-                      colors={{ first: "#ffffff", second: "#e2e8f0" }}
-                    >
-                      Export
-                    </SparklesText>
-                    <div className="viz-download-shimmer" />
-                  </button>
-                  {exportDropdownOpen && (
-                    <div className="viz-export-dropdown">
-                      <p className="viz-export-title">Export options</p>
-                      <div className="viz-export-formats">
-                        {(["png", "jpg", "pdf"] as const).map(fmt => (
-                          <label
-                            key={fmt}
-                            className={`viz-export-fmt${exportFormat === fmt ? " viz-export-fmt-active" : ""}${fmt === "pdf" && !hasPurchased ? " viz-export-fmt-locked" : ""}`}
-                            onClick={() => {
-                              if (fmt === "pdf" && !hasPurchased) {
-                                window.open("/pricing", "_blank");
-                              } else {
-                                setExportFormat(fmt);
-                              }
-                            }}
-                          >
-                            <input
-                              type="radio"
-                              name="exportFormat"
-                              value={fmt}
-                              checked={exportFormat === fmt}
-                              readOnly
-                              disabled={fmt === "pdf" && !hasPurchased}
-                              style={{ accentColor: "#ec5b13" }}
-                            />
-                            <span className="viz-export-fmt-label">{fmt.toUpperCase()}</span>
-                            {fmt === "pdf" && !hasPurchased && <span className="viz-export-pro-badge">👑 Pro</span>}
-                          </label>
-                        ))}
-                      </div>
-                      <p className="viz-export-desc">
-                        {exportFormat === "png" ? "Standard quality · Upgrade for HD" : "Smaller file size, great for sharing."}
-                      </p>
-                      <button className="viz-export-dl-btn" onClick={() => handleFreeDownload()}>
-                        <Download size={14} strokeWidth={2.5} />
-                        Download
-                      </button>
-                      {hasPurchased ? (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', justifyContent: 'center', padding: '0.5rem 0.75rem', background: 'rgba(22,163,74,0.07)', borderRadius: '0.5rem', marginTop: '0.25rem' }}>
-                          <span style={{ fontSize: '0.85rem' }}>🔓</span>
-                          <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#16a34a' }}>HD quality · Commercial use unlocked</span>
-                        </div>
-                      ) : (
-                        <>
-                          <p style={{ fontSize: '0.7rem', color: '#94a3b8', margin: '0 0 0.25rem', textAlign: 'center' }}>
-                            Standard quality · <a href="/pricing" target="_blank" rel="noopener noreferrer" style={{ color: '#ec5b13', fontWeight: 700, textDecoration: 'none' }}>Upgrade for HD</a>
-                          </p>
-                          <p className="viz-export-commercial">
-                            Free downloads are for personal use only.{" "}
-                            <a href="/pricing" target="_blank" rel="noopener noreferrer" className="viz-export-get-plan">
-                              Get a plan
-                            </a>{" "}
-                            for commercial use.
-                          </p>
-                        </>
-                      )}
-                    </div>
-                  )}
-                </div>
-                <button className="viz-icon-btn" onClick={() => setLightboxOpen(true)} disabled={!currentImage} title="Fullscreen">
-                  <Maximize2 size={13} />
-                </button>
-                <button className="viz-icon-btn" title="Zoom out" onClick={zoomOut} disabled={zoomLevel <= 0.5}>
-                  <ZoomOut size={13} />
-                </button>
-                <span className="viz-zoom-label">{Math.round(zoomLevel * 100)}%</span>
-                <button className="viz-icon-btn" title="Zoom in" onClick={zoomIn} disabled={zoomLevel >= 3}>
-                  <ZoomIn size={13} />
-                </button>
-              </div>
-            </div>
 
             {/* Comparison slider */}
             <div className="viz-compare-wrap">
@@ -910,10 +1088,6 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                     />
                     <div className="viz-compare-label viz-label-left">{fb.labelBefore}</div>
                     <div className="viz-compare-label viz-label-right">{fb.labelAfter}</div>
-                    <div className="viz-fallback-hint">
-                      <UploadIcon size={14} style={{ color: "#ec5b13" }} />
-                      Upload your image to replace this example
-                    </div>
                   </>
                 );
               })()}
@@ -948,8 +1122,79 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
             </div>
           </div>
 
-        </div>
+
+          {/* ── My Renders — all user projects with a rendered image ── */}
+          {!embeddedId && userProjects.length > 0 && (
+            <div className="viz-history-section">
+              <div className="viz-history-header">
+                <span className="viz-history-title">My Renders</span>
+                <span className="viz-history-count">{userProjects.length}</span>
+              </div>
+              <div className="viz-history-grid">
+                {userProjects.map((p) => {
+                  const isActive = p._id === project?._id;
+                  return (
+                    <div
+                      key={p._id}
+                      className={`viz-history-card${isActive ? " viz-history-card-active" : ""}`}
+                      onClick={() => setHistoryModal(p)}
+                    >
+                      <div className="viz-history-card-img">
+                        <img src={p.renderedImageUrl} alt={p.name} onContextMenu={e => e.preventDefault()} />
+                        <div className="viz-history-card-overlay">
+                          <button
+                            className="viz-hc-action"
+                            title="Preview"
+                            onClick={(e) => { e.stopPropagation(); setHistoryModal(p); }}
+                          >
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                          </button>
+                          <button
+                            className="viz-hc-action"
+                            title="Download"
+                            onClick={(e) => { e.stopPropagation(); downloadHistoryImage(p.renderedImageUrl, p.name || "render"); }}
+                          >
+                            <Download size={15} strokeWidth={2.2} />
+                          </button>
+                        </div>
+                        <div className="viz-history-card-info">
+                          {p.renderStyle && <span className="viz-hc-style">{p.renderStyle}</span>}
+                          <span className="viz-hc-date">{new Date(p.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>
+                        </div>
+                      </div>
+                      {isActive && <div className="viz-history-card-active-bar" />}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          </div>{/* end viz-output-col */}
+
+        </div>{/* end viz-workspace */}
+
+        {/* ── Mobile sticky generate bar ── */}
+        {!embeddedId && !roomTypeModalOpen && !styleModalOpen && !angleModalOpen && (
+          <div className="viz-mob-generate-bar">
+            <div className="viz-mob-generate-count">
+              <UploadIcon size={13} />
+              {project?.originalImageUrl ? "1 image" : "No image"}
+            </div>
+            <button
+              className="viz-mob-generate-btn"
+              onClick={runGeneration}
+              disabled={isProcessing || (activeInputType !== "floor-plan-generator" && (isNewMode || !project))}
+            >
+              <Zap size={15} strokeWidth={2.5} />
+              {isProcessing ? "Generating…" : currentImage ? "Regenerate" : "Generate"}
+            </button>
+          </div>
+        )}
+
       </main>
+
+      </div>{/* end viz-body */}
 
       {modalType && (
         <div className="viz-modal-backdrop">
@@ -1011,6 +1256,15 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
         </div>
       )}
 
+      {/* ── History render modal ── */}
+      {historyModal && (
+        <ProjectModal
+          project={historyModal}
+          onClose={() => setHistoryModal(null)}
+          onDownload={() => downloadHistoryImage(historyModal.renderedImageUrl, historyModal.name || "render")}
+        />
+      )}
+
       {currentImage && (
         <Lightbox
           open={lightboxOpen}
@@ -1031,11 +1285,6 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
         />
       )}
 
-      <NameProjectModal
-        open={nameModalOpen}
-        onConfirm={handleNameConfirm}
-        onCancel={handleNameCancel}
-      />
     </div>
   );
 }

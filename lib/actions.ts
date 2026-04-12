@@ -42,10 +42,11 @@ export async function getProject(id: string) {
     return project ? JSON.parse(JSON.stringify(project)) : null;
 }
 
-export async function updateProject(id: string, renderedImageUrl: string) {
+export async function updateProject(id: string, renderedImageUrl: string, style?: string, roomType?: string) {
  await connectDb();
  await Project.findByIdAndUpdate(id, {
-    renderedImageUrl, status: "done"
+    $set: { renderedImageUrl, status: "done" },
+    $push: { renders: { url: renderedImageUrl, style: style ?? "Modern", roomType: roomType ?? "", createdAt: new Date() } },
  });
 }
 
