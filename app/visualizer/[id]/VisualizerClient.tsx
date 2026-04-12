@@ -191,6 +191,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
 
   const runGeneration = async () => {
     if (isProcessing) return;
+    setMobileTab("history");
 
     // Guest mode — no login, no project, direct generation
     if (embeddedId && !user) {
@@ -1119,6 +1120,15 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                   </div>
                 </div>
               )}
+
+              {/* Mobile expand button — shown only when image is ready */}
+              {currentImage && !isProcessing && (
+                <button className="viz-mob-expand-btn" onClick={() => setLightboxOpen(true)}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                  </svg>
+                </button>
+              )}
             </div>
           </div>
 
@@ -1174,21 +1184,72 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
 
         </div>{/* end viz-workspace */}
 
+        {/* ── Mobile export sheet ── */}
+        {exportDropdownOpen && (
+          <>
+            <div style={{ position: "fixed", inset: 0, zIndex: 149 }} onClick={() => setExportDropdownOpen(false)} />
+            <div className="viz-mob-export-sheet">
+              <p style={{ margin: 0, fontSize: "0.85rem", fontWeight: 700, color: "#0f172a" }}>Export image</p>
+              <div style={{ display: "flex", gap: "0.5rem" }}>
+                {(["png", "jpg", "pdf"] as const).map(fmt => {
+                  const locked = fmt === "pdf" && !hasPurchased;
+                  return (
+                    <label
+                      key={fmt}
+                      className={`viz-export-fmt${exportFormat === fmt ? " viz-export-fmt-active" : ""}${locked ? " viz-export-fmt-locked" : ""}`}
+                      style={{ flex: 1, justifyContent: "center" }}
+                      onClick={() => { if (locked) { window.open("/pricing", "_blank"); } else { setExportFormat(fmt); } }}
+                    >
+                      <input type="radio" name="mob-fmt" value={fmt} checked={exportFormat === fmt} readOnly disabled={locked} style={{ accentColor: "#ec5b13" }} />
+                      <span className="viz-export-fmt-label">{fmt.toUpperCase()}</span>
+                      {locked && <span className="viz-export-pro-badge">👑</span>}
+                    </label>
+                  );
+                })}
+              </div>
+              <button className="viz-export-dl-btn" style={{ marginBottom: 0 }} onClick={() => handleFreeDownload(exportFormat)}>
+                <Download size={13} strokeWidth={2.5} /> Download {exportFormat.toUpperCase()}
+              </button>
+            </div>
+          </>
+        )}
+
         {/* ── Mobile sticky generate bar ── */}
         {!embeddedId && !roomTypeModalOpen && !styleModalOpen && !angleModalOpen && (
           <div className="viz-mob-generate-bar">
-            <div className="viz-mob-generate-count">
-              <UploadIcon size={13} />
-              {project?.originalImageUrl ? "1 image" : "No image"}
-            </div>
-            <button
-              className="viz-mob-generate-btn"
-              onClick={runGeneration}
-              disabled={isProcessing || (activeInputType !== "floor-plan-generator" && (isNewMode || !project))}
-            >
-              <Zap size={15} strokeWidth={2.5} />
-              {isProcessing ? "Generating…" : currentImage ? "Regenerate" : "Generate"}
-            </button>
+            {mobileTab === "history" && currentImage ? (
+              <>
+                <button
+                  className="viz-mob-export-btn"
+                  onClick={() => setExportDropdownOpen(o => !o)}
+                >
+                  <Download size={15} strokeWidth={2.5} />
+                  Export
+                </button>
+                <button
+                  className="viz-mob-generate-btn"
+                  onClick={() => setMobileTab("generator")}
+                >
+                  <Zap size={15} strokeWidth={2.5} />
+                  Regenerate
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="viz-mob-generate-count">
+                  <UploadIcon size={13} />
+                  {project?.originalImageUrl ? "1 image" : "No image"}
+                </div>
+                <button
+                  className="viz-mob-generate-btn"
+                  onClick={runGeneration}
+                  disabled={isProcessing || (activeInputType !== "floor-plan-generator" && (isNewMode || !project))}
+                >
+                  <Zap size={15} strokeWidth={2.5} />
+                  {isProcessing ? "Generating…" : "Generate"}
+                </button>
+              </>
+            )}
           </div>
         )}
 
