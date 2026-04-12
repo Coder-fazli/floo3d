@@ -3,7 +3,7 @@ import { StyleDef } from "./types";
 const interiorStyles: Record<string, StyleDef> = {
   Modern: {
     rules: `
-- COLOUR: Apply the 70-20-10 rule strictly. 70% neutral foundation — whites, cool greys, warm greige, or deep charcoal for walls, floors and large surfaces. 20% secondary tone — one consistent mid-tone across soft furnishings and rugs, either muted earth (tobacco, slate, warm taupe) OR a single muted jewel tone (deep sage, dusty navy, muted terracotta) — never both. 10% accent — matte black, brushed stainless steel, or polished chrome hardware, frames and fixtures only. No warm saturated colours. No mixed colour schemes.
+- COLOUR: Apply the 70-20-10 rule strictly. 70% neutral foundation — walls and large surfaces MUST be light: warm greige, off-white, soft warm white, or very light cool grey. Never dark charcoal, never black walls, never dark grey walls — even if the input room is dark. 20% secondary tone — one consistent mid-tone across soft furnishings and rugs, either muted earth (tobacco, slate, warm taupe) OR a single muted jewel tone (deep sage, dusty navy, muted terracotta) — never both. 10% accent — matte black, brushed stainless steel, or polished chrome hardware, frames and fixtures only. No warm saturated colours. No mixed colour schemes.
 - CONTRAST: Modern design lives on deliberate contrast. Pair light walls with dark furniture, or dark walls with light upholstery. Pair smooth leather with raw concrete. Pair polished stone with matte plaster. At least one strong contrast pair must be visible in the render.
 - FURNITURE: Replace or adapt all ornate, carved or curved decorative pieces. Furniture must read as geometric and angular — flat surfaces, clean edges, low-profile silhouettes with long horizontal lines. Exposed legs in metal or dark wood are correct. Upholstery in smooth leather, solid-colour wool or neutral linen only — no patterns, no tufting, no fringe. Multi-functional pieces preferred — storage ottomans, extendable tables.
 - SURFACES: Walls must be flat matte in a single neutral — no wallpaper, no panelling, no decorative texture. Floor must remain the same material as input but rendered cleaner — wood floors appear as horizontal-grain walnut, ash or maple; tile appears uniform and seamless; concrete appears polished or honed. No rugs with patterns — solid or subtle texture only.
@@ -169,6 +169,8 @@ GLOBAL RULES — DO NOT VIOLATE UNDER ANY CIRCUMSTANCES:
 6) No text, labels or watermarks in the output.
 7) Preserve the spatial layout of the room — large furniture should remain in roughly the same position unless the style clearly requires a minor adjustment.
 8) When reducing objects or furniture, remove the least important items first while keeping the room believable and functional.
+9) LIGHTING: Always render as if photographed professionally in bright natural daylight — regardless of how dark, dim or artificially lit the original photo is. Improve and brighten the lighting. Never inherit a dark, gloomy or yellow-tinted mood from the input photo.
+10) TRANSFORMATION: The output must look dramatically different from the input. If the input is cluttered, dark and dated — the output must be clean, bright and styled. A subtle change is a failure. The viewer must immediately see a complete transformation.
 ${rr}
 
 STYLE APPLICATION — ${style.toUpperCase()}:
