@@ -1318,54 +1318,46 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
           {/* ── Preview action bar ── */}
           {currentImage && !isProcessing && !embeddedId && (
             <div className="viz-preview-actions">
-              {/* Export button + dropdown */}
+              {/* Export */}
               <div style={{ position: "relative" }}>
                 <button
-                  className="viz-preview-action-btn"
+                  className="pj-img-footer-btn"
                   onClick={() => { setExportDropdownOpen(o => !o); setPreviewSharePopover(false); }}
                 >
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
                   </svg>
-                  Export
+                  <span>Export</span>
                 </button>
               </div>
 
-              {/* Share button + popover */}
+              {/* Share */}
               <div style={{ position: "relative" }}>
                 <button
-                  className="viz-preview-action-btn"
+                  className={`pj-img-footer-btn${previewSharePopover ? " pj-img-footer-btn-active" : ""}`}
                   onClick={() => { setPreviewSharePopover(o => !o); setExportDropdownOpen(false); }}
                 >
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-                  </svg>
-                  Share
+                  <svg width="28" height="28" viewBox="0 0 512 512" fill="none" stroke="currentColor" strokeWidth="36" strokeLinecap="round" strokeLinejoin="round"><path d="M368 32l112 112-112 112V192c-96 0-192 32-224 128 0-128 64-240 224-256V32z"/><path d="M432 368v80a32 32 0 0 1-32 32H80a32 32 0 0 1-32-32V144a32 32 0 0 1 32-32h80"/></svg>
+                  <span>Share</span>
                 </button>
                 {previewSharePopover && (
                   <>
                     <div style={{ position: "fixed", inset: 0, zIndex: 149 }} onClick={() => setPreviewSharePopover(false)} />
-                    <div className="viz-share-popover">
-                      <button className="viz-share-popover-item" onClick={handlePreviewCopyLink}>
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-                          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-                        </svg>
+                    <div style={{ position: "absolute", bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)", background: "#fff", borderRadius: "0.875rem", boxShadow: "0 8px 32px rgba(0,0,0,0.15)", padding: "0.5rem", display: "flex", gap: "0.25rem", zIndex: 200, whiteSpace: "nowrap" }}>
+                      <button onClick={handlePreviewCopyLink} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3rem", padding: "0.6rem 0.75rem", background: "none", border: "none", cursor: "pointer", borderRadius: "0.625rem", fontSize: "0.68rem", fontWeight: 600, color: "#0f172a", fontFamily: "inherit" }}
+                        onMouseEnter={e => (e.currentTarget.style.background = "#f1f5f9")} onMouseLeave={e => (e.currentTarget.style.background = "none")}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
                         Copy link
                       </button>
-                      <button className="viz-share-popover-item" onClick={handlePreviewShareImage}>
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-                          <polyline points="21 15 16 10 5 21"/>
-                        </svg>
-                        Share image
+                      <button onClick={handlePreviewShareImage} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3rem", padding: "0.6rem 0.75rem", background: "none", border: "none", cursor: "pointer", borderRadius: "0.625rem", fontSize: "0.68rem", fontWeight: 600, color: "#0f172a", fontFamily: "inherit" }}
+                        onMouseEnter={e => (e.currentTarget.style.background = "#f1f5f9")} onMouseLeave={e => (e.currentTarget.style.background = "none")}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                        Share Image
                       </button>
-                      <button className="viz-share-popover-item" onClick={handlePreviewShareTwitter}>
-                        <svg width="15" height="15" viewBox="0 0 512 512" fill="currentColor">
-                          <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/>
-                        </svg>
-                        Share on X
+                      <button onClick={handlePreviewShareTwitter} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3rem", padding: "0.6rem 0.75rem", background: "none", border: "none", cursor: "pointer", borderRadius: "0.625rem", fontSize: "0.68rem", fontWeight: 600, color: "#0f172a", fontFamily: "inherit" }}
+                        onMouseEnter={e => (e.currentTarget.style.background = "#f1f5f9")} onMouseLeave={e => (e.currentTarget.style.background = "none")}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        X
                       </button>
                     </div>
                   </>
