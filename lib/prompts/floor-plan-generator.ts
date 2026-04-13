@@ -21,46 +21,115 @@ export interface FloorPlanGeneratorConfig {
 }
 
 const stylePrompts: Record<string, string> = {
-    blueprint: "Clean architectural blueprint style. White lines on a dark blue background, or black lines on white — precise and technical. Thin walls shown as double lines with correct thickness. Standard architectural symbols for doors (swing arc), windows (three parallel lines on wall), stairs. Room labels in clean sans-serif text. North arrow in corner. No furniture detail — only fixed elements. No decorative elements, no color fills, no gradients.",
-    colored: "Top-down 2D floor plan with flat colored rooms. Each room filled with a distinct soft pastel color — living room in warm beige, bedrooms in soft blue, kitchen in light yellow, bathrooms in light teal, other rooms in muted grey or green. Walls are thick solid dark lines. Furniture shown as simple flat 2D icons in a slightly darker shade of the room color. Doors shown as thin arcs. Clean, readable, no gradients, no shadows, no 3D effect.",
-    isometric: "Isometric 3D dollhouse render from a fixed corner angle — camera at 45 degrees looking down at the front corner. Roof removed to show all interior rooms. Walls have visible height and thickness. Realistic furniture and materials inside each room. Consistent lighting from above-left. White or light grey background. No text, no labels, no annotations.",
-    "3d top-down": "Photorealistic 3D render with camera mounted directly overhead at 90 degrees — zero tilt, zero perspective angle. The view is purely flat like a map but rendered in 3D with realistic materials. Ceiling removed to show interior. Realistic furniture, floor materials, lighting and soft shadows visible from above. High-detail render. No text, no labels, no watermarks.",
+    blueprint: `OUTPUT STYLE — ARCHITECTURAL BLUEPRINT:
+White or black lines on a contrasting background (dark blue or white). Precise and technical.
+- Walls: double lines. Exterior walls noticeably thicker (≈ 3× line width) than interior partitions.
+- Doors: standard quarter-circle swing arc on the wall line, showing opening direction.
+- Windows: three parallel lines spanning the wall opening on exterior walls only.
+- Stairs (if multi-floor): parallel lines with directional arrow labelled "UP".
+- Room labels: clean sans-serif text centred inside each room.
+- North arrow in top-right corner.
+- NO furniture, NO decorative objects, NO color fills, NO gradients, NO shadows, NO dimensions text.`,
+
+    colored: `OUTPUT STYLE — COLORED 2D FLOOR PLAN:
+Top-down 2D plan with flat pastel-colored rooms. Clean and readable.
+- Room fills: living room warm beige, bedrooms soft blue, kitchen light yellow, bathrooms light teal, dining muted green, office light grey, corridors/hallways off-white.
+- Exterior walls thick solid dark lines. Interior partition walls thinner.
+- Furniture as simple flat 2D icons in a slightly darker shade of the room color.
+- Doors: thin quarter-circle arcs showing opening direction. Windows: short perpendicular lines on exterior walls.
+- Room name labels centred in each room.
+- NO gradients, NO shadows, NO 3D effects, NO dimensions text.`,
+
+    isometric: `OUTPUT STYLE — ISOMETRIC 3D DOLLHOUSE:
+Strict isometric perspective — camera at 45 degrees looking down at the front corner. Roof fully removed.
+- Wall height: approximately 2.7 metres (standard ceiling height). Consistent across all rooms.
+- Exterior walls clearly thicker and more solid than interior partitions.
+- Light source: top-left. Consistent soft shadows on all right-facing and floor surfaces.
+- Realistic furniture and materials per room type, correctly scaled to wall height.
+- Clean white or light grey studio background. Building sits on a thin white presentation base.
+- NO text, NO labels, NO annotations, NO watermarks.`,
+
+    "3d top-down": `OUTPUT STYLE — PHOTOREALISTIC 3D TOP-DOWN:
+Camera at exactly 90 degrees overhead. Zero tilt, zero perspective distortion — purely flat like a map but in 3D.
+- Ceiling fully removed. All rooms visible from directly above.
+- Wall height consistent (≈ 2.7m). Walls cast short downward shadows onto the floor.
+- Light source: directly above with slight ambient from top-left. Soft uniform shadows.
+- Realistic floor materials per room: hardwood in living/dining/bedroom, tile in kitchen/bathroom, carpet in office.
+- Furniture rendered from directly above: bed rectangle with pillow circle, sofa rectangle, table with chairs, counters, toilet D-shape, sink oval.
+- NO text, NO labels, NO watermarks.`,
 }
 
-export function buildFloorPlanGeneratorPrompt(config:FloorPlanGeneratorConfig) : string {
-    const { propertyType, area, areaUnit, floors, rooms, extras,
-  style  } = config; 
+export function buildFloorPlanGeneratorPrompt(config: FloorPlanGeneratorConfig): string {
+    const { propertyType, area, areaUnit, floors, rooms, extras, style } = config;
 
-  const roomList = [
-    rooms.bedroom > 0 && `${rooms.bedroom} Bedroom${rooms.bedroom > 1 ? "s" : ""}`, 
-    rooms.bathroom > 0 && `${rooms.bathroom} Bathroom${rooms.bathroom > 1 ? "s" : ""}`, 
-    rooms.kitchen > 0 && `${rooms.kitchen} Kitchen`, 
-    rooms.livingRoom > 0 && `${rooms.livingRoom} Living Room`, 
-    rooms.diningRoom > 0 && `${rooms.diningRoom} Dining Room`, 
-    rooms.office > 0 && `${rooms.office} Office`, 
-    extras.garage && "Garage", 
-    extras.balcony && "Balcony", 
-    extras.terrace && "Terrace", 
-    extras.garden && "Garden area"
-  ].filter(Boolean).join(", ");
+    const areaM2 = areaUnit === "sqft" ? Math.round(area * 0.0929) : area;
+    const areaDisplay = `${area} ${areaUnit} (≈ ${areaM2} m²)`;
 
-  const floorNote = floors > 1
-    ? `Show the ground floor plan only. Label it clearly as "Ground Floor". Do not stack multiple floors in one image.`
-    : `Single floor plan.`;
+    const roomList = [
+        rooms.bedroom    > 0 && `${rooms.bedroom} Bedroom${rooms.bedroom > 1 ? "s" : ""}`,
+        rooms.bathroom   > 0 && `${rooms.bathroom} Bathroom${rooms.bathroom > 1 ? "s" : ""}`,
+        rooms.kitchen    > 0 && `${rooms.kitchen} Kitchen`,
+        rooms.livingRoom > 0 && `${rooms.livingRoom} Living Room`,
+        rooms.diningRoom > 0 && `${rooms.diningRoom} Dining Room`,
+        rooms.office     > 0 && `${rooms.office} Office`,
+        extras.garage    && "Garage",
+        extras.balcony   && "Balcony",
+        extras.terrace   && "Terrace",
+        extras.garden    && "Garden",
+    ].filter(Boolean).join(", ");
 
-  return `Generate an accurate architectural floor plan for the following property.
+    const activeExtras = [
+        extras.garage  && "Garage: attached to the building on a side wall with a direct interior door entry. Sized for at least one car.",
+        extras.balcony && "Balcony: accessible via a glass door from the living room or master bedroom. Shown as an open outdoor slab with a railing on the exterior edge.",
+        extras.terrace && "Terrace: a larger paved outdoor area connected to the ground floor via sliding or double doors. Shown with a distinct floor pattern (e.g. stone grid).",
+        extras.garden  && "Garden: a clearly bounded outdoor area adjacent to the building, shown with a grass texture or green fill. Must not exceed the building footprint in size.",
+    ].filter(Boolean);
 
-PROPERTY: ${floors}-floor ${propertyType}, total area ${area} ${areaUnit}
-ROOMS: ${roomList}
+    const extrasBlock = activeExtras.length > 0
+        ? `EXTRAS — include all of the following:\n${activeExtras.map(e => `- ${e}`).join("\n")}`
+        : "";
 
-STRICT RULES — DO NOT VIOLATE:
-1) Scale rooms proportionally to the total area of ${area} ${areaUnit}. A ${area} ${areaUnit} property must not look like a mansion or a studio — match realistic proportions.
-2) Every room listed must appear exactly once. Do not add extra rooms, storage rooms, hallways or spaces not listed.
-3) Walls must have consistent thickness throughout. Doors and windows must be placed on walls only — never floating.
-4) Bathrooms must contain only bathroom fixtures. Kitchens must contain only kitchen fixtures. Do not mix furniture across rooms.
-5) ${floorNote}
-6) Extras if present: ${extras.garage ? "Garage attached to the building." : ""} ${extras.balcony ? "Balcony accessible from a main room." : ""} ${extras.terrace ? "Terrace shown as an outdoor area connected to the building." : ""} ${extras.garden ? "Garden shown as a clearly bounded outdoor area adjacent to the building — sized proportionally, not larger than the building footprint." : ""}
-7) No text inside rooms other than room name labels. No dimensions, no north arrow unless the style requires it. No decorative borders.
+    const floorBlock = floors > 1
+        ? `FLOORS: ${floors}-floor building. Show the GROUND FLOOR PLAN ONLY. Place a staircase near the entrance hall or a central corridor — draw it as parallel lines with an "UP" arrow. Label the drawing "Ground Floor".`
+        : `FLOORS: Single-storey building.`;
+
+    const furnitureRule = style === "blueprint"
+        ? "NO furniture of any kind. Show fixed elements only: walls, doors (swing arcs), windows, stairs, built-in kitchen counter outline, bathroom fixture outlines (toilet D, sink oval, bath rectangle)."
+        : `Add furniture to every room:
+- Living room: sofa, coffee table, TV unit against a wall.
+- Bedroom: bed (sized to room — double or single), bedside tables, wardrobe along a wall.
+- Kitchen: L-shaped or linear counter with sink, stove, and fridge. Counter along walls, not floating.
+- Dining room: rectangular dining table with chairs on all sides.
+- Bathroom: toilet, sink, and shower cubicle or bathtub — arranged to fit the room without overlapping.
+- Office: desk against a wall, office chair, small bookshelf.
+All furniture must be correctly scaled to the room and wall height. No furniture floating outside room boundaries.`;
+
+    return `Generate a precise, professional architectural floor plan for the following property.
+
+PROPERTY TYPE: ${propertyType}
+TOTAL AREA: ${areaDisplay}
+ROOMS REQUIRED: ${roomList}
+${floorBlock}
+
+BUILDING FOOTPRINT:
+- Use a compact, realistic building shape — preferably rectangular or a simple L-shape. No irregular, fragmented or disconnected shapes.
+- The building outline must form a single closed perimeter. All rooms must sit inside this perimeter.
+- The main entrance (front door) faces the bottom edge of the image. Street side is bottom.
+
+ROOM LAYOUT RULES — FOLLOW ALL STRICTLY:
+1. AREA SCALE: Total built area is ${areaDisplay}. Every room must be proportionally sized to this total. Do not make rooms too large or too small for a ${areaM2} m² ${propertyType}.
+2. ROOM SIZE HIERARCHY: Living room = largest room. Bedrooms = medium-large. Kitchen and dining = medium. Bathrooms = smallest. Office ≈ bedroom size.
+3. COMPLETENESS: Every room in the list must appear exactly once: ${roomList}. Do not add unlisted rooms. Do not omit any listed room.
+4. CIRCULATION: Include a small entrance hallway at the front door. Add narrow corridors only where needed to connect rooms. Every room must be accessible through its own door — never only through another room (except en-suite bathrooms directly off a master bedroom).
+5. LOGICAL ADJACENCY: Kitchen must be adjacent or directly connected to dining room. Living room near the entrance. Bedrooms grouped together away from kitchen and living areas. Bathrooms adjacent to the bedrooms they serve. Office away from bedrooms if space allows.
+6. WET ROOMS: Kitchen and bathrooms should share or be near a common plumbing wall. Group them on the same side of the building where possible.
+7. WALLS: Exterior walls thicker than interior partitions throughout. All walls are straight and aligned to a grid — no diagonal walls. No gaps in the building perimeter.
+8. OPENINGS: Every room has at least one door. Windows appear on exterior walls only — never on interior partition walls. Every habitable room (bedroom, living, kitchen, dining, office) has at least one exterior window.
+9. NO OVERLAPPING: Rooms must not overlap each other. Every part of the floor plan belongs to exactly one room, wall, or corridor.
+${extrasBlock ? `\n${extrasBlock}` : ""}
+
+FURNITURE & FIXTURES:
+${furnitureRule}
 
 ${stylePrompts[style]}`;
 }
