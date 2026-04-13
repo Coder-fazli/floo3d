@@ -238,7 +238,6 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Generation failed");
         setCurrentImage(data.renderedImageUrl);
-        setMobileShowCompare(false);
         setMobileTab("history");
         if (data.projectId) {
           window.history.replaceState(null, "", `/visualizer/${data.projectId}`);
@@ -361,7 +360,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   };
 
   const [mobileTab, setMobileTab] = useState<"generator" | "history">("generator");
-  const [mobileShowCompare, setMobileShowCompare] = useState(false);
+  const [mobileCompareOpen, setMobileCompareOpen] = useState(false);
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
   const [exportFormat, setExportFormat] = useState<"png" | "jpg" | "pdf">("png");
   const [previewExportOpen, setPreviewExportOpen] = useState(false);
@@ -482,7 +481,6 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
     if (window.innerWidth > 768) { setHistoryModal(p); return; }
     setProject(p);
     setCurrentImage(p.renderedImageUrl);
-    setMobileShowCompare(false);
     setMobileTab("history");
     previewCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -1232,7 +1230,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                   onClick={() => setLightboxOpen(true)}
                   onContextMenu={e => e.preventDefault()}
                 />
-              ) : project?.originalImageUrl && currentImage && mobileShowCompare ? (
+              ) : project?.originalImageUrl && currentImage ? (
                 <ReactCompareSlider
                   defaultValue={50}
                   style={{ width: "100%", height: "100%", transform: `scale(${zoomLevel})`, transformOrigin: "center", transition: "transform 0.3s ease" }}
@@ -1263,14 +1261,6 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                       onContextMenu={e => e.preventDefault()}
                     />
                   }
-                />
-              ) : project?.originalImageUrl && currentImage && !mobileShowCompare ? (
-                <img
-                  src={currentImage}
-                  alt="Result"
-                  style={{ width: "100%", height: "100%", objectFit: "contain", background: "#f1f5f9", cursor: "zoom-in" }}
-                  onClick={() => setLightboxOpen(true)}
-                  onContextMenu={e => e.preventDefault()}
                 />
               ) : project?.originalImageUrl ? (
                 <NextImage src={project.originalImageUrl} alt="Original" fill style={{ objectFit: "contain", background: "#f1f5f9" }} />
@@ -1341,7 +1331,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
 
               {/* Mobile-only: Compare */}
               {project?.originalImageUrl && (
-                <button className={`pj-img-footer-btn viz-preview-mob-only${mobileShowCompare ? " pj-img-footer-btn-active" : ""}`} onClick={() => setMobileShowCompare(v => !v)}>
+                <button className="pj-img-footer-btn viz-preview-mob-only" onClick={() => setMobileCompareOpen(true)}>
                   <svg width="28" height="28" viewBox="0 0 512 512" fill="currentColor"><path d="M75 92v328h362V92H75zm322 288H115V132h282v248zM181 204a25 25 0 1 0 0-50 25 25 0 0 0 0 50zm-46 136 70-96 46 64 34-46 72 78H135zM0 142h55v228H0zm457 0h55v228h-55zM96 420h320v50H96zm46 62h18v30h-18zm36 0h18v30h-18zm36 0h18v30h-18zm36 0h18v30h-18zm36 0h18v30h-18zM66 450H18l24-30 24 30zm380 0 24-30 24 30h-48z"/></svg>
                   <span>Compare</span>
                 </button>
@@ -1602,6 +1592,27 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                 </>
               )}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Mobile compare modal ── */}
+      {mobileCompareOpen && project?.originalImageUrl && currentImage && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 500, background: "#000", display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.75rem 1rem", background: "rgba(0,0,0,0.7)" }}>
+            <span style={{ color: "#fff", fontSize: "0.85rem", fontWeight: 700 }}>Before / After</span>
+            <button onClick={() => setMobileCompareOpen(false)} style={{ background: "rgba(255,255,255,0.15)", border: "none", borderRadius: "50%", width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#fff" }}>
+              <X size={18} />
+            </button>
+          </div>
+          <div style={{ flex: 1, overflow: "hidden" }}>
+            <ReactCompareSlider
+              defaultValue={50}
+              style={{ width: "100%", height: "100%" }}
+              handle={<ReactCompareSliderHandle buttonStyle={{ background: "#fff", border: "none", boxShadow: "0 2px 16px rgba(0,0,0,0.25)", color: "#ec5b13" }} linesStyle={{ background: "#ec5b13", width: 3, opacity: 0.9 }} />}
+              itemOne={<ReactCompareSliderImage src={project.originalImageUrl} alt="Original" style={{ objectFit: "contain", background: "#111" }} />}
+              itemTwo={<ReactCompareSliderImage src={currentImage} alt="Result" style={{ objectFit: "contain", background: "#111" }} />}
+            />
           </div>
         </div>
       )}
