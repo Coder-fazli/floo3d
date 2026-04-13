@@ -18,7 +18,7 @@ import AppSidebar from "@/components/AppSidebar";
 import { HoleBackground } from "@/components/animate-ui/components/backgrounds/hole";
 import { SparklesText } from "@/components/ui/sparkles-text";
 import { type FramesData } from "@/lib/actions";
-import { DEFAULT_FALLBACKS, DEFAULT_STYLES, DEFAULT_ANGLES, ANGLE_LABELS } from "@/lib/frameDefaults";
+import { DEFAULT_FALLBACKS, DEFAULT_STYLES, DEFAULT_ANGLES, ANGLE_LABELS, DEFAULT_ROOM_TYPES } from "@/lib/frameDefaults";
 import { type FpgConfig } from "../components/FpgSidebarSection";
 import AITextLoading, { LOADING_TEXTS } from "@/components/kokonutui/ai-text-loading";
 import RateRender from "@/components/RateRender";
@@ -78,6 +78,8 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   // Resolved per active input type at render time (see usage below)
   const getStyleImage = (inputType: string, style: string) =>
     frames?.styles?.[inputType]?.[style] ?? DEFAULT_STYLES[inputType]?.[style] ?? "/card-room-after.webp";
+  const getRoomTypeImage = (name: string) =>
+    frames?.roomTypes?.[name] ?? DEFAULT_ROOM_TYPES[name] ?? "/card-room-after.webp";
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
@@ -360,6 +362,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   const [mobileTab, setMobileTab] = useState<"generator" | "history">("generator");
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
   const [exportFormat, setExportFormat] = useState<"png" | "jpg" | "pdf">("png");
+  const [previewSharePopover, setPreviewSharePopover] = useState(false);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [roomTypeModalOpen, setRoomTypeModalOpen] = useState(false);
   const [styleModalOpen, setStyleModalOpen] = useState(false);
@@ -478,7 +481,35 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
     alert("Link copied!");
   };
 
-  const downloadHistoryImage = async (url: string, styleName: string) => {
+  const handlePreviewCopyLink = async () => {
+    const url = `${window.location.origin}/visualizer/${id}`;
+    await navigator.clipboard.writeText(url);
+    setPreviewSharePopover(false);
+    alert("Link copied!");
+  };
+
+  const handlePreviewShareImage = async () => {
+    if (!currentImage) return;
+    setPreviewSharePopover(false);
+    try {
+      const res = await fetch(currentImage);
+      const blob = await res.blob();
+      const file = new File([blob], "render.png", { type: "image/png" });
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], title: project?.name ?? "My Render" });
+        return;
+      }
+    } catch {}
+    window.open(currentImage, "_blank");
+  };
+
+  const handlePreviewShareTwitter = () => {
+    const url = `${window.location.origin}/visualizer/${id}`;
+    window.open(`https://twitter.com/intent/tweet?text=Check+out+my+AI+render&url=${encodeURIComponent(url)}`, "_blank");
+    setPreviewSharePopover(false);
+  };
+
+  const downloadHistoryImage = async (url: string, styleName: string, projectId?: string) => {
     try {
       const res = await fetch(url);
       const blob = await res.blob();
@@ -490,6 +521,14 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
       URL.revokeObjectURL(blobUrl);
     } catch {
       window.open(url, "_blank");
+    }
+    const pid = projectId ?? project?._id;
+    if (pid) {
+      fetch("/api/track-download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectId: pid }),
+      });
     }
   };
 
@@ -732,14 +771,14 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
               <button className="viz-modal-close" onClick={() => setRoomTypeModalOpen(false)}>✕</button>
             </div>
             <div className="viz-modal-grid viz-modal-scroll">
-              {ROOM_TYPE_DATA.map(({ name, img }) => (
+              {ROOM_TYPE_DATA.map(({ name }) => (
                 <div
                   key={name}
                   className={`viz-modal-item${roomType === name ? " viz-modal-item-active" : ""}`}
                   onClick={() => { setRoomType(name); setRoomTypeChosen(true); }}
                 >
                   <div className="viz-modal-item-img">
-                    <img src={img} alt={name} onError={(e) => { (e.target as HTMLImageElement).src = "/card-room-after.webp"; }} />
+                    <img src={getRoomTypeImage(name)} alt={name} onError={(e) => { (e.target as HTMLImageElement).src = "/card-room-after.webp"; }} />
                     {roomType === name && <div className="viz-modal-item-check">✓</div>}
                   </div>
                   <span className="viz-modal-item-label">{name}</span>
@@ -1060,7 +1099,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                       {roomTypeChosen ? (
                         <>
                           <img
-                            src={ROOM_TYPE_DATA.find(r => r.name === roomType)?.img ?? "/card-room-after.webp"}
+                            src={getRoomTypeImage(roomType)}
                             alt={roomType}
                             onError={(e) => { (e.target as HTMLImageElement).src = "/card-room-after.webp"; }}
                             style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "0.75rem" }}
@@ -1276,6 +1315,64 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
             </div>
           </div>
 
+          {/* ── Preview action bar ── */}
+          {currentImage && !isProcessing && !embeddedId && (
+            <div className="viz-preview-actions">
+              {/* Export button + dropdown */}
+              <div style={{ position: "relative" }}>
+                <button
+                  className="viz-preview-action-btn"
+                  onClick={() => { setExportDropdownOpen(o => !o); setPreviewSharePopover(false); }}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  Export
+                </button>
+              </div>
+
+              {/* Share button + popover */}
+              <div style={{ position: "relative" }}>
+                <button
+                  className="viz-preview-action-btn"
+                  onClick={() => { setPreviewSharePopover(o => !o); setExportDropdownOpen(false); }}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                  </svg>
+                  Share
+                </button>
+                {previewSharePopover && (
+                  <>
+                    <div style={{ position: "fixed", inset: 0, zIndex: 149 }} onClick={() => setPreviewSharePopover(false)} />
+                    <div className="viz-share-popover">
+                      <button className="viz-share-popover-item" onClick={handlePreviewCopyLink}>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                        </svg>
+                        Copy link
+                      </button>
+                      <button className="viz-share-popover-item" onClick={handlePreviewShareImage}>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                          <polyline points="21 15 16 10 5 21"/>
+                        </svg>
+                        Share image
+                      </button>
+                      <button className="viz-share-popover-item" onClick={handlePreviewShareTwitter}>
+                        <svg width="15" height="15" viewBox="0 0 512 512" fill="currentColor">
+                          <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/>
+                        </svg>
+                        Share on X
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* ── My Renders — all user projects with a rendered image ── */}
           {!embeddedId && userProjects.length > 0 && (
@@ -1302,13 +1399,6 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                             onClick={(e) => { e.stopPropagation(); setHistoryModal(p); }}
                           >
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                          </button>
-                          <button
-                            className="viz-hc-action"
-                            title="Download"
-                            onClick={(e) => { e.stopPropagation(); downloadHistoryImage(p.renderedImageUrl, p.name || "render"); }}
-                          >
-                            <Download size={15} strokeWidth={2.2} />
                           </button>
                         </div>
                         <div className="viz-history-card-info">
@@ -1466,7 +1556,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
         <ProjectModal
           project={historyModal}
           onClose={() => setHistoryModal(null)}
-          onDownload={() => downloadHistoryImage(historyModal.renderedImageUrl, historyModal.name || "render")}
+          onDownload={() => downloadHistoryImage(historyModal.renderedImageUrl, historyModal.name || "render", historyModal._id)}
         />
       )}
 

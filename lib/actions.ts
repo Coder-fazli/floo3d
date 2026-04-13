@@ -10,6 +10,7 @@ export type FramesData = {
   fallbacks: Record<string, { before?: string; after?: string }>;
   styles: Record<string, Record<string, string>>; // inputType → styleName → url
   angles: Record<string, string>; // angleName → url
+  roomTypes: Record<string, string>; // roomName → url
 };
 
 
@@ -89,9 +90,10 @@ export async function getAppFrames(): Promise<FramesData> {
   await connectDb();
   const doc = await AppFrames.findOne({ key: "main" }).lean();
   return {
-    fallbacks: (doc as any)?.fallbacks ?? {},
-    styles:    (doc as any)?.styles    ?? {},
-    angles:    (doc as any)?.angles    ?? {},
+    fallbacks:  (doc as any)?.fallbacks  ?? {},
+    styles:     (doc as any)?.styles     ?? {},
+    angles:     (doc as any)?.angles     ?? {},
+    roomTypes:  (doc as any)?.roomTypes  ?? {},
   };
 }
 

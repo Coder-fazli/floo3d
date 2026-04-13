@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { type FramesData } from "@/lib/actions";
 import { saveFrameImage } from "@/lib/actions.admin";
-import { DEFAULT_FALLBACKS, DEFAULT_STYLES, DEFAULT_ANGLES, ANGLE_LABELS, INPUT_TYPE_LABELS } from "@/lib/frameDefaults";
+import { DEFAULT_FALLBACKS, DEFAULT_STYLES, DEFAULT_ANGLES, ANGLE_LABELS, INPUT_TYPE_LABELS, DEFAULT_ROOM_TYPES } from "@/lib/frameDefaults";
 import { Upload } from "lucide-react";
 
 type Props = { initialFrames: FramesData };
@@ -87,6 +87,15 @@ export default function FramesClient({ initialFrames }: Props) {
     } finally { setUpl(uk, false); }
   };
 
+  const handleRoomType = async (room: string, file: File) => {
+    const uk = `rt:${room}`;
+    setUpl(uk, true);
+    try {
+      const url = await saveFrameImage("roomType", room, room, await toBase64(file));
+      setFrames((f) => ({ ...f, roomTypes: { ...f.roomTypes, [room]: url } }));
+    } finally { setUpl(uk, false); }
+  };
+
   const handleStyle = async (inputType: string, style: string, file: File) => {
     const uk = `s:${inputType}:${style}`;
     setUpl(uk, true);
@@ -149,6 +158,27 @@ export default function FramesClient({ initialFrames }: Props) {
               <p style={{ fontSize: "0.72rem", fontWeight: 600, color: "#475569", textAlign: "center", marginTop: "0.375rem" }}>
                 {ANGLE_LABELS[angle]}
               </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Room Type Thumbnails */}
+      <div className="adm-card" style={{ padding: "1.75rem", marginBottom: "1.5rem" }}>
+        <h3 className="adm-settings-title" style={{ marginBottom: "0.375rem" }}>Interior Design — Room Type Thumbnails</h3>
+        <p style={{ fontSize: "0.8rem", color: "#94a3b8", marginBottom: "1.5rem" }}>
+          Preview images shown in the Choose Room Type modal.
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: "1rem" }}>
+          {Object.keys(DEFAULT_ROOM_TYPES).map((room) => (
+            <div key={room}>
+              <ImageSlot
+                src={frames.roomTypes?.[room] ?? DEFAULT_ROOM_TYPES[room]}
+                uploading={!!uploading[`rt:${room}`]}
+                square
+                onPick={(f) => handleRoomType(room, f)}
+              />
+              <p style={{ fontSize: "0.72rem", fontWeight: 600, color: "#475569", textAlign: "center", marginTop: "0.375rem" }}>{room}</p>
             </div>
           ))}
         </div>

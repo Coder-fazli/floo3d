@@ -167,7 +167,7 @@ export async function saveFpgImage(
 // ─── Frames ───────────────────────────────────────────────────────────────────
 
 export async function saveFrameImage(
-  category: "fallback" | "style" | "angle",
+  category: "fallback" | "style" | "angle" | "roomType",
   key: string,
   slot: string,
   base64: string
@@ -193,6 +193,10 @@ export async function saveFrameImage(
     const angles = { ...(doc.angles ?? {}), [key]: url };
     doc.angles = angles;
     doc.markModified("angles");
+  } else if (category === "roomType") {
+    const roomTypes = { ...(doc.roomTypes ?? {}), [key]: url };
+    doc.roomTypes = roomTypes;
+    doc.markModified("roomTypes");
   }
 
   await doc.save();

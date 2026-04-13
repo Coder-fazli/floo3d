@@ -137,7 +137,7 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
               const saved = frames.fallbacks[id] ?? {};
               const imgBefore = saved.before ?? def.before;
               const imgAfter  = saved.after  ?? def.after;
-              const { label, desc, hint } = INPUT_TYPE_META[id];
+              const { label, desc } = INPUT_TYPE_META[id];
               return (
                 <div
                   key={id}
@@ -161,7 +161,6 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
                     <div>
                       <h3 className="nr-type-label">{label}</h3>
                       <p className="nr-type-desc">{desc}</p>
-                      <span style={{ display: "inline-block", marginTop: "0.5rem", fontSize: "0.7rem", color: "#64748b", background: "#f1f5f9", borderRadius: "999px", padding: "0.2rem 0.6rem", fontWeight: 500 }}>{hint}</span>
                     </div>
                     <span className="nr-type-cta">Try it →</span>
                   </div>

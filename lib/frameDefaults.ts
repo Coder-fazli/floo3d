@@ -64,3 +64,15 @@ export const ANGLE_LABELS: Record<string, string> = {
   exterior:     "Exterior",
   crossSection: "Night View",
 };
+
+export const DEFAULT_ROOM_TYPES: Record<string, string> = {
+  "Living Room":  "/room-living.jpg",
+  "Bedroom":      "/room-bedroom.jpg",
+  "Kitchen":      "/room-kitchen.jpg",
+  "Bathroom":     "/room-bathroom.jpg",
+  "Office":       "/room-office.jpg",
+  "Dining Room":  "/room-dining.jpg",
+  "Studio":       "/room-studio.jpg",
+  "Hallway":      "/room-hallway.jpg",
+  "Kids Room":    "/room-kids.jpg",
+};

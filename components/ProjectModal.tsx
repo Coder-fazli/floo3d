@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { getUserInfo } from "@/lib/actions";
-import { Calendar, X, Download, Share2, Trash2, Maximize2, ArrowLeftRight, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
+import { Calendar, X, Download, Trash2, Maximize2, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import { SparklesText } from "@/components/ui/sparkles-text";
 
 export interface ProjectModalProject {
@@ -51,6 +51,7 @@ export default function ProjectModal({
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
   const [exportFormat, setExportFormat] = useState<"png" | "jpg" | "pdf">("png");
   const [hasPurchased, setHasPurchased] = useState(false);
+  const [sharePopoverOpen, setSharePopoverOpen] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -59,33 +60,41 @@ export default function ProjectModal({
 
   const imageUrl = project.renderedImageUrl || project.originalImageUrl;
 
-  async function handleShare() {
-    if (onShare) { onShare(); return; }
+  const shareLink = typeof window !== "undefined" ? `${window.location.origin}/visualizer/${project._id}` : "";
+
+  const handleCopyLink = async () => {
+    await navigator.clipboard.writeText(shareLink);
+    setSharePopoverOpen(false);
+  };
+
+  const handleShareImage = async () => {
+    setSharePopoverOpen(false);
     const src = imageUrl;
     if (!src) return;
-
-    // Try Web Share API with the actual image file
     if (navigator.share) {
       try {
         const res = await fetch(src);
         const blob = await res.blob();
         const ext = blob.type.includes("png") ? "png" : "jpg";
         const file = new File([blob], `${project.name || "render"}.${ext}`, { type: blob.type });
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        if (navigator.canShare?.({ files: [file] })) {
           await navigator.share({ files: [file], title: project.name || "My Render" });
           return;
         }
-        // Fallback: share URL if file sharing not supported
-        await navigator.share({ title: project.name || "My Render", url: `${window.location.origin}/visualizer/${project._id}` });
-        return;
+        await navigator.share({ title: project.name || "My Render", url: shareLink });
       } catch (e) {
-        if ((e as Error).name === "AbortError") return; // user cancelled
+        if ((e as Error).name !== "AbortError") await navigator.clipboard.writeText(shareLink);
       }
+    } else {
+      await navigator.clipboard.writeText(shareLink);
     }
+  };
 
-    // Fallback: copy link silently
-    await navigator.clipboard.writeText(`${window.location.origin}/visualizer/${project._id}`);
-  }
+  const handleShareTwitter = () => {
+    setSharePopoverOpen(false);
+    const text = encodeURIComponent(`Check out my AI-generated render: ${shareLink}`);
+    window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
+  };
 
   const handleFreeDownload = async (fmt: "png" | "jpg" | "pdf" = exportFormat) => {
     if (onDownload) { onDownload(); return; }
@@ -158,7 +167,6 @@ export default function ProjectModal({
         {/* Top bar */}
         <div className="pj-modal-topbar">
           <div className="pj-topbar-icons">
-            <button className="pj-topbar-btn" title="Share" onClick={handleShare}><Share2 size={15} /></button>
             {onDelete && (
               <button className="pj-topbar-btn pj-topbar-btn-danger" title="Delete" onClick={onDelete}><Trash2 size={15} /></button>
             )}
@@ -206,22 +214,58 @@ export default function ProjectModal({
             {/* Footer */}
             <div className="pj-modal-img-footer">
               <button className={`pj-img-footer-btn${fullscreen ? " pj-img-footer-btn-active" : ""}`} onClick={() => setFullscreen(f => !f)}>
-                <Maximize2 size={14} /><span>Expand</span>
+                <Maximize2 size={28} /><span>Expand</span>
               </button>
               {project.renderedImageUrl && project.originalImageUrl && (
                 <button className={`pj-img-footer-btn${showSlider ? " pj-img-footer-btn-active" : ""}`} onClick={() => setShowSlider(s => !s)}>
-                  <ArrowLeftRight size={14} /><span>Compare</span>
+                  <svg width="28" height="28" viewBox="0 0 512 512" fill="currentColor"><path d="M75 92v328h362V92H75zm322 288H115V132h282v248zM181 204a25 25 0 1 0 0-50 25 25 0 0 0 0 50zm-46 136 70-96 46 64 34-46 72 78H135zM0 142h55v228H0zm457 0h55v228h-55zM96 420h320v50H96zm46 62h18v30h-18zm36 0h18v30h-18zm36 0h18v30h-18zm36 0h18v30h-18zm36 0h18v30h-18zM66 450H18l24-30 24 30zm380 0 24-30 24 30h-48z"/></svg>
+                  <span>Compare</span>
                 </button>
               )}
+              <div style={{ position: "relative" }}>
+                <button className={`pj-img-footer-btn${sharePopoverOpen ? " pj-img-footer-btn-active" : ""}`} onClick={() => setSharePopoverOpen(o => !o)}>
+                  <svg width="28" height="28" viewBox="0 0 512 512" fill="none" stroke="currentColor" strokeWidth="36" strokeLinecap="round" strokeLinejoin="round"><path d="M368 32l112 112-112 112V192c-96 0-192 32-224 128 0-128 64-240 224-256V32z"/><path d="M432 368v80a32 32 0 0 1-32 32H80a32 32 0 0 1-32-32V144a32 32 0 0 1 32-32h80"/></svg>
+                  <span>Share</span>
+                </button>
+                {sharePopoverOpen && (
+                  <>
+                    <div style={{ position: "fixed", inset: 0, zIndex: 10 }} onClick={() => setSharePopoverOpen(false)} />
+                    <div style={{ position: "absolute", bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)", background: "#fff", borderRadius: "0.875rem", boxShadow: "0 8px 32px rgba(0,0,0,0.15)", padding: "0.5rem", display: "flex", gap: "0.25rem", zIndex: 20, whiteSpace: "nowrap" }}>
+                      <button onClick={handleCopyLink} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3rem", padding: "0.6rem 0.75rem", background: "none", border: "none", cursor: "pointer", borderRadius: "0.625rem", fontSize: "0.68rem", fontWeight: 600, color: "#0f172a", fontFamily: "inherit" }}
+                        onMouseEnter={e => (e.currentTarget.style.background = "#f1f5f9")} onMouseLeave={e => (e.currentTarget.style.background = "none")}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                        Copy link
+                      </button>
+                      <button onClick={handleShareImage} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3rem", padding: "0.6rem 0.75rem", background: "none", border: "none", cursor: "pointer", borderRadius: "0.625rem", fontSize: "0.68rem", fontWeight: 600, color: "#0f172a", fontFamily: "inherit" }}
+                        onMouseEnter={e => (e.currentTarget.style.background = "#f1f5f9")} onMouseLeave={e => (e.currentTarget.style.background = "none")}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                        Share Image
+                      </button>
+                      <button onClick={handleShareTwitter} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3rem", padding: "0.6rem 0.75rem", background: "none", border: "none", cursor: "pointer", borderRadius: "0.625rem", fontSize: "0.68rem", fontWeight: 600, color: "#0f172a", fontFamily: "inherit" }}
+                        onMouseEnter={e => (e.currentTarget.style.background = "#f1f5f9")} onMouseLeave={e => (e.currentTarget.style.background = "none")}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        X
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
 
           {/* Right: info panel */}
           <div className="pj-modal-panel">
 
-            {/* Name */}
+            {/* Input type title */}
             <div className="pj-modal-panel-header">
-              <span className="pj-modal-panel-name">{project.name}</span>
+              <span className="pj-modal-panel-name">
+                {project.inputType === "floor-plan"           ? "Blueprint → 3D"
+                 : project.inputType === "interior-design"    ? "Interior Redesign"
+                 : project.inputType === "outdoor"            ? "Garden & Yard Design"
+                 : project.inputType === "empty-room"         ? "Virtual Staging"
+                 : project.inputType === "floor-plan-generator" ? "Floor Plan Generator"
+                 : project.name}
+              </span>
             </div>
 
             {/* Thumbnail */}

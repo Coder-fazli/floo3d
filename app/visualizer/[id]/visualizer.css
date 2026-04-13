@@ -3493,3 +3493,64 @@
         box-shadow: 0 2px 8px rgba(0,0,0,0.12);
     }
 }
+
+/* ── Preview action bar (Export + Share under preview card) ── */
+.viz-preview-actions {
+    display: flex;
+    gap: 0.625rem;
+    margin-top: 0.75rem;
+}
+
+.viz-preview-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.625rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #0f172a;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+.viz-preview-action-btn:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+/* ── Share popover under preview card ── */
+.viz-share-popover {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+    padding: 0.375rem;
+    z-index: 200;
+    min-width: 170px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.viz-share-popover-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.75rem;
+    border: none;
+    background: transparent;
+    border-radius: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #0f172a;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    transition: background 0.12s;
+}
+.viz-share-popover-item:hover { background: #f1f5f9; }
