@@ -3502,6 +3502,10 @@
     margin-top: 0.75rem;
 }
 
+@media (max-width: 768px) {
+    .viz-preview-export-wrap { display: none !important; }
+}
+
 .viz-preview-action-btn {
     display: flex;
     align-items: center;

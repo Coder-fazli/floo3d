@@ -1321,7 +1321,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
             <div className="viz-preview-actions">
 
               {/* Export — exact same button + dropdown as ProjectModal */}
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              <div className="viz-preview-export-wrap" style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                 {previewExportOpen && (
                   <div style={{ width: "100%", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "0.75rem", padding: "0.875rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                     <p style={{ margin: 0, fontSize: "0.8rem", fontWeight: 700, color: "#0f172a" }}>Export options</p>
@@ -1356,7 +1356,6 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                 )}
                 <button
                   className="viz-download-btn"
-                  style={{ width: "100%", justifyContent: "center" }}
                   onClick={() => { setPreviewExportOpen(o => !o); setPreviewSharePopover(false); }}
                 >
                   <Download size={12} strokeWidth={2.5} />
