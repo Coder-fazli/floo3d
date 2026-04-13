@@ -31,6 +31,7 @@ interface ProjectModalProps {
   hasNext?: boolean;
   onPrev?: () => void;
   onNext?: () => void;
+  defaultShowSlider?: boolean;
 }
 
 export default function ProjectModal({
@@ -43,11 +44,12 @@ export default function ProjectModal({
   hasNext,
   onPrev,
   onNext,
+  defaultShowSlider = false,
 }: ProjectModalProps) {
   const router = useRouter();
   const { user } = useUser();
   const [fullscreen, setFullscreen] = useState(false);
-  const [showSlider, setShowSlider] = useState(false);
+  const [showSlider, setShowSlider] = useState(defaultShowSlider);
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
   const [exportFormat, setExportFormat] = useState<"png" | "jpg" | "pdf">("png");
   const [hasPurchased, setHasPurchased] = useState(false);
