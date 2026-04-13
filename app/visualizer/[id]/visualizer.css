@@ -3502,8 +3502,12 @@
     margin-top: 0.75rem;
 }
 
+.viz-preview-mob-only { display: none !important; }
+
 @media (max-width: 768px) {
     .viz-preview-export-wrap { display: none !important; }
+    .viz-preview-mob-only { display: flex !important; }
+    .viz-preview-actions { justify-content: center; }
 }
 
 .viz-preview-action-btn {

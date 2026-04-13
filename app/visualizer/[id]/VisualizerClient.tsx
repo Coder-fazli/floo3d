@@ -238,6 +238,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Generation failed");
         setCurrentImage(data.renderedImageUrl);
+        setMobileShowCompare(false);
         setMobileTab("history");
         if (data.projectId) {
           window.history.replaceState(null, "", `/visualizer/${data.projectId}`);
@@ -360,6 +361,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   };
 
   const [mobileTab, setMobileTab] = useState<"generator" | "history">("generator");
+  const [mobileShowCompare, setMobileShowCompare] = useState(false);
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
   const [exportFormat, setExportFormat] = useState<"png" | "jpg" | "pdf">("png");
   const [previewExportOpen, setPreviewExportOpen] = useState(false);
@@ -474,6 +476,15 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
         body: JSON.stringify({ projectId: project._id }),
       });
     }
+  };
+
+  const handleMobileHistoryTap = (p: any) => {
+    if (window.innerWidth > 768) { setHistoryModal(p); return; }
+    setProject(p);
+    setCurrentImage(p.renderedImageUrl);
+    setMobileShowCompare(false);
+    setMobileTab("history");
+    previewCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const handleShare = async () => {
@@ -1221,7 +1232,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                   onClick={() => setLightboxOpen(true)}
                   onContextMenu={e => e.preventDefault()}
                 />
-              ) : project?.originalImageUrl && currentImage ? (
+              ) : project?.originalImageUrl && currentImage && mobileShowCompare ? (
                 <ReactCompareSlider
                   defaultValue={50}
                   style={{ width: "100%", height: "100%", transform: `scale(${zoomLevel})`, transformOrigin: "center", transition: "transform 0.3s ease" }}
@@ -1252,6 +1263,14 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                       onContextMenu={e => e.preventDefault()}
                     />
                   }
+                />
+              ) : project?.originalImageUrl && currentImage && !mobileShowCompare ? (
+                <img
+                  src={currentImage}
+                  alt="Result"
+                  style={{ width: "100%", height: "100%", objectFit: "contain", background: "#f1f5f9", cursor: "zoom-in" }}
+                  onClick={() => setLightboxOpen(true)}
+                  onContextMenu={e => e.preventDefault()}
                 />
               ) : project?.originalImageUrl ? (
                 <NextImage src={project.originalImageUrl} alt="Original" fill style={{ objectFit: "contain", background: "#f1f5f9" }} />
@@ -1305,20 +1324,28 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                 </div>
               )}
 
-              {/* Mobile expand button — shown only when image is ready */}
-              {currentImage && !isProcessing && (
-                <button className="viz-mob-expand-btn" onClick={() => setLightboxOpen(true)}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
-                  </svg>
-                </button>
-              )}
             </div>
           </div>
 
           {/* ── Preview action bar ── */}
           {currentImage && !isProcessing && !embeddedId && (
             <div className="viz-preview-actions">
+
+              {/* Mobile-only: Expand */}
+              <button className="pj-img-footer-btn viz-preview-mob-only" onClick={() => setLightboxOpen(true)}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                </svg>
+                <span>Expand</span>
+              </button>
+
+              {/* Mobile-only: Compare */}
+              {project?.originalImageUrl && (
+                <button className={`pj-img-footer-btn viz-preview-mob-only${mobileShowCompare ? " pj-img-footer-btn-active" : ""}`} onClick={() => setMobileShowCompare(v => !v)}>
+                  <svg width="28" height="28" viewBox="0 0 512 512" fill="currentColor"><path d="M75 92v328h362V92H75zm322 288H115V132h282v248zM181 204a25 25 0 1 0 0-50 25 25 0 0 0 0 50zm-46 136 70-96 46 64 34-46 72 78H135zM0 142h55v228H0zm457 0h55v228h-55zM96 420h320v50H96zm46 62h18v30h-18zm36 0h18v30h-18zm36 0h18v30h-18zm36 0h18v30h-18zm36 0h18v30h-18zM66 450H18l24-30 24 30zm380 0 24-30 24 30h-48z"/></svg>
+                  <span>Compare</span>
+                </button>
+              )}
 
               {/* Export — exact same button + dropdown as ProjectModal */}
               <div className="viz-preview-export-wrap" style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
@@ -1416,7 +1443,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                     <div
                       key={p._id}
                       className={`viz-history-card${isActive ? " viz-history-card-active" : ""}`}
-                      onClick={() => setHistoryModal(p)}
+                      onClick={() => handleMobileHistoryTap(p)}
                     >
                       <div className="viz-history-card-img">
                         <img src={p.renderedImageUrl} alt={p.name} onContextMenu={e => e.preventDefault()} />
@@ -1424,7 +1451,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                           <button
                             className="viz-hc-action"
                             title="Preview"
-                            onClick={(e) => { e.stopPropagation(); setHistoryModal(p); }}
+                            onClick={(e) => { e.stopPropagation(); handleMobileHistoryTap(p); }}
                           >
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                           </button>
