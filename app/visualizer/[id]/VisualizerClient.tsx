@@ -382,6 +382,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   // All user projects with renders — shown as gallery below preview card
   const [userProjects, setUserProjects] = useState<any[]>([]);
   const [historyModal, setHistoryModal] = useState<any | null>(null);
+  const [historyModalWithCompare, setHistoryModalWithCompare] = useState(false);
 
   // Floor plan generator config
   const [fpgConfig, setFpgConfig] = useState<FpgConfig>({
@@ -1330,7 +1331,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
 
               {/* Mobile-only: Compare */}
               {project?.originalImageUrl && (
-                <button className="pj-img-footer-btn viz-preview-mob-only" onClick={() => setHistoryModal({ ...project, renderedImageUrl: currentImage })}>
+                <button className="pj-img-footer-btn viz-preview-mob-only" onClick={() => { setHistoryModalWithCompare(true); setHistoryModal({ ...project, renderedImageUrl: currentImage }); }}>
                   <svg width="28" height="28" viewBox="0 0 512 512" fill="currentColor"><path d="M75 92v328h362V92H75zm322 288H115V132h282v248zM181 204a25 25 0 1 0 0-50 25 25 0 0 0 0 50zm-46 136 70-96 46 64 34-46 72 78H135zM0 142h55v228H0zm457 0h55v228h-55zM96 420h320v50H96zm46 62h18v30h-18zm36 0h18v30h-18zm36 0h18v30h-18zm36 0h18v30h-18zm36 0h18v30h-18zM66 450H18l24-30 24 30zm380 0 24-30 24 30h-48z"/></svg>
                   <span>Compare</span>
                 </button>
@@ -1432,7 +1433,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                     <div
                       key={p._id}
                       className={`viz-history-card${isActive ? " viz-history-card-active" : ""}`}
-                      onClick={() => handleMobileHistoryTap(p)}
+                      onClick={() => { setHistoryModalWithCompare(false); handleMobileHistoryTap(p); }}
                     >
                       <div className="viz-history-card-img">
                         <img src={p.renderedImageUrl} alt={p.name} onContextMenu={e => e.preventDefault()} />
@@ -1599,8 +1600,9 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
       {historyModal && (
         <ProjectModal
           project={historyModal}
-          onClose={() => setHistoryModal(null)}
+          onClose={() => { setHistoryModal(null); setHistoryModalWithCompare(false); }}
           onDownload={() => downloadHistoryImage(historyModal.renderedImageUrl, historyModal.name || "render", historyModal._id)}
+          defaultShowSlider={historyModalWithCompare}
         />
       )}
 
