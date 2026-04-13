@@ -29,7 +29,11 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
   useEffect(() => {
     if (!user) return;
     getUserInfo(user.id).then(d => setCredits(d.credits ?? 0));
-    saveUserCountry(user.id);
+    // Detect country client-side (works in dev + production)
+    fetch("https://ipapi.co/json/")
+      .then(r => r.json())
+      .then(d => { if (d?.country_code) saveUserCountry(user.id, d.country_code); })
+      .catch(() => {});
   }, [user]);
 
   useEffect(() => {

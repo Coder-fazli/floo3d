@@ -3,7 +3,7 @@
 import "./visualizer.css";
 import NextImage from "next/image";
 import { useUser, useClerk } from "@clerk/nextjs";
-import { getCredits, getUserInfo } from "@/lib/actions";
+import { getCredits, getUserInfo, saveUserCountry } from "@/lib/actions";
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { getProject, getProjects } from "@/lib/actions";
@@ -159,6 +159,10 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
     if (!user) return;
     getCredits(user.id, user.fullName ?? user.firstName ?? "", user.emailAddresses?.[0]?.emailAddress ?? "").then(setCredits);
     if (!isAdminView) getUserInfo(user.id).then(d => setHasPurchased(d.hasPurchased));
+    fetch("https://ipapi.co/json/")
+      .then(r => r.json())
+      .then(d => { if (d?.country_code) saveUserCountry(user.id, d.country_code); })
+      .catch(() => {});
     // Load all user projects that have a rendered image
     getProjects(user.id).then(projects =>
       setUserProjects(projects.filter((p: any) => p.renderedImageUrl))
