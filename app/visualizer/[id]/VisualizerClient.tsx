@@ -19,7 +19,7 @@ import { HoleBackground } from "@/components/animate-ui/components/backgrounds/h
 import { SparklesText } from "@/components/ui/sparkles-text";
 import { type FramesData } from "@/lib/actions";
 import { DEFAULT_FALLBACKS, DEFAULT_STYLES, DEFAULT_ANGLES, ANGLE_LABELS } from "@/lib/frameDefaults";
-import FpgSidebarSection, { type FpgConfig } from "../components/FpgSidebarSection";
+import { type FpgConfig } from "../components/FpgSidebarSection";
 import AITextLoading, { LOADING_TEXTS } from "@/components/kokonutui/ai-text-loading";
 import RateRender from "@/components/RateRender";
 
@@ -364,6 +364,8 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   const [roomTypeModalOpen, setRoomTypeModalOpen] = useState(false);
   const [styleModalOpen, setStyleModalOpen] = useState(false);
   const [angleModalOpen, setAngleModalOpen] = useState(false);
+  const [fpgConfigModalOpen, setFpgConfigModalOpen] = useState(false);
+  const [fpgStyleModalOpen, setFpgStyleModalOpen] = useState(false);
   const [styleTab, setStyleTab] = useState("All");
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [uploadTab, setUploadTab] = useState<"upload" | "examples">("upload");
@@ -387,6 +389,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
     extras: { garage: false, balcony: false, terrace: false, garden: false },
     style: "blueprint",
   });
+  const [fpgAreaStr, setFpgAreaStr] = useState(String(fpgConfig.area));
 
   const handleExport = async () => {
     if (!currentImage) return;
@@ -571,6 +574,123 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
           </div>
         );
       })()}
+
+      {/* ── FPG Configure Modal ── */}
+      {fpgConfigModalOpen && (
+        <div className="viz-modal-backdrop" onClick={() => setFpgConfigModalOpen(false)}>
+          <div className="viz-modal-box viz-modal-sheet" onClick={e => e.stopPropagation()}>
+            <div className="viz-modal-header">
+              <h2 className="viz-modal-title">Configure Floor Plan</h2>
+              <button className="viz-modal-close" onClick={() => setFpgConfigModalOpen(false)}>✕</button>
+            </div>
+            <div className="viz-modal-scroll" style={{ display: "flex", flexDirection: "column", gap: "1rem", padding: "1rem 1.25rem" }}>
+
+              {/* Property Type */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+                <span style={{ fontSize: "0.78rem", fontWeight: 700, color: "#475569" }}>Property Type</span>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                  {["House", "Apartment", "Villa", "Studio", "Office"].map(t => (
+                    <button key={t} onClick={() => setFpgConfig(c => ({ ...c, propertyType: t }))}
+                      style={{ padding: "0.4rem 1rem", borderRadius: "9999px", border: "1.5px solid", fontFamily: "inherit", fontSize: "0.82rem", fontWeight: 600, cursor: "pointer",
+                        borderColor: fpgConfig.propertyType === t ? "#ec5b13" : "#e2e8f0",
+                        background: fpgConfig.propertyType === t ? "rgba(236,91,19,0.08)" : "#f8fafc",
+                        color: fpgConfig.propertyType === t ? "#ec5b13" : "#64748b" }}
+                    >{t}</button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Total Area */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+                <span style={{ fontSize: "0.78rem", fontWeight: 700, color: "#475569" }}>Total Area</span>
+                <div style={{ display: "flex", gap: "0.5rem" }}>
+                  <input type="number" className="viz-room-select" style={{ flex: 1 }} value={fpgAreaStr} min={20} max={2000}
+                    onChange={e => { const raw = e.target.value.replace(/^0+(?=\d)/, ""); setFpgAreaStr(raw); const n = parseInt(raw, 10); if (!isNaN(n)) setFpgConfig(c => ({ ...c, area: n })); }}
+                    onBlur={e => { const n = Math.max(20, Math.min(2000, parseInt(e.target.value, 10) || 20)); setFpgAreaStr(String(n)); setFpgConfig(c => ({ ...c, area: n })); }}
+                  />
+                  <select className="viz-room-select" style={{ width: "80px" }} value={fpgConfig.areaUnit} onChange={e => setFpgConfig(c => ({ ...c, areaUnit: e.target.value as "m2" | "sqft" }))}>
+                    <option value="m2">m²</option>
+                    <option value="sqft">sqft</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Floors */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <span style={{ fontSize: "0.78rem", fontWeight: 700, color: "#475569" }}>Floors</span>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <button className="viz-icon-btn" onClick={() => setFpgConfig(c => ({ ...c, floors: Math.max(1, c.floors - 1) }))}>-</button>
+                  <span style={{ fontSize: "0.9rem", fontWeight: 800, minWidth: "1.5rem", textAlign: "center" }}>{fpgConfig.floors}</span>
+                  <button className="viz-icon-btn" onClick={() => setFpgConfig(c => ({ ...c, floors: Math.min(5, c.floors + 1) }))}>+</button>
+                </div>
+              </div>
+
+              {/* Rooms */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+                <span style={{ fontSize: "0.78rem", fontWeight: 700, color: "#475569" }}>Rooms</span>
+                {([["bedroom","Bedroom"],["bathroom","Bathroom"],["kitchen","Kitchen"],["livingRoom","Living Room"],["diningRoom","Dining Room"],["office","Office"]] as const).map(([key, label]) => (
+                  <div key={key} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.25rem 0" }}>
+                    <span style={{ fontSize: "0.82rem", color: "#64748b", fontWeight: 500 }}>{label}</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                      <button className="viz-icon-btn" onClick={() => setFpgConfig(c => ({ ...c, rooms: { ...c.rooms, [key]: Math.max(0, c.rooms[key] - 1) } }))}>-</button>
+                      <span style={{ fontSize: "0.9rem", fontWeight: 800, minWidth: "1.5rem", textAlign: "center" }}>{fpgConfig.rooms[key]}</span>
+                      <button className="viz-icon-btn" onClick={() => setFpgConfig(c => ({ ...c, rooms: { ...c.rooms, [key]: c.rooms[key] + 1 } }))}>+</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Extras */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+                <span style={{ fontSize: "0.78rem", fontWeight: 700, color: "#475569" }}>Extras</span>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                  {(["garage","balcony","terrace","garden"] as const).map(key => (
+                    <button key={key} onClick={() => setFpgConfig(c => ({ ...c, extras: { ...c.extras, [key]: !c.extras[key] } }))}
+                      style={{ padding: "0.4rem 1rem", borderRadius: "9999px", border: "1.5px solid", fontFamily: "inherit", fontSize: "0.82rem", fontWeight: 600, cursor: "pointer", textTransform: "capitalize",
+                        borderColor: fpgConfig.extras[key] ? "#ec5b13" : "#e2e8f0",
+                        background: fpgConfig.extras[key] ? "rgba(236,91,19,0.08)" : "#f8fafc",
+                        color: fpgConfig.extras[key] ? "#ec5b13" : "#64748b" }}
+                    >{key}</button>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+            <div className="viz-modal-footer viz-modal-footer-sticky">
+              <button className="viz-modal-cancel" onClick={() => setFpgConfigModalOpen(false)}>Cancel</button>
+              <button className="viz-modal-confirm" onClick={() => setFpgConfigModalOpen(false)}>Confirm</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── FPG Style Modal ── */}
+      {fpgStyleModalOpen && (
+        <div className="viz-modal-backdrop" onClick={() => setFpgStyleModalOpen(false)}>
+          <div className="viz-modal-box viz-modal-sheet" onClick={e => e.stopPropagation()}>
+            <div className="viz-modal-header">
+              <h2 className="viz-modal-title">Choose Style</h2>
+              <button className="viz-modal-close" onClick={() => setFpgStyleModalOpen(false)}>✕</button>
+            </div>
+            <div className="viz-modal-grid viz-modal-scroll">
+              {([["blueprint","Blueprint"],["colored","Colored"],["isometric","Isometric"],["3d top-down","3D Top-Down"]] as const).map(([key, label]) => (
+                <div key={key} className={`viz-modal-item${fpgConfig.style === key ? " viz-modal-item-active" : ""}`}
+                  onClick={() => setFpgConfig(c => ({ ...c, style: key }))}>
+                  <div className="viz-modal-item-img">
+                    <img src={getStyleImage("floor-plan-generator", label)} alt={label} onError={e => { (e.target as HTMLImageElement).src = "/real-3d-render.jpg"; }} />
+                    {fpgConfig.style === key && <div className="viz-modal-item-check">✓</div>}
+                  </div>
+                  <span className="viz-modal-item-label">{label}</span>
+                </div>
+              ))}
+            </div>
+            <div className="viz-modal-footer viz-modal-footer-sticky">
+              <button className="viz-modal-cancel" onClick={() => setFpgStyleModalOpen(false)}>Cancel</button>
+              <button className="viz-modal-confirm" onClick={() => setFpgStyleModalOpen(false)}>Confirm</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Angle Modal ── */}
       {angleModalOpen && (
@@ -861,7 +981,31 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
             />
 
             {activeInputType === "floor-plan-generator" ? (
-              <FpgSidebarSection config={fpgConfig} onChange={setFpgConfig} getStyleImage={(s) => getStyleImage("floor-plan-generator", s)} />
+              <div className="viz-opts">
+                {/* Configure card */}
+                <div className="viz-opt-card" onClick={() => setFpgConfigModalOpen(true)}>
+                  <div className="viz-opt-card-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </div>
+                  <span className="viz-opt-card-label">Configure</span>
+                  <span className="viz-opt-card-value">{fpgConfig.propertyType} · {fpgConfig.area} {fpgConfig.areaUnit === "m2" ? "m²" : "sqft"}</span>
+                  <button className="viz-opt-card-btn">Edit</button>
+                </div>
+
+                {/* Style card */}
+                <div className="viz-opt-card" onClick={() => setFpgStyleModalOpen(true)}>
+                  <div className="viz-opt-card-icon viz-opt-card-icon-thumb" style={{ background: "none", padding: 0 }}>
+                    <img
+                      src={getStyleImage("floor-plan-generator", fpgConfig.style === "blueprint" ? "Blueprint" : fpgConfig.style === "colored" ? "Colored" : fpgConfig.style === "isometric" ? "Isometric" : "3D Top-Down")}
+                      alt={fpgConfig.style}
+                      style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "0.75rem" }}
+                    />
+                  </div>
+                  <span className="viz-opt-card-label">Style</span>
+                  <span className="viz-opt-card-value">{fpgConfig.style === "blueprint" ? "Blueprint" : fpgConfig.style === "colored" ? "Colored" : fpgConfig.style === "isometric" ? "Isometric" : "3D Top-Down"}</span>
+                  <button className="viz-opt-card-btn">Change</button>
+                </div>
+              </div>
             ) : (<>
 
               {/* ── Upload card ── */}
@@ -1215,7 +1359,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
         )}
 
         {/* ── Mobile sticky generate bar ── */}
-        {!embeddedId && !roomTypeModalOpen && !styleModalOpen && !angleModalOpen && (
+        {!embeddedId && !roomTypeModalOpen && !styleModalOpen && !angleModalOpen && !fpgConfigModalOpen && !fpgStyleModalOpen && (
           <div className="viz-mob-generate-bar">
             {mobileTab === "history" && currentImage ? (
               <>

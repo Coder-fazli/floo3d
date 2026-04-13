@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Sparkles, Building2, Ruler, Layers, BedDouble, Bath, UtensilsCrossed, Sofa, Coffee, Briefcase } from "lucide-react";
 
 type RoomKey = "bedroom" | "bathroom" | "kitchen" | "livingRoom" | "diningRoom" | "office";
@@ -46,6 +47,8 @@ const STYLES: { key: FpgStyle; label: string }[] = [
 ];
 
 export default function FpgSidebarSection({ config, onChange, getStyleImage }: Props) {
+  const [areaStr, setAreaStr] = useState(String(config.area));
+
   return (
     <div className="viz-sb-section">
       <div className="viz-sb-section-title">
@@ -76,10 +79,20 @@ export default function FpgSidebarSection({ config, onChange, getStyleImage }: P
               type="number"
               className="viz-room-select"
               style={{ flex: 1 }}
-              value={config.area}
+              value={areaStr}
               min={20}
               max={2000}
-              onChange={e => onChange(c => ({ ...c, area: Number(e.target.value) }))}
+              onChange={e => {
+                const raw = e.target.value.replace(/^0+(?=\d)/, "");
+                setAreaStr(raw);
+                const num = parseInt(raw, 10);
+                if (!isNaN(num)) onChange(c => ({ ...c, area: num }));
+              }}
+              onBlur={e => {
+                const num = Math.max(20, Math.min(2000, parseInt(e.target.value, 10) || 20));
+                setAreaStr(String(num));
+                onChange(c => ({ ...c, area: num }));
+              }}
             />
             <select className="viz-room-select" style={{ width: "70px" }} value={config.areaUnit} onChange={e => onChange(c => ({ ...c, areaUnit: e.target.value as "m2" | "sqft" }))}>
               <option value="m2">m²</option>
