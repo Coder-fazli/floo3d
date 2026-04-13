@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { ArrowUpRight, FolderOpen, Sparkles, X } from "lucide-react";
 import AutoCompareSlider from "@/components/AutoCompareSlider";
-import { type FramesData, getUserInfo } from "@/lib/actions";
+import { type FramesData, getUserInfo, saveUserCountry } from "@/lib/actions";
 import { DEFAULT_FALLBACKS } from "@/lib/frameDefaults";
 import { Zap } from "lucide-react";
 
@@ -29,6 +29,7 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
   useEffect(() => {
     if (!user) return;
     getUserInfo(user.id).then(d => setCredits(d.credits ?? 0));
+    saveUserCountry(user.id);
   }, [user]);
 
   useEffect(() => {

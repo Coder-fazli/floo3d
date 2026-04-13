@@ -1,26 +1,30 @@
 const BASE_PROMPT = `
-TASK: Convert the input 2D floor plan into a photorealistic 3D architectural render.
+TASK: Convert the input 2D floor plan (which may be a blueprint, CAD export, technical drawing, or hand-drawn plan in any color — blue, black, white, grey or other) into a high-quality architectural render.
 
-STRICT REQUIREMENTS — DO NOT VIOLATE:
-1) REMOVE ALL TEXT: Do not render any letters, numbers, labels, dimensions, or annotations. Floors must be continuous where text used to be.
-2) GEOMETRY MUST MATCH: Walls, rooms, doors, and windows must follow the exact lines and positions in the plan. Do not shift or resize.
-3) CLEAN, REALISTIC OUTPUT: Crisp edges, balanced lighting, and realistic materials. No sketch or hand-drawn look.
-4) NO EXTRA CONTENT: Do not add rooms, furniture, or objects that are not clearly indicated by the plan.
-5) IGNORE INPUT COLOURS COMPLETELY: The input is a 2D floor plan and may be blue, black, white or any colour. Do not carry any colour from the input into the output. All colours in the output must come exclusively from the design style defined below — not from the input image.
+LAYOUT FIDELITY — HIGHEST PRIORITY:
+- Count every room visible in the input and render EXACTLY that many rooms. Do not merge, drop, or add rooms.
+- Walls, partitions, doors, and windows must follow the exact positions and proportions shown in the plan. Do not shift, rotate, or resize any element.
+- If a room is small in the plan, keep it small. If a room is large, keep it large.
+
+STRICT OUTPUT RULES — DO NOT VIOLATE:
+1) TEXT IN OUTPUT: Do not render any letters, numbers, labels, dimensions, or annotations in the OUTPUT image. Read and use any text in the input to understand room types — but produce zero visible text in the result.
+2) CLEAN OUTPUT: Crisp edges, balanced lighting, and realistic materials. No sketch, cartoon or hand-drawn look.
+3) NO EXTRA CONTENT: Do not add rooms, furniture, or objects that are not clearly indicated by the plan.
+4) IGNORE INPUT COLOURS: The input is a technical drawing and may be any colour. Do not carry input colours into the output. All colours must come exclusively from the design style defined below.
 
 STRUCTURE & DETAILS:
-- Walls: Extrude precisely from the plan lines. Consistent wall height and thickness.
-- Doors: In top-down view, convert door swing arcs into open doors aligned to the plan. In isometric, exterior or cross-section views, render doors as closed — do not show swing arcs.
-- Windows: Convert thin perimeter lines into realistic glass windows.
+- Walls: Extrude precisely from the plan lines. Consistent wall height and thickness throughout.
+- Doors: In top-down view, convert door swing arcs into open doors aligned to the plan. In isometric, exterior or night views, render doors as closed.
+- Windows: Convert thin perimeter lines into realistic glass windows with frames.
 
-FURNITURE & ROOM MAPPING (only where icons/fixtures are clearly shown):
+FURNITURE & ROOM MAPPING (only where icons or fixtures are clearly shown):
 - Bed icon → realistic bed with duvet and pillows.
 - Sofa icon → modern sectional or sofa.
 - Dining table icon → table with chairs.
 - Kitchen icon → counters with sink and stove.
 - Bathroom icon → toilet, sink, and tub/shower.
 - Office/study icon → desk, chair, and minimal shelving.
-- Porch/patio/balcony icon → outdoor seating or simple furniture (keep minimal).
+- Porch/patio/balcony icon → simple outdoor seating (keep minimal).
 - Utility/laundry icon → washer/dryer and minimal cabinetry.
 
 STYLE & LIGHTING:
@@ -40,25 +44,32 @@ const floorPlanStyles: Record<string, string> = {
 
 const anglePrompts: Record<string, string> = {
   topDown: `
-CAMERA ANGLE — STRICT TOP-DOWN (OVERHEAD PLAN VIEW):
-CRITICAL: Camera is mounted directly overhead, pointing straight down at 90 degrees. Zero perspective tilt. Zero angle. Purely flat like looking at a map.
-No roof, no ceiling, no walls visible from the side. Only the floor, furniture tops, and room layout visible from above.
-This must look like an architectural floor plan rendered in 3D — not a dollhouse, not isometric. Pure bird's-eye overhead.`,
+CAMERA ANGLE — TOP-DOWN PLAN RENDER VIEW:
+Camera is mounted directly overhead at exactly 90 degrees, pointing straight down. Zero tilt, zero perspective distortion. This is a rendered plan view — not isometric, not dollhouse.
+Only the floor surface, furniture tops, and the room layout are visible. Wall tops appear as thin lines. No wall faces, no ceiling, no exterior visible.
+The result must look like an architectural floor plan brought to life in 3D materials and lighting — viewed purely from directly above like a map.`,
 
   isometric: `
-Create a detailed 3D architectural dollhouse render based on the provided floor plan. Use a strictly isometric, three-quarter front-corner perspective. Position the camera looking downward at a roughly 45-degree angle towards the near-front corner of the building. This corner must be clearly visible and the lowest point of the frame, showing depth and both of the front exterior wall faces (left and right) in equal perspective. The roof is removed to reveal all interior rooms with their vertical wall faces. The resulting image must look like a physical open-top model with depth and perspective, not a flat, overhead 2D plan. Place the entire model on a clean white presentation base against a pure white studio background.`,
+CAMERA ANGLE — ISOMETRIC DOLLHOUSE VIEW:
+Create a detailed 3D architectural dollhouse render. Use a strictly isometric three-quarter front-corner perspective. Camera looks downward at roughly 45 degrees toward the near-front corner of the building — this corner is the lowest point of the frame, with both front exterior wall faces visible in equal perspective.
+The roof is fully removed to reveal all interior rooms with their full-height walls, furniture, and finishes.
+The result must look like a physical open-top architectural model — with clear depth, wall thickness, and perspective. Not flat, not overhead.
+Place the entire model on a clean white presentation base against a pure white studio background.`,
 
   exterior: `
-CAMERA ANGLE — EXTERIOR DRONE VIEW (OUTSIDE THE BUILDING):
-CRITICAL: Camera is OUTSIDE the building, hovering like a drone at 45 degrees above ground level. Show the FULL exterior of the building.
-The roof is fully visible and closed. Show exterior facade, roof materials, windows, front door, and surrounding ground/garden.
-NO interior is visible. This is a purely exterior architectural render — like a real estate drone photo. The building sits in its environment with landscaping around it.`,
+CAMERA ANGLE — EXTERIOR DRONE VIEW:
+Camera is OUTSIDE the building, hovering like a drone at 45 degrees above ground level. Show the FULL exterior of the building.
+The roof is fully closed and visible. Show the exterior facade, roof materials, windows, front door, and surrounding ground or garden.
+NO interior is visible — this is a purely exterior architectural render like a real estate drone photo. The building sits in its environment with simple landscaping around it.`,
 
   crossSection: `
-Create a detailed 3D architectural dollhouse render based on the provided floor plan. Use a strictly isometric, three-quarter front-corner perspective. Position the camera looking downward at a roughly 45-degree angle towards the near-front corner of the building. This corner must be clearly visible and the lowest point of the frame, showing depth and both of the front exterior wall faces (left and right) in equal perspective. The roof is removed to reveal all interior rooms with their vertical wall faces. The resulting image must look like a physical open-top model with depth and perspective, not a flat, overhead 2D plan. Place the entire model on a clean dark presentation base against a pure dark studio background.
+CAMERA ANGLE — ISOMETRIC NIGHT DOLLHOUSE VIEW:
+Create a detailed 3D architectural dollhouse render. Use a strictly isometric three-quarter front-corner perspective. Camera looks downward at roughly 45 degrees toward the near-front corner of the building — this corner is the lowest point of the frame, with both front exterior wall faces visible in equal perspective.
+The roof is fully removed to reveal all interior rooms with their full-height walls, furniture, and finishes.
+The result must look like a physical open-top architectural model — with clear depth, wall thickness, and perspective. Not flat, not overhead.
+Place the entire model on a clean dark charcoal presentation base against a pure dark studio background.
 
-NIGHT ATMOSPHERE: This is a night-time render. The interior of every room is warmly lit with soft golden artificial lighting glowing from inside. Ceiling lights, floor lamps and accent lighting visible inside each room. The exterior walls are dark. Warm light spills out through doorways between rooms. Dramatic contrast between the dark exterior walls and the warm glowing interiors.`,
-
+NIGHT ATMOSPHERE: This is a night-time render. Every room interior is warmly lit with soft golden artificial lighting — ceiling lights, floor lamps, and accent lighting glowing from inside each room. Warm light spills through doorways. Dramatic contrast between the dark exterior walls and the warm glowing interiors.`,
 };
 
 export function buildFloorPlanPrompt(style: string, viewAngle: string = "topDown"): string {

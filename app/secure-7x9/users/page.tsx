@@ -2,6 +2,8 @@ import { Search } from "lucide-react";
 import Link from "next/link";
 import { getAllUSers, getAllProjects } from "@/lib/actions.admin";
 
+const COUNTRY_NAMES = new Intl.DisplayNames(["en"], { type: "region" });
+
 
 
 export default async function AdminUsers() {
@@ -26,6 +28,7 @@ export default async function AdminUsers() {
             <thead>
               <tr>
                 <th>User</th>
+                <th>Country</th>
                 <th>Plan</th>
                 <th>Last Model</th>
                 <th>Credits</th>
@@ -50,6 +53,25 @@ export default async function AdminUsers() {
                         <p className="adm-user-email">{u.email}</p>
                       </div>
                     </div>
+                  </td>
+                  <td>
+                    {u.country ? (
+                      <span style={{ display: "flex", alignItems: "center", gap: "0.4rem", whiteSpace: "nowrap" }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={`https://flagcdn.com/w20/${u.country.toLowerCase()}.png`}
+                          width={20}
+                          height={14}
+                          alt={u.country}
+                          style={{ borderRadius: "2px", objectFit: "cover", flexShrink: 0 }}
+                        />
+                        <span style={{ fontSize: "0.82rem", color: "#475569" }}>
+                          {(() => { try { return COUNTRY_NAMES.of(u.country); } catch { return u.country; } })()}
+                        </span>
+                      </span>
+                    ) : (
+                      <span style={{ color: "#94a3b8", fontSize: "0.78rem" }}>—</span>
+                    )}
                   </td>
                   <td>
                     <span style={{ fontSize: "0.75rem", fontWeight: 600, padding: "0.2rem 0.55rem", borderRadius: "999px", background: u.hasPurchased ? "#ede9fe" : "#f1f5f9", color: u.hasPurchased ? "#7c3aed" : "#64748b" }}>

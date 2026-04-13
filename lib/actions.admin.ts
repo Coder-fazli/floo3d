@@ -42,7 +42,7 @@ export async function getAllUSers() {
   await requireAdmin();
   noStore();
   await connectDb();
-  const users = await User.find({}).sort("-createdAt").lean();
+  const users = await User.find({}, { clerkId: 1, name: 1, email: 1, imageUrl: 1, credits: 1, hasPurchased: 1, suspended: 1, country: 1, createdAt: 1 }).sort("-createdAt").lean();
 
   // Get last used model for each user
   const userIds = users.map((u: any) => u.clerkId);

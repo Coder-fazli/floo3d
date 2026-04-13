@@ -362,6 +362,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   const [mobileTab, setMobileTab] = useState<"generator" | "history">("generator");
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
   const [exportFormat, setExportFormat] = useState<"png" | "jpg" | "pdf">("png");
+  const [previewExportOpen, setPreviewExportOpen] = useState(false);
   const [previewSharePopover, setPreviewSharePopover] = useState(false);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [roomTypeModalOpen, setRoomTypeModalOpen] = useState(false);
@@ -1318,24 +1319,59 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
           {/* ── Preview action bar ── */}
           {currentImage && !isProcessing && !embeddedId && (
             <div className="viz-preview-actions">
-              {/* Export */}
-              <div style={{ position: "relative" }}>
+
+              {/* Export — exact same button + dropdown as ProjectModal */}
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                {previewExportOpen && (
+                  <div style={{ width: "100%", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "0.75rem", padding: "0.875rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                    <p style={{ margin: 0, fontSize: "0.8rem", fontWeight: 700, color: "#0f172a" }}>Export options</p>
+                    <div style={{ display: "flex", gap: "0.4rem" }}>
+                      {(["png", "jpg", "pdf"] as const).map(fmt => (
+                        <label
+                          key={fmt}
+                          className={`viz-export-fmt${exportFormat === fmt ? " viz-export-fmt-active" : ""}${fmt === "pdf" && !hasPurchased ? " viz-export-fmt-locked" : ""}`}
+                          style={{ flex: 1, justifyContent: "center", padding: "0.4rem 0.3rem" }}
+                          onClick={() => { if (fmt === "pdf" && !hasPurchased) { window.open("/pricing", "_blank"); } else { setExportFormat(fmt); } }}
+                        >
+                          <input type="radio" name="preview-exportFormat" value={fmt} checked={exportFormat === fmt} readOnly disabled={fmt === "pdf" && !hasPurchased} style={{ accentColor: "#ec5b13" }} />
+                          <span className="viz-export-fmt-label">{fmt.toUpperCase()}</span>
+                          {fmt === "pdf" && !hasPurchased && <span className="viz-export-pro-badge">👑</span>}
+                        </label>
+                      ))}
+                    </div>
+                    <p className="viz-export-desc" style={{ margin: 0 }}>
+                      {exportFormat === "pdf" ? "Export as a print-ready PDF document." : exportFormat === "jpg" ? "Smaller file size, great for sharing online." : "Standard quality · Upgrade for HD lossless."}
+                    </p>
+                    <button className="viz-export-dl-btn" style={{ marginBottom: 0 }} onClick={() => { handleFreeDownload(exportFormat); setPreviewExportOpen(false); }}>
+                      <Download size={13} strokeWidth={2.5} /> Download {exportFormat.toUpperCase()}
+                    </button>
+                    {hasPurchased ? (
+                      <p style={{ margin: 0, fontSize: "0.68rem", fontWeight: 700, color: "#16a34a", textAlign: "center" }}>🔓 HD quality · Commercial use unlocked</p>
+                    ) : (
+                      <p style={{ margin: 0, fontSize: "0.68rem", color: "#94a3b8", textAlign: "center", lineHeight: 1.4 }}>
+                        Personal use only · <a href="/pricing" target="_blank" rel="noopener noreferrer" style={{ color: "#ec5b13", fontWeight: 700, textDecoration: "none" }}>Upgrade for HD</a>
+                      </p>
+                    )}
+                  </div>
+                )}
                 <button
-                  className="pj-img-footer-btn"
-                  onClick={() => { setExportDropdownOpen(o => !o); setPreviewSharePopover(false); }}
+                  className="viz-download-btn"
+                  style={{ width: "100%", justifyContent: "center" }}
+                  onClick={() => { setPreviewExportOpen(o => !o); setPreviewSharePopover(false); }}
                 >
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-                  </svg>
-                  <span>Export</span>
+                  <Download size={12} strokeWidth={2.5} />
+                  <SparklesText className="viz-download-sparkles-text" sparklesCount={4} colors={{ first: "#ffffff", second: "#e2e8f0" }}>
+                    Export
+                  </SparklesText>
+                  <div className="viz-download-shimmer" />
                 </button>
               </div>
 
-              {/* Share */}
+              {/* Share — same pj-img-footer-btn as modal */}
               <div style={{ position: "relative" }}>
                 <button
                   className={`pj-img-footer-btn${previewSharePopover ? " pj-img-footer-btn-active" : ""}`}
-                  onClick={() => { setPreviewSharePopover(o => !o); setExportDropdownOpen(false); }}
+                  onClick={() => { setPreviewSharePopover(o => !o); setPreviewExportOpen(false); }}
                 >
                   <svg width="28" height="28" viewBox="0 0 512 512" fill="none" stroke="currentColor" strokeWidth="36" strokeLinecap="round" strokeLinejoin="round"><path d="M368 32l112 112-112 112V192c-96 0-192 32-224 128 0-128 64-240 224-256V32z"/><path d="M432 368v80a32 32 0 0 1-32 32H80a32 32 0 0 1-32-32V144a32 32 0 0 1 32-32h80"/></svg>
                   <span>Share</span>
@@ -1363,6 +1399,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                   </>
                 )}
               </div>
+
             </div>
           )}
 

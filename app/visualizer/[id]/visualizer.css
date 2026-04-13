@@ -3497,9 +3497,9 @@
 /* ── Preview action bar (Export + Share under preview card) ── */
 .viz-preview-actions {
     display: flex;
+    align-items: flex-end;
     gap: 0.625rem;
     margin-top: 0.75rem;
-    justify-content: center;
 }
 
 .viz-preview-action-btn {

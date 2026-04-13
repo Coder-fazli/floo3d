@@ -44,6 +44,15 @@ export async function POST(request: Request) {
     }
     if (!isUnlimited) await deductCredit(userId);
 
+    // Track country from Vercel geolocation header (only stores once per user)
+    const country = request.headers.get("x-vercel-ip-country") ?? "";
+    if (country) {
+      User.findOneAndUpdate(
+        { clerkId: userId, $or: [{ country: { $exists: false } }, { country: "" }] },
+        { $set: { country } }
+      ).catch(() => {});
+    }
+
     const imageResponse = await fetch(imageUrl);
     const buffer = await imageResponse.arrayBuffer();
     const base64 = Buffer.from(buffer).toString("base64");

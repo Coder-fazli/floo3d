@@ -9,6 +9,7 @@ const UserSchema = new Schema({
     imageUrl: { type: String, default: "" },
     hasPurchased: { type: Boolean, default: false },
     suspended: { type: Boolean, default: false },
+    country: { type: String, default: "" },
     },
 { timestamps: true });
 

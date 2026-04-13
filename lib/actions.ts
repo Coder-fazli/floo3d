@@ -1,5 +1,6 @@
 "use server"
 import { unstable_noStore as noStore } from "next/cache";
+import { headers } from "next/headers";
 import { connectDb } from "./db";
 import Project from "./models/Project";
 import User from "./models/User";
@@ -125,4 +126,16 @@ export async function getModelSettings(): Promise<Record<string, string>> {
   await connectDb();
   const doc = await SiteSettings.findOne({ key: "home" });
   return doc?.models ?? {};
+}
+
+export async function saveUserCountry(clerkId: string): Promise<void> {
+  const headersList = await headers();
+  const country = headersList.get("x-vercel-ip-country") ?? "";
+  if (!country || !clerkId) return;
+  await connectDb();
+  // Only set country if not already stored
+  await User.findOneAndUpdate(
+    { clerkId, $or: [{ country: { $exists: false } }, { country: "" }] },
+    { $set: { country } }
+  );
 }
