@@ -24,6 +24,9 @@ export async function generateMetadata() {
     verification: {
       google: "VQWIPVTjBUsZ0y8muOavx22CA_-t8Ld0bNR78zDxEWM",
     },
+    other: {
+      "google-adsense-account": "ca-pub-6790452039559569",
+    },
     alternates: {
       canonical: "https://myhomestyler.com",
     },
