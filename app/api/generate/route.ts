@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     projectId = body.projectId;
 
-    const { imageUrl, inputType = "interior-design", style = "Modern", roomType, viewAngle } = body;
+    const { imageUrl, inputType = "interior-design", style = "Modern", roomType, viewAngle, customPrompt = "" } = body;
     resolvedInputType = viewAngle === "isometric" || viewAngle === "crossSection" ? "isometric" : inputType;
 
     // Validate ImageUrl
@@ -71,7 +71,7 @@ export async function POST(request: Request) {
       } as any,
     });
 
-    const prompt = buildPrompt({ inputType, style, roomType, viewAngle });
+    const prompt = buildPrompt({ inputType, style, roomType, viewAngle, customPrompt });
 
     // Try up to 2 times — Gemini occasionally returns no image on first attempt
     let imagePart: any = null;

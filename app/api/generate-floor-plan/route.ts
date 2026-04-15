@@ -22,7 +22,7 @@ export async function POST(request: Request) {
         const { userId } = await auth();
         if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         const body = await request.json();
-        const { config }: { config: FloorPlanGeneratorConfig } = body;
+        const { config, customPrompt = "" }: { config: FloorPlanGeneratorConfig; customPrompt?: string } = body;
 
         await connectDb();
         const userDoc = await User.findOne({ clerkId: userId }, { suspended: 1 }).lean() as any;
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
 
 
      // Build prompt
-      const prompt = buildFloorPlanGeneratorPrompt(config);
+      const prompt = buildFloorPlanGeneratorPrompt(config, customPrompt);
 
       // Read model — paid users get better model automatically
       const [modelSettings, userInfo] = await Promise.all([getModelSettings(), getUserInfo(userId)]);

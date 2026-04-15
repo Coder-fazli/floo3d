@@ -59,7 +59,7 @@ Camera at exactly 90 degrees overhead. Zero tilt, zero perspective distortion â€
 - NO text, NO labels, NO watermarks.`,
 }
 
-export function buildFloorPlanGeneratorPrompt(config: FloorPlanGeneratorConfig): string {
+export function buildFloorPlanGeneratorPrompt(config: FloorPlanGeneratorConfig, customPrompt = ""): string {
     const { propertyType, area, areaUnit, floors, rooms, extras, style } = config;
 
     const areaM2 = areaUnit === "sqft" ? Math.round(area * 0.0929) : area;
@@ -131,5 +131,5 @@ ${extrasBlock ? `\n${extrasBlock}` : ""}
 FURNITURE & FIXTURES:
 ${furnitureRule}
 
-${stylePrompts[style]}`;
+${stylePrompts[style]}${customPrompt.trim() ? `\n\nADDITIONAL USER REQUIREMENTS:\n${customPrompt.trim().replace(/<[^>]*>/g, "").slice(0, 1000)}\nThese requirements take priority over default guidelines where they conflict.` : ""}`;
 }

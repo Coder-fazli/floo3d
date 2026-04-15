@@ -110,6 +110,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   const [renderStyle, setRenderStyle] = useState("Modern");
   const [roomType, setRoomType] = useState("Living Room");
   const [viewAngle, setViewAngle] = useState("topDown");
+  const [customPrompt, setCustomPrompt] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   // Read type from URL for new mode (or use defaultType prop)
 
@@ -237,6 +238,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             config: fpgConfig,
+            customPrompt: customPrompt.trim().slice(0, 1000),
           }),
         });
         const data = await res.json();
@@ -274,6 +276,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
           style: renderStyle,
           roomType,
           viewAngle,
+          customPrompt: customPrompt.trim().slice(0, 1000),
         }),
       });
 
@@ -1173,6 +1176,23 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
               </div>
 
             </>)}
+
+            {/* ── Custom Requirements (floor-plan + floor-plan-generator only) ── */}
+            {(activeInputType === "floor-plan" || activeInputType === "floor-plan-generator") && (
+              <div className="viz-custom-prompt-wrap">
+                <label className="viz-custom-prompt-label">
+                  Custom Requirements
+                  <span className="viz-custom-prompt-count">{customPrompt.length}/1000</span>
+                </label>
+                <textarea
+                  className="viz-custom-prompt-input"
+                  placeholder="Describe specific needs, dimensions, or constraints..."
+                  maxLength={1000}
+                  value={customPrompt}
+                  onChange={e => setCustomPrompt(e.target.value)}
+                />
+              </div>
+            )}
 
             {/* ── Generate (always pinned at bottom) ── */}
             <div className="viz-generate-wrap">

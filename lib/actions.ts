@@ -87,6 +87,7 @@ export async function getSiteSettings(){
 }
 
 export async function getAppFrames(): Promise<FramesData> {
+  noStore();
   await connectDb();
   const doc = await AppFrames.findOne({ key: "main" }).lean();
   return {
