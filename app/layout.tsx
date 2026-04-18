@@ -98,11 +98,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             }}
           />
           {/* Google AdSense */}
-          <Script
+          {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+          <script
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6790452039559569"
             crossOrigin="anonymous"
-            strategy="afterInteractive"
           />
 
           {/* Yandex Metrika */}
