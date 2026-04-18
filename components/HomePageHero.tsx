@@ -104,15 +104,6 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride,
         {/* ── Left: Content ── */}
         <div className="hph-content">
 
-          {/* Live badge */}
-          <div className="hph-badge">
-            <span className="hph-badge-dot-wrap">
-              <span className="hph-badge-ping" />
-              <span className="hph-badge-dot" />
-            </span>
-            <span className="hph-badge-text">Best AI Interior Design Tool · Free to Start</span>
-          </div>
-
           {/* Heading */}
           <h1 className="hph-heading">
             AI-Powered<br />

@@ -12,11 +12,15 @@ import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import Image from "next/image";
 import Link from "next/link";
-import { Download, Upload as UploadIcon, Sparkles, X, ExternalLink, Home, Zap } from "lucide-react";
+import { Upload as UploadIcon, Sparkles, X, ExternalLink, Home, Zap } from "lucide-react";
 import ProjectModal from "@/components/ProjectModal";
 import AppSidebar from "@/components/AppSidebar";
 import { HoleBackground } from "@/components/animate-ui/components/backgrounds/hole";
 import { SparklesText } from "@/components/ui/sparkles-text";
+import ExpandButton from "@/components/ui/ExpandButton";
+import CompareButton from "@/components/ui/CompareButton";
+import ShareButton from "@/components/ui/ShareButton";
+import ExportButton from "@/components/ui/ExportButton";
 import { type FramesData } from "@/lib/actions";
 import { DEFAULT_FALLBACKS, DEFAULT_STYLES, DEFAULT_ANGLES, ANGLE_LABELS, DEFAULT_ROOM_TYPES } from "@/lib/frameDefaults";
 import { type FpgConfig } from "../components/FpgSidebarSection";
@@ -367,10 +371,6 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   };
 
   const [mobileTab, setMobileTab] = useState<"generator" | "history">("generator");
-  const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
-  const [exportFormat, setExportFormat] = useState<"png" | "jpg" | "pdf">("png");
-  const [previewExportOpen, setPreviewExportOpen] = useState(false);
-  const [previewSharePopover, setPreviewSharePopover] = useState(false);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [roomTypeModalOpen, setRoomTypeModalOpen] = useState(false);
   const [styleModalOpen, setStyleModalOpen] = useState(false);
@@ -403,87 +403,6 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   });
   const [fpgAreaStr, setFpgAreaStr] = useState(String(fpgConfig.area));
 
-  const handleExport = async () => {
-    if (!currentImage) return;
-    const response = await fetch(currentImage);
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${project?.name || "render"}.png`;
-    link.click();
-    URL.revokeObjectURL(url);
-
-    if(project?._id) {
-      fetch("/api/track-download", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ projectId: project._id }),
-      });
-    }
-  };
-
-  const handleFreeDownload = async (fmt: "png" | "jpg" | "pdf" = exportFormat) => {
-    const src = currentImage || guestResult;
-    if (!src) return;
-    setExportDropdownOpen(false);
-    const img = document.createElement("img");
-    img.crossOrigin = "anonymous";
-    img.onload = () => {
-      const maxW = (hasPurchased || isAdminView) ? img.width : 1024;
-      const scale = Math.min(1, maxW / img.width);
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width * scale;
-      canvas.height = img.height * scale;
-      const ctx = canvas.getContext("2d")!;
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-      // Watermark — only for free users, never for admin
-      if (!hasPurchased && !isAdminView) {
-        const wFontSize = Math.max(20, Math.round(canvas.width * 0.048));
-        ctx.save();
-        // Shadow for contrast on any background
-        ctx.shadowColor = "rgba(0,0,0,0.55)";
-        ctx.shadowBlur = wFontSize * 0.6;
-        ctx.globalAlpha = 0.55;
-        ctx.fillStyle = "#ffffff";
-        ctx.font = `700 ${wFontSize}px sans-serif`;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText("MyHomeStyler.com", canvas.width * 0.5, canvas.height * 0.5);
-        ctx.restore();
-      }
-
-      if (fmt === "pdf") {
-        import("jspdf").then(({ jsPDF }) => {
-          const pdf = new jsPDF({ orientation: canvas.width > canvas.height ? "landscape" : "portrait", unit: "px", format: [canvas.width, canvas.height] });
-          pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, canvas.width, canvas.height);
-          pdf.save(`${project?.name || "render"}.pdf`);
-        });
-      } else if (!hasPurchased && !isAdminView) {
-        // Free users: JPEG at reduced quality only
-        const link = document.createElement("a");
-        link.download = `${project?.name || "render"}.jpg`;
-        link.href = canvas.toDataURL("image/jpeg", 0.55);
-        link.click();
-      } else {
-        const link = document.createElement("a");
-        const isPng = fmt === "png";
-        link.download = `${project?.name || "render"}.${fmt}`;
-        link.href = canvas.toDataURL(isPng ? "image/png" : "image/jpeg", isPng ? 1 : 0.85);
-        link.click();
-      }
-    };
-    img.src = src;
-    if (project?._id) {
-      fetch("/api/track-download", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ projectId: project._id }),
-      });
-    }
-  };
-
   const handleMobileHistoryTap = (p: any) => {
     if (window.innerWidth > 768) { setHistoryModal(p); return; }
     setProject(p);
@@ -498,33 +417,6 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
     alert("Link copied!");
   };
 
-  const handlePreviewCopyLink = async () => {
-    const url = `${window.location.origin}/visualizer/${id}`;
-    await navigator.clipboard.writeText(url);
-    setPreviewSharePopover(false);
-    alert("Link copied!");
-  };
-
-  const handlePreviewShareImage = async () => {
-    if (!currentImage) return;
-    setPreviewSharePopover(false);
-    try {
-      const res = await fetch(currentImage);
-      const blob = await res.blob();
-      const file = new File([blob], "render.png", { type: "image/png" });
-      if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: project?.name ?? "My Render" });
-        return;
-      }
-    } catch {}
-    window.open(currentImage, "_blank");
-  };
-
-  const handlePreviewShareTwitter = () => {
-    const url = `${window.location.origin}/visualizer/${id}`;
-    window.open(`https://twitter.com/intent/tweet?text=Check+out+my+AI+render&url=${encodeURIComponent(url)}`, "_blank");
-    setPreviewSharePopover(false);
-  };
 
   const downloadHistoryImage = async (url: string, styleName: string, projectId?: string) => {
     try {
@@ -1127,7 +1019,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                           >✕</button>
                         </>
                       ) : (
-                        <img src="/icon-room-type.png" alt="Room Type" width={36} height={36} style={{ objectFit: "contain" }} />
+                        <img src="/icon-room-type.png" alt="Room Type" width={52} height={52} style={{ objectFit: "contain" }} />
                       )}
                     </div>
                     <span className="viz-opt-card-label">Room Type</span>
@@ -1139,8 +1031,8 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                 {/* View Angle card — floor-plan only */}
                 {activeInputType === "floor-plan" && (
                   <div className="viz-opt-card" onClick={() => setAngleModalOpen(true)}>
-                    <div className="viz-opt-card-icon">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    <div className="viz-opt-card-icon" style={{ background: "none" }}>
+                      <img src="/icon-angle.png" alt="Angle" width={52} height={52} style={{ objectFit: "contain" }} />
                     </div>
                     <span className="viz-opt-card-label">Angle</span>
                     <span className="viz-opt-card-value">{ANGLE_LABELS[viewAngle] ?? viewAngle}</span>
@@ -1164,7 +1056,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                         >✕</button>
                       </>
                     ) : (
-                      <Sparkles size={24} strokeWidth={1.6} />
+                      <img src="/icon-room-type.png" alt="Style" width={52} height={52} style={{ objectFit: "contain" }} />
                     )}
                   </div>
                   <span className="viz-opt-card-label">Style</span>
@@ -1344,102 +1236,22 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
           {/* ── Preview action bar ── */}
           {currentImage && !isProcessing && !embeddedId && (
             <div className="viz-preview-actions">
-
-              {/* Mobile-only: Expand */}
-              <button className="pj-img-footer-btn viz-preview-mob-only" onClick={() => setLightboxOpen(true)}>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
-                </svg>
-                <span>Expand</span>
-              </button>
-
-              {/* Mobile-only: Compare */}
+              <ExpandButton onClick={() => setLightboxOpen(true)} />
               {project?.originalImageUrl && (
-                <button className="pj-img-footer-btn viz-preview-mob-only" onClick={() => { setHistoryModalWithCompare(true); setHistoryModal({ ...project, renderedImageUrl: currentImage }); }}>
-                  <svg width="28" height="28" viewBox="0 0 512 512" fill="currentColor"><path d="M75 92v328h362V92H75zm322 288H115V132h282v248zM181 204a25 25 0 1 0 0-50 25 25 0 0 0 0 50zm-46 136 70-96 46 64 34-46 72 78H135zM0 142h55v228H0zm457 0h55v228h-55zM96 420h320v50H96zm46 62h18v30h-18zm36 0h18v30h-18zm36 0h18v30h-18zm36 0h18v30h-18zm36 0h18v30h-18zM66 450H18l24-30 24 30zm380 0 24-30 24 30h-48z"/></svg>
-                  <span>Compare</span>
-                </button>
+                <CompareButton
+                  onClick={() => { setHistoryModalWithCompare(true); setHistoryModal({ ...project, renderedImageUrl: currentImage }); }}
+                />
               )}
-
-              {/* Export — exact same button + dropdown as ProjectModal */}
-              <div className="viz-preview-export-wrap" style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                {previewExportOpen && (
-                  <div style={{ width: "100%", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "0.75rem", padding: "0.875rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                    <p style={{ margin: 0, fontSize: "0.8rem", fontWeight: 700, color: "#0f172a" }}>Export options</p>
-                    <div style={{ display: "flex", gap: "0.4rem" }}>
-                      {(["png", "jpg", "pdf"] as const).map(fmt => (
-                        <label
-                          key={fmt}
-                          className={`viz-export-fmt${exportFormat === fmt ? " viz-export-fmt-active" : ""}${fmt === "pdf" && !hasPurchased ? " viz-export-fmt-locked" : ""}`}
-                          style={{ flex: 1, justifyContent: "center", padding: "0.4rem 0.3rem" }}
-                          onClick={() => { if (fmt === "pdf" && !hasPurchased) { window.open("/pricing", "_blank"); } else { setExportFormat(fmt); } }}
-                        >
-                          <input type="radio" name="preview-exportFormat" value={fmt} checked={exportFormat === fmt} readOnly disabled={fmt === "pdf" && !hasPurchased} style={{ accentColor: "#ec5b13" }} />
-                          <span className="viz-export-fmt-label">{fmt.toUpperCase()}</span>
-                          {fmt === "pdf" && !hasPurchased && <span className="viz-export-pro-badge">👑</span>}
-                        </label>
-                      ))}
-                    </div>
-                    <p className="viz-export-desc" style={{ margin: 0 }}>
-                      {exportFormat === "pdf" ? "Export as a print-ready PDF document." : exportFormat === "jpg" ? "Smaller file size, great for sharing online." : "Standard quality · Upgrade for HD lossless."}
-                    </p>
-                    <button className="viz-export-dl-btn" style={{ marginBottom: 0 }} onClick={() => { handleFreeDownload(exportFormat); setPreviewExportOpen(false); }}>
-                      <Download size={13} strokeWidth={2.5} /> Download {exportFormat.toUpperCase()}
-                    </button>
-                    {hasPurchased ? (
-                      <p style={{ margin: 0, fontSize: "0.68rem", fontWeight: 700, color: "#16a34a", textAlign: "center" }}>🔓 HD quality · Commercial use unlocked</p>
-                    ) : (
-                      <p style={{ margin: 0, fontSize: "0.68rem", color: "#94a3b8", textAlign: "center", lineHeight: 1.4 }}>
-                        Personal use only · <a href="/pricing" target="_blank" rel="noopener noreferrer" style={{ color: "#ec5b13", fontWeight: 700, textDecoration: "none" }}>Upgrade for HD</a>
-                      </p>
-                    )}
-                  </div>
-                )}
-                <button
-                  className="viz-download-btn"
-                  onClick={() => { setPreviewExportOpen(o => !o); setPreviewSharePopover(false); }}
-                >
-                  <Download size={12} strokeWidth={2.5} />
-                  <SparklesText className="viz-download-sparkles-text" sparklesCount={4} colors={{ first: "#ffffff", second: "#e2e8f0" }}>
-                    Export
-                  </SparklesText>
-                  <div className="viz-download-shimmer" />
-                </button>
-              </div>
-
-              {/* Share — same pj-img-footer-btn as modal */}
-              <div style={{ position: "relative" }}>
-                <button
-                  className={`pj-img-footer-btn${previewSharePopover ? " pj-img-footer-btn-active" : ""}`}
-                  onClick={() => { setPreviewSharePopover(o => !o); setPreviewExportOpen(false); }}
-                >
-                  <svg width="28" height="28" viewBox="0 0 512 512" fill="none" stroke="currentColor" strokeWidth="36" strokeLinecap="round" strokeLinejoin="round"><path d="M368 32l112 112-112 112V192c-96 0-192 32-224 128 0-128 64-240 224-256V32z"/><path d="M432 368v80a32 32 0 0 1-32 32H80a32 32 0 0 1-32-32V144a32 32 0 0 1 32-32h80"/></svg>
-                  <span>Share</span>
-                </button>
-                {previewSharePopover && (
-                  <>
-                    <div style={{ position: "fixed", inset: 0, zIndex: 149 }} onClick={() => setPreviewSharePopover(false)} />
-                    <div style={{ position: "absolute", bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)", background: "#fff", borderRadius: "0.875rem", boxShadow: "0 8px 32px rgba(0,0,0,0.15)", padding: "0.5rem", display: "flex", gap: "0.25rem", zIndex: 200, whiteSpace: "nowrap" }}>
-                      <button onClick={handlePreviewCopyLink} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3rem", padding: "0.6rem 0.75rem", background: "none", border: "none", cursor: "pointer", borderRadius: "0.625rem", fontSize: "0.68rem", fontWeight: 600, color: "#0f172a", fontFamily: "inherit" }}
-                        onMouseEnter={e => (e.currentTarget.style.background = "#f1f5f9")} onMouseLeave={e => (e.currentTarget.style.background = "none")}>
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                        Copy link
-                      </button>
-                      <button onClick={handlePreviewShareImage} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3rem", padding: "0.6rem 0.75rem", background: "none", border: "none", cursor: "pointer", borderRadius: "0.625rem", fontSize: "0.68rem", fontWeight: 600, color: "#0f172a", fontFamily: "inherit" }}
-                        onMouseEnter={e => (e.currentTarget.style.background = "#f1f5f9")} onMouseLeave={e => (e.currentTarget.style.background = "none")}>
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-                        Share Image
-                      </button>
-                      <button onClick={handlePreviewShareTwitter} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3rem", padding: "0.6rem 0.75rem", background: "none", border: "none", cursor: "pointer", borderRadius: "0.625rem", fontSize: "0.68rem", fontWeight: 600, color: "#0f172a", fontFamily: "inherit" }}
-                        onMouseEnter={e => (e.currentTarget.style.background = "#f1f5f9")} onMouseLeave={e => (e.currentTarget.style.background = "none")}>
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                        X
-                      </button>
-                    </div>
-                  </>
-                )}
-              </div>
-
+              <ExportButton
+                imageUrl={currentImage}
+                fileName={project?.name}
+                hasPurchased={hasPurchased}
+                isAdminView={isAdminView}
+                projectId={project?._id}
+              />
+              {project?._id && (
+                <ShareButton projectId={project._id} imageUrl={currentImage} fileName={project?.name} />
+              )}
             </div>
           )}
 
@@ -1487,48 +1299,19 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
 
         </div>{/* end viz-workspace */}
 
-        {/* ── Mobile export sheet ── */}
-        {exportDropdownOpen && (
-          <>
-            <div style={{ position: "fixed", inset: 0, zIndex: 149 }} onClick={() => setExportDropdownOpen(false)} />
-            <div className="viz-mob-export-sheet">
-              <p style={{ margin: 0, fontSize: "0.85rem", fontWeight: 700, color: "#0f172a" }}>Export image</p>
-              <div style={{ display: "flex", gap: "0.5rem" }}>
-                {(["png", "jpg", "pdf"] as const).map(fmt => {
-                  const locked = fmt === "pdf" && !hasPurchased;
-                  return (
-                    <label
-                      key={fmt}
-                      className={`viz-export-fmt${exportFormat === fmt ? " viz-export-fmt-active" : ""}${locked ? " viz-export-fmt-locked" : ""}`}
-                      style={{ flex: 1, justifyContent: "center" }}
-                      onClick={() => { if (locked) { window.open("/pricing", "_blank"); } else { setExportFormat(fmt); } }}
-                    >
-                      <input type="radio" name="mob-fmt" value={fmt} checked={exportFormat === fmt} readOnly disabled={locked} style={{ accentColor: "#ec5b13" }} />
-                      <span className="viz-export-fmt-label">{fmt.toUpperCase()}</span>
-                      {locked && <span className="viz-export-pro-badge">👑</span>}
-                    </label>
-                  );
-                })}
-              </div>
-              <button className="viz-export-dl-btn" style={{ marginBottom: 0 }} onClick={() => handleFreeDownload(exportFormat)}>
-                <Download size={13} strokeWidth={2.5} /> Download {exportFormat.toUpperCase()}
-              </button>
-            </div>
-          </>
-        )}
 
         {/* ── Mobile sticky generate bar ── */}
         {!embeddedId && !roomTypeModalOpen && !styleModalOpen && !angleModalOpen && !fpgConfigModalOpen && !fpgStyleModalOpen && (
           <div className="viz-mob-generate-bar">
             {mobileTab === "history" && currentImage ? (
               <>
-                <button
-                  className="viz-mob-export-btn"
-                  onClick={() => setExportDropdownOpen(o => !o)}
-                >
-                  <Download size={15} strokeWidth={2.5} />
-                  Export
-                </button>
+                <ExportButton
+                  imageUrl={currentImage}
+                  fileName={project?.name}
+                  hasPurchased={hasPurchased}
+                  isAdminView={isAdminView}
+                  projectId={project?._id}
+                />
                 <button
                   className="viz-mob-generate-btn"
                   onClick={() => setMobileTab("generator")}
@@ -1625,7 +1408,6 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
         <ProjectModal
           project={historyModal}
           onClose={() => { setHistoryModal(null); setHistoryModalWithCompare(false); }}
-          onDownload={() => downloadHistoryImage(historyModal.renderedImageUrl, historyModal.name || "render", historyModal._id)}
           defaultShowSlider={historyModalWithCompare}
         />
       )}

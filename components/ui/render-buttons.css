@@ -1,0 +1,139 @@
+/* Shared render action button styles — imported by each button component */
+
+/* ── Footer icon+label button ── */
+.pj-img-footer-btn {
+    display: flex; align-items: center; gap: 0.35rem;
+    padding: 0.35rem 0.75rem; border-radius: 0.5rem;
+    border: 1px solid #e2e8f0; background: #f8fafc; color: #475569;
+    font-size: 0.72rem; font-weight: 600; cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    font-family: inherit;
+}
+.pj-img-footer-btn:hover { background: #f1f5f9; color: #0f172a; border-color: #cbd5e1; }
+.pj-img-footer-btn-active { background: rgba(236,91,19,0.08); color: #ec5b13; border-color: rgba(236,91,19,0.3); }
+.pj-img-footer-btn-active:hover { background: rgba(236,91,19,0.14); color: #ec5b13; }
+
+@media (max-width: 768px) {
+    .pj-img-footer-btn span { display: none; }
+}
+
+/* ── Export button (dark gradient) ── */
+.viz-download-btn {
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.65rem 1.4rem; border-radius: 0.5rem; border: none;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    color: #fff; font-size: 0.82rem; font-weight: 700;
+    letter-spacing: 0.03em; cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s; white-space: nowrap;
+}
+.viz-download-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    background: linear-gradient(135deg, #ec5b13 0%, #ff7a3d 100%);
+}
+.viz-download-btn:active:not(:disabled) { transform: translateY(0); }
+.viz-download-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.viz-download-shimmer {
+    position: absolute; inset: 0;
+    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%);
+    background-size: 200% 100%;
+    animation: viz-dl-sweep 2.4s ease-in-out infinite;
+}
+.viz-download-btn:disabled .viz-download-shimmer { display: none; }
+
+.viz-download-sparkles-text {
+    font-size: 0.75rem; font-weight: 700;
+    color: #ffffff !important; letter-spacing: 0.02em; line-height: 1;
+}
+.viz-download-sparkles-text span { color: #ffffff !important; }
+
+@keyframes viz-dl-sweep {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ── Export dropdown panel ── */
+.rb-export-panel {
+    background: #f8fafc; border: 1px solid #e2e8f0;
+    border-radius: 0.75rem; padding: 0.875rem;
+    display: flex; flex-direction: column; gap: 0.5rem;
+}
+.rb-export-panel-title {
+    margin: 0; font-size: 0.8rem; font-weight: 700; color: #0f172a;
+}
+.rb-export-fmts { display: flex; gap: 0.4rem; }
+
+.viz-export-fmt {
+    display: flex; align-items: center; gap: 0.4rem;
+    padding: 0.45rem 0.75rem; border-radius: 9999px;
+    border: 1.5px solid #e2e8f0; background: #f8fafc;
+    cursor: pointer; transition: border-color 0.15s, background 0.15s; user-select: none;
+}
+.viz-export-fmt-active { border-color: #ec5b13; background: rgba(236,91,19,0.06); }
+.viz-export-fmt-locked { opacity: 0.55; cursor: pointer; }
+.viz-export-fmt-label { font-size: 0.78rem; font-weight: 700; color: #0f172a; }
+.viz-export-pro-badge { font-size: 0.65rem; font-weight: 700; color: #f59e0b; white-space: nowrap; }
+
+.viz-export-desc { font-size: 0.75rem; color: #64748b; margin: 0; line-height: 1.4; }
+
+.viz-export-dl-btn {
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    width: 100%; padding: 0.6rem 1rem; background: #ec5b13; color: #fff;
+    border: none; border-radius: 0.5rem; font-size: 0.82rem; font-weight: 700;
+    cursor: pointer; transition: background 0.15s; margin-bottom: 0;
+}
+.viz-export-dl-btn:hover { background: #d44e0f; }
+
+/* ── Desktop export wrap — hidden on mobile ── */
+.rb-export-wrap {
+    display: flex; flex-direction: column; gap: 0.5rem;
+}
+@media (max-width: 768px) {
+    .rb-export-wrap { display: none !important; }
+}
+
+/* ── Mobile export button & bottom sheet ── */
+.rb-mob-export-btn { display: none; }
+.rb-mob-export-sheet { display: none; }
+
+@media (max-width: 768px) {
+    .rb-mob-export-btn {
+        display: flex; align-items: center; justify-content: center;
+        gap: 0.5rem; padding: 0.85rem 1.1rem; background: #f1f5f9;
+        color: #0f172a; border: none; border-radius: 0.875rem;
+        font-size: 0.9rem; font-weight: 700; cursor: pointer; flex-shrink: 0;
+    }
+    .rb-mob-export-sheet {
+        display: flex; flex-direction: column; gap: 0.75rem;
+        position: fixed;
+        bottom: calc(70px + env(safe-area-inset-bottom));
+        left: 1rem; right: 1rem;
+        background: #ffffff; border: 1px solid #e2e8f0;
+        border-radius: 1rem; padding: 1rem;
+        box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
+        z-index: 160;
+    }
+}
+
+/* ── Full-width modifier (used in modal right panel) ── */
+.pj-export-full { width: 100%; }
+.pj-export-full .viz-download-btn { width: 100%; justify-content: center; }
+
+/* ── Share popover ── */
+.rb-share-popover {
+    position: absolute; bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%);
+    background: #fff; border-radius: 0.875rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    padding: 0.5rem; display: flex; gap: 0.25rem;
+    z-index: 200; white-space: nowrap;
+}
+.rb-share-option {
+    display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+    padding: 0.6rem 0.75rem; background: none; border: none;
+    cursor: pointer; border-radius: 0.625rem;
+    font-size: 0.68rem; font-weight: 600; color: #0f172a; font-family: inherit;
+    transition: background 0.12s;
+}
+.rb-share-option:hover { background: #f1f5f9; }

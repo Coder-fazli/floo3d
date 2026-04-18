@@ -918,7 +918,7 @@
     flex-direction: row;
     flex: 1;
     min-height: 0;
-    margin-left: 68px; /* offset for fixed icon nav */
+    margin-left: 80px; /* offset for fixed icon nav */
     min-width: 0;
     overflow-x: hidden;
 }
@@ -2375,7 +2375,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: #28030F;
+    background: #E9717B;
     color: #ffffff;
     border: none;
     border-radius: 0.875rem;
@@ -2388,7 +2388,7 @@
 }
 
 .viz-upload-card-btn:hover {
-    background: #3d0518;
+    background: #E24754;
     transform: translateY(-1px);
 }
 

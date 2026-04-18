@@ -1,6 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { Inter, Instrument_Serif, Geist, Playfair_Display, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
+import "./theme-test.css";
 import { cn } from "@/lib/utils";
 import { getSiteSettings } from "@/lib/actions";
 import CrispChat from "@/components/CrispChat";
