@@ -12,6 +12,7 @@ import {
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
 import "./Navbar.css";
+import ContactModal from "./ContactModal";
 
 const NAV_LINKS = [
   { href: "#gallery",  label: "Gallery"  },
@@ -28,6 +29,7 @@ const Navbar = () => {
   const [credits, setCredits] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -99,6 +101,7 @@ const Navbar = () => {
                   </div>
                 )}
               </div>
+              <button className="navbar-btn-ghost navbar-desktop-only" onClick={() => setContactOpen(true)}>Support</button>
               <a href="/dashboard" className="navbar-btn-primary navbar-desktop-only">Dashboard</a>
 
               <div className="navbar-mobile-group">
@@ -134,7 +137,10 @@ const Navbar = () => {
               <li key={href}><a href={href} onClick={() => setMenuOpen(false)}>{label}</a></li>
             ))}
             {isSignedIn ? (
-              <li><a href="/dashboard/profile" onClick={() => setMenuOpen(false)}>Profile</a></li>
+              <>
+                <li><a href="/dashboard/profile" onClick={() => setMenuOpen(false)}>Profile</a></li>
+                <li><a href="#" onClick={() => { setContactOpen(true); setMenuOpen(false); }}>Support</a></li>
+              </>
             ) : (
               <li>
                 <a href="#" onClick={() => { openSignUp({ fallbackRedirectUrl: "/dashboard" }); setMenuOpen(false); }}>
@@ -146,6 +152,8 @@ const Navbar = () => {
         </div>
       )}
     </header>
+
+    {contactOpen && <ContactModal onClose={() => setContactOpen(false)} />}
   );
 };
 
