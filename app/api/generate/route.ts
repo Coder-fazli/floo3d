@@ -58,7 +58,7 @@ export async function POST(request: Request) {
     if (userInfo.customModel) {
       modelName = userInfo.customModel;
     } else if (userInfo.hasPurchased) {
-      modelName = isSpecialAngle ? "gemini-3-pro-image-preview" : "gemini-3.1-flash-image-preview";
+      modelName = "gemini-3-pro-image-preview";
     } else {
       modelName = isSpecialAngle
         ? (modelSettings["isometric"] ?? "gemini-3-pro-image-preview")
