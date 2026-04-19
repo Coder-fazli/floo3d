@@ -152,8 +152,8 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
         </div>
       </div>
 
-      {/* Credits + Projects grid */}
-      <div className="adm-credits-grid">
+      {/* Manage Credits + Model Override row */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", marginBottom: "1.5rem" }}>
 
         {/* Manage Credits */}
         <div className="adm-card" style={{ padding: "1.5rem" }}>
@@ -200,6 +200,10 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
             </button>
           </form>
         </div>
+      </div>
+
+      {/* Recent Projects */}
+      <div style={{ marginBottom: "1.5rem" }}>
 
         {/* Recent Projects */}
         <div className="adm-card" style={{ overflow: "hidden" }}>
