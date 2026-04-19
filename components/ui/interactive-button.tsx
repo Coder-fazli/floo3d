@@ -13,7 +13,7 @@ interface InteractiveHoverButtonProps extends React.ButtonHTMLAttributes<HTMLBut
 export const InteractiveHoverButton = React.forwardRef<HTMLButtonElement, InteractiveHoverButtonProps>(
   ({ text = "Button", className, href, onClick, ...props }, ref) => {
     // Tropical Heat palette — no blue
-    const glowColors = ["#EB4203", "#FF9C5F", "#FCEFC3", "#00CEC8"];
+    const glowColors = ["#E8437A", "#FF9C5F", "#FCEFC3", "#00CEC8"];
     const scale = 1.6;
     const duration = 6;
 

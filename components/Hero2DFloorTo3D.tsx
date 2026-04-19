@@ -296,7 +296,7 @@ export default function Hero() {
                         background: "#fff",
                         border: "none",
                         boxShadow: "0 2px 16px rgba(0,0,0,0.25)",
-                        color: "#ec5b13",
+                        color: "var(--brand-color)",
                       }}
                       linesStyle={{ background: "#fff", width: 2, opacity: 0.7 }}
                     />

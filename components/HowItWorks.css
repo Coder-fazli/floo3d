@@ -25,7 +25,7 @@
 .hiw-title {
     font-size: clamp(2.25rem, 5vw, 3.75rem);
     font-weight: 900;
-    color: #0f172a;
+    color: #27282f;
     line-height: 1.1;
     margin: 0 0 1.5rem;
     font-family: var(--font-sans), "Public Sans", sans-serif;
@@ -199,7 +199,7 @@
 .hiw-card-title {
     font-size: 2rem;
     font-weight: 900;
-    color: #0f172a;
+    color: #27282f;
     margin: 1rem 0 0;
     font-family: var(--font-sans), "Public Sans", sans-serif;
     line-height: 1.1;
@@ -338,7 +338,7 @@
     overflow: hidden;
     margin-top: 6rem;
     border-radius: 2rem;
-    background: #0f172a;
+    background: #27282f;
     padding: 4rem;
     text-align: center;
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);

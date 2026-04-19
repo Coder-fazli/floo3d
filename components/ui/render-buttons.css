@@ -9,7 +9,7 @@
     transition: background 0.15s, color 0.15s, border-color 0.15s;
     font-family: inherit;
 }
-.pj-img-footer-btn:hover { background: #f1f5f9; color: #0f172a; border-color: #cbd5e1; }
+.pj-img-footer-btn:hover { background: #f1f5f9; color: #27282f; border-color: #cbd5e1; }
 .pj-img-footer-btn-active { background: rgba(236,91,19,0.08); color: #ec5b13; border-color: rgba(236,91,19,0.3); }
 .pj-img-footer-btn-active:hover { background: rgba(236,91,19,0.14); color: #ec5b13; }
 
@@ -60,7 +60,7 @@
     display: flex; flex-direction: column; gap: 0.5rem;
 }
 .rb-export-panel-title {
-    margin: 0; font-size: 0.8rem; font-weight: 700; color: #0f172a;
+    margin: 0; font-size: 0.8rem; font-weight: 700; color: #27282f;
 }
 .rb-export-fmts { display: flex; gap: 0.4rem; }
 
@@ -72,7 +72,7 @@
 }
 .viz-export-fmt-active { border-color: #ec5b13; background: rgba(236,91,19,0.06); }
 .viz-export-fmt-locked { opacity: 0.55; cursor: pointer; }
-.viz-export-fmt-label { font-size: 0.78rem; font-weight: 700; color: #0f172a; }
+.viz-export-fmt-label { font-size: 0.78rem; font-weight: 700; color: #27282f; }
 .viz-export-pro-badge { font-size: 0.65rem; font-weight: 700; color: #f59e0b; white-space: nowrap; }
 
 .viz-export-desc { font-size: 0.75rem; color: #64748b; margin: 0; line-height: 1.4; }
@@ -101,7 +101,7 @@
     .rb-mob-export-btn {
         display: flex; align-items: center; justify-content: center;
         gap: 0.5rem; padding: 0.85rem 1.1rem; background: #f1f5f9;
-        color: #0f172a; border: none; border-radius: 0.875rem;
+        color: #27282f; border: none; border-radius: 0.875rem;
         font-size: 0.9rem; font-weight: 700; cursor: pointer; flex-shrink: 0;
     }
     .rb-mob-export-sheet {
@@ -133,7 +133,7 @@
     display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
     padding: 0.6rem 0.75rem; background: none; border: none;
     cursor: pointer; border-radius: 0.625rem;
-    font-size: 0.68rem; font-weight: 600; color: #0f172a; font-family: inherit;
+    font-size: 0.68rem; font-weight: 600; color: #27282f; font-family: inherit;
     transition: background 0.12s;
 }
 .rb-share-option:hover { background: #f1f5f9; }

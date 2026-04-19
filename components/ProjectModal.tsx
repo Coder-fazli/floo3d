@@ -97,7 +97,7 @@ export default function ProjectModal({
                 <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
                   <img src={project.originalImageUrl} alt="Before" style={{ width: "50%", height: "100%", objectFit: "cover" }} />
                   <img src={project.renderedImageUrl} alt="After" style={{ width: "50%", height: "100%", objectFit: "cover" }} />
-                  <div style={{ position: "absolute", top: 0, bottom: 0, left: "50%", width: 3, background: "#ec5b13", transform: "translateX(-50%)" }} />
+                  <div style={{ position: "absolute", top: 0, bottom: 0, left: "50%", width: 3, background: "var(--brand-color)", transform: "translateX(-50%)" }} />
                 </div>
               ) : (
                 <img

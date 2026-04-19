@@ -7,7 +7,7 @@
 }
 
 .legal-hero {
-  background: #0f172a;
+  background: #27282f;
   padding: 5rem 1.5rem 4rem;
   text-align: center;
 }
@@ -49,7 +49,7 @@
 .legal-section h2 {
   font-size: 1.25rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #27282f;
   margin: 0 0 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 2px solid #f1f5f9;
@@ -58,7 +58,7 @@
 .legal-section h3 {
   font-size: 1rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #27282f;
   margin: 1.5rem 0 0.5rem;
 }
 

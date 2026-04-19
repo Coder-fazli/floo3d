@@ -30,7 +30,7 @@ const TestimonialCard = ({ profileImage, name, feedback, mainImage, beforeImage 
 
     {/* Before image thumbnail — bottom right corner */}
     <div style={{ position: "absolute", bottom: 0, right: 0 }}>
-      <span style={{ position: "absolute", top: -14, right: 4, fontSize: "0.42rem", fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "#fff", background: "#EB4203", borderRadius: 9999, padding: "2px 6px", whiteSpace: "nowrap" }}>Input</span>
+      <span style={{ position: "absolute", top: -14, right: 4, fontSize: "0.42rem", fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "#fff", background: "var(--brand-color)", borderRadius: 9999, padding: "2px 6px", whiteSpace: "nowrap" }}>Input</span>
       <div style={{
         width: 52, height: 46,
         borderRadius: "0.75rem 0 0.75rem 0",
@@ -71,7 +71,7 @@ export default function RecentProjects() {
           transition={{ duration: 0.7 }}
           className="text-center mb-10"
         >
-          <p className="text-xs font-black tracking-widest uppercase mb-3" style={{ color: "#EB4203" }}>
+          <p className="text-xs font-black tracking-widest uppercase mb-3" style={{ color: "var(--brand-color)" }}>
             Community Showcase
           </p>
           <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4" style={{ color: "#28030F", fontFamily: "var(--font-playfair), Georgia, serif" }}>

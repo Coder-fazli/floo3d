@@ -144,7 +144,7 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
               fontSize: "0.65rem",
               fontWeight: 700,
               background: activeTab === tab.key ? "rgba(236,91,19,0.1)" : "#f1f5f9",
-              color: activeTab === tab.key ? "#ec5b13" : "#94a3b8",
+              color: activeTab === tab.key ? "var(--brand-color)" : "#94a3b8",
               borderRadius: "9999px",
               padding: "0.1rem 0.45rem",
             }}>
@@ -165,9 +165,9 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
                 padding: "0.3rem 0.75rem",
                 borderRadius: "9999px",
                 border: "1px solid",
-                borderColor: statusFilter === opt.key ? "#ec5b13" : "#e2e8f0",
+                borderColor: statusFilter === opt.key ? "var(--brand-color)" : "#e2e8f0",
                 background: statusFilter === opt.key ? "rgba(236,91,19,0.06)" : "#ffffff",
-                color: statusFilter === opt.key ? "#ec5b13" : "#64748b",
+                color: statusFilter === opt.key ? "var(--brand-color)" : "#64748b",
                 fontSize: "0.8rem",
                 fontWeight: 600,
                 cursor: "pointer",
@@ -353,9 +353,9 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
                       onClick={() => setPage(n as number)}
                       className="proj-page-btn"
                       style={{
-                        borderColor: page === n ? "#ec5b13" : "#e2e8f0",
+                        borderColor: page === n ? "var(--brand-color)" : "#e2e8f0",
                         background: page === n ? "rgba(236,91,19,0.08)" : "#fff",
-                        color: page === n ? "#ec5b13" : "#334155",
+                        color: page === n ? "var(--brand-color)" : "#334155",
                         fontWeight: page === n ? 700 : 500,
                       }}
                     >

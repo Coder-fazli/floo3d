@@ -52,7 +52,7 @@ export default function FpgSidebarSection({ config, onChange, getStyleImage }: P
   return (
     <div className="viz-sb-section">
       <div className="viz-sb-section-title">
-        <Sparkles size={13} strokeWidth={2.5} style={{ color: "#ec5b13" }} />
+        <Sparkles size={13} strokeWidth={2.5} style={{ color: "var(--brand-color)" }} />
         Configure Floor Plan
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
@@ -139,9 +139,9 @@ export default function FpgSidebarSection({ config, onChange, getStyleImage }: P
                 padding: "0.25rem 0.6rem",
                 borderRadius: "9999px",
                 border: "1.5px solid",
-                borderColor: config.extras[key] ? "#ec5b13" : "#e2e8f0",
+                borderColor: config.extras[key] ? "var(--brand-color)" : "#e2e8f0",
                 background: config.extras[key] ? "rgba(236,91,19,0.08)" : "#f8fafc",
-                color: config.extras[key] ? "#ec5b13" : "#64748b",
+                color: config.extras[key] ? "var(--brand-color)" : "#64748b",
                 fontSize: "0.72rem",
                 fontWeight: 600,
                 cursor: "pointer",
@@ -156,7 +156,7 @@ export default function FpgSidebarSection({ config, onChange, getStyleImage }: P
         {/* Style */}
         <div style={{ marginTop: "0.25rem" }}>
           <div className="viz-sb-section-title" style={{ marginBottom: "0.5rem" }}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ec5b13" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
             Design Style
           </div>
           <div className="viz-style-scroll">

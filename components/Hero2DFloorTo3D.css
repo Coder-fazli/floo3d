@@ -27,7 +27,7 @@
     font-weight: 900 !important;
     line-height: 1.1 !important;
     letter-spacing: -0.02em !important;
-    color: #0f172a !important;
+    color: #27282f !important;
     margin: 0 !important;
 }
 
@@ -116,7 +116,7 @@
 .sh-card-title {
     font-size: 1.2rem !important;
     font-weight: 700 !important;
-    color: #0f172a !important;
+    color: #27282f !important;
     margin: 0 !important;
     font-family: var(--font-sans), sans-serif !important;
 }
@@ -193,7 +193,7 @@
 .sh-drop-title {
     font-size: 0.95rem;
     font-weight: 600;
-    color: #0f172a;
+    color: #27282f;
     margin: 0;
     text-align: center;
 }
@@ -383,7 +383,7 @@ img.sh-avatar { object-fit: cover; display: block; }
     font-weight: 900;
     font-style: italic;
     letter-spacing: -0.03em;
-    color: #334155;
+    color: #27282f;
     filter: grayscale(1);
 }
 

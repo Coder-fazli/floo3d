@@ -94,12 +94,12 @@ export default function RateRender({ projectId, initialRating = null }: RateRend
           style={{ display: "flex", alignItems: "center" }}
         >
           {/* SVG thumbs-up — fills on active */}
-          <svg width="18" height="18" viewBox="0 0 24 24" fill={liked ? "#ec5b13" : "none"} stroke={liked ? "#ec5b13" : "#64748b"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill={liked ? "var(--brand-color)" : "none"} stroke={liked ? "var(--brand-color)" : "#64748b"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/>
             <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
           </svg>
         </motion.div>
-        <CountFlip value={liked ? 1 : 0} color={liked ? "#ec5b13" : "#94a3b8"} />
+        <CountFlip value={liked ? 1 : 0} color={liked ? "var(--brand-color)" : "#94a3b8"} />
       </motion.button>
 
       {/* Divider */}

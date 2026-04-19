@@ -14,7 +14,7 @@ export default function MainHero({ heroBeforeUrl, heroAfterUrl }: { heroBeforeUr
         <HomePageHero
           heroBeforeUrl={heroBeforeUrl}
           heroAfterUrl={heroAfterUrl}
-          headingAccent={<span style={{ color: "#EB4203" }}>Home Styler</span>}
+          headingAccent={<span style={{ color: "var(--brand-color)" }}>Home Styler</span>}
           ctaOverride={
             <a href="/dashboard">
               <WetPaintButton>Try It Free</WetPaintButton>

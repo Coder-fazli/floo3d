@@ -41,7 +41,7 @@ export default function AppSidebar() {
             <Image src="/favicon.png" alt="logo" width={36} height={36} />
           </div>
           <span className="viz-icon-nav-label viz-icon-nav-brand">
-            MyHome<span style={{ color: "#ec5b13" }}>Styler</span>
+            MyHome<span style={{ color: "var(--brand-color)" }}>Styler</span>
           </span>
         </Link>
 

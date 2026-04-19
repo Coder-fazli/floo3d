@@ -47,7 +47,7 @@
 .faq-title {
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 900;
-  color: #0f172a;
+  color: #27282f;
   line-height: 1.15;
   letter-spacing: -0.03em;
   margin: 0 0 1rem;
@@ -114,7 +114,7 @@
 .faq-q {
   font-size: 1rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #27282f;
   line-height: 1.4;
   transition: color 0.25s;
 }

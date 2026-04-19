@@ -115,7 +115,7 @@ export default function ExportButton({
               checked={format === fmt}
               readOnly
               disabled={fmt === "pdf" && !hasPurchased && !isAdminView}
-              style={{ accentColor: "#ec5b13" }}
+              style={{ accentColor: "var(--brand-color)" }}
             />
             <span className="viz-export-fmt-label">{fmt.toUpperCase()}</span>
             {fmt === "pdf" && !hasPurchased && !isAdminView && <span className="viz-export-pro-badge">👑</span>}
@@ -139,7 +139,7 @@ export default function ExportButton({
       ) : (
         <p style={{ margin: 0, fontSize: "0.68rem", color: "#94a3b8", textAlign: "center", lineHeight: 1.4 }}>
           Personal use only ·{" "}
-          <a href="/pricing" target="_blank" rel="noopener noreferrer" style={{ color: "#ec5b13", fontWeight: 700, textDecoration: "none" }}>
+          <a href="/pricing" target="_blank" rel="noopener noreferrer" style={{ color: "var(--brand-color)", fontWeight: 700, textDecoration: "none" }}>
             Upgrade for HD
           </a>
         </p>

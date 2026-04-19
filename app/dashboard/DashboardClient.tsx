@@ -79,7 +79,7 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
               background: 'rgba(236,91,19,0.1)', display: 'flex',
               alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem',
             }}>
-              <Sparkles size={28} style={{ color: '#ec5b13' }} />
+              <Sparkles size={28} style={{ color: "var(--brand-color)" }} />
             </div>
 
             <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f172a', margin: '0 0 0.5rem' }}>
@@ -92,7 +92,7 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
             <button
               onClick={() => { setShowSuccess(false); router.push("/visualizer/new"); }}
               style={{
-                width: '100%', padding: '0.75rem', background: '#ec5b13',
+                width: '100%', padding: '0.75rem', background: "var(--brand-color)",
                 color: '#fff', border: 'none', borderRadius: '0.75rem',
                 fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer',
               }}

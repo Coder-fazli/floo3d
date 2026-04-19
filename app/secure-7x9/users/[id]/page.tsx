@@ -298,7 +298,7 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
                     <td style={{ fontWeight: 700, color: "#16a34a" }}>${((o.amount ?? 0) / 100).toFixed(2)}</td>
                     <td style={{ fontSize: "0.78rem", color: "#64748b" }}>{o.paymentMethod ?? "—"}</td>
                     <td style={{ fontSize: "0.78rem", color: "#64748b" }}>{o.country ?? "—"}</td>
-                    <td>{o.receiptUrl ? <a href={o.receiptUrl} target="_blank" style={{ color: "#ec5b13", fontSize: "0.78rem", fontWeight: 600 }}>View ↗</a> : "—"}</td>
+                    <td>{o.receiptUrl ? <a href={o.receiptUrl} target="_blank" style={{ color: "var(--brand-color)", fontSize: "0.78rem", fontWeight: 600 }}>View ↗</a> : "—"}</td>
                   </tr>
                 ))
               )}

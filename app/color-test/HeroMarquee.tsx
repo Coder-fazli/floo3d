@@ -56,7 +56,7 @@ export default function HeroMarquee() {
             <div
               className="absolute bottom-4 left-4"
               style={{
-                background: "#EB4203",
+                background: "var(--brand-color)",
                 borderRadius: "9999px",
                 padding: "7px 18px",
                 boxShadow: "0 4px 16px rgba(0,0,0,0.15)",

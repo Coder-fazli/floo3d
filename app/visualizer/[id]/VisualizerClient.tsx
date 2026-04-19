@@ -513,7 +513,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                 ))}
                 <button
                   onClick={() => setWelcomeOpen(false)}
-                  style={{ marginTop: "1rem", width: "100%", padding: "0.75rem", background: "#ec5b13", color: "#fff", border: "none", borderRadius: "0.75rem", fontSize: "0.9rem", fontWeight: 700, cursor: "pointer" }}
+                  style={{ marginTop: "1rem", width: "100%", padding: "0.75rem", background: "var(--brand-color)", color: "#fff", border: "none", borderRadius: "0.75rem", fontSize: "0.9rem", fontWeight: 700, cursor: "pointer" }}
                 >
                   Got it, let&apos;s go →
                 </button>
@@ -540,9 +540,9 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                   {["House", "Apartment", "Villa", "Studio", "Office"].map(t => (
                     <button key={t} onClick={() => setFpgConfig(c => ({ ...c, propertyType: t }))}
                       style={{ padding: "0.4rem 1rem", borderRadius: "9999px", border: "1.5px solid", fontFamily: "inherit", fontSize: "0.82rem", fontWeight: 600, cursor: "pointer",
-                        borderColor: fpgConfig.propertyType === t ? "#ec5b13" : "#e2e8f0",
+                        borderColor: fpgConfig.propertyType === t ? "var(--brand-color)" : "#e2e8f0",
                         background: fpgConfig.propertyType === t ? "rgba(236,91,19,0.08)" : "#f8fafc",
-                        color: fpgConfig.propertyType === t ? "#ec5b13" : "#64748b" }}
+                        color: fpgConfig.propertyType === t ? "var(--brand-color)" : "#64748b" }}
                     >{t}</button>
                   ))}
                 </div>
@@ -595,9 +595,9 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                   {(["garage","balcony","terrace","garden"] as const).map(key => (
                     <button key={key} onClick={() => setFpgConfig(c => ({ ...c, extras: { ...c.extras, [key]: !c.extras[key] } }))}
                       style={{ padding: "0.4rem 1rem", borderRadius: "9999px", border: "1.5px solid", fontFamily: "inherit", fontSize: "0.82rem", fontWeight: 600, cursor: "pointer", textTransform: "capitalize",
-                        borderColor: fpgConfig.extras[key] ? "#ec5b13" : "#e2e8f0",
+                        borderColor: fpgConfig.extras[key] ? "var(--brand-color)" : "#e2e8f0",
                         background: fpgConfig.extras[key] ? "rgba(236,91,19,0.08)" : "#f8fafc",
-                        color: fpgConfig.extras[key] ? "#ec5b13" : "#64748b" }}
+                        color: fpgConfig.extras[key] ? "var(--brand-color)" : "#64748b" }}
                     >{key}</button>
                   ))}
                 </div>
@@ -1132,7 +1132,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                 <ReactCompareSlider
                   defaultValue={50}
                   style={{ width: "100%", height: "100%", transform: `scale(${zoomLevel})`, transformOrigin: "center", transition: "transform 0.3s ease" }}
-                  handle={<ReactCompareSliderHandle buttonStyle={{ background: "#fff", border: "none", boxShadow: "0 2px 16px rgba(0,0,0,0.25)", color: "#ec5b13" }} linesStyle={{ background: "#ec5b13", width: 3, opacity: 0.9 }} />}
+                  handle={<ReactCompareSliderHandle buttonStyle={{ background: "#fff", border: "none", boxShadow: "0 2px 16px rgba(0,0,0,0.25)", color: "var(--brand-color)" }} linesStyle={{ background: "var(--brand-color)", width: 3, opacity: 0.9 }} />}
                   itemOne={<ReactCompareSliderImage src={guestBase64} alt="Original" style={{ objectFit: "contain", background: "#f1f5f9" }} />}
                   itemTwo={<ReactCompareSliderImage src={guestResult} alt="Result" style={{ objectFit: "contain", background: "#f1f5f9", cursor: "zoom-in" }} onClick={() => setLightboxOpen(true)} onContextMenu={e => e.preventDefault()} />}
                 />
@@ -1156,9 +1156,9 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                         background: "#fff",
                         border: "none",
                         boxShadow: "0 2px 16px rgba(0,0,0,0.25)",
-                        color: "#ec5b13",
+                        color: "var(--brand-color)",
                       }}
-                      linesStyle={{ background: "#ec5b13", width: 3, opacity: 0.9 }}
+                      linesStyle={{ background: "var(--brand-color)", width: 3, opacity: 0.9 }}
                     />
                   }
                   itemOne={
@@ -1189,8 +1189,8 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                       style={{ width: "100%", height: "100%" }}
                       handle={
                         <ReactCompareSliderHandle
-                          buttonStyle={{ background: "#fff", border: "none", boxShadow: "0 2px 16px rgba(0,0,0,0.25)", color: "#ec5b13" }}
-                          linesStyle={{ background: "#ec5b13", width: 3, opacity: 0.9 }}
+                          buttonStyle={{ background: "#fff", border: "none", boxShadow: "0 2px 16px rgba(0,0,0,0.25)", color: "var(--brand-color)" }}
+                          linesStyle={{ background: "var(--brand-color)", width: 3, opacity: 0.9 }}
                         />
                       }
                       itemOne={<ReactCompareSliderImage src={fb.before} alt="Before" style={{ objectFit: "cover" }} />}

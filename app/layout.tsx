@@ -1,5 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import { Inter, Instrument_Serif, Geist, Playfair_Display, Cormorant_Garamond } from "next/font/google";
+import { Inter, Instrument_Serif, Geist, Playfair_Display, Cormorant_Garamond, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import "./theme-test.css";
 import { cn } from "@/lib/utils";
@@ -13,6 +13,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const instrumentSerif = Instrument_Serif({ subsets: ["latin"], weight: "400", variable: "--font-instrument-serif" });
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400","700","900"], variable: "--font-playfair" });
 const cormorant = Cormorant_Garamond({ subsets: ["latin"], weight: ["300","400","600"], variable: "--font-cormorant" });
+const jakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["400","500","600","700","800"], variable: "--font-jakarta" });
 
 export async function generateMetadata() {
   const s = await getSiteSettings();
@@ -57,7 +58,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <ClerkProvider>
       <html lang="en" className={cn("font-sans", geist.variable)}>
-        <body className={`${inter.variable} ${instrumentSerif.variable} ${playfair.variable} ${cormorant.variable}`}>
+        <body className={`${inter.variable} ${instrumentSerif.variable} ${playfair.variable} ${cormorant.variable} ${jakartaSans.variable}`}>
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{

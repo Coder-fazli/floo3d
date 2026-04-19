@@ -83,7 +83,7 @@ export default function FAQ({ faqs, twoColumns }: { faqs?: { q: string; a: strin
           <div className="faq-visual-wrap">
             {/* Floating cards */}
             <div className="faq-float faq-float-tl">
-              <svg width="44" height="44" fill="none" stroke="#ec5b13" viewBox="0 0 24 24">
+              <svg width="44" height="44" fill="none" stroke="var(--brand-color)" viewBox="0 0 24 24">
                 <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
               </svg>
             </div>

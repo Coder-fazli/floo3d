@@ -52,7 +52,7 @@
     font-size: 1.1rem;
     font-weight: 700;
     letter-spacing: -0.02em;
-    color: #28030F;
+    color: #27282f;
     font-family: var(--font-playfair), Georgia, serif;
 }
 
@@ -113,7 +113,7 @@
     padding: 0.5rem 1rem 0.5rem 2.25rem;
     font-size: 0.8rem;
     width: 16rem;
-    color: #28030F;
+    color: #27282f;
     outline: none;
     transition: box-shadow 0.2s;
     font-family: inherit;
@@ -145,7 +145,7 @@
 
 .dbnav-bell:hover {
     background: #f1f5f9;
-    color: #0f172a;
+    color: #27282f;
 }
 
 .dbnav-bell-dot {
@@ -209,7 +209,7 @@
 .dbnav-user-name {
     font-size: 0.75rem;
     font-weight: 700;
-    color: #28030F;
+    color: #27282f;
     margin: 0;
     line-height: 1.2;
 }
@@ -282,5 +282,5 @@
 }
 
 .dbnav-signout:hover {
-  color: #28030F;
+  color: #27282f;
 }

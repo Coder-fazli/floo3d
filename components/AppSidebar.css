@@ -63,7 +63,7 @@
 .viz-icon-nav-brand {
     font-size: 0.95rem;
     font-weight: 800;
-    color: #28030F;
+    color: #27282f;
     letter-spacing: -0.02em;
     font-family: var(--font-playfair), Georgia, serif;
 }
@@ -97,20 +97,20 @@
 
 .viz-icon-nav-item:hover {
     background: rgba(236, 91, 19, 0.07);
-    color: #ec5b13;
+    color: #E8437A;
 }
 
 .viz-icon-nav-item:hover .viz-icon-nav-label {
-    color: #ec5b13;
+    color: #E8437A;
 }
 
 .viz-icon-nav-item-active {
     background: rgba(236, 91, 19, 0.09);
-    color: #ec5b13 !important;
+    color: #E8437A !important;
 }
 
 .viz-icon-nav-item-active .viz-icon-nav-label {
-    color: #ec5b13 !important;
+    color: #E8437A !important;
 }
 
 .viz-icon-nav-item-icon {
@@ -168,14 +168,14 @@
     height: 50px;
     border-radius: 0.75rem;
     background: transparent;
-    color: #ec5b13;
+    color: #E8437A;
     flex-shrink: 0;
 }
 
 .viz-icon-nav-credits-num {
     font-size: 0.82rem;
     font-weight: 900;
-    color: #ec5b13;
+    color: #E8437A;
     line-height: 1;
 }
 
@@ -197,7 +197,7 @@
 .viz-icon-nav-credits-count {
     font-size: 0.85rem;
     font-weight: 800;
-    color: #28030F;
+    color: #27282f;
     white-space: nowrap;
     line-height: 1;
 }
@@ -205,7 +205,7 @@
 .viz-icon-nav-credits-action {
     font-size: 0.65rem;
     font-weight: 600;
-    color: #ec5b13;
+    color: #E8437A;
     white-space: nowrap;
     line-height: 1;
 }
@@ -244,7 +244,7 @@
     padding: 0.625rem 0.875rem;
     font-size: 0.82rem;
     font-weight: 600;
-    color: #334155;
+    color: #27282f;
     background: none;
     border: none;
     border-radius: 0.625rem;
@@ -257,7 +257,7 @@
 
 .viz-burger-item:hover {
     background: #f8fafc;
-    color: #0f172a;
+    color: #27282f;
 }
 
 .viz-burger-item-danger {

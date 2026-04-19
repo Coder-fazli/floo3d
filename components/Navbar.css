@@ -48,7 +48,7 @@
 .navbar-name {
     font-size: 1.1rem;
     font-weight: 700;
-    color: #28030F;
+    color: #27282f;
     letter-spacing: -0.02em;
     font-family: var(--font-playfair), Georgia, serif;
 }
@@ -74,7 +74,7 @@
 }
 
 .navbar-links a:hover {
-    color: #EB4203;
+    color: var(--brand-color);
 }
 
 /* NavigationMenu link style */
@@ -90,8 +90,8 @@
 }
 
 .navbar-nav-link:hover {
-    color: #EB4203 !important;
-    background: rgba(235, 66, 3, 0.06) !important;
+    color: var(--brand-color) !important;
+    background: rgba(242, 85, 138, 0.06) !important;
 }
 
 /* Actions */
@@ -203,7 +203,7 @@
     cursor: pointer;
     padding: 0.5rem 1.25rem;
     border-radius: 0.75rem;
-    box-shadow: 0 4px 14px rgba(236, 91, 19, 0.3);
+    box-shadow: 0 4px 14px rgba(242, 85, 138, 0.3);
     transition: transform 0.15s, opacity 0.15s;
 }
 
@@ -221,7 +221,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: #334155;
+    color: #27282f;
     padding: 0.25rem;
 }
 
@@ -274,8 +274,8 @@
 }
 
 .navbar-mobile a:hover {
-    background: rgba(235, 66, 3, 0.05);
-    color: #EB4203;
+    background: rgba(242, 85, 138, 0.05);
+    color: var(--brand-color);
 }
 
 .navbar-btn-primary[href] {

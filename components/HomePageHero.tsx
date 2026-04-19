@@ -143,8 +143,8 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride,
                 </div>
               ))}
             </div>
-            <p style={{ fontSize: "0.95rem", color: "#755760", margin: 0, fontWeight: 600 }}>
-              Trusted by <strong style={{ fontWeight: 900, color: "#EB4203" }}>2,500+</strong> architects &amp; designers
+            <p style={{ fontSize: "1rem", color: "#5F6B6B", margin: 0, fontWeight: 600 }}>
+              Trusted by <strong style={{ fontWeight: 900, color: "var(--brand-color)" }}>2,500+</strong> architects &amp; designers
             </p>
           </div>
         </div>

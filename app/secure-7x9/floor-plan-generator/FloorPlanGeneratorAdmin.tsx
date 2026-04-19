@@ -36,10 +36,10 @@ function UploadBtn({ uploading, saved, side, onPick }: {
           width: "100%",
           padding: "0.6rem 1rem",
           border: "2px dashed",
-          borderColor: saved ? "#16a34a" : uploading ? "#ec5b13" : "#e2e8f0",
+          borderColor: saved ? "#16a34a" : uploading ? "var(--brand-color)" : "#e2e8f0",
           borderRadius: "0.625rem",
           background: saved ? "#f0fdf4" : uploading ? "rgba(236,91,19,0.04)" : "#f8fafc",
-          color: saved ? "#16a34a" : uploading ? "#ec5b13" : "#64748b",
+          color: saved ? "#16a34a" : uploading ? "var(--brand-color)" : "#64748b",
           fontSize: "0.8rem",
           fontWeight: 600,
           cursor: uploading ? "wait" : "pointer",
@@ -105,7 +105,7 @@ function SliderSection({
               style={{ width: "100%", height: "100%" }}
               handle={
                 <ReactCompareSliderHandle
-                  buttonStyle={{ background: "#fff", border: "none", boxShadow: "0 2px 16px rgba(0,0,0,0.2)", color: "#ec5b13", width: "2.5rem", height: "2.5rem" }}
+                  buttonStyle={{ background: "#fff", border: "none", boxShadow: "0 2px 16px rgba(0,0,0,0.2)", color: "var(--brand-color)", width: "2.5rem", height: "2.5rem" }}
                   linesStyle={{ background: "rgba(236,91,19,0.6)", width: 2 }}
                 />
               }

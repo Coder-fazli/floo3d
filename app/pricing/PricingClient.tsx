@@ -27,7 +27,7 @@ function PricingFAQItem({ q, a }: { q: string; a: string }) {
     >
       <div className="flex items-center justify-between px-5 py-4">
         <span className="font-semibold text-sm pr-4" style={{ color: "#28030F" }}>{q}</span>
-        <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center transition-transform" style={{ background: "rgba(235,66,3,0.08)", color: "#EB4203", transform: open ? "rotate(45deg)" : "none" }}>
+        <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center transition-transform" style={{ background: "rgba(235,66,3,0.08)", color: "var(--brand-color)", transform: open ? "rotate(45deg)" : "none" }}>
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v8M1 5h8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
         </span>
       </div>
@@ -103,11 +103,11 @@ function CustomPlan({ onBuy, loading }: { onBuy: (credits: number, price: number
       transition={{ duration: 0.4 }}
       className="w-full max-w-xl mx-auto"
     >
-      <div className="rounded-2xl overflow-hidden" style={{ background: "#ffffff", border: "2px solid #EB4203", boxShadow: "0 20px 60px rgba(235,66,3,0.12)" }}>
+      <div className="rounded-2xl overflow-hidden" style={{ background: "#ffffff", border: `2px solid var(--brand-color)`, boxShadow: "0 20px 60px rgba(235,66,3,0.12)" }}>
         <div className="p-6 pb-4">
           <div className="flex items-center gap-3 mb-4">
             <div className="h-10 w-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(235,66,3,0.08)", border: "1px solid rgba(235,66,3,0.2)" }}>
-              <Zap size={18} style={{ color: "#EB4203" }} />
+              <Zap size={18} style={{ color: "var(--brand-color)" }} />
             </div>
             <div>
               <h3 className="text-2xl font-bold" style={{ color: "#28030F", fontFamily: "var(--font-playfair), Georgia, serif" }}>Custom Pack</h3>
@@ -121,7 +121,7 @@ function CustomPlan({ onBuy, loading }: { onBuy: (credits: number, price: number
               <span>$</span><NumberFlow value={price} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
             </span>
             <div className="text-sm leading-tight">
-              <div className="font-bold" style={{ color: "#EB4203" }}>{credits} credits</div>
+              <div className="font-bold" style={{ color: "var(--brand-color)" }}>{credits} credits</div>
               <div style={{ color: "#755760" }}>{renders} renders · ${perRender}/render</div>
             </div>
           </div>
@@ -140,13 +140,13 @@ function CustomPlan({ onBuy, loading }: { onBuy: (credits: number, price: number
               value={stepIdx}
               onChange={e => setStepIdx(Number(e.target.value))}
               className="w-full h-2 rounded-full appearance-none cursor-pointer"
-              style={{ background: `linear-gradient(to right, #EB4203 ${pct}%, rgba(117,87,96,0.2) ${pct}%)`, accentColor: '#EB4203' }}
+              style={{ background: `linear-gradient(to right, "var(--brand-color)" ${pct}%, rgba(117,87,96,0.2) ${pct}%)`, accentColor: "var(--brand-color)" }}
             />
             <div className="flex justify-between text-xs">
               {STEPS.map((s, i) => (
                 <button key={s} onClick={() => setStepIdx(i)}
                   className="font-medium transition-colors"
-                  style={{ color: i === stepIdx ? "#EB4203" : "#a08888" }}>
+                  style={{ color: i === stepIdx ? "var(--brand-color)" : "#a08888" }}>
                   {s >= 1000 ? '1k' : s}
                 </button>
               ))}
@@ -155,8 +155,8 @@ function CustomPlan({ onBuy, loading }: { onBuy: (credits: number, price: number
 
           {/* Volume discount badge */}
           <div className="flex items-center gap-2 rounded-xl px-4 py-2.5 mb-6" style={{ background: "rgba(235,66,3,0.06)", border: "1px solid rgba(235,66,3,0.15)" }}>
-            <Sparkles size={14} style={{ color: "#EB4203", flexShrink: 0 }} />
-            <span className="text-sm font-medium" style={{ color: "#EB4203" }}>
+            <Sparkles size={14} style={{ color: "var(--brand-color)", flexShrink: 0 }} />
+            <span className="text-sm font-medium" style={{ color: "var(--brand-color)" }}>
               {credits < 100  && 'Standard rate — $0.12/credit'}
               {credits >= 100 && credits < 300  && '10% volume discount — $0.10/credit'}
               {credits >= 300 && credits < 600  && '15% volume discount — $0.085/credit'}
@@ -180,7 +180,7 @@ function CustomPlan({ onBuy, loading }: { onBuy: (credits: number, price: number
 
         {/* What you get */}
         <div className="px-6 pb-6 pt-4" style={{ borderTop: "1px solid rgba(117,87,96,0.12)" }}>
-          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: "#EB4203" }}>Includes</p>
+          <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: "var(--brand-color)" }}>Includes</p>
           <div className="grid grid-cols-2 gap-x-4 gap-y-2.5">
             {[
               `${credits} credits (${renders} AI renders)`,
@@ -192,7 +192,7 @@ function CustomPlan({ onBuy, loading }: { onBuy: (credits: number, price: number
             ].map((f, i) => (
               <div key={i} className="flex items-center gap-2">
                 <span className="h-5 w-5 rounded-full grid place-content-center flex-shrink-0" style={{ background: "rgba(235,66,3,0.08)", border: "1px solid rgba(235,66,3,0.3)" }}>
-                  <CheckCheck className="h-3 w-3" style={{ color: "#EB4203" }} />
+                  <CheckCheck className="h-3 w-3" style={{ color: "var(--brand-color)" }} />
                 </span>
                 <span className="text-xs font-medium" style={{ color: "#755760" }}>{f}</span>
               </div>
@@ -318,7 +318,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
 
       {/* Header */}
       <article className="text-center mb-10 space-y-4">
-        <span className="inline-block text-xs font-black tracking-widest uppercase mb-2" style={{ color: "#EB4203" }}>Pricing</span>
+        <span className="inline-block text-xs font-black tracking-widest uppercase mb-2" style={{ color: "var(--brand-color)" }}>Pricing</span>
         <h2 className="text-4xl md:text-5xl font-bold leading-tight" style={{ color: "#28030F", fontFamily: "var(--font-playfair), Georgia, serif" }}>
           One-time credits.<br />No subscription ever.
         </h2>
@@ -336,7 +336,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
             { icon: "⚡", text: "All 4 AI tools included" },
           ].map((t, i) => (
             <div key={i} className="flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold" style={{ background: "#ffffff", border: "1px solid rgba(117,87,96,0.2)", color: "#28030F" }}>
-              <span style={{ color: "#EB4203" }}>{t.icon}</span>
+              <span style={{ color: "var(--brand-color)" }}>{t.icon}</span>
               {t.text}
             </div>
           ))}
@@ -360,7 +360,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                   className={cn('relative rounded-2xl text-left transition-all duration-200', plan.popular ? 'md:-mt-4 md:mb-4' : '')}
                   style={plan.popular ? {
                     background: "#ffffff",
-                    border: "2px solid #EB4203",
+                    border: `2px solid var(--brand-color)`,
                     boxShadow: "0 20px 60px rgba(235,66,3,0.18), 0 4px 20px rgba(235,66,3,0.1)",
                   } : plan.id === 'elite' ? {
                     background: "#28030F",
@@ -372,7 +372,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                 >
                   {plan.popular && (
                     <div className="absolute -top-4 left-0 right-0 flex justify-center">
-                      <span className="px-4 py-1.5 rounded-full text-xs font-black tracking-widest uppercase text-white" style={{ background: "#EB4203" }}>
+                      <span className="px-4 py-1.5 rounded-full text-xs font-black tracking-widest uppercase text-white" style={{ background: "var(--brand-color)" }}>
                         ★ Most Popular
                       </span>
                     </div>
@@ -384,7 +384,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                         {plan.name}
                       </h3>
                       {plan.id === 'elite' && (
-                        <span className="px-2 py-1 rounded-full text-xs font-bold" style={{ background: "rgba(235,66,3,0.2)", color: "#EB4203" }}>
+                        <span className="px-2 py-1 rounded-full text-xs font-bold" style={{ background: "rgba(235,66,3,0.2)", color: "var(--brand-color)" }}>
                           Best AI
                         </span>
                       )}
@@ -411,12 +411,12 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
 
                   {/* Features */}
                   <div className="px-6 pb-6 pt-3" style={{ borderTop: plan.id === 'elite' ? "1px solid rgba(253,246,242,0.1)" : "1px solid rgba(117,87,96,0.12)" }}>
-                    <p className="font-bold text-xs uppercase tracking-widest mb-3" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.5)" : "#EB4203" }}>{plan.includes[0]}</p>
+                    <p className="font-bold text-xs uppercase tracking-widest mb-3" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.5)" : "var(--brand-color)" }}>{plan.includes[0]}</p>
                     <ul className="space-y-2.5">
                       {plan.includes.slice(1).map((f, i) => (
                         <li key={i} className="flex items-center gap-3">
                           <span className="h-5 w-5 rounded-full grid place-content-center flex-shrink-0" style={{ background: plan.id === 'elite' ? "rgba(235,66,3,0.2)" : "rgba(235,66,3,0.08)", border: "1px solid rgba(235,66,3,0.4)" }}>
-                            <CheckCheck className="h-3 w-3" style={{ color: "#EB4203" }} />
+                            <CheckCheck className="h-3 w-3" style={{ color: "var(--brand-color)" }} />
                           </span>
                           <span className="text-sm font-medium" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.8)" : "#755760" }}>{f}</span>
                         </li>

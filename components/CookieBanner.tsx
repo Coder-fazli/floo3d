@@ -55,7 +55,7 @@ export default function CookieBanner() {
           </p>
           <p style={{ margin: 0, fontSize: "0.76rem", color: "#64748b", lineHeight: 1.5 }}>
             To improve your experience and analyse traffic. See our{" "}
-            <Link href="/privacy-policy" style={{ color: "#ec5b13", fontWeight: 600, textDecoration: "none" }}>
+            <Link href="/privacy-policy" style={{ color: "var(--brand-color)", fontWeight: 600, textDecoration: "none" }}>
               Privacy Policy
             </Link>.
           </p>
@@ -84,7 +84,7 @@ export default function CookieBanner() {
           padding: "0.5rem 1rem",
           borderRadius: "0.75rem",
           border: "none",
-          background: "#ec5b13",
+          background: "var(--brand-color)",
           color: "#fff",
           fontSize: "0.8rem",
           fontWeight: 700,

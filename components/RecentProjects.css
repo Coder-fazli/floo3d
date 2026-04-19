@@ -41,7 +41,7 @@
 .rp-title {
   font-size: clamp(2.25rem, 5vw, 3.75rem);
   font-weight: 900;
-  color: #0f172a;
+  color: #27282f;
   line-height: 1.1;
   letter-spacing: -0.03em;
   margin: 0 0 0.75rem;
@@ -120,7 +120,7 @@
 .rp-user-name {
   font-size: 0.875rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #27282f;
   margin: 0;
   line-height: 1.2;
 }
@@ -306,14 +306,14 @@
   transition: color 0.15s;
 }
 
-.rp-icon:hover { color: #334155; }
+.rp-icon:hover { color: #27282f; }
 .rp-icon-like { color: var(--brand-color); font-variation-settings: 'FILL' 1; }
 .rp-icon-right { margin-left: auto; }
 
 .rp-likes {
   font-size: 0.875rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #27282f;
   margin: 0 0 0.4rem;
 }
 
@@ -326,7 +326,7 @@
 
 .rp-caption-user {
   font-weight: 800;
-  color: #0f172a;
+  color: #27282f;
 }
 
 .rp-tags {

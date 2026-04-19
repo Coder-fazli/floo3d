@@ -41,7 +41,7 @@ function ImageSlot({
           cursor: uploading ? "wait" : "pointer",
           background: "#f8fafc",
         }}
-        onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#ec5b13"; const ov = e.currentTarget.querySelector<HTMLElement>(".frame-ov"); if (ov) ov.style.opacity = "1"; }}
+        onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--brand-color)"; const ov = e.currentTarget.querySelector<HTMLElement>(".frame-ov"); if (ov) ov.style.opacity = "1"; }}
         onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#e2e8f0"; const ov = e.currentTarget.querySelector<HTMLElement>(".frame-ov"); if (ov && !uploading) ov.style.opacity = "0"; }}
       >
         <img src={src} alt={label ?? "frame"} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />

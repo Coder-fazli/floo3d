@@ -173,7 +173,7 @@ export default async function BusinessPage({ searchParams }: { searchParams: Pro
                   <span style={{ fontSize: "0.78rem", fontWeight: 700, color: "#0f172a" }}>{t.count}</span>
                 </div>
                 <div style={{ height: "5px", background: "#f1f5f9", borderRadius: "999px" }}>
-                  <div style={{ height: "100%", borderRadius: "999px", background: i === 0 ? "#ec5b13" : "#e2e8f0", width: `${(t.count / d.totalRenders) * 100}%`, transition: "width 0.3s" }} />
+                  <div style={{ height: "100%", borderRadius: "999px", background: i === 0 ? "var(--brand-color)" : "#e2e8f0", width: `${(t.count / d.totalRenders) * 100}%`, transition: "width 0.3s" }} />
                 </div>
               </div>
             ))}
@@ -193,7 +193,7 @@ export default async function BusinessPage({ searchParams }: { searchParams: Pro
                   style={{
                     width: "100%",
                     height: `${Math.max((r.amount / maxBar) * 100, r.amount > 0 ? 4 : 1)}%`,
-                    background: r.amount > 0 ? "#ec5b13" : "#f1f5f9",
+                    background: r.amount > 0 ? "var(--brand-color)" : "#f1f5f9",
                     borderRadius: "4px 4px 0 0",
                     transition: "height 0.3s",
                     cursor: "pointer",
@@ -243,7 +243,7 @@ export default async function BusinessPage({ searchParams }: { searchParams: Pro
                     <td style={{ fontWeight: 700, color: "#16a34a" }}>{fmt((o.amount ?? 0) / 100)}</td>
                     <td style={{ fontSize: "0.78rem", color: "#64748b" }}>{o.paymentMethod ?? "—"}</td>
                     <td style={{ fontSize: "0.78rem", color: "#64748b" }}>{o.country ?? "—"}</td>
-                    <td>{o.receiptUrl ? <a href={o.receiptUrl} target="_blank" style={{ color: "#ec5b13", fontSize: "0.78rem", fontWeight: 600 }}>View ↗</a> : "—"}</td>
+                    <td>{o.receiptUrl ? <a href={o.receiptUrl} target="_blank" style={{ color: "var(--brand-color)", fontSize: "0.78rem", fontWeight: 600 }}>View ↗</a> : "—"}</td>
                   </tr>
                 ))
               )}

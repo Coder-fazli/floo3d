@@ -51,7 +51,7 @@
   font-weight: 700;
   line-height: 0.9;
   letter-spacing: -0.02em;
-  color: #28030F;
+  color: #27282f;
   margin: 0;
   text-transform: none;
 }
@@ -96,7 +96,7 @@
   position: absolute;
   font-size: clamp(3rem, 8vw, 5.5rem);
   font-weight: 900;
-  -webkit-text-stroke: 1px #0f172a;
+  -webkit-text-stroke: 1px #27282f;
   color: transparent;
   opacity: 0.06;
   pointer-events: none;
@@ -193,7 +193,7 @@
 .do-label-before {
   left: 0.875rem;
   background: rgba(255, 255, 255, 0.85);
-  color: #0f172a;
+  color: #27282f;
   border: 1px solid rgba(0, 0, 0, 0.06);
   backdrop-filter: blur(4px);
 }
@@ -225,7 +225,7 @@
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: #28030F;
+  color: #27282f;
   margin: 0 0 0.625rem;
 }
 
@@ -243,7 +243,7 @@
 
 /* ── Text card ── */
 .do-text-card {
-  background: #FDF6F2;
+  background: #f5f4ed;
   border: 1px solid rgba(117, 87, 96, 0.15);
   border-bottom: 3px solid var(--brand-color);
   box-shadow: 0 8px 32px rgba(40, 3, 15, 0.06);
@@ -375,7 +375,7 @@
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.1;
-  color: #28030F;
+  color: #27282f;
   font-style: italic;
   margin: 0 0 0.75rem;
 }

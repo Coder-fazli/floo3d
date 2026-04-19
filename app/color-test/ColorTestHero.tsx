@@ -15,7 +15,7 @@ export default function ColorTestHero({ heroBeforeUrl, heroAfterUrl }: { heroBef
         <HomePageHero
           heroBeforeUrl={heroBeforeUrl}
           heroAfterUrl={heroAfterUrl}
-          headingAccent={<AnimatedUnderlineText text="Home Styler" className="text-[#EB4203]" underlineClassName="text-white" />}
+          headingAccent={<AnimatedUnderlineText text="Home Styler" className="text-[var(--brand-color)]" underlineClassName="text-white" />}
           ctaOverride={
             <a href="/dashboard">
               <WetPaintButton>Try It Free</WetPaintButton>

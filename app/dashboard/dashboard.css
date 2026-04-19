@@ -1,5 +1,13 @@
 /* All classes prefixed db- */
 
+/* ── Dashboard font: Plus Jakarta Sans ── */
+.viz-page, .viz-page *,
+.viz-body, .viz-body *,
+.viz-icon-nav, .viz-icon-nav *,
+.db-page, .db-page * {
+  font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+}
+
 /* ── New Render Flow (nr-) ── */
 .nr-flow {
   display: flex;
@@ -113,7 +121,7 @@
 .nr-type-label {
   font-size: 1rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #27282f;
   margin: 0 0 0.25rem;
   letter-spacing: -0.01em;
   line-height: 1.2;
@@ -316,7 +324,7 @@
 .db-welcome-title {
     font-size: 1.75rem;
     font-weight: 900;
-    color: #0f172a;
+    color: #27282f;
     letter-spacing: -0.02em;
     margin: 0 0 0.25rem;
     font-family: var(--font-sans), "Public Sans", sans-serif;
@@ -344,7 +352,7 @@
     border-radius: 0.75rem;
     font-size: 0.8rem;
     font-weight: 700;
-    color: #334155;
+    color: #27282f;
     cursor: pointer;
     transition: background 0.2s;
     font-family: inherit;
@@ -415,7 +423,7 @@
 .db-upload-title {
     font-size: 1.1rem;
     font-weight: 700;
-    color: #0f172a;
+    color: #27282f;
     margin: 0 0 0.5rem;
     font-family: inherit;
 }
@@ -444,7 +452,7 @@
 .db-projects-title {
     font-size: 1.1rem;
     font-weight: 900;
-    color: #0f172a;
+    color: #27282f;
     letter-spacing: -0.02em;
     margin: 0;
     font-family: inherit;
@@ -474,7 +482,7 @@
 
 .db-filter-active {
     background: #ffffff;
-    color: #0f172a;
+    color: #27282f;
     box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 
@@ -602,7 +610,7 @@
 .db-card-name {
     font-size: 0.875rem;
     font-weight: 700;
-    color: #0f172a;
+    color: #27282f;
     margin: 0 0 0.4rem;
     transition: color 0.2s;
     font-family: inherit;
@@ -637,7 +645,7 @@
     border-radius: 0.75rem;
     font-size: 0.875rem;
     font-weight: 700;
-    color: #334155;
+    color: #27282f;
     cursor: pointer;
     transition: background 0.2s, border-color 0.2s;
     font-family: inherit;
@@ -979,7 +987,7 @@
 
 .pj-topbar-btn:hover {
     background: #f1f5f9;
-    color: #0f172a;
+    color: #27282f;
     border-color: #cbd5e1;
 }
 
@@ -1004,7 +1012,7 @@
     transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 
-.pj-icon-btn:hover { background: #f1f5f9; color: #0f172a; border-color: #cbd5e1; }
+.pj-icon-btn:hover { background: #f1f5f9; color: #27282f; border-color: #cbd5e1; }
 .pj-icon-btn-danger:hover { background: #fff1f2; color: #ef4444; border-color: #fecaca; }
 .pj-icon-btn-close { margin-left: 0.25rem; }
 
@@ -1083,7 +1091,7 @@
     border: 1px solid rgba(255,255,255,0.4);
     background: rgba(255,255,255,0.88);
     backdrop-filter: blur(6px);
-    color: #334155;
+    color: #27282f;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1139,7 +1147,7 @@
 
 .pj-img-footer-btn:hover {
     background: #f1f5f9;
-    color: #0f172a;
+    color: #27282f;
     border-color: #cbd5e1;
 }
 
@@ -1192,7 +1200,7 @@
 .pj-modal-panel-name {
     font-size: 1.64rem;
     font-weight: 700;
-    color: #0f172a;
+    color: #27282f;
     line-height: 1.25;
     word-break: break-word;
 }
@@ -1253,7 +1261,7 @@
 }
 
 .pj-modal-panel-meta-val {
-    color: #0f172a;
+    color: #27282f;
     font-weight: 600;
     text-align: right;
     max-width: 55%;
@@ -1290,7 +1298,7 @@
 
 .pj-panel-btn-ghost:hover {
     background: #f8fafc;
-    color: #0f172a;
+    color: #27282f;
     border-color: #cbd5e1;
 }
 
@@ -1369,7 +1377,7 @@
     font-family: inherit;
 }
 
-.pj-bottom-btn:hover { background: #f1f5f9; color: #0f172a; border-color: #cbd5e1; }
+.pj-bottom-btn:hover { background: #f1f5f9; color: #27282f; border-color: #cbd5e1; }
 .pj-bottom-btn-active { background: rgba(236,91,19,0.08); color: #ec5b13; border-color: rgba(236,91,19,0.3); }
 .pj-bottom-btn-active:hover { background: rgba(236,91,19,0.14); color: #ec5b13; }
 .pj-bottom-btn-primary { background: #ec5b13; color: #fff; border-color: #ec5b13; box-shadow: 0 4px 14px rgba(236,91,19,0.25); }
@@ -1434,7 +1442,7 @@
 .viz-modal-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #27282f;
   margin: 0 0 0.75rem;
 }
 .viz-modal-text {
@@ -1502,7 +1510,7 @@
     box-shadow: 0 8px 32px rgba(0,0,0,0.1);
     z-index: 100; min-width: 240px; max-width: calc(100vw - 1.5rem); box-sizing: border-box;
 }
-.viz-export-title { font-size: 0.9rem; font-weight: 700; color: #0f172a; margin: 0 0 0.9rem; }
+.viz-export-title { font-size: 0.9rem; font-weight: 700; color: #27282f; margin: 0 0 0.9rem; }
 .viz-export-formats { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
 .viz-export-fmt {
     display: flex; align-items: center; gap: 0.4rem;
@@ -1512,7 +1520,7 @@
 }
 .viz-export-fmt-active { border-color: #ec5b13; background: rgba(236,91,19,0.06); }
 .viz-export-fmt-locked { opacity: 0.55; cursor: pointer; }
-.viz-export-fmt-label { font-size: 0.78rem; font-weight: 700; color: #0f172a; }
+.viz-export-fmt-label { font-size: 0.78rem; font-weight: 700; color: #27282f; }
 .viz-export-pro-badge { font-size: 0.65rem; font-weight: 700; color: #f59e0b; white-space: nowrap; }
 .viz-export-desc { font-size: 0.75rem; color: #64748b; margin: 0 0 0.9rem; line-height: 1.4; }
 .viz-export-dl-btn {

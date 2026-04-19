@@ -22,7 +22,7 @@
 .models-row-label {
   font-size: 0.875rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #27282f;
   margin: 0 0 0.75rem;
 }
 
@@ -57,7 +57,7 @@
 .models-option-name {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #0f172a;
+  color: #27282f;
 }
 
 .models-option-active .models-option-name {
@@ -104,7 +104,7 @@
 .models-summary-value {
   font-size: 1.1rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #27282f;
 }
 
 @media (max-width: 640px) {

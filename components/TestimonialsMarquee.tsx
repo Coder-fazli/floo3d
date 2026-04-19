@@ -7,7 +7,7 @@ import { Marquee } from "@/components/ui/marquee";
 
 export function Highlight({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <span className={cn("p-1 py-0.5 font-bold", className)} style={{ background: "rgba(235,66,3,0.08)", color: "#EB4203" }}>
+    <span className={cn("p-1 py-0.5 font-bold", className)} style={{ background: "rgba(235,66,3,0.08)", color: "var(--brand-color)" }}>
       {children}
     </span>
   );
@@ -26,7 +26,7 @@ function TestimonialCard({ description, name, img, role, className }: {
         {description}
         <div className="flex flex-row py-1">
           {[...Array(5)].map((_, i) => (
-            <Star key={i} className="size-4" style={{ fill: "#EB4203", color: "#EB4203" }} />
+            <Star key={i} className="size-4" style={{ fill: "var(--brand-color)", color: "var(--brand-color)" }} />
           ))}
         </div>
       </div>
@@ -129,7 +129,7 @@ export default function TestimonialsMarquee({ items }: { items?: Testimonial[] }
         </h2>
         <h3 className="mx-auto mb-8 max-w-lg text-center text-lg font-medium tracking-tight text-balance" style={{ color: "#755760" }}>
           Don&apos;t just take our word for it. Here&apos;s what{" "}
-          <span style={{ color: "#EB4203", fontWeight: 700 }}>
+          <span style={{ color: "var(--brand-color)", fontWeight: 700 }}>
             homeowners &amp; designers
           </span>{" "}
           are saying about{" "}

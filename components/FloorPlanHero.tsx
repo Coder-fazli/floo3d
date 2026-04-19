@@ -148,14 +148,14 @@ export default function FloorPlanHero() {
             <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem" }}>
               <div style={{ display: "flex", gap: "0.2rem" }}>
                 {[1,2,3,4,5].map((s) => (
-                  <Star key={s} size={13} fill="#ec5b13" stroke="none" />
+                  <Star key={s} size={13} fill="var(--brand-color)" stroke="none" />
                 ))}
               </div>
               <p style={{ fontSize: "0.78rem", color: "#475569", margin: 0, fontWeight: 500 }}>
                 Trusted by{" "}
                 <CountUp value={2500} duration={2} separator="," suffix="+" colorScheme="gradient" className="font-bold" />
                 {" "}architects &{" "}
-                <a href="/#reviews" style={{ color: "#ec5b13", fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "2px" }}>
+                <a href="/#reviews" style={{ color: "var(--brand-color)", fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "2px" }}>
                   happy users
                 </a>
               </p>
@@ -184,7 +184,7 @@ export default function FloorPlanHero() {
                     backdropFilter: "blur(12px)",
                     border: "1px solid #ffffff",
                     boxShadow: "0 10px 25px -5px rgba(0,0,0,0.15)",
-                    color: "#ec5b13",
+                    color: "var(--brand-color)",
                     width: "3.5rem",
                     height: "3.5rem",
                   }}

@@ -60,7 +60,7 @@ export default async function AdminOverview({ searchParams }: { searchParams: Pr
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <p style={{ margin: 0, fontSize: "0.75rem", fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.06em" }}>Renders</p>
             <div style={{ width: "2rem", height: "2rem", borderRadius: "0.5rem", background: "rgba(236,91,19,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Zap size={14} color="#ec5b13" />
+              <Zap size={14} color="var(--brand-color)" />
             </div>
           </div>
           <h2 style={{ margin: 0, fontSize: "2.5rem", fontWeight: 800, color: "#0f172a", lineHeight: 1 }}>{d.newRenders}</h2>
