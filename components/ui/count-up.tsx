@@ -44,7 +44,7 @@ export function CountUp({
       <span
         className={className}
         style={{
-          background: "linear-gradient(90deg, "var(--brand-color)", #f97316)",
+          background: "linear-gradient(90deg, var(--brand-color), #f97316)",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
           fontWeight: 800,
