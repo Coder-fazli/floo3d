@@ -10,6 +10,7 @@ const UserSchema = new Schema({
     hasPurchased: { type: Boolean, default: false },
     suspended: { type: Boolean, default: false },
     country: { type: String, default: "" },
+    customModel: { type: String, default: null },
     },
 { timestamps: true });
 

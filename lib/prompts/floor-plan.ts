@@ -1,4 +1,6 @@
 const BASE_PROMPT = `
+⚠ ABSOLUTE RULE — ZERO TEXT IN OUTPUT: The output image must contain NO text, NO letters, NO numbers, NO room labels, NO dimension annotations, NO legends, NO watermarks of any kind. The input floor plan will contain text — use it only to understand the layout. Do NOT reproduce any of it visually. Any text appearing in the output makes the result a failure.
+
 TASK: Convert the input 2D floor plan (which may be a blueprint, CAD export, technical drawing, or hand-drawn plan in any color — blue, black, white, grey or other) into a high-quality architectural render.
 
 LAYOUT FIDELITY — HIGHEST PRIORITY:
@@ -8,7 +10,7 @@ LAYOUT FIDELITY — HIGHEST PRIORITY:
 - Wall thickness must be consistent and proportional to room size throughout — exterior walls visibly thicker than interior partitions.
 
 STRICT OUTPUT RULES:
-1. TEXT IN OUTPUT: Do not render any letters, numbers, labels, or annotations in the OUTPUT. Read and use any text visible in the input to understand room types — but produce zero visible text in the result.
+1. TEXT IN OUTPUT: See absolute rule above — zero text, letters, numbers, or annotations in the output under any circumstances.
 2. CLEAN OUTPUT: Crisp edges, balanced lighting, realistic materials. No sketch, cartoon or hand-drawn look.
 3. NO EXTRA CONTENT: Do not add rooms, furniture, or objects not clearly indicated in the plan.
 4. IGNORE INPUT COLOURS: The input is a technical drawing and may be any colour. Do not carry input colours into the output. All colours come exclusively from the design style defined below.

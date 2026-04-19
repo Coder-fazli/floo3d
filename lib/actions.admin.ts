@@ -64,6 +64,12 @@ export async function updateUserCredits(clerkId: string, credits: number) {
   await User.findOneAndUpdate({ clerkId }, { credits });
 }
 
+export async function updateUserModel(clerkId: string, model: string | null) {
+  await requireAdmin();
+  await connectDb();
+  await User.findOneAndUpdate({ clerkId }, { customModel: model || null });
+}
+
 export async function deleteUSer(clerkId: string) {
   await requireAdmin();
   await connectDb();

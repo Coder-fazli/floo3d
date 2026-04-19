@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Calendar, Lock, RotateCcw, Trash2, ChevronLeft, ShoppingBag, Activity } from "lucide-react";
 import { getUserByClerkId, getProjects } from "@/lib/actions";
-import { updateUserCredits, deleteUSer, getOrdersByUser, getLogsByUser, suspendUser } from "@/lib/actions.admin";
+import { updateUserCredits, deleteUSer, getOrdersByUser, getLogsByUser, suspendUser, updateUserModel } from "@/lib/actions.admin";
 import AdminViewButton from "./AdminViewButton";
 
 const MODEL_COSTS: Record<string, number> = {
@@ -49,6 +49,13 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
     "use server";
     await deleteUSer(id);
     redirect("/secure-7x9/users");
+  }
+
+  async function saveModel(formData: FormData) {
+    "use server";
+    const val = (formData.get("customModel") as string) || null;
+    await updateUserModel(id, val);
+    redirect(`/secure-7x9/users/${id}`);
   }
 
   async function handleSuspend() {
@@ -163,6 +170,33 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
             <p className="adm-credits-hint">This will set the exact credit balance for this user.</p>
             <button type="submit" className="adm-btn-primary" style={{ width: "100%", justifyContent: "center", marginTop: "1.25rem" }}>
               Save Changes
+            </button>
+          </form>
+        </div>
+
+        {/* Model Override */}
+        <div className="adm-card" style={{ padding: "1.5rem" }}>
+          <h4 style={{ fontSize: "1rem", fontWeight: 700, color: "#0f172a", margin: "0 0 0.25rem" }}>AI Model Override</h4>
+          <p style={{ fontSize: "0.78rem", color: "#94a3b8", margin: "0 0 1.25rem" }}>Force a specific model for this user. Overrides paid/free logic. Leave empty to use default.</p>
+          {user.customModel && (
+            <div style={{ marginBottom: "1rem", padding: "0.5rem 0.875rem", background: "#ede9fe", borderRadius: "0.625rem", fontSize: "0.78rem", fontWeight: 700, color: "#7c3aed", fontFamily: "monospace" }}>
+              Active: {user.customModel}
+            </div>
+          )}
+          <form action={saveModel}>
+            <label className="adm-form-label">Model ID</label>
+            <select
+              name="customModel"
+              defaultValue={user.customModel ?? ""}
+              style={{ width: "100%", padding: "0.65rem 0.875rem", border: "1.5px solid #e2e8f0", borderRadius: "0.75rem", fontSize: "0.875rem", color: "#0f172a", background: "#f8fafc", fontFamily: "inherit", marginBottom: "0.5rem" }}
+            >
+              <option value="">— Default (use paid/free logic) —</option>
+              <option value="gemini-3-pro-image-preview">gemini-3-pro-image-preview</option>
+              <option value="gemini-3.1-flash-image-preview">gemini-3.1-flash-image-preview</option>
+              <option value="gemini-2.5-flash-image">gemini-2.5-flash-image</option>
+            </select>
+            <button type="submit" className="adm-btn-primary" style={{ width: "100%", justifyContent: "center", marginTop: "0.75rem" }}>
+              Save Model
             </button>
           </form>
         </div>

@@ -55,6 +55,7 @@ const Navbar = () => {
   };
 
   return (
+    <>
     <header className="navbar">
       <nav className="navbar-inner">
 
@@ -154,6 +155,7 @@ const Navbar = () => {
     </header>
 
     {contactOpen && <ContactModal onClose={() => setContactOpen(false)} />}
+    </>
   );
 };
 

@@ -40,11 +40,15 @@ export async function POST(request: Request) {
      // Build prompt
       const prompt = buildFloorPlanGeneratorPrompt(config, customPrompt);
 
-      // Read model — paid users get better model automatically
+      // Read model — customModel per user overrides everything, then hasPurchased, then global settings
       const [modelSettings, userInfo] = await Promise.all([getModelSettings(), getUserInfo(userId)]);
-      modelName = userInfo.hasPurchased
-        ? "gemini-3.1-flash-image-preview"
-        : (modelSettings["floor-plan-generator"] ?? "gemini-3.1-flash-image-preview");
+      if (userInfo.customModel) {
+        modelName = userInfo.customModel;
+      } else {
+        modelName = userInfo.hasPurchased
+          ? "gemini-3-pro-image-preview"
+          : (modelSettings["floor-plan-generator"] ?? "gemini-3.1-flash-image-preview");
+      }
 
       // Call Gemini API
         const model = genAI.getGenerativeModel({

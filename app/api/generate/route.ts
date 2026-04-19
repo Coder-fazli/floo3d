@@ -55,8 +55,9 @@ export async function POST(request: Request) {
     const [modelSettings, userInfo] = await Promise.all([getModelSettings(), getUserInfo(userId)]);
     const isSpecialAngle = viewAngle === "isometric" || viewAngle === "crossSection";
 
-    if (userInfo.hasPurchased) {
-      // Paid users get better models automatically
+    if (userInfo.customModel) {
+      modelName = userInfo.customModel;
+    } else if (userInfo.hasPurchased) {
       modelName = isSpecialAngle ? "gemini-3-pro-image-preview" : "gemini-3.1-flash-image-preview";
     } else {
       modelName = isSpecialAngle

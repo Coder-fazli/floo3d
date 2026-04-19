@@ -66,10 +66,10 @@ export async function getCredits(userId: string, name?: string, email?: string) 
     return user.credits;
 }
 
-export async function getUserInfo(userId: string): Promise<{ credits: number; hasPurchased: boolean }> {
+export async function getUserInfo(userId: string): Promise<{ credits: number; hasPurchased: boolean; customModel: string | null }> {
     await connectDb();
     const user = await User.findOne({ clerkId: userId });
-    return { credits: user?.credits ?? 4, hasPurchased: user?.hasPurchased ?? false };
+    return { credits: user?.credits ?? 4, hasPurchased: user?.hasPurchased ?? false, customModel: user?.customModel ?? null };
 }
 
 export async function deductCredit(userId:string) {
