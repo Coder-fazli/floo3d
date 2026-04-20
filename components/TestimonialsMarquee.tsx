@@ -7,7 +7,7 @@ import { Marquee } from "@/components/ui/marquee";
 
 export function Highlight({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <span className={cn("p-1 py-0.5 font-bold", className)} style={{ background: "rgba(235,66,3,0.08)", color: "var(--brand-color)" }}>
+    <span className={cn("p-1 py-0.5 font-bold", className)} style={{ background: "rgba(251,59,1,0.08)", color: "var(--brand-color)" }}>
       {children}
     </span>
   );
@@ -21,7 +21,7 @@ function TestimonialCard({ description, name, img, role, className }: {
       "mb-4 flex w-full cursor-pointer break-inside-avoid flex-col items-center justify-between gap-6 rounded-xl p-4",
       "shadow-sm border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md",
       className,
-    )} style={{ background: "#FDF6F2", borderColor: "rgba(117,87,96,0.15)" }}>
+    )} style={{ background: "#ffffff", borderColor: "rgba(117,87,96,0.12)" }}>
       <div className="text-sm font-normal select-none" style={{ color: "#755760" }}>
         {description}
         <div className="flex flex-row py-1">
@@ -37,10 +37,10 @@ function TestimonialCard({ description, name, img, role, className }: {
           src={img || ""}
           alt={name}
           className="size-10 rounded-full ring-offset-2"
-          style={{ outline: "1px solid rgba(235,66,3,0.2)" }}
+          style={{ outline: "1px solid rgba(251,59,1,0.2)" }}
         />
         <div>
-          <p className="font-medium" style={{ color: "#28030F" }}>{name}</p>
+          <p className="font-medium" style={{ color: "#27282f" }}>{name}</p>
           <p className="text-xs font-normal" style={{ color: "#755760" }}>{role}</p>
         </div>
       </div>
@@ -116,15 +116,15 @@ export default function TestimonialsMarquee({ items }: { items?: Testimonial[] }
   const data = items ?? testimonials;
   return (
     <section className="tm-section relative mx-auto w-full max-w-7xl px-4 py-10">
-      <div className="absolute top-20 -left-20 z-10 h-64 w-64 rounded-full blur-3xl" style={{ background: "rgba(235,66,3,0.05)" }} />
-      <div className="absolute -right-20 bottom-20 z-10 h-64 w-64 rounded-full blur-3xl" style={{ background: "rgba(235,66,3,0.05)" }} />
+      <div className="absolute top-20 -left-20 z-10 h-64 w-64 rounded-full blur-3xl" style={{ background: "rgba(251,59,1,0.05)" }} />
+      <div className="absolute -right-20 bottom-20 z-10 h-64 w-64 rounded-full blur-3xl" style={{ background: "rgba(251,59,1,0.05)" }} />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="mb-4 text-center text-4xl leading-[1.2] font-bold tracking-tighter md:text-5xl" style={{ color: "#28030F", fontFamily: "var(--font-playfair), Georgia, serif" }}>
+        <h2 className="mb-4 text-center text-4xl leading-[1.2] font-bold tracking-tighter md:text-5xl" style={{ color: "#27282f", fontFamily: "var(--font-playfair), Georgia, serif" }}>
           What Our Users Are Saying
         </h2>
         <h3 className="mx-auto mb-8 max-w-lg text-center text-lg font-medium tracking-tight text-balance" style={{ color: "#755760" }}>
@@ -133,7 +133,7 @@ export default function TestimonialsMarquee({ items }: { items?: Testimonial[] }
             homeowners &amp; designers
           </span>{" "}
           are saying about{" "}
-          <span style={{ fontWeight: 700, color: "#28030F" }}>MyHomeStyler</span>
+          <span style={{ fontWeight: 700, color: "#27282f" }}>MyHomeStyler</span>
         </h3>
       </motion.div>
 
@@ -158,7 +158,7 @@ export default function TestimonialsMarquee({ items }: { items?: Testimonial[] }
               </Marquee>
             ))}
         </div>
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 w-full" style={{ background: "linear-gradient(to top, #ffffff, transparent)" }} />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 w-full" style={{ background: "linear-gradient(to top, #faf7f4, transparent)" }} />
       </div>
     </section>
   );

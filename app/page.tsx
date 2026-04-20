@@ -106,7 +106,7 @@ export default async function Home() {
 
       <Blog />
 
-      <FAQ />
+      <FAQ twoColumns />
 
       <Footer />
     </div>

@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const DEFAULT_FAQS = [
   {
     q: "Is this the best free AI interior design app?",
-    a: "MyHomeStyler is among the best AI interior design tools available — and it's free to start. Every new account gets 4 free credits covering all 4 tools: AI interior design, free AI floor plan generator, virtual staging AI, and AI landscape design. No credit card required.",
+    a: "MyHomeStyler is among the best AI interior design tools available — and it's free to start. Every new account gets 2 free credits covering all 4 tools: AI interior design, free AI floor plan generator, virtual staging AI, and AI landscape design. No credit card required.",
   },
   {
     q: "Can I use it as a free AI room design and room planner?",

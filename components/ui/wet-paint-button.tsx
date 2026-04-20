@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 const WetPaintButton = ({ children, className }: { className?: string; children: React.ReactNode }) => {
   return (
     <button
-      className={cn("wet-paint-btn px-6 py-3.5 text-sm md:px-9 md:py-[1.1rem] md:text-xl font-black text-white tracking-wide cursor-pointer transition-all relative overflow-hidden", className)}
-      style={{ background: "linear-gradient(145deg, #FF8A70, var(--brand-color))", boxShadow: "0 0 16px 4px rgba(235, 66, 3, 0.18), 0 6px 16px rgba(235, 66, 3, 0.15)", borderRadius: "1rem" }}
+      className={cn("wet-paint-btn px-9 py-[1.1rem] text-[0.72rem] font-bold text-white uppercase tracking-[0.2em] cursor-pointer transition-opacity relative overflow-hidden hover:opacity-90", className)}
+      style={{ background: "var(--brand-color)", boxShadow: "none", borderRadius: "0.25rem" }}
     >
       <span className="relative z-10">{children}</span>
     </button>

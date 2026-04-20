@@ -13,7 +13,7 @@
 /* ── DesignOptions Section (do-) ── */
 
 .do-section {
-  background: linear-gradient(to bottom, #FDF6F2 0%, #ffffff 6%, #ffffff 94%, #FDF6F2 100%);
+  background: #ffffff;
   padding: 3rem 0 0;
 }
 
@@ -243,7 +243,7 @@
 
 /* ── Text card ── */
 .do-text-card {
-  background: #f5f4ed;
+  background: #faf7f4;
   border: 1px solid rgba(117, 87, 96, 0.15);
   border-bottom: 3px solid var(--brand-color);
   box-shadow: 0 8px 32px rgba(40, 3, 15, 0.06);

@@ -117,7 +117,7 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride,
           </p>
 
           {/* CTAs */}
-          <div className="hph-btns" style={{ display: "flex", flexDirection: "row", gap: "0.625rem", flexWrap: "nowrap", alignItems: "center" }}>
+          <div className="hph-btns" style={{ display: "flex", flexDirection: "row", gap: "1.25rem", flexWrap: "nowrap", alignItems: "center" }}>
             {ctaOverride ?? (!isLoaded
               ? <button className="hph-btn-primary" style={{ opacity: 0, pointerEvents: "none" }}>Try It Free</button>
               : isSignedIn

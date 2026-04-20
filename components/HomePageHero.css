@@ -4,7 +4,7 @@
   position: relative;
   padding: 2.5rem 0 0;
   overflow: hidden;
-  background: #f5f4ed;
+  background: #faf7f4;
 }
 
 /* Ambient blobs */
@@ -150,17 +150,21 @@
   align-items: center;
 }
 
+.hph-section .hph-btn-primary,
+.hph-btns .hph-btn-primary,
 .hph-btn-primary {
-  padding: 1.2rem 2.75rem;
+  padding: 1.1rem 2.5rem;
   background: var(--brand-color);
   color: #ffffff;
   border: none;
-  border-radius: 1rem;
-  font-size: 1.05rem;
+  border-radius: 0.25rem !important;
+  font-size: 0.72rem;
   font-weight: 700;
+  text-transform: uppercase !important;
+  letter-spacing: 0.2em !important;
   cursor: pointer;
-  box-shadow: 0 20px 40px -8px rgba(251, 59, 1, 0.35);
-  transition: box-shadow 0.2s, transform 0.2s;
+  box-shadow: none !important;
+  transition: opacity 0.2s;
   font-family: inherit;
   text-decoration: none;
   display: inline-flex;
@@ -185,9 +189,12 @@
   }
 }
 
+.hph-section .hph-btn-primary:hover,
+.hph-btns .hph-btn-primary:hover,
 .hph-btn-primary:hover {
-  box-shadow: 0 24px 48px -8px rgba(251, 59, 1, 0.45);
-  transform: translateY(-2px);
+  opacity: 0.88;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 .hph-btn-secondary {

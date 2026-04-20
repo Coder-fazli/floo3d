@@ -877,7 +877,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
               <span className="viz-embed-bar-text">
                 <strong>{guestCredits} free generation{guestCredits !== 1 ? "s" : ""}</strong> remaining — no sign up needed.{" "}
                 <button className="viz-embed-bar-link" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>
-                  Sign up free → get 4 credits
+                  Sign up free → get 2 credits
                 </button>
                 {" "}· no credit card needed
               </span>

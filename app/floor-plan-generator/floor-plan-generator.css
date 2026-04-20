@@ -1,6 +1,6 @@
 .fpg-page {
   padding: 4rem 1.5rem 6rem;
-  background: #f8fafc;
+  background: #faf7f4;
   min-height: 60vh;
 }
 
@@ -20,7 +20,7 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #ec5b13;
+  color: var(--brand-color);
   margin-bottom: 0.75rem;
 }
 
@@ -88,7 +88,7 @@
   padding: 0.35rem 0.9rem;
   border-radius: 9999px;
   border: 1.5px solid #e2e8f0;
-  background: #f8fafc;
+  background: #faf7f4;
   color: #64748b;
   font-size: 0.82rem;
   font-weight: 600;
@@ -98,14 +98,14 @@
 }
 
 .fpg-chip:hover {
-  border-color: #ec5b13;
-  color: #ec5b13;
+  border-color: var(--brand-color);
+  color: var(--brand-color);
 }
 
 .fpg-chip-active {
-  border-color: #ec5b13;
-  background: rgba(236, 91, 19, 0.08);
-  color: #ec5b13;
+  border-color: var(--brand-color);
+  background: rgba(251, 59, 1, 0.08);
+  color: var(--brand-color);
 }
 
 /* Area + floors row */
@@ -140,7 +140,7 @@
 }
 
 .fpg-input:focus {
-  border-color: #ec5b13;
+  border-color: var(--brand-color);
 }
 
 .fpg-unit-toggle {
@@ -157,13 +157,13 @@
   font-family: inherit;
   cursor: pointer;
   border: none;
-  background: #f8fafc;
+  background: #faf7f4;
   color: #64748b;
   transition: all 0.15s;
 }
 
 .fpg-unit-btn.active {
-  background: #ec5b13;
+  background: var(--brand-color);
   color: #fff;
 }
 
@@ -172,7 +172,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: #f8fafc;
+  background: #faf7f4;
   border: 1.5px solid #e2e8f0;
   border-radius: 0.625rem;
   padding: 0.35rem 0.75rem;
@@ -195,8 +195,8 @@
 }
 
 .fpg-step-btn:hover {
-  border-color: #ec5b13;
-  color: #ec5b13;
+  border-color: var(--brand-color);
+  color: var(--brand-color);
 }
 
 .fpg-step-val {
@@ -237,7 +237,7 @@
   padding: 0.75rem 0.5rem;
   border: 1.5px solid #e2e8f0;
   border-radius: 0.75rem;
-  background: #f8fafc;
+  background: #faf7f4;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -248,12 +248,12 @@
 }
 
 .fpg-style-card:hover {
-  border-color: #ec5b13;
+  border-color: var(--brand-color);
 }
 
 .fpg-style-active {
-  border-color: #ec5b13;
-  background: rgba(236, 91, 19, 0.06);
+  border-color: var(--brand-color);
+  background: rgba(251, 59, 1, 0.06);
 }
 
 .fpg-style-name {
@@ -274,7 +274,7 @@
   padding: 0.875rem;
   border-radius: 0.75rem;
   border: none;
-  background: linear-gradient(135deg, #ec5b13, #f97316);
+  background: var(--brand-color);
   color: #fff;
   font-size: 1rem;
   font-weight: 700;
@@ -353,7 +353,7 @@
 }
 
 .fpg-3d-btn {
-  background: linear-gradient(135deg, #ec5b13, #f97316);
+  background: var(--brand-color);
   color: #fff;
 }
 

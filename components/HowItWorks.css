@@ -391,11 +391,17 @@
 .hiw-cta-btn-primary {
     background: var(--brand-color);
     color: #ffffff;
-    box-shadow: 0 10px 30px rgba(236, 91, 19, 0.4);
+    box-shadow: none;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.72rem;
+    font-weight: 700;
 }
 
 .hiw-cta-btn-primary:hover {
-    transform: scale(1.05);
+    opacity: 0.88;
+    transform: none;
 }
 
 .hiw-cta-btn-ghost {

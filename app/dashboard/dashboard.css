@@ -367,20 +367,22 @@
     align-items: center;
     gap: 0.4rem;
     padding: 0.5rem 1rem;
-    background: #ec5b13;
+    background: var(--brand-color);
     border: none;
-    border-radius: 0.75rem;
-    font-size: 0.8rem;
+    border-radius: 0.25rem;
+    font-size: 0.72rem;
     font-weight: 700;
     color: #ffffff;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(236, 91, 19, 0.25);
+    box-shadow: none;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
     transition: opacity 0.2s;
     font-family: inherit;
 }
 
 .db-btn-primary:hover {
-    opacity: 0.9;
+    opacity: 0.88;
 }
 
 /* ── Upload zone ── */
@@ -1308,22 +1310,23 @@
     justify-content: center;
     gap: 0.4rem;
     padding: 0.55rem 1rem;
-    border-radius: 0.625rem;
-    border: 1px solid #ec5b13;
-    background: #ec5b13;
+    border-radius: 0.25rem;
+    border: none;
+    background: var(--brand-color);
     color: #ffffff;
-    font-size: 0.78rem;
-    font-weight: 600;
+    font-size: 0.68rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    transition: opacity 0.15s;
     font-family: inherit;
     width: 100%;
-    box-shadow: 0 4px 14px rgba(236,91,19,0.25);
+    box-shadow: none;
 }
 
 .pj-panel-btn-primary:hover {
-    background: #d44d0d;
-    border-color: #d44d0d;
+    opacity: 0.88;
 }
 
 .pj-panel-btn-download {
@@ -1380,8 +1383,8 @@
 .pj-bottom-btn:hover { background: #f1f5f9; color: #27282f; border-color: #cbd5e1; }
 .pj-bottom-btn-active { background: rgba(236,91,19,0.08); color: #ec5b13; border-color: rgba(236,91,19,0.3); }
 .pj-bottom-btn-active:hover { background: rgba(236,91,19,0.14); color: #ec5b13; }
-.pj-bottom-btn-primary { background: #ec5b13; color: #fff; border-color: #ec5b13; box-shadow: 0 4px 14px rgba(236,91,19,0.25); }
-.pj-bottom-btn-primary:hover { background: #d44d0d; border-color: #d44d0d; color: #fff; }
+.pj-bottom-btn-primary { background: var(--brand-color); color: #fff; border-color: var(--brand-color); box-shadow: none; border-radius: 0.25rem; text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.68rem; font-weight: 700; }
+.pj-bottom-btn-primary:hover { opacity: 0.88; background: var(--brand-color); border-color: var(--brand-color); color: #fff; }
 
 /* ── Responsive ── */
 @media (max-width: 720px) {
@@ -1460,16 +1463,19 @@
 .viz-modal-btn-primary {
   flex: 1;
   padding: 0.75rem;
-  background: #ec5b13;
+  background: var(--brand-color);
   color: #ffffff;
-  font-size: 0.875rem;
+  font-size: 0.72rem;
   font-weight: 700;
   border: none;
-  border-radius: 0.75rem;
+  border-radius: 0.25rem;
   cursor: pointer;
+  box-shadow: none;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
   transition: opacity 0.2s;
 }
-.viz-modal-btn-primary:hover { opacity: 0.9; }
+.viz-modal-btn-primary:hover { opacity: 0.88; }
 
 /* ── Export button (shared with visualizer) ── */
 .viz-download-btn {

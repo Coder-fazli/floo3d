@@ -2,10 +2,10 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(248, 248, 248, 0.85);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.4);
     box-shadow: 0 1px 12px rgba(40, 3, 15, 0.05);
 }
 
@@ -123,14 +123,14 @@
     width: 2rem;
     height: 2rem;
     border-radius: 9999px;
-    background: rgba(117, 87, 96, 0.1);
-    color: #755760;
+    background: #eeb818;
+    color: #ffffff;
     text-decoration: none;
-    transition: background 0.15s;
+    transition: opacity 0.15s;
 }
 
 .navbar-profile:hover {
-    background: rgba(117, 87, 96, 0.18);
+    opacity: 0.85;
 }
 
 .navbar-profile-wrap {
@@ -195,25 +195,29 @@
 }
 
 .navbar-btn-primary {
-    font-size: 0.875rem;
+    font-size: 0.72rem;
     font-weight: 700;
     color: #fff;
     background: var(--brand-color);
     border: none;
     cursor: pointer;
-    padding: 0.5rem 1.25rem;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 14px rgba(242, 85, 138, 0.3);
-    transition: transform 0.15s, opacity 0.15s;
+    padding: 0.55rem 1.25rem;
+    border-radius: 0.25rem;
+    box-shadow: none;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    transition: opacity 0.15s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
 }
 
 .navbar-btn-primary:hover {
-    opacity: 0.92;
-    transform: scale(1.03);
+    opacity: 0.88;
 }
 
 .navbar-btn-primary:active {
-    transform: scale(0.97);
+    opacity: 0.75;
 }
 
 .navbar-burger {
@@ -287,15 +291,18 @@
 .navbar-mobile-dashboard {
     display: block;
     padding: 0.6rem 0.5rem;
-    font-size: 0.95rem;
+    font-size: 0.72rem;
     font-weight: 700;
     color: #ffffff !important;
     background: var(--brand-color);
-    border-radius: 0.75rem;
+    border-radius: 0.25rem;
     text-decoration: none;
     text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
     margin-bottom: 0.25rem;
     transition: opacity 0.15s;
+    box-shadow: none;
 }
 
 .navbar-mobile-dashboard:hover {
