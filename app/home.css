@@ -162,11 +162,15 @@
   .hph-slider-container {
     pointer-events: none !important;
   }
-  /* Fix avatar image fill */
+  /* Trusted row — horizontal, 3 avatars only */
   .hph-trusted-row {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 0.35rem !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    flex-wrap: nowrap !important;
+  }
+  .hph-trusted-row > div > div:nth-child(n+4) {
+    display: none !important;
   }
   .hph-trusted-row div img {
     width: 100% !important;
@@ -175,32 +179,32 @@
     display: block !important;
   }
   .hph-trusted-row div[style] {
-    width: 28px !important;
-    height: 28px !important;
-    min-width: 28px !important;
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
   }
   .hph-trusted-row img {
-    width: 28px !important;
-    height: 28px !important;
+    width: 26px !important;
+    height: 26px !important;
   }
   .hph-trusted-row p {
-    font-size: 0.78rem !important;
-    white-space: normal !important;
+    font-size: 0.72rem !important;
+    white-space: nowrap !important;
   }
   .hph-grid {
-    gap: 1rem !important;
+    gap: 0.75rem !important;
   }
   .hph-heading {
-    font-size: 2.2rem !important;
-    margin-bottom: 1rem !important;
-    margin-top: 0.75rem !important;
+    font-size: 2.5rem !important;
+    margin-bottom: 0.75rem !important;
+    margin-top: 0.5rem !important;
   }
   .hph-sub {
-    font-size: 0.9rem !important;
-    margin-bottom: 1rem !important;
+    font-size: 0.95rem !important;
+    margin-bottom: 0.875rem !important;
   }
   .hph-slider-container {
-    aspect-ratio: 5/3 !important;
+    aspect-ratio: 16/9 !important;
   }
   .hph-badge {
     display: none !important;
@@ -208,8 +212,15 @@
   .hph-slider-wrap {
     order: -1 !important;
   }
-  .hph-sub {
-    margin-bottom: 1rem !important;
+  /* Primary CTA more dominant */
+  .hph-btn-cta-label {
+    padding: 0.7rem 1.5rem !important;
+    font-size: 0.72rem !important;
+  }
+  .hph-btn-secondary {
+    padding: 0.7rem 1rem !important;
+    font-size: 0.68rem !important;
+    opacity: 0.85 !important;
   }
 }
 

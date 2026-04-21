@@ -113,7 +113,7 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride,
 
           {/* Sub */}
           <p className="hph-sub">
-            Upload a photo → get a fully redesigned room in seconds. No software, no designer, no waiting.
+            Upload a photo. Get a pro redesign in seconds.
           </p>
 
           {/* CTAs */}
