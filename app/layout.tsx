@@ -1,5 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import { Inter, Instrument_Serif, Geist, Playfair_Display, Cormorant_Garamond, Plus_Jakarta_Sans } from "next/font/google";
+import { Playfair_Display, Roboto } from "next/font/google";
 import "./globals.css";
 import "./theme-test.css";
 import { cn } from "@/lib/utils";
@@ -8,12 +8,8 @@ import CrispChat from "@/components/CrispChat";
 import CookieBanner from "@/components/CookieBanner";
 import Script from "next/script";
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const instrumentSerif = Instrument_Serif({ subsets: ["latin"], weight: "400", variable: "--font-instrument-serif" });
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400","700","900"], variable: "--font-playfair" });
-const cormorant = Cormorant_Garamond({ subsets: ["latin"], weight: ["300","400","600"], variable: "--font-cormorant" });
-const jakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["400","500","600","700","800"], variable: "--font-jakarta" });
+const roboto = Roboto({ subsets: ["latin"], weight: ["400","500","700","900"], variable: "--font-roboto" });
 
 export async function generateMetadata() {
   const s = await getSiteSettings();
@@ -57,8 +53,8 @@ export async function generateMetadata() {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={cn("font-sans", geist.variable)}>
-        <body className={`${inter.variable} ${instrumentSerif.variable} ${playfair.variable} ${cormorant.variable} ${jakartaSans.variable}`}>
+      <html lang="en" className={cn(playfair.variable, roboto.variable)}>
+        <body className={`${playfair.variable} ${roboto.variable}`}>
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{

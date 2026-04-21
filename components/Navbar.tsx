@@ -61,9 +61,7 @@ const Navbar = () => {
 
         {/* Brand */}
         <a href="/" className="navbar-brand">
-          <div className="navbar-logo-icon">
-            <Image src="/favicon.png" alt="MyHomeStyler" width={40} height={40} />
-          </div>
+          <img src="/logo.png" alt="MyHomeStyler" className="navbar-logo-img" />
           <span className="navbar-name">MyHome<span className="navbar-name-accent">Styler</span></span>
         </a>
 
@@ -107,7 +105,6 @@ const Navbar = () => {
                   </div>
                 )}
               </div>
-              <button className="navbar-btn-ghost navbar-desktop-only" onClick={() => setContactOpen(true)}>Support</button>
               <a href="/dashboard" className="navbar-btn-primary navbar-desktop-only">Dashboard</a>
 
               <div className="navbar-mobile-group">

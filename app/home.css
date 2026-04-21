@@ -56,9 +56,9 @@
 
 /* ── Navbar: transparent, blends into creamy bg ── */
 .navbar {
-  background: transparent !important;
+  background: #faf7f4 !important;
   backdrop-filter: none !important;
-  border-bottom: none !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5) !important;
 }
 .navbar-credits {
   color: #27282f !important;

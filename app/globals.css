@@ -93,8 +93,8 @@ html, body {
     --color-primary: #f97316;
     --color-secondary: #3b82f6;
     --color-accent: #8b5cf6;
-    --font-serif: var(--font-playfair), var(--font-instrument-serif), serif;
-    --font-sans: var(--font-inter), sans-serif;
+    --font-serif: var(--font-playfair), Georgia, serif;
+    --font-sans: var(--font-roboto), sans-serif;
     --shadow-neobrutalism: 4px 4px 0px 0px rgba(0, 0, 0, 1);
 }
 
@@ -107,7 +107,7 @@ html, body {
     body {
         background-color: #fdfbf7;
         color: #1a1a1a;
-        font-family: var(--font-inter), sans-serif;
+        font-family: var(--font-roboto), sans-serif;
         -webkit-font-smoothing: antialiased;
     @apply bg-background text-foreground;
     }
@@ -430,7 +430,7 @@ html, body {
                 color: #27282f;
                 line-height: 1.1;
                 margin: 0;
-                font-family: var(--font-sans), "Public Sans", sans-serif;
+                font-family: var(--font-roboto), sans-serif;
             }
 
             .marquee-accent {
