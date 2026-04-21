@@ -136,7 +136,7 @@
   background: rgba(0,0,0,0.06) !important;
 }
 .navbar-icon-btn:hover {
-  background: rgba(0,0,0,0.1) !important;
+  background: rgba(0,0,0,0.06) !important;
 }
 .navbar-credits-mobile {
   color: #ffffff !important;
@@ -176,20 +176,19 @@
   }
   /* shrink individual avatar circles */
   .hph-trusted-row > div:first-child > div {
-    width: 24px !important;
-    height: 24px !important;
-    min-width: 24px !important;
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
   }
   .hph-trusted-row > div:first-child > div img {
-    width: 24px !important;
-    height: 24px !important;
+    width: 30px !important;
+    height: 30px !important;
     object-fit: cover !important;
   }
   .hph-trusted-row p {
     font-size: 0.72rem !important;
-    white-space: normal !important;
+    white-space: nowrap !important;
     min-width: 0 !important;
-    flex: 1 !important;
     margin-left: 0.35rem !important;
   }
   .hph-grid {
@@ -215,12 +214,14 @@
   }
   /* Primary CTA dominant, ghost smaller */
   .hph-btn-cta-label {
-    padding: 0.7rem 1.5rem !important;
+    padding: 0.85rem 1.75rem !important;
+    font-size: 0.78rem !important;
   }
   .hph-btn-secondary {
-    padding: 0.5rem 0.75rem !important;
+    padding: 0.85rem 0.5rem !important;
     font-size: 0.65rem !important;
     opacity: 0.75 !important;
+    border-radius: 0 !important;
   }
 }
 

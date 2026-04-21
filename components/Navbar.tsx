@@ -80,6 +80,11 @@ const Navbar = () => {
                 </NavigationMenuLink>
               </NavigationMenuItem>
             ))}
+            {isSignedIn && (
+              <NavigationMenuItem>
+                <button className="navbar-nav-link" onClick={() => setContactOpen(true)}>Support</button>
+              </NavigationMenuItem>
+            )}
           </NavigationMenuList>
         </NavigationMenu>
 

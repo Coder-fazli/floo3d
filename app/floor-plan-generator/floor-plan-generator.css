@@ -56,7 +56,7 @@
 .fpg-form {
   background: #fff;
   border-radius: 1.25rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8e4df;
   padding: 2rem;
   display: flex;
   flex-direction: column;
@@ -87,7 +87,7 @@
 .fpg-chip {
   padding: 0.35rem 0.9rem;
   border-radius: 9999px;
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid #e8e4df;
   background: #faf7f4;
   color: #64748b;
   font-size: 0.82rem;
@@ -129,7 +129,7 @@
 .fpg-input {
   flex: 1;
   padding: 0.5rem 0.75rem;
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid #e8e4df;
   border-radius: 0.625rem;
   font-size: 0.9rem;
   font-family: inherit;
@@ -145,7 +145,7 @@
 
 .fpg-unit-toggle {
   display: flex;
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid #e8e4df;
   border-radius: 0.625rem;
   overflow: hidden;
 }
@@ -173,7 +173,7 @@
   align-items: center;
   gap: 0.75rem;
   background: #faf7f4;
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid #e8e4df;
   border-radius: 0.625rem;
   padding: 0.35rem 0.75rem;
   width: fit-content;
@@ -183,7 +183,7 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid #e8e4df;
   background: #fff;
   color: #475569;
   cursor: pointer;
@@ -235,7 +235,7 @@
 
 .fpg-style-card {
   padding: 0.75rem 0.5rem;
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid #e8e4df;
   border-radius: 0.75rem;
   background: #faf7f4;
   cursor: pointer;
@@ -307,7 +307,7 @@
 .fpg-result {
   background: #fff;
   border-radius: 1.25rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8e4df;
   padding: 1.5rem;
   min-height: 420px;
   display: flex;
@@ -349,7 +349,7 @@
 .fpg-dl-btn {
   background: #f1f5f9;
   color: #27282f;
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid #e8e4df;
 }
 
 .fpg-3d-btn {

@@ -4,7 +4,7 @@
     position: relative;
     width: 100%;
     background: #FDF6F2;
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid #e8e4df;
     padding: 5rem 0 2.5rem;
     overflow: hidden;
     font-family: var(--font-sans), "Public Sans", sans-serif;
@@ -99,7 +99,7 @@
 
 .ftr-newsletter-card {
     background: #ffffff;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #e8e4df;
     border-radius: 1rem;
     padding: 2rem;
 }
@@ -125,7 +125,7 @@
 .ftr-input {
     flex: 1;
     background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #e8e4df;
     color: #27282f;
     border-radius: 0.75rem;
     padding: 0.75rem 1rem;
@@ -175,7 +175,7 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 2.5rem;
     padding: 3rem 0;
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid #e8e4df;
 }
 
 .ftr-nav-col {
@@ -222,7 +222,7 @@
     flex-wrap: wrap;
     gap: 1.5rem;
     padding-top: 2.5rem;
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid #e8e4df;
 }
 
 .ftr-copy {
@@ -282,7 +282,7 @@
 .ftr-divider {
     width: 1px;
     height: 1rem;
-    background: #e2e8f0;
+    background: #e8e4df;
 }
 
 .ftr-status-dot {

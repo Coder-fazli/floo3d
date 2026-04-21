@@ -62,7 +62,7 @@
   top: 0;
   bottom: 0;
   width: 2px;
-  background: #e2e8f0;
+  background: #e8e4df;
   transform: translateX(-50%);
   z-index: 0;
 }
@@ -174,7 +174,7 @@
   height: 1.5rem;
   border-radius: 9999px;
   background: #ffffff;
-  border: 3px solid #e2e8f0;
+  border: 3px solid #e8e4df;
   position: relative;
   z-index: 4;
   transition: border-color 0.35s, background 0.35s;
@@ -276,7 +276,7 @@
   border-radius: 1.5rem;
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0,0,0,0.12);
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8e4df;
   background: #f8fafc;
   padding: 1rem;
 }
@@ -295,7 +295,7 @@
 .hiw2-img-pair {
   aspect-ratio: 16/9;
   box-shadow: 0 20px 60px rgba(0,0,0,0.12);
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8e4df;
   background: #f8fafc;
   border-radius: 1.25rem;
   padding: 0.75rem;
@@ -322,7 +322,7 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: #27282f;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e8e4df;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 

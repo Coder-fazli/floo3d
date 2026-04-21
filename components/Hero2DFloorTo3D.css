@@ -82,7 +82,7 @@
 .sh-card {
     background: #ffffff;
     border-radius: 1.5rem;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #e8e4df;
     box-shadow: 0 1px 3px rgba(0,0,0,.05);
     padding: 2rem;
     display: flex;
@@ -212,7 +212,7 @@
 .sh-progress-bar {
     width: 100%;
     height: 6px;
-    background: #e2e8f0;
+    background: #e8e4df;
     border-radius: 9999px;
     overflow: hidden;
 }
@@ -272,7 +272,7 @@
     border-radius: 1rem;
     overflow: hidden;
     position: relative;
-    background: #e2e8f0;
+    background: #e8e4df;
 }
 
 .sh-compare-empty {
@@ -358,7 +358,7 @@ img.sh-avatar { object-fit: cover; display: block; }
     justify-content: space-between;
     gap: 1.5rem;
     padding-top: 2rem;
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid #e8e4df;
     opacity: 0.6;
 }
 

@@ -540,7 +540,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                   {["House", "Apartment", "Villa", "Studio", "Office"].map(t => (
                     <button key={t} onClick={() => setFpgConfig(c => ({ ...c, propertyType: t }))}
                       style={{ padding: "0.4rem 1rem", borderRadius: "9999px", border: "1.5px solid", fontFamily: "inherit", fontSize: "0.82rem", fontWeight: 600, cursor: "pointer",
-                        borderColor: fpgConfig.propertyType === t ? "var(--brand-color)" : "#e2e8f0",
+                        borderColor: fpgConfig.propertyType === t ? "var(--brand-color)" : "#e8e4df",
                         background: fpgConfig.propertyType === t ? "rgba(236,91,19,0.08)" : "#f8fafc",
                         color: fpgConfig.propertyType === t ? "var(--brand-color)" : "#64748b" }}
                     >{t}</button>
@@ -595,7 +595,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                   {(["garage","balcony","terrace","garden"] as const).map(key => (
                     <button key={key} onClick={() => setFpgConfig(c => ({ ...c, extras: { ...c.extras, [key]: !c.extras[key] } }))}
                       style={{ padding: "0.4rem 1rem", borderRadius: "9999px", border: "1.5px solid", fontFamily: "inherit", fontSize: "0.82rem", fontWeight: 600, cursor: "pointer", textTransform: "capitalize",
-                        borderColor: fpgConfig.extras[key] ? "var(--brand-color)" : "#e2e8f0",
+                        borderColor: fpgConfig.extras[key] ? "var(--brand-color)" : "#e8e4df",
                         background: fpgConfig.extras[key] ? "rgba(236,91,19,0.08)" : "#f8fafc",
                         color: fpgConfig.extras[key] ? "var(--brand-color)" : "#64748b" }}
                     >{key}</button>
