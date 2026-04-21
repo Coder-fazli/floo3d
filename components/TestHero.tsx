@@ -4,6 +4,7 @@ import { motion, Variants } from "framer-motion";
 import { useClerk, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import "./TestHero.css";
+import LiveVisitorCounter from "./LiveVisitorCounter";
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -60,7 +61,7 @@ export default function TestHero() {
         >
           <motion.h1 className="th-heading" variants={item}>
             AI-Powered<br />
-            <span className="th-heading-accent">Interior Styler</span><br />
+            <span className="th-heading-accent">Home Styler</span><br />
             for Any Space.
           </motion.h1>
 
@@ -68,15 +69,20 @@ export default function TestHero() {
             Upload a photo. Get a pro redesign in seconds.
           </motion.p>
 
-          <motion.div className="th-btns" variants={item}>
-            {!isLoaded ? null : isSignedIn ? (
-              <Link href="/dashboard" className="th-btn-primary">Try It Free</Link>
-            ) : (
-              <button className="th-btn-primary" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>
-                Try It Free
-              </button>
-            )}
-            <Link href="/#reviews" className="th-btn-secondary">See Examples</Link>
+          <motion.div className="th-btns-group" variants={item}>
+            <div className="th-btns">
+              {isSignedIn ? (
+                <Link href="/dashboard" className="th-btn-primary">Try It Free</Link>
+              ) : (
+                <button className="th-btn-primary" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>
+                  Try It Free
+                </button>
+              )}
+              <Link href="/#reviews" className="th-btn-secondary">See Examples</Link>
+            </div>
+            <div className="th-live-visitor">
+              <LiveVisitorCounter />
+            </div>
           </motion.div>
 
           {/* Trust row */}
@@ -106,6 +112,7 @@ export default function TestHero() {
         </motion.div>
 
       </div>
+
     </section>
   );
 }

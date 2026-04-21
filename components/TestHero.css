@@ -3,7 +3,7 @@
 .th-section {
   position: relative;
   background: #faf7f4;
-  padding: 5rem 0 4rem 2rem;
+  padding: 9rem 0 7rem 4rem;
   min-height: 100vh;
   overflow: hidden;
 }
@@ -17,7 +17,7 @@
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1.2fr;
-  gap: 2rem;
+  gap: 4rem;
   align-items: center;
   min-height: calc(100vh - 12rem);
 }
@@ -33,10 +33,10 @@
 .th-heading {
   font-size: clamp(2.5rem, 4vw, 4.5rem);
   font-weight: 800;
-  line-height: 1.05;
+  line-height: 1.2;
   letter-spacing: -0.03em;
   color: #27282f;
-  margin: 0 0 0.75rem;
+  margin: 0 0 1.5rem;
   font-family: var(--font-playfair), Georgia, serif;
 }
 
@@ -49,7 +49,15 @@
   color: #4a5568;
   line-height: 1.7;
   font-weight: 500;
-  margin: 0 0 1rem;
+  margin: 0 0 3rem;
+}
+
+/* Buttons group wrapper */
+.th-btns-group {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-bottom: 2.5rem;
 }
 
 /* Buttons */
@@ -58,7 +66,7 @@
   flex-direction: row;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.75rem;
   flex-wrap: nowrap;
 }
 
@@ -154,6 +162,13 @@
   width: 100%;
   height: auto;
   display: block;
+  filter: drop-shadow(0 0 14px rgba(0,0,0,0.22));
+}
+
+/* Live visitor */
+.th-live-visitor {
+  align-self: stretch;
+  margin-bottom: 1.5rem;
 }
 
 /* ── Responsive ── */
