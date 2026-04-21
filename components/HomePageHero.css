@@ -226,36 +226,8 @@
 }
 
 @media (max-width: 768px) {
-  .hph-btns {
-    margin-bottom: 1.25rem;
-    gap: 0.625rem;
-  }
-
-  .hph-btns > * {
-    flex: 1;
-  }
-
-  .hph-btn-cta {
-    flex: 1;
-  }
-
-  .hph-btn-cta-label {
-    flex: 1;
-    padding: 0.55rem 1.5rem;
-    justify-content: center;
-    white-space: normal;
-  }
-
   .hph-btn-cta-arrow {
     display: none;
-  }
-
-  .hph-btn-secondary {
-    flex: 1;
-    padding: 0.55rem 1rem;
-    line-height: 1.2;
-    border-color: rgba(117, 87, 96, 0.4);
-    color: #755760;
   }
 }
 

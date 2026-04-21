@@ -158,11 +158,16 @@
     padding-top: 1.5rem !important;
     padding-bottom: 2rem !important;
   }
+  /* Tighter grid padding so content stays left-aligned and fits */
+  .hph-grid {
+    padding: 0 1rem !important;
+    gap: 1.5rem !important;
+  }
   /* Disable slider interaction on mobile */
   .hph-slider-container {
     pointer-events: none !important;
   }
-  /* Trusted row — horizontal, 3 avatars only */
+  /* Trusted row — horizontal, 5 avatars, text on one line */
   .hph-trusted-row {
     flex-direction: row !important;
     align-items: center !important;
@@ -174,25 +179,22 @@
     flex-shrink: 0 !important;
     display: flex !important;
   }
-  /* shrink individual avatar circles */
+  /* avatar circles at 26px */
   .hph-trusted-row > div:first-child > div {
-    width: 30px !important;
-    height: 30px !important;
-    min-width: 30px !important;
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
   }
   .hph-trusted-row > div:first-child > div img {
-    width: 30px !important;
-    height: 30px !important;
+    width: 26px !important;
+    height: 26px !important;
     object-fit: cover !important;
   }
   .hph-trusted-row p {
-    font-size: 0.72rem !important;
+    font-size: 0.78rem !important;
     white-space: nowrap !important;
     min-width: 0 !important;
-    margin-left: 0.35rem !important;
-  }
-  .hph-grid {
-    gap: 1.5rem !important;
+    margin-left: 0 !important;
   }
   .hph-heading {
     font-size: 2.5rem !important;
@@ -212,16 +214,33 @@
   .hph-slider-wrap {
     order: -1 !important;
   }
-  /* Primary CTA dominant, ghost smaller */
+  /* Buttons: CTA takes remaining space, ghost is content-width only */
+  .hph-btns {
+    gap: 0.625rem !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    margin-bottom: 1.25rem !important;
+  }
+  .hph-btns > * {
+    flex: 0 0 auto !important;
+  }
+  .hph-btn-cta {
+    flex: 1 1 0 !important;
+  }
   .hph-btn-cta-label {
-    padding: 0.85rem 1.75rem !important;
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 0.85rem 1.5rem !important;
     font-size: 0.78rem !important;
+    white-space: nowrap !important;
   }
   .hph-btn-secondary {
-    padding: 0.85rem 0.5rem !important;
+    flex: 0 0 auto !important;
+    padding: 0.85rem 1rem !important;
     font-size: 0.65rem !important;
     opacity: 0.75 !important;
     border-radius: 0 !important;
+    white-space: nowrap !important;
   }
 }
 
