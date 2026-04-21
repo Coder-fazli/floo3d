@@ -144,26 +144,24 @@
 .hph-btns {
   display: flex;
   flex-direction: row;
-  gap: 0.625rem;
-  margin-bottom: 3rem;
+  gap: 1rem;
+  margin-bottom: 2.75rem;
   flex-wrap: nowrap;
   align-items: center;
 }
 
-.hph-section .hph-btn-primary,
-.hph-btns .hph-btn-primary,
 .hph-btn-primary {
   padding: 1.1rem 2.5rem;
   background: var(--brand-color);
   color: #ffffff;
   border: none;
-  border-radius: 0.25rem !important;
+  border-radius: 0.25rem;
   font-size: 0.72rem;
   font-weight: 700;
-  text-transform: uppercase !important;
-  letter-spacing: 0.2em !important;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
   cursor: pointer;
-  box-shadow: none !important;
+  box-shadow: none;
   transition: opacity 0.2s;
   font-family: inherit;
   text-decoration: none;
@@ -172,43 +170,25 @@
   justify-content: center;
 }
 
-@media (max-width: 768px) {
-  .hph-btn-primary {
-    padding: 0.55rem 1.1rem !important;
-    font-size: 0.72rem !important;
-    border-radius: 9999px !important;
-    line-height: 1.2 !important;
-    flex: 1 !important;
-  }
-  .hph-btn-secondary {
-    padding: 0.55rem 0.85rem !important;
-    font-size: 0.72rem !important;
-    border-radius: 9999px !important;
-    line-height: 1.2 !important;
-    flex: 1 !important;
-  }
-}
-
-.hph-section .hph-btn-primary:hover,
-.hph-btns .hph-btn-primary:hover,
 .hph-btn-primary:hover {
   opacity: 0.88;
-  box-shadow: none !important;
-  transform: none !important;
 }
 
 .hph-btn-secondary {
-  padding: 1.2rem 2.25rem;
-  background: #ffffff;
+  padding: 1.1rem 2.25rem;
+  background: transparent;
   color: #27282f;
-  border: 1px solid #e2e8f0;
-  border-radius: 1rem;
-  font-size: 1rem;
+  border: 1.5px solid #d1d5db;
+  border-radius: 0.25rem;
+  font-size: 0.72rem;
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
   cursor: pointer;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  box-shadow: none;
   transition: border-color 0.2s, background 0.2s;
   font-family: inherit;
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -216,7 +196,71 @@
 
 .hph-btn-secondary:hover {
   border-color: var(--brand-color);
-  background: rgba(251, 59, 1, 0.04);
+  background: rgba(251, 59, 1, 0.05);
+  color: #27282f;
+}
+
+/* Arrow CTA button (Try It Free) */
+.hph-btn-cta {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.hph-btn-cta-label {
+  background: var(--brand-color);
+  color: #fff;
+  padding: 1.25rem 2.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.hph-btn-cta-arrow {
+  margin-left: -18px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .hph-btns {
+    margin-bottom: 1.25rem;
+    gap: 0.625rem;
+  }
+
+  .hph-btns > * {
+    flex: 1;
+  }
+
+  .hph-btn-cta {
+    flex: 1;
+    overflow: hidden;
+    border-radius: 9999px;
+  }
+
+  .hph-btn-cta-label {
+    flex: 1;
+    padding: 0.55rem 1rem;
+    border-radius: 9999px;
+    justify-content: center;
+    white-space: normal;
+  }
+
+  .hph-btn-cta-arrow {
+    display: none;
+  }
+
+  .hph-btn-secondary {
+    flex: 1;
+    padding: 0.55rem 1rem;
+    border-radius: 9999px;
+    line-height: 1.2;
+    border-color: rgba(117, 87, 96, 0.4);
+    color: #755760;
+  }
 }
 
 /* Social proof */
