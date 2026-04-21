@@ -89,7 +89,7 @@ const Navbar = () => {
             <>
               <div className="navbar-credits navbar-desktop-only">
                 <Zap className="credits-icon" />
-                <span>{credits ?? 4}</span>
+                <span>{credits ?? 2}</span>
               </div>
               <div className="navbar-profile-wrap navbar-desktop-only">
                 <button className="navbar-profile" onClick={() => setProfileOpen(p => !p)} title="Account">
@@ -108,7 +108,7 @@ const Navbar = () => {
               <div className="navbar-mobile-group">
                 <div className="navbar-credits-mobile">
                   <Zap size={13} />
-                  <span>{credits ?? 4}</span>
+                  <span>{credits ?? 2}</span>
                 </div>
                 <a href="/dashboard" className="navbar-icon-btn" title="Go to Dashboard">
                   <LogIn size={20} />
