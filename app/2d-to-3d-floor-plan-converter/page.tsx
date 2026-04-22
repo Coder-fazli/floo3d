@@ -55,7 +55,7 @@ const jsonLd = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD",
-        "description": "6 free conversions — no credit card required",
+        "description": "2 free conversions — no credit card required",
       },
       "aggregateRating": {
         "@type": "AggregateRating",
@@ -79,17 +79,17 @@ const jsonLd = {
         {
           "@type": "Question",
           "name": "Do I need to sign up or create an account?",
-          "acceptedAnswer": { "@type": "Answer", "text": "No. You can convert your first floor plans completely free without signing up. You get 6 free generations right here on the page — no account, no email, nothing. Sign up only when you want more." },
+          "acceptedAnswer": { "@type": "Answer", "text": "No. You can convert your first floor plans completely free without signing up. You get 2 free generations right here on the page — no account, no email, nothing. Sign up only when you want more." },
         },
         {
           "@type": "Question",
           "name": "Is it really free? Do you need a credit card?",
-          "acceptedAnswer": { "@type": "Answer", "text": "100% free to start — no credit card required, ever. We don't ask for payment details to try the tool. You get 6 free generations as a guest. Sign up free and get 2 credits instantly, still no credit card needed." },
+          "acceptedAnswer": { "@type": "Answer", "text": "100% free to start — no credit card required, ever. We don't ask for payment details to try the tool. You get 2 free generations as a guest. Sign up free and get 2 credits instantly, still no credit card needed." },
         },
         {
           "@type": "Question",
           "name": "How many free conversions do I get?",
-          "acceptedAnswer": { "@type": "Answer", "text": "As a guest you get 6 free 2D to 3D conversions right on this page. Create a free account and get 2 credits added to your balance immediately. No credit card, no subscription required." },
+          "acceptedAnswer": { "@type": "Answer", "text": "As a guest you get 2 free 2D to 3D conversions right on this page. Create a free account and get 2 credits added to your balance immediately. No credit card, no subscription required." },
         },
         {
           "@type": "Question",
@@ -207,15 +207,15 @@ export default async function FloorPlanConverterPage() {
       <FAQ faqs={[
         {
           q: "Do I need to sign up or create an account?",
-          a: "No. You can convert your first floor plans completely free without signing up. You get 6 free generations right here on the page — no account, no email, nothing. Sign up only when you want more.",
+          a: "No. You can convert your first floor plans completely free without signing up. You get 2 free generations right here on the page — no account, no email, nothing. Sign up only when you want more.",
         },
         {
           q: "Is it really free? Do you need a credit card?",
-          a: "100% free to start — no credit card required, ever. We don't ask for payment details to try the tool. You get 6 free generations as a guest. Sign up free and get 2 credits instantly, still no credit card needed.",
+          a: "100% free to start — no credit card required, ever. We don't ask for payment details to try the tool. You get 2 free generations as a guest. Sign up free and get 2 credits instantly, still no credit card needed.",
         },
         {
           q: "How many free conversions do I get?",
-          a: "As a guest you get 6 free 2D to 3D conversions right on this page. Create a free account and get 2 credits added to your balance immediately. No credit card, no subscription required.",
+          a: "As a guest you get 2 free 2D to 3D conversions right on this page. Create a free account and get 2 credits added to your balance immediately. No credit card, no subscription required.",
         },
         {
           q: "What happens when I run out of free credits?",

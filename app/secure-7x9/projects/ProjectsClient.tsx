@@ -201,9 +201,9 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
       </div>
 
       {/* Table */}
-      <div className="adm-card" style={{ overflow: "hidden" }}>
+      <div className="adm-card" style={{ overflow: "auto" }}>
         <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" } as any}>
-          <table className="adm-table" style={{ minWidth: "700px" }}>
+          <table className="adm-table" style={{ minWidth: "900px" }}>
             <thead>
               <tr>
                 <th>Project</th>
