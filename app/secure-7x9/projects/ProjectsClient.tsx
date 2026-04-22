@@ -201,9 +201,9 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
       </div>
 
       {/* Table */}
-      <div className="adm-card" style={{ overflow: "auto" }}>
-        <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" } as any}>
-          <table className="adm-table" style={{ minWidth: "900px" }}>
+      <div className="adm-card" style={{ overflowX: "auto" }}>
+        <div>
+          <table className="adm-table" style={{ minWidth: "900px", width: "100%" }}>
             <thead>
               <tr>
                 <th>Project</th>
@@ -241,12 +241,7 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
                         <div className="adm-thumb">
                           {p.originalImageUrl && <img src={p.originalImageUrl} alt="" />}
                         </div>
-                        <div style={{ minWidth: 0 }}>
-                          <p style={{ margin: 0, fontSize: "0.875rem", fontWeight: 600, color: "#0f172a", maxWidth: "10rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                            {p.name || "Untitled"}
-                          </p>
-                          <p style={{ margin: 0, fontSize: "0.65rem", color: "#cbd5e1", fontFamily: "monospace" }}>{p._id?.slice(-8)}</p>
-                        </div>
+                        <p style={{ margin: 0, fontSize: "0.65rem", color: "#cbd5e1", fontFamily: "monospace" }}>{p._id?.slice(-8)}</p>
                       </div>
                     </td>
 
