@@ -7,29 +7,39 @@ const outdoorStyles: Record<string, string> = {
   Desert:        "decomposed granite or sandy gravel ground, clusters of cacti and succulent arrangements, natural sandstone boulders, drought-resistant agave and yucca plants, low adobe or rammed-earth walls, warm terracotta and sand tones, minimal water use",
 };
 
-export function buildOutdoorPrompt(style: string): string {
+export function buildOutdoorPrompt(style: string, customPrompt?: string): string {
   const detail = outdoorStyles[style] ?? `materials, plants, furniture and lighting typical of ${style} landscape design`;
 
-  return `
+  let prompt = `
 USE THE PROVIDED PHOTO AS THE EXACT STRUCTURAL BASE.
 
-GLOBAL RULES — DO NOT VIOLATE:
-1) Keep the exact same camera angle and perspective.
-2) Keep all boundary walls, fences and permanent built structures in exact position.
-3) Do not change the size or shape of the outdoor space.
-4) No text, labels or watermarks in the output.
+GLOBAL RULES — DO NOT VIOLATE UNDER ANY CIRCUMSTANCES:
+1) Keep the exact same camera angle and perspective — do not rotate, zoom or shift the viewpoint.
+2) Keep all boundary walls, fences, permanent built structures, pergolas, decking and hardscape in their exact position and proportion.
+3) Do not change the size or shape of the outdoor space or alter any permanent structural element.
+4) Preserve the spatial layout — existing large trees, mature shrubs, pools, patios and fixed landscape features must remain in their positions. Replace or adapt their appearance to match the style; do not remove or relocate them.
+5) Replace or adapt existing plants, ground cover and movable furniture to match the target style — do not pile new elements on top of existing ones.
+6) No text, labels or watermarks in the output.
+7) LIGHTING: Always render in bright natural daylight with clear sky. Never inherit a dark, overcast or gloomy mood from the input photo.
 
 REDESIGN WITH ${style.toUpperCase()} OUTDOOR AESTHETIC:
 Use the following specific elements: ${detail}.
 
-- Ground: Replace with ground cover, paving or decking matching the style above.
-- Plants: Add realistic plants, trees and shrubs exactly as described.
-- Furniture: Add outdoor seating and dining pieces that fit the style.
-- Lighting: Add appropriate outdoor lighting — path lights, lanterns, string lights, etc.
-- Decor: Add water features, planters or decorative elements consistent with the style.
+- Ground: Replace existing ground cover, paving or decking with the style-appropriate material above.
+- Plants: Replace or adapt existing plants and add style-appropriate trees, shrubs and ground cover exactly as described. Respect existing planting positions.
+- Furniture: Replace existing outdoor furniture with pieces that fit the style. Keep furniture in approximately the same area as the original.
+- Lighting: Replace or adapt lighting fixtures with appropriate outdoor lighting — path lights, lanterns, string lights, etc.
+- Decor: Replace or adapt water features, planters or decorative elements to be consistent with the style.
 
-Apply the style strongly but realistically, as if professionally landscaped.
+Apply the style clearly and professionally, as if the space was redesigned by a landscape architect. The outdoor space must remain recognisably the same garden — same boundaries, same proportions, same layout — with the style transformed.
 
 FINISH: Photorealistic output. Professional landscape photography quality. Natural daylight lighting. No watermarks.
 `.trim();
+
+  if (customPrompt?.trim()) {
+    const sanitized = customPrompt.trim().replace(/<[^>]*>/g, "").slice(0, 1000);
+    prompt += `\n\nADDITIONAL USER REQUIREMENTS:\n${sanitized}\nThese requirements take priority over default style guidelines where they conflict.`;
+  }
+
+  return prompt;
 }

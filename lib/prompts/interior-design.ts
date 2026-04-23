@@ -149,7 +149,7 @@ ROOM-SPECIFIC RULES — KIDS ROOM:
 - FLOOR: A rug defines the play zone — it should be large, soft, and in a pattern or colour that anchors the room without competing with the wall accent colour.`,
 };
 
-export function buildInteriorDesignPrompt(style: string, roomType?: string): string {
+export function buildInteriorDesignPrompt(style: string, roomType?: string, customPrompt?: string): string {
   const s = interiorStyles[style] ?? {
     rules: `- Replace or adapt the room's furniture, surfaces, lighting and decor so they match ${style} design principles.`,
     feel: `A professionally redesigned ${style} interior.`,
@@ -157,7 +157,7 @@ export function buildInteriorDesignPrompt(style: string, roomType?: string): str
 
   const rr = roomType ? (roomRules[roomType] ?? "") : "";
 
-  return `
+  const base = `
 USE THE PROVIDED PHOTO AS THE EXACT STRUCTURAL BASE.
 
 GLOBAL RULES — DO NOT VIOLATE UNDER ANY CIRCUMSTANCES:
@@ -167,10 +167,10 @@ GLOBAL RULES — DO NOT VIOLATE UNDER ANY CIRCUMSTANCES:
 4) Keep all fixed built-in elements exactly in place — bathtub, toilet, shower, kitchen units, staircases, built-in wardrobes.
 5) Treat any damaged, worn or heavily decorated surfaces as renovation targets — work with them, do not invent new architecture.
 6) No text, labels or watermarks in the output.
-7) Preserve the spatial layout of the room — large furniture should remain in roughly the same position unless the style clearly requires a minor adjustment.
+7) Preserve the spatial layout exactly — all furniture must remain in the same position and occupy the same floor area as in the input. Do not move a sofa to a different wall, do not rearrange the room layout. Only replace the style and appearance of each piece in place.
 8) When reducing objects or furniture, remove the least important items first while keeping the room believable and functional.
 9) LIGHTING: Always render as if photographed professionally in bright natural daylight — regardless of how dark, dim or artificially lit the original photo is. Improve and brighten the lighting. Never inherit a dark, gloomy or yellow-tinted mood from the input photo.
-10) TRANSFORMATION: The output must look dramatically different from the input. If the input is cluttered, dark and dated — the output must be clean, bright and styled. A subtle change is a failure. The viewer must immediately see a complete transformation.
+10) TRANSFORMATION: Apply the style change clearly and professionally — replace dated furniture, update surfaces and finishes, and make the room look genuinely styled. However, the room must remain the SAME room — same proportions, same camera angle, same wall positions, same furniture footprint and placement. The structural layout must be identical. Change the style, not the space.
 ${rr}
 
 STYLE APPLICATION — ${style.toUpperCase()}:
@@ -183,4 +183,11 @@ ${s.feel}
 
 FINISH: The result should look like a professionally photographed interior renovation of the same room. Lighting direction, window light and time-of-day must remain consistent with the input photo. No watermarks.
 `.trim();
+
+  if (customPrompt?.trim()) {
+    const sanitized = customPrompt.trim().replace(/<[^>]*>/g, "").slice(0, 1000);
+    return `${base}\n\nADDITIONAL USER REQUIREMENTS:\n${sanitized}\nThese requirements take priority over default style guidelines where they conflict.`;
+  }
+
+  return base;
 }

@@ -13,8 +13,8 @@ function appendCustomPrompt(prompt: string, customPrompt?: string): string {
 export function buildPrompt(config: PromptConfig): string {
     const { inputType, style, roomType, viewAngle, customPrompt } = config;
 
-    if (inputType === "interior-design") return buildInteriorDesignPrompt(style, roomType);
-    if (inputType === "outdoor") return buildOutdoorPrompt(style);
+    if (inputType === "interior-design") return buildInteriorDesignPrompt(style, roomType, customPrompt);
+    if (inputType === "outdoor") return buildOutdoorPrompt(style, customPrompt);
     if (inputType === "empty-room") return buildEmptyRoomPrompt();
 
     return appendCustomPrompt(buildFloorPlanPrompt(style, viewAngle), customPrompt);
