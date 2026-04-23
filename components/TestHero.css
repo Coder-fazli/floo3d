@@ -52,21 +52,13 @@
   margin: 0 0 3rem;
 }
 
-/* Buttons group wrapper */
-.th-btns-group {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: stretch;
-  margin-bottom: 2.5rem;
-}
-
 /* Buttons */
 .th-btns {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 2.5rem;
   flex-wrap: nowrap;
 }
 
@@ -163,12 +155,6 @@
   height: auto;
   display: block;
   filter: drop-shadow(0 0 14px rgba(0,0,0,0.22));
-}
-
-/* Live visitor */
-.th-live-visitor {
-  align-self: stretch;
-  margin-bottom: 1.5rem;
 }
 
 /* ── Responsive ── */

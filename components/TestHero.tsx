@@ -4,7 +4,6 @@ import { motion, Variants } from "framer-motion";
 import { useClerk, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import "./TestHero.css";
-import LiveVisitorCounter from "./LiveVisitorCounter";
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -69,20 +68,15 @@ export default function TestHero() {
             Upload a photo. Get a pro redesign in seconds.
           </motion.p>
 
-          <motion.div className="th-btns-group" variants={item}>
-            <div className="th-btns">
-              {isSignedIn ? (
-                <Link href="/dashboard" className="th-btn-primary">Try It Free</Link>
-              ) : (
-                <button className="th-btn-primary" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>
-                  Try It Free
-                </button>
-              )}
-              <Link href="/#reviews" className="th-btn-secondary">See Examples</Link>
-            </div>
-            <div className="th-live-visitor">
-              <LiveVisitorCounter />
-            </div>
+          <motion.div className="th-btns" variants={item}>
+            {isSignedIn ? (
+              <Link href="/dashboard" className="th-btn-primary">Try It Free</Link>
+            ) : (
+              <button className="th-btn-primary" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>
+                Try It Free
+              </button>
+            )}
+            <Link href="/#reviews" className="th-btn-secondary">See Examples</Link>
           </motion.div>
 
           {/* Trust row */}
