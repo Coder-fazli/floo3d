@@ -8,7 +8,7 @@ export default function MainHero({ heroBeforeUrl, heroAfterUrl }: { heroBeforeUr
   return (
     <div style={{ background: "#faf7f4" }}>
       <Navbar />
-      <TestHero />
+      <TestHero heroBeforeUrl={heroBeforeUrl} heroAfterUrl={heroAfterUrl} />
       <HeroMarquee />
     </div>
   );

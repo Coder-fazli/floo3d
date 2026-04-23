@@ -47,12 +47,12 @@ function SparkBurst({ burstSeed }: { burstSeed: number }) {
 }
 
 export default function AutoCompareSlider({ before, after }: Props) {
-  const posRef  = useRef(8);
+  const posRef  = useRef(1);
   const dirRef  = useRef(1);
   const rafRef  = useRef<number>(0);
   const lastRef = useRef<number>(0);
 
-  const [pos, setPos]         = useState(8);
+  const [pos, setPos]         = useState(1);
   const [burstKey, setBurstKey] = useState<number | null>(null);
 
   useEffect(() => {
@@ -71,8 +71,8 @@ export default function AutoCompareSlider({ before, after }: Props) {
 
       const raw = Math.min((now - segStart) / SEG, 1);
       const t   = ease(raw);
-      const from = dirRef.current === 1 ? 8 : 92;
-      const to   = dirRef.current === 1 ? 92 : 8;
+      const from = dirRef.current === 1 ? 1 : 99;
+      const to   = dirRef.current === 1 ? 99 : 1;
       const next = from + t * (to - from);
 
       posRef.current = next;

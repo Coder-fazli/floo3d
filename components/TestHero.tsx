@@ -4,6 +4,7 @@ import { motion, Variants } from "framer-motion";
 import { useClerk, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import "./TestHero.css";
+import AutoCompareSlider from "./AutoCompareSlider";
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -41,9 +42,12 @@ const IMAGES = [
   "/card-outdoor-after.webp",
 ];
 
-export default function TestHero() {
+export default function TestHero({ heroBeforeUrl, heroAfterUrl }: { heroBeforeUrl?: string | null; heroAfterUrl?: string | null }) {
   const { isSignedIn, isLoaded } = useUser();
   const { openSignUp } = useClerk();
+
+  const beforeSrc = heroBeforeUrl ?? "/hero-before.jpg";
+  const afterSrc  = heroAfterUrl  ?? "/hero-after.jpg";
 
   return (
     <section className="th-section">
@@ -68,41 +72,40 @@ export default function TestHero() {
             Upload a photo. Get a pro redesign in seconds.
           </motion.p>
 
-          <motion.div className="th-btns" variants={item}>
-            {isSignedIn ? (
-              <Link href="/dashboard" className="th-btn-primary">Try It Free</Link>
-            ) : (
-              <button className="th-btn-primary" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>
-                Try It Free
-              </button>
-            )}
-            <Link href="/#reviews" className="th-btn-secondary">See Examples</Link>
-          </motion.div>
-
-          {/* Trust row */}
-          <motion.div className="th-trust" variants={item}>
-            <div className="th-avatars">
-              {AVATARS.map((src, i) => (
-                <img key={i} src={src} alt="user" className="th-avatar" style={{ marginLeft: i === 0 ? 0 : -8, zIndex: 5 - i }} />
-              ))}
+          <motion.div className="th-cta-group" variants={item}>
+            <div className="th-btns">
+              {isSignedIn ? (
+                <Link href="/dashboard" className="th-btn-primary">Try It Free</Link>
+              ) : (
+                <button className="th-btn-primary" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>
+                  Try It Free
+                </button>
+              )}
+              <Link href="/#reviews" className="th-btn-secondary">See Examples</Link>
             </div>
-            <p className="th-trust-text">
-              Trusted by <strong>2,500+</strong> architects &amp; designers
-            </p>
+
+            {/* Trust — directly under buttons */}
+            <div className="th-trust">
+              <div className="th-avatars">
+                {AVATARS.map((src, i) => (
+                  <img key={i} src={src} alt="user" className="th-avatar" style={{ marginLeft: i === 0 ? 0 : -8, zIndex: 5 - i }} />
+                ))}
+              </div>
+              <p className="th-trust-text">
+                Trusted by <strong>2,500+</strong> architects &amp; designers
+              </p>
+            </div>
           </motion.div>
         </motion.div>
 
-        {/* ── Right: Collage ── */}
+        {/* ── Right: Before/After Slider ── */}
         <motion.div
           className="th-collage"
           variants={imgVariant}
           initial="hidden"
           animate="visible"
         >
-          <picture>
-            <source media="(max-width: 1024px)" srcSet="/th-collage-mobile.png" />
-            <img src="/th-collage.png" alt="Before and after redesign" className="th-collage-img" />
-          </picture>
+          <AutoCompareSlider before={beforeSrc} after={afterSrc} />
         </motion.div>
 
       </div>
