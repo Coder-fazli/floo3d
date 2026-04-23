@@ -97,7 +97,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
 
   // Guest mode (embedded pages, no login)
   const GUEST_CREDITS_KEY = "guest_credits";
-  const GUEST_CREDITS_DEFAULT = 6;
+  const GUEST_CREDITS_DEFAULT = 2;
   const [guestBase64, setGuestBase64] = useState<string | null>(null);
   const [guestResult, setGuestResult] = useState<string | null>(null);
   const [guestCredits, setGuestCredits] = useState(GUEST_CREDITS_DEFAULT);
@@ -196,8 +196,15 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
   useEffect(() => {
     if (!embeddedId) return;
     const stored = localStorage.getItem(GUEST_CREDITS_KEY);
-    if (stored === null) localStorage.setItem(GUEST_CREDITS_KEY, String(GUEST_CREDITS_DEFAULT));
-    else setGuestCredits(Math.max(0, parseInt(stored) || 0));
+    if (stored === null) {
+      localStorage.setItem(GUEST_CREDITS_KEY, String(GUEST_CREDITS_DEFAULT));
+    } else {
+      const parsed = Math.max(0, parseInt(stored) || 0);
+      // Reset if stored value exceeds the current max (stale from old limit)
+      const clamped = Math.min(parsed, GUEST_CREDITS_DEFAULT);
+      if (clamped !== parsed) localStorage.setItem(GUEST_CREDITS_KEY, String(clamped));
+      setGuestCredits(clamped);
+    }
   }, [embeddedId]);
 
   const runGeneration = async () => {

@@ -10,7 +10,7 @@ import { Suspense } from "react";
 import VisualizerClient from "@/app/visualizer/[id]/VisualizerClient";
 import FAQ from "@/components/FAQ";
 import TestimonialsMarquee, { type Testimonial, Highlight } from "@/components/TestimonialsMarquee";
-import { getSiteSettings, getAppFrames } from "@/lib/actions";
+import { getSiteSettings, getAppFrames, getHomeImages } from "@/lib/actions";
 
 const DEFAULT_TITLE = "2D to 3D Floor Plan Converter — Convert 2D Floor Plan to 3D Model Free Online";
 const DEFAULT_DESC = "Convert 2D floor plans to 3D models free online — no credit card, no login required. Works with blueprints, house plans & hand-drawn sketches. Results in seconds.";
@@ -181,7 +181,7 @@ const converterTestimonials: Testimonial[] = [
 ];
 
 export default async function FloorPlanConverterPage() {
-  const frames = await getAppFrames();
+  const [frames, homeImages] = await Promise.all([getAppFrames(), getHomeImages()]);
   return (
     <div className="home">
       <script

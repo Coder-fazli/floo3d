@@ -101,15 +101,6 @@ export default function FloorPlanHero() {
         {/* ── Left: Content ── */}
         <div className="hph-content">
 
-          {/* Live badge */}
-          <div className="hph-badge">
-            <span className="hph-badge-dot-wrap">
-              <span className="hph-badge-ping" />
-              <span className="hph-badge-dot" />
-            </span>
-            <span className="hph-badge-text">Free 2D to 3D Floor Plan Converter · No Login Required</span>
-          </div>
-
           {/* Heading */}
           <h1 className="hph-heading">
             2D to 3D Floor<br />
@@ -204,21 +195,6 @@ export default function FloorPlanHero() {
             </span>
           </div>
 
-          {/* Floating glass card */}
-          <div className="hph-float-card">
-            <div className="hph-float-row">
-              <div className="hph-float-icon">
-                <svg width="16" height="16" fill="none" stroke="#16a34a" strokeWidth="3" viewBox="0 0 24 24">
-                  <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-              <span className="hph-float-label">3D Render Ready</span>
-            </div>
-            <div className="hph-float-bar-bg">
-              <div className="hph-float-bar-fill" />
-            </div>
-            <p className="hph-float-sub">Floor plan processed in 1.4s</p>
-          </div>
         </div>
 
       </div>

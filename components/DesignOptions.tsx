@@ -38,7 +38,6 @@ export default function DesignOptions({ transformImages = {} }: { transformImage
   const ref01 = useFadeIn();
   const ref02 = useFadeIn();
   const ref03 = useFadeIn();
-  const ref04 = useFadeIn();
 
   const img = (section: string, side: "before" | "after", fallback: string) =>
     transformImages[section]?.[side] || fallback;
@@ -115,24 +114,6 @@ export default function DesignOptions({ transformImages = {} }: { transformImage
                 <h3 className="do-item-title">Empty the Room</h3>
                 <p className="do-item-desc">
                   AI virtual staging made simple — remove all furniture and decor instantly to reveal a clean, empty space. Perfect for real estate listings and planning fresh layouts.
-                </p>
-                <Link href="/dashboard" className="do-cta-btn">Try It Now</Link>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 04 — Outdoor / Garden */}
-        <div className="do-item do-fade" ref={ref04}>
-          <div className="do-flex-row-rev">
-            <div className="do-flex-img-60">
-              <ImgCard before={img("04","before","/card-outdoor-before.avif")} after={img("04","after","/card-outdoor-after.avif")} />
-            </div>
-            <div className="do-flex-text-40">
-              <div className="do-text-card">
-                <h3 className="do-item-title">Outdoor &amp; Garden</h3>
-                <p className="do-item-desc">
-                  Free AI landscape design for any outdoor space. AI backyard design, garden design, and home exterior design — visualize your dream outdoor space with realistic materials and lighting.
                 </p>
                 <Link href="/dashboard" className="do-cta-btn">Try It Now</Link>
               </div>

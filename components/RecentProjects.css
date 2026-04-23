@@ -1,9 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap');
-
 .rp-section {
   background: #faf7f4;
   padding: 5rem 3rem 0;
-  font-family: "Public Sans", sans-serif;
   position: relative;
 }
 
@@ -45,7 +42,7 @@
   line-height: 1.1;
   letter-spacing: -0.03em;
   margin: 0 0 0.75rem;
-  font-family: var(--font-sans), "Public Sans", sans-serif;
+  font-family: var(--font-playfair), Georgia, serif;
 }
 
 .rp-sub {

@@ -21,8 +21,8 @@ function TestimonialCard({ description, name, img, role, className }: {
       "mb-4 flex w-full cursor-pointer break-inside-avoid flex-col items-center justify-between gap-6 rounded-xl p-4",
       "shadow-sm border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md",
       className,
-    )} style={{ background: "#ffffff", borderColor: "rgba(117,87,96,0.12)" }}>
-      <div className="text-sm font-normal select-none" style={{ color: "#755760" }}>
+    )} style={{ background: "#ffffff", borderColor: "#e8eaed" }}>
+      <div className="text-sm font-normal select-none" style={{ color: "#475569" }}>
         {description}
         <div className="flex flex-row py-1">
           {[...Array(5)].map((_, i) => (
@@ -41,7 +41,7 @@ function TestimonialCard({ description, name, img, role, className }: {
         />
         <div>
           <p className="font-medium" style={{ color: "#27282f" }}>{name}</p>
-          <p className="text-xs font-normal" style={{ color: "#755760" }}>{role}</p>
+          <p className="text-xs font-normal" style={{ color: "#64748b" }}>{role}</p>
         </div>
       </div>
     </div>
@@ -127,7 +127,7 @@ export default function TestimonialsMarquee({ items }: { items?: Testimonial[] }
         <h2 className="mb-4 text-center text-4xl leading-[1.2] font-bold tracking-tighter md:text-5xl" style={{ color: "#27282f", fontFamily: "var(--font-playfair), Georgia, serif" }}>
           What Our Users Are Saying
         </h2>
-        <h3 className="mx-auto mb-8 max-w-lg text-center text-lg font-medium tracking-tight text-balance" style={{ color: "#755760" }}>
+        <h3 className="mx-auto mb-8 max-w-lg text-center text-lg font-medium tracking-tight text-balance" style={{ color: "#64748b" }}>
           Don&apos;t just take our word for it. Here&apos;s what{" "}
           <span style={{ color: "var(--brand-color)", fontWeight: 700 }}>
             homeowners &amp; designers

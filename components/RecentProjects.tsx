@@ -7,7 +7,6 @@ import { MasonryGrid } from "@/components/ui/image-testimonial-grid";
 const testimonials = [
   { profileImage: "/avatars/female1.jpg", name: "Emma Wilson",   feedback: "London Loft Conversion",       mainImage: "/real-3d-render.jpg",      beforeImage: "/real-2d-plan.jpg" },
   { profileImage: "/avatars/female2.jpg", name: "Sarah Chen",    feedback: "Coastal Villa Masterpiece",    mainImage: "/hero-after.jpg",           beforeImage: "/hero-before.jpg" },
-  { profileImage: "/avatars/female3.jpg", name: "Amara Okafor",  feedback: "Skyline Office Lounge",        mainImage: "/card-outdoor-after.webp",  beforeImage: "/card-outdoor-before.webp" },
   { profileImage: "/avatars/av2.jpg",     name: "James Patel",   feedback: "Modern Living Room Redesign",  mainImage: "/hiw-living.jpg",           beforeImage: "/hiw-sketch.jpg" },
   { profileImage: "/avatars/av5.jpg",     name: "Lucas Müller",  feedback: "Dark Luxury 3D Render",        mainImage: "/hiw-dark3d.jpg",           beforeImage: "/hiw-sketch2.jpg" },
   { profileImage: "/avatars/female1.jpg", name: "Priya Sharma",  feedback: "Virtual Staged Bedroom",       mainImage: "/card-room-after.webp",     beforeImage: "/card-room-before.webp" },
