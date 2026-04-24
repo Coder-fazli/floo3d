@@ -248,7 +248,7 @@
 
 /* Marquee (white) — fade top from cream in, fade bottom to cream */
 .marquee-section {
-  background: linear-gradient(to bottom, #FDF6F2 0%, #ffffff 7%, #ffffff 93%, #FDF6F2 100%) !important;
+  background: linear-gradient(to bottom, #faf7f4 0%, #ffffff 7%, #ffffff 93%, #faf7f4 100%) !important;
   border-bottom: none !important;
 }
 

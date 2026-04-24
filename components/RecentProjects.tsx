@@ -60,7 +60,7 @@ export default function RecentProjects() {
   }, []);
 
   return (
-    <section className="w-full py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{ background: "#FDF6F2" }} id="reviews">
+    <section className="w-full py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{ background: "#faf7f4" }} id="reviews">
       <div className="max-w-7xl mx-auto relative z-10">
 
         <motion.div
@@ -73,10 +73,10 @@ export default function RecentProjects() {
           <p className="text-xs font-black tracking-widest uppercase mb-3" style={{ color: "var(--brand-color)" }}>
             Community Showcase
           </p>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4" style={{ color: "#28030F", fontFamily: "var(--font-playfair), Georgia, serif" }}>
+          <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4" style={{ color: "#27282f", fontFamily: "var(--font-playfair), Georgia, serif" }}>
             Real Results from Real Users
           </h2>
-          <p className="text-base leading-relaxed max-w-2xl mx-auto" style={{ color: "#755760" }}>
+          <p className="text-base leading-relaxed max-w-2xl mx-auto" style={{ color: "#64748b" }}>
             See how architects, interior designers, and homeowners use our AI tools — from virtual staging to AI landscape design.
           </p>
         </motion.div>

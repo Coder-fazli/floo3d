@@ -3,8 +3,11 @@
 import { motion, Variants } from "framer-motion";
 import { useClerk, useUser } from "@clerk/nextjs";
 import Link from "next/link";
+import Image from "next/image";
+import { Star } from "lucide-react";
 import "./TestHero.css";
 import AutoCompareSlider from "./AutoCompareSlider";
+import { CountUp } from "@/components/ui/count-up";
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -85,15 +88,35 @@ export default function TestHero({ heroBeforeUrl, heroAfterUrl }: { heroBeforeUr
             </div>
 
             {/* Trust — directly under buttons */}
-            <div className="th-trust">
-              <div className="th-avatars">
+            <div style={{ display: "flex", alignItems: "center", gap: "0.875rem" }}>
+              <div style={{ display: "flex" }}>
                 {AVATARS.map((src, i) => (
-                  <img key={i} src={src} alt="user" className="th-avatar" style={{ marginLeft: i === 0 ? 0 : -8, zIndex: 5 - i }} />
+                  <div key={i} style={{
+                    width: 38, height: 38, borderRadius: "9999px", overflow: "hidden",
+                    border: "2px solid #ffffff",
+                    marginLeft: i === 0 ? 0 : -10,
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.12)",
+                    position: "relative", zIndex: 5 - i,
+                  }}>
+                    <Image src={src} alt="user" width={38} height={38} style={{ objectFit: "cover", width: "100%", height: "100%" }} />
+                  </div>
                 ))}
               </div>
-              <p className="th-trust-text">
-                Trusted by <strong>2,500+</strong> architects &amp; designers
-              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+                <div style={{ display: "flex", gap: "0.2rem" }}>
+                  {[1,2,3,4,5].map((s) => (
+                    <Star key={s} size={13} fill="var(--brand-color)" stroke="none" />
+                  ))}
+                </div>
+                <p style={{ fontSize: "0.78rem", color: "#475569", margin: 0, fontWeight: 500 }}>
+                  Trusted by{" "}
+                  <CountUp value={2500} duration={2} separator="," suffix="+" colorScheme="gradient" className="font-bold" />
+                  {" "}architects &{" "}
+                  <a href="/#reviews" style={{ color: "var(--brand-color)", fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "2px" }}>
+                    happy users
+                  </a>
+                </p>
+              </div>
             </div>
           </motion.div>
         </motion.div>

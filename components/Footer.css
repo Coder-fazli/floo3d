@@ -3,11 +3,11 @@
 .ftr-footer {
     position: relative;
     width: 100%;
-    background: #FDF6F2;
+    background: #faf7f4;
     border-top: 1px solid #e8e4df;
     padding: 5rem 0 2.5rem;
     overflow: hidden;
-    font-family: var(--font-sans), "Public Sans", sans-serif;
+    font-family: var(--font-sans), sans-serif;
 }
 
 /* ── Top gradient line ── */

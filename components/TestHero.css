@@ -27,11 +27,11 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: -20px;
+  margin-top: 40px;
 }
 
 .th-heading {
-  font-size: clamp(2.5rem, 4vw, 4.5rem);
+  font-size: clamp(2.5rem, 4.5vw, 5.5rem);
   font-weight: 800;
   line-height: 1.2;
   letter-spacing: -0.03em;
@@ -70,7 +70,7 @@
 }
 
 .th-btn-primary {
-  padding: 1.1rem 2.75rem;
+  padding: 1.1rem 3.75rem;
   background: #fb3b01;
   color: #ffffff;
   border: none;
@@ -199,6 +199,7 @@
   .th-heading { font-size: 2.2rem; }
   .th-sub { font-size: 1rem; margin-bottom: 2rem; }
   .th-btn-primary { padding: 1rem 1.5rem; font-size: 0.8rem; }
+  .th-btn-secondary { padding: 0.65rem 1.5rem; font-size: 0.8rem; }
   .th-avatar { width: 2.25rem; height: 2.25rem; }
   .th-trust-text { font-size: 0.85rem; }
 }
