@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getSiteSettings } from "@/lib/actions";
-import { saveSiteSettings, saveFloorPlanSettings } from "@/lib/actions.admin";
+import { saveSiteSettings, saveFloorPlanSettings, saveGeneralSettings, saveLogoImage } from "@/lib/actions.admin";
 
 export default function AdminSettings() {
   // Home page SEO
@@ -17,6 +17,18 @@ export default function AdminSettings() {
   const [fpSaving, setFpSaving] = useState(false);
   const [fpSaved, setFpSaved] = useState(false);
 
+  // General settings
+  const [siteName, setSiteName] = useState("");
+  const [supportEmail, setSupportEmail] = useState("");
+  const [generalSaving, setGeneralSaving] = useState(false);
+  const [generalSaved, setGeneralSaved] = useState(false);
+
+  // Branding
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const [faviconUrl, setFaviconUrl] = useState<string | null>(null);
+  const [logoUploading, setLogoUploading] = useState(false);
+  const [faviconUploading, setFaviconUploading] = useState(false);
+
 
   useEffect(() => {
     getSiteSettings().then((s: any) => {
@@ -25,6 +37,10 @@ export default function AdminSettings() {
         setMetaDescription(s.metaDescription ?? "");
         setFpMetaTitle(s.floorPlanMetaTitle ?? "");
         setFpMetaDescription(s.floorPlanMetaDescription ?? "");
+        setSiteName(s.siteName ?? "");
+        setSupportEmail(s.supportEmail ?? "");
+        setLogoUrl(s.logoUrl ?? null);
+        setFaviconUrl(s.faviconUrl ?? null);
       }
     });
   }, []);
@@ -149,11 +165,52 @@ export default function AdminSettings() {
         <h3 className="adm-settings-title">General App Settings</h3>
         <div className="adm-form-group">
           <label className="adm-form-label">Site Name</label>
-          <input className="adm-form-input" type="text" defaultValue="Floo3D" />
+          <input className="adm-form-input" type="text" value={siteName} onChange={e => setSiteName(e.target.value)} placeholder="MyHomeStyler" />
         </div>
         <div className="adm-form-group">
           <label className="adm-form-label">Support Email</label>
-          <input className="adm-form-input" type="email" defaultValue="support@floo3d.io" />
+          <input className="adm-form-input" type="email" value={supportEmail} onChange={e => setSupportEmail(e.target.value)} placeholder="support@myhomestyler.com" />
+        </div>
+        <button className="adm-btn-primary" disabled={generalSaving} onClick={async () => {
+          setGeneralSaving(true);
+          await saveGeneralSettings(siteName, supportEmail);
+          setGeneralSaved(true);
+          setTimeout(() => setGeneralSaved(false), 2500);
+          setGeneralSaving(false);
+        }}>
+          {generalSaving ? "Saving..." : generalSaved ? "Saved ✓" : "Save Changes"}
+        </button>
+      </div>
+
+      {/* Branding */}
+      <div className="adm-card" style={{ padding: "2rem", marginBottom: "1.5rem" }}>
+        <h3 className="adm-settings-title">Branding</h3>
+        <p style={{ fontSize: "0.8rem", color: "#94a3b8", marginBottom: "1.5rem" }}>Upload your logo and favicon. Recommended: PNG with transparent background.</p>
+
+        <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}>
+          {/* Logo */}
+          <div>
+            <label className="adm-form-label">Logo</label>
+            <div style={{ width: 160, height: 60, border: "2px dashed #e2e8f0", borderRadius: "0.75rem", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", background: "#f8fafc", cursor: "pointer", position: "relative" }}
+              onClick={() => { const i = document.createElement("input"); i.type = "file"; i.accept = "image/*"; i.onchange = async (e) => { const f = (e.target as HTMLInputElement).files?.[0]; if (!f) return; setLogoUploading(true); const r = new FileReader(); r.onload = async () => { const url = await saveLogoImage(r.result as string, "logo"); setLogoUrl(url); setLogoUploading(false); }; r.readAsDataURL(f); }; i.click(); }}>
+              {logoUploading ? <span style={{ fontSize: "0.75rem", color: "#94a3b8" }}>Uploading…</span>
+                : logoUrl ? <img src={logoUrl} alt="Logo" style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} />
+                : <span style={{ fontSize: "0.75rem", color: "#94a3b8" }}>Click to upload</span>}
+            </div>
+            <p style={{ fontSize: "0.7rem", color: "#94a3b8", marginTop: "0.35rem" }}>Recommended: 320×80px PNG</p>
+          </div>
+
+          {/* Favicon */}
+          <div>
+            <label className="adm-form-label">Favicon</label>
+            <div style={{ width: 60, height: 60, border: "2px dashed #e2e8f0", borderRadius: "0.75rem", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", background: "#f8fafc", cursor: "pointer" }}
+              onClick={() => { const i = document.createElement("input"); i.type = "file"; i.accept = "image/*"; i.onchange = async (e) => { const f = (e.target as HTMLInputElement).files?.[0]; if (!f) return; setFaviconUploading(true); const r = new FileReader(); r.onload = async () => { const url = await saveLogoImage(r.result as string, "favicon"); setFaviconUrl(url); setFaviconUploading(false); }; r.readAsDataURL(f); }; i.click(); }}>
+              {faviconUploading ? <span style={{ fontSize: "0.65rem", color: "#94a3b8" }}>…</span>
+                : faviconUrl ? <img src={faviconUrl} alt="Favicon" style={{ width: 40, height: 40, objectFit: "contain" }} />
+                : <span style={{ fontSize: "0.65rem", color: "#94a3b8", textAlign: "center" }}>Click</span>}
+            </div>
+            <p style={{ fontSize: "0.7rem", color: "#94a3b8", marginTop: "0.35rem" }}>Recommended: 32×32px ICO/PNG</p>
+          </div>
         </div>
       </div>
 

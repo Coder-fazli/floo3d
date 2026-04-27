@@ -16,6 +16,11 @@ const SiteSettingsSchema = new mongoose.Schema({
    // Floor Plan Generator page hero slider
    fpgHeroBeforeUrl: { type: String, default: null },
    fpgHeroAfterUrl:  { type: String, default: null },
+   // General app settings
+   siteName:     { type: String, default: "MyHomeStyler" },
+   supportEmail: { type: String, default: "support@myhomestyler.com" },
+   logoUrl:      { type: String, default: null },
+   faviconUrl:   { type: String, default: null },
    // AI model selection per input type
    models: { type: mongoose.Schema.Types.Mixed, default: {} },
 },

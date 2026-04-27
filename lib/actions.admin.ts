@@ -82,6 +82,27 @@ export async function suspendUser(clerkId: string, suspended: boolean) {
   await User.findOneAndUpdate({ clerkId }, { suspended });
 }
 
+// ─── General Settings ──────────────────────────────────────────────────────────
+
+export async function saveGeneralSettings(siteName: string, supportEmail: string) {
+  await requireAdmin();
+  await connectDb();
+  await SiteSettings.findOneAndUpdate(
+    { key: "home" },
+    { siteName, supportEmail },
+    { upsert: true, new: true }
+  );
+}
+
+export async function saveLogoImage(base64: string, type: "logo" | "favicon") {
+  await requireAdmin();
+  await connectDb();
+  const url = await uploadImage(base64, "branding");
+  const field = type === "logo" ? "logoUrl" : "faviconUrl";
+  await SiteSettings.findOneAndUpdate({ key: "home" }, { [field]: url }, { upsert: true, new: true });
+  return url;
+}
+
 // ─── SEO Settings ─────────────────────────────────────────────────────────────
 
 export async function saveSiteSettings(metaTitle: string, metaDescription: string) {
