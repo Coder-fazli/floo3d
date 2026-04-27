@@ -123,8 +123,8 @@ function CustomPlan({ onBuy, loading }: { onBuy: (credits: number, price: number
               <span>$</span><NumberFlow value={price} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
             </span>
             <div className="text-sm leading-tight">
-              <div className="font-bold" style={{ color: "var(--brand-color)" }}>{credits} credits</div>
-              <div style={{ color: "#64748b" }}>{renders} renders · ${perRender}/render</div>
+              <div className="font-bold" style={{ color: "var(--brand-color)" }}>{renders} renders</div>
+              <div style={{ color: "#64748b" }}>${perRender}/render</div>
             </div>
           </div>
 
@@ -142,7 +142,7 @@ function CustomPlan({ onBuy, loading }: { onBuy: (credits: number, price: number
               value={stepIdx}
               onChange={e => setStepIdx(Number(e.target.value))}
               className="w-full h-2 rounded-full appearance-none cursor-pointer"
-              style={{ background: `linear-gradient(to right, "var(--brand-color)" ${pct}%, rgba(117,87,96,0.2) ${pct}%)`, accentColor: "var(--brand-color)" }}
+              style={{ background: `linear-gradient(to right, var(--brand-color) ${pct}%, rgba(117,87,96,0.2) ${pct}%)`, accentColor: "var(--brand-color)" }}
             />
             <div className="flex justify-between text-xs">
               {STEPS.map((s, i) => (
