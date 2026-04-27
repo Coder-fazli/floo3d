@@ -168,7 +168,7 @@ function CustomPlan({ onBuy, loading }: { onBuy: (credits: number, price: number
 
           {/* Buy button */}
           <GlowButton
-            label={loading ? 'Redirecting…' : `Buy ${credits} Credits — $${price.toFixed(2)}`}
+            label={loading ? 'Redirecting…' : `Buy ${renders} Renders — $${price.toFixed(2)}`}
             onClick={() => onBuy(credits, price)}
           />
 
