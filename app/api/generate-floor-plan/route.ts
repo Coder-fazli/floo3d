@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 import { uploadImage } from "@/lib/cloudinary";
-import { getCredits, deductCredit, getModelSettings, getUserInfo } from "@/lib/actions";
+import { getCredits, deductCredit, refundCredit, getModelSettings, getUserInfo } from "@/lib/actions";
 import User from "@/lib/models/User";
 import { buildFloorPlanGeneratorPrompt, FloorPlanGeneratorConfig }
  from "@/lib/prompts/floor-plan-generator";
@@ -17,6 +17,7 @@ export const maxDuration = 60;
 export async function POST(request: Request) {
     let modelName = "gemini-3.1-flash-image-preview";
     const startTime = Date.now();
+    let creditDeducted = false;
 
     try {
         const { userId } = await auth();
@@ -25,16 +26,20 @@ export async function POST(request: Request) {
         const { config, customPrompt = "" }: { config: FloorPlanGeneratorConfig; customPrompt?: string } = body;
 
         await connectDb();
-        const userDoc = await User.findOne({ clerkId: userId }, { suspended: 1 }).lean() as any;
+        const userDoc = await User.findOne({ clerkId: userId }, { suspended: 1, subscriptionStatus: 1 }).lean() as any;
         if (userDoc?.suspended) return NextResponse.json({ error: "suspended" }, { status: 403 });
+        if (userDoc?.subscriptionStatus && userDoc.subscriptionStatus !== "active") return NextResponse.json({ error: "Subscription not active" }, { status: 403 });
 
        // We Check Credits
         const credits = await getCredits(userId);
         const isUnlimited = credits >= 99999;
-        if (!isUnlimited && credits < 2) {
-            return NextResponse.json({ error: "No credits left" }, { status: 403 });
+        if (!isUnlimited) {
+          const ok = await deductCredit(userId);
+          if (!ok) return NextResponse.json({
+            error: "No credits left" }, { status: 403 
+          });
+          creditDeducted = true
         }
-        if(!isUnlimited) await deductCredit(userId);
 
 
      // Build prompt
@@ -63,6 +68,7 @@ export async function POST(request: Request) {
      const imagePart = parts?.find((p: any) => p.inlineData);
 
       if (!imagePart) {
+        if (creditDeducted) await refundCredit(userId);
         await connectDb();
         await GenerationLog.create({
           userId,
@@ -107,6 +113,7 @@ export async function POST(request: Request) {
         try {
           const { userId } = await auth();
           if (userId) {
+            if (creditDeducted) await refundCredit(userId);
             await connectDb();
             await GenerationLog.create({
               userId,

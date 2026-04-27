@@ -490,6 +490,8 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
 
   const openUploadModal = () => {
     if (!user && !embeddedId) { openSignUp({ fallbackRedirectUrl: "/dashboard" }); return; }
+    if (!isAdminView && credits !== null && credits < 2) 
+    { setModalType("credits"); return; }
     setUploadTab("upload");
     setSelectedAsset(null);
     setUploadModalOpen(true);
@@ -1104,7 +1106,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
               <button
                 className="viz-generate-btn"
                 onClick={runGeneration}
-                disabled={isProcessing || (embeddedId && !user ? !guestBase64 : (activeInputType !== "floor-plan-generator" && (isNewMode || !project)))}
+                disabled={isProcessing || (!isAdminView && credits !== null && credits < 2) || (embeddedId && !user ? !guestBase64 : (activeInputType !== "floor-plan-generator" && (isNewMode || !project)))}
               >
                 {isProcessing ? (
                   <>

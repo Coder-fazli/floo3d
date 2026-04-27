@@ -35,16 +35,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid image URL" }, { status: 400 });
 
     await connectDb();
-    const userDoc = await User.findOne({ clerkId: userId }, { suspended: 1, credits: 1 }).lean() as any;
+    const userDoc = await User.findOne({ clerkId: userId }, { suspended: 1, credits: 1, subscriptionStatus: 1 }).lean() as any;
+    
     if (userDoc?.suspended) return NextResponse.json({ error: "suspended" }, { status: 403 });
+    if (userDoc?.subscriptionStatus && userDoc.subscriptionStatus !== "active" ) return NextResponse.json({ error: "Subscription not active" }, { status: 403 });
 
     const credits = await getCredits(userId);
     const isUnlimited = credits >= 99999;
-    if (!isUnlimited && credits < 2) {
-      return NextResponse.json({ error: "No credits left" }, { status: 403 });
-    }
-if (!isUnlimited) {                                                                         await deductCredit(userId);                             
-creditDeducted = true;                                                                     }
+    if (!isUnlimited) {
+      const ok = await deductCredit(userId);
+      if (!ok) return NextResponse.json({ error: "No credits left" }, { status: 403 });
+      creditDeducted = true
+       }
 
     const imageResponse = await fetch(imageUrl);
     const buffer = await imageResponse.arrayBuffer();

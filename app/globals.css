@@ -10,12 +10,12 @@
   font-size: 1rem;
   font-weight: 700;
   color: #fff;
-  background: linear-gradient(135deg, #f97316, #ec5b13, #ea580c);
+  background: var(--brand-color);
   border: none;
   border-radius: 0.875rem;
   cursor: pointer;
   overflow: hidden;
-  box-shadow: 0 0 18px rgba(236,91,19,0.55), 0 4px 16px rgba(236,91,19,0.3);
+  box-shadow: 0 0 18px rgba(251,59,1,0.5), 0 4px 16px rgba(251,59,1,0.25);
   transition: box-shadow 0.25s ease, transform 0.15s ease;
   font-family: inherit;
   width: 100%;
@@ -48,14 +48,14 @@
 }
 
 .glow-btn:hover {
-  box-shadow: 0 0 28px rgba(236,91,19,0.75), 0 6px 20px rgba(236,91,19,0.4);
+  box-shadow: 0 0 28px rgba(251,59,1,0.7), 0 6px 20px rgba(251,59,1,0.35);
   transform: translateY(-1px);
 }
 
 .glow-btn:active,
 .glow-btn[data-state="clicked"] {
   transform: scale(0.96);
-  box-shadow: 0 0 12px rgba(236,91,19,0.5);
+  box-shadow: 0 0 12px rgba(251,59,1,0.45);
 }
 
 @keyframes glow-shine {

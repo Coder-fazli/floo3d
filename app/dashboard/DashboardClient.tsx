@@ -25,10 +25,18 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
   const { user, isLoaded } = useUser();
   const [showSuccess, setShowSuccess] = useState(false);
   const [credits, setCredits] = useState<number | null>(null);
+  const [subStatus, setSubStatus] = useState<string | null>(null);
+  const [subPlan, setSubPlan] = useState<string | null>(null);
+  const [periodEnd, setPeriodEnd] = useState<Date | null>(null);
 
   useEffect(() => {
     if (!user) return;
-    getUserInfo(user.id).then(d => setCredits(d.credits ?? 0));
+    getUserInfo(user.id).then(d => {
+      setCredits(d.credits ?? 0);
+      setSubStatus(d.subscriptionStatus ?? null);
+      setSubPlan(d.subscriptionPlan ?? null);
+      setPeriodEnd(d.currentPeriodEnd ? new Date(d.currentPeriodEnd) : null);
+    });
     // Detect country client-side (works in dev + production)
     fetch("https://ipapi.co/json/")
       .then(r => r.json())
@@ -83,10 +91,10 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
             </div>
 
             <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f172a', margin: '0 0 0.5rem' }}>
-              Credits Added! 🎉
+              Subscription Active! 🎉
             </h2>
             <p style={{ fontSize: '0.9rem', color: '#64748b', margin: '0 0 1.75rem', lineHeight: 1.6 }}>
-              Your purchase was successful. Your credits have been added to your account — start generating right away.
+              Your subscription is active. Credits have been added to your account — start generating right away.
             </p>
 
             <button
@@ -129,6 +137,32 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
             <a className="db-mob-upgrade db-mobile-only" href="/pricing">Upgrade</a>
           </div>
         </div>
+
+        {/* Subscription info */}
+        {subStatus && (
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem", padding: "0.875rem 1.25rem", background: "#ffffff", border: "1px solid #e8eaed", borderRadius: "0.75rem", marginBottom: "1.5rem", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <span style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", padding: "0.2rem 0.6rem", borderRadius: "999px",
+                background: subStatus === "active" ? "rgba(22,163,74,0.1)" : subStatus === "past_due" ? "rgba(234,179,8,0.1)" : "rgba(239,68,68,0.1)",
+                color: subStatus === "active" ? "#16a34a" : subStatus === "past_due" ? "#ca8a04" : "#ef4444",
+              }}>
+                {subStatus === "active" ? "Active" : subStatus === "past_due" ? "Past Due" : "Canceled"}
+              </span>
+              <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "#0f172a", textTransform: "capitalize" }}>{subPlan} Plan</span>
+            </div>
+            {periodEnd && subStatus === "active" && (
+              <span style={{ fontSize: "0.78rem", color: "#64748b" }}>
+                Renews {periodEnd.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+              </span>
+            )}
+            {subStatus === "past_due" && (
+              <span style={{ fontSize: "0.78rem", color: "#ca8a04" }}>Payment failed — please update your card</span>
+            )}
+            <a href="/pricing" style={{ marginLeft: "auto", fontSize: "0.78rem", fontWeight: 700, color: "var(--brand-color)", textDecoration: "none" }}>
+              Manage →
+            </a>
+          </div>
+        )}
 
         {/* Input Type Selection */}
         <section className="nr-section">

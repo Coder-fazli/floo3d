@@ -66,18 +66,28 @@ export async function getCredits(userId: string, name?: string, email?: string) 
     return user.credits;
 }
 
-export async function getUserInfo(userId: string): Promise<{ credits: number; hasPurchased: boolean; customModel: string | null }> {
+export async function getUserInfo(userId: string): Promise<{ credits: number; hasPurchased: boolean; customModel: string | null; subscriptionStatus: string | null; subscriptionPlan: string | null; currentPeriodEnd: Date | null }> {
     await connectDb();
     const user = await User.findOne({ clerkId: userId });
-    return { credits: user?.credits ?? 2, hasPurchased: user?.hasPurchased ?? false, customModel: user?.customModel ?? null };
+    return {
+        credits: user?.credits ?? 2,
+        hasPurchased: user?.hasPurchased ?? false,
+        customModel: user?.customModel ?? null,
+        subscriptionStatus: user?.subscriptionStatus ?? null,
+        subscriptionPlan: user?.subscriptionPlan ?? null,
+        currentPeriodEnd: user?.currentPeriodEnd ?? null,
+    };
 }
 
-export async function deductCredit(userId:string) {
+export async function deductCredit(userId:string): 
+Promise<boolean> {
     await connectDb();
-    await User.findOneAndUpdate(
-        { clerkId: userId },
-        { $inc: { credits: -2 } }
+    const result = await User.findOneAndUpdate(
+      { clerkId: userId, credits: { $gte: 2 } },
+      { $inc: { credits: -2 } },
+      { new: true }
     );
+    return result !== null;
 }
 
 // Refund credits in case of failure

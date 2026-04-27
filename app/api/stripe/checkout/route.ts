@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { connectDb } from "@/lib/db";
 import PricingSettings from "@/lib/models/PricingSettings";
+import User from "@/lib/models/User";
+
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -15,17 +17,25 @@ export async function POST(request: Request) {
     if (!["starter", "pro", "elite", "custom"].includes(plan)) return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
 
     if (plan === "custom") {
+      if (!customPrice || customPrice <= 0 || !customCredits || customCredits <= 0) {
+        return NextResponse.json({ error: "Custom price and credits must be greater than 0" }, { status: 400 });
+      }
+      await connectDb();
+      const user: any = await User.findOne({ clerkId: userId }).lean();
       const origin = request.headers.get("origin") ?? "http://localhost:3000";
       const session = await stripe.checkout.sessions.create({
-         mode: "payment",
+         mode: "subscription",
+         customer: user?.stripeCustomerId || undefined,
+         customer_email: user?.stripeCustomerId ? undefined : (user?.email || undefined),
          line_items: [{
          quantity: 1,
          price_data: {
          currency: "usd",
          unit_amount: Math.round(customPrice * 100),
+         recurring: { interval: "month" },
          product_data: {
          name: `Custom Pack — ${customCredits} Credits`,
-         description: `${customCredits} AI credits = ${Math.floor(customCredits / 2)} renders. Never expire.`,
+         description: `${customCredits} credits refreshed every month. ${Math.floor(customCredits / 2)} AI renders/mo.`,
           },
         },
       }],
@@ -37,9 +47,10 @@ export async function POST(request: Request) {
     });
     return NextResponse.json({ url: session.url });
     }
-
+  
     await connectDb();
     const pricing: any = await PricingSettings.findOne().lean() ?? {};
+    const user: any = await User.findOne({ clerkId: userId }).lean();
     const PLANS = {
       starter: { credits: pricing.starterCredits ?? 100, amount: Math.round((pricing.starterPrice ?? 9.99) * 100),  label: `Starter — ${pricing.starterCredits ?? 100} Credits` },
       pro:     { credits: pricing.proCredits ?? 300,     amount: Math.round((pricing.proPrice ?? 24.99) * 100),     label: `Pro — ${pricing.proCredits ?? 300} Credits` },
@@ -50,16 +61,19 @@ export async function POST(request: Request) {
     const origin = request.headers.get("origin") ?? "http://localhost:3000";
 
     const session = await stripe.checkout.sessions.create({
-      mode: "payment",
+      mode: "subscription",
+      customer: user?.stripeCustomerId || undefined,
+      customer_email: user?.stripeCustomerId ? undefined : (user?.email || undefined),
       line_items: [
         {
           quantity: 1,
           price_data: {
             currency: "usd",
             unit_amount: planData.amount,
+            recurring: { interval: "month" },
             product_data: {
               name: planData.label,
-              description: `${planData.credits} AI generation credits for MyHomeStyler. Credits never expire.`,
+              description: `${planData.credits} AI credits refreshed monthly for MyHomeStyler.`,
             },
           },
         },

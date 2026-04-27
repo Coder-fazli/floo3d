@@ -4,11 +4,12 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import NumberFlow from '@number-flow/react';
 import { CheckCheck, Zap, Shield, Star, Sparkles } from 'lucide-react';
+import { Component as GlowButton } from '@/components/ui/glow-button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { useClerk, useUser } from '@clerk/nextjs';
 import Link from 'next/link';
-import { Component as GlowButton } from '@/components/ui/glow-button';
+import SubscriptionTermsModal from '@/components/SubscriptionTermsModal';
 
 type PricingSettings = {
   starterPrice: number; starterCredits: number; starterDescription: string; starterFeatures: string[];
@@ -22,17 +23,17 @@ function PricingFAQItem({ q, a }: { q: string; a: string }) {
   return (
     <div
       className="rounded-xl overflow-hidden cursor-pointer"
-      style={{ background: "#ffffff", border: "1px solid rgba(117,87,96,0.15)" }}
+      style={{ background: "#ffffff", border: "1px solid #e8eaed" }}
       onClick={() => setOpen(o => !o)}
     >
       <div className="flex items-center justify-between px-5 py-4">
-        <span className="font-semibold text-sm pr-4" style={{ color: "#28030F" }}>{q}</span>
+        <span className="font-semibold text-sm pr-4" style={{ color: "#27282f" }}>{q}</span>
         <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center transition-transform" style={{ background: "rgba(235,66,3,0.08)", color: "var(--brand-color)", transform: open ? "rotate(45deg)" : "none" }}>
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v8M1 5h8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
         </span>
       </div>
       {open && (
-        <div className="px-5 pb-4 text-sm leading-relaxed" style={{ color: "#755760", borderTop: "1px solid rgba(117,87,96,0.08)" }}>
+        <div className="px-5 pb-4 text-sm leading-relaxed" style={{ color: "#64748b", borderTop: "1px solid #f1f5f9" }}>
           {a}
         </div>
       )}
@@ -60,13 +61,14 @@ function PricingSwitch({ selected, onSwitch }: { selected: string; onSwitch: (v:
             {selected === tab.value && (
               <motion.span
                 layoutId="pricingSwitch"
-                className="absolute top-0 left-0 h-12 w-full rounded-xl border-4 shadow-sm shadow-orange-600 border-orange-600 bg-gradient-to-t from-orange-500 via-orange-400 to-orange-600"
+                className="absolute top-0 left-0 h-12 w-full rounded-xl"
+                style={{ background: "linear-gradient(to bottom, #ff5520, #fb3b01, #d42f00)", boxShadow: "0 4px 12px rgba(251,59,1,0.45), inset 0 1px 0 rgba(255,255,255,0.2)", border: "none" }}
                 transition={{ type: 'spring', stiffness: 500, damping: 30 }}
               />
             )}
             <span className="relative">{tab.label}</span>
             {tab.badge && (
-              <span className="relative rounded-full bg-orange-50 px-2 py-0.5 text-xs font-semibold text-orange-600">
+              <span className="relative rounded-full px-2 py-0.5 text-xs font-semibold" style={{ background: "rgba(251,59,1,0.08)", color: "var(--brand-color)" }}>
                 {tab.badge}
               </span>
             )}
@@ -103,26 +105,26 @@ function CustomPlan({ onBuy, loading }: { onBuy: (credits: number, price: number
       transition={{ duration: 0.4 }}
       className="w-full max-w-xl mx-auto"
     >
-      <div className="rounded-2xl overflow-hidden" style={{ background: "#ffffff", border: `2px solid var(--brand-color)`, boxShadow: "0 20px 60px rgba(235,66,3,0.12)" }}>
+      <div className="rounded-2xl overflow-hidden" style={{ background: "#ffffff", border: "2px solid var(--brand-color)", boxShadow: "0 20px 60px rgba(235,66,3,0.12)" }}>
         <div className="p-6 pb-4">
           <div className="flex items-center gap-3 mb-4">
             <div className="h-10 w-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(235,66,3,0.08)", border: "1px solid rgba(235,66,3,0.2)" }}>
               <Zap size={18} style={{ color: "var(--brand-color)" }} />
             </div>
             <div>
-              <h3 className="text-2xl font-bold" style={{ color: "#28030F", fontFamily: "var(--font-playfair), Georgia, serif" }}>Custom Pack</h3>
-              <p className="text-xs" style={{ color: "#755760" }}>Pay exactly what you need — no subscription</p>
+              <h3 className="text-2xl font-bold" style={{ color: "#27282f", fontFamily: "var(--font-playfair), Georgia, serif" }}>Custom Pack</h3>
+              <p className="text-xs" style={{ color: "#64748b" }}>Pay exactly what you need — no subscription</p>
             </div>
           </div>
 
           {/* Price display */}
           <div className="flex items-baseline gap-3 mb-6" style={{ flexWrap: "nowrap" }}>
-            <span className="font-bold whitespace-nowrap" style={{ color: "#28030F", display: "inline-flex", alignItems: "baseline", fontSize: "3rem", flexShrink: 0 }}>
+            <span className="font-bold whitespace-nowrap" style={{ color: "#27282f", display: "inline-flex", alignItems: "baseline", fontSize: "3rem", flexShrink: 0 }}>
               <span>$</span><NumberFlow value={price} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
             </span>
             <div className="text-sm leading-tight">
               <div className="font-bold" style={{ color: "var(--brand-color)" }}>{credits} credits</div>
-              <div style={{ color: "#755760" }}>{renders} renders · ${perRender}/render</div>
+              <div style={{ color: "#64748b" }}>{renders} renders · ${perRender}/render</div>
             </div>
           </div>
 
@@ -194,7 +196,7 @@ function CustomPlan({ onBuy, loading }: { onBuy: (credits: number, price: number
                 <span className="h-5 w-5 rounded-full grid place-content-center flex-shrink-0" style={{ background: "rgba(235,66,3,0.08)", border: "1px solid rgba(235,66,3,0.3)" }}>
                   <CheckCheck className="h-3 w-3" style={{ color: "var(--brand-color)" }} />
                 </span>
-                <span className="text-xs font-medium" style={{ color: "#755760" }}>{f}</span>
+                <span className="text-xs font-medium" style={{ color: "#64748b" }}>{f}</span>
               </div>
             ))}
           </div>
@@ -209,6 +211,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
   const [tab, setTab] = useState('0');
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
   const { openSignUp } = useClerk();
   const { isSignedIn } = useUser();
 
@@ -221,8 +224,8 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
       credits: pricingSettings?.starterCredits ?? 100,
       description: pricingSettings?.starterDescription ?? 'Great for homeowners and designers working on a single project.',
       includes: [
-        'Free includes:',
-        '100 credits — 50 AI renders',
+        'Starter includes:',
+        '50 AI renders per month',
         'All 4 AI tools included',
         'HD quality renders',
         'PNG, JPG & PDF export',
@@ -239,7 +242,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
       popular: true,
       includes: [
         'Everything in Starter, plus:',
-        '300 credits — 150 AI renders',
+        '150 AI renders per month',
         'Isometric & cross-section views',
         'More design styles',
         'Priority generation queue',
@@ -315,32 +318,19 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
 
   return (
     <div className="px-4 pt-16 pb-24 min-h-screen max-w-7xl mx-auto relative">
+      <SubscriptionTermsModal open={showTerms} onClose={() => setShowTerms(false)} />
 
       {/* Header */}
       <article className="text-center mb-10 space-y-4">
         <span className="inline-block text-xs font-black tracking-widest uppercase mb-2" style={{ color: "var(--brand-color)" }}>Pricing</span>
-        <h2 className="text-4xl md:text-5xl font-bold leading-tight" style={{ color: "#28030F", fontFamily: "var(--font-playfair), Georgia, serif" }}>
-          One-time credits.<br />No subscription ever.
+        <h2 className="text-4xl md:text-5xl font-bold leading-tight" style={{ color: "#27282f", fontFamily: "var(--font-playfair), Georgia, serif" }}>
+          Monthly plans.<br />Cancel anytime.
         </h2>
-        <p className="text-base max-w-lg mx-auto" style={{ color: "#755760" }}>
-          Pay once, use across all 4 AI tools. Credits never expire — no monthly fees, no surprises.
+        <p className="text-base max-w-lg mx-auto" style={{ color: "#64748b" }}>
+          Subscribe monthly, credits refresh every cycle. No lock-in — cancel anytime, no surprises.
         </p>
         <PricingSwitch selected={tab} onSwitch={setTab} />
 
-        {/* Trust bar */}
-        <div className="flex flex-wrap justify-center gap-3 mt-6">
-          {[
-            { icon: "★", text: "2,547 architects & designers" },
-            { icon: "🔒", text: "Secure checkout via Stripe" },
-            { icon: "∞", text: "Credits never expire" },
-            { icon: "⚡", text: "All 4 AI tools included" },
-          ].map((t, i) => (
-            <div key={i} className="flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold" style={{ background: "#ffffff", border: "1px solid rgba(117,87,96,0.2)", color: "#28030F" }}>
-              <span style={{ color: "var(--brand-color)" }}>{t.icon}</span>
-              {t.text}
-            </div>
-          ))}
-        </div>
       </article>
 
       {/* Plans tab */}
@@ -360,14 +350,14 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                   className={cn('relative rounded-2xl text-left transition-all duration-200', plan.popular ? 'md:-mt-4 md:mb-4' : '')}
                   style={plan.popular ? {
                     background: "#ffffff",
-                    border: `2px solid var(--brand-color)`,
+                    border: "2px solid var(--brand-color)",
                     boxShadow: "0 20px 60px rgba(235,66,3,0.18), 0 4px 20px rgba(235,66,3,0.1)",
                   } : plan.id === 'elite' ? {
                     background: "#28030F",
                     border: "1px solid rgba(235,66,3,0.3)",
                   } : {
                     background: "#ffffff",
-                    border: "1px solid rgba(117,87,96,0.2)",
+                    border: "1px solid #e8eaed",
                   }}
                 >
                   {plan.popular && (
@@ -380,7 +370,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
 
                   <div className="p-6 pb-4">
                     <div className="flex justify-between items-start mb-1">
-                      <h3 className="text-2xl font-bold" style={{ color: plan.id === 'elite' ? "#FDF6F2" : "#28030F", fontFamily: "var(--font-playfair), Georgia, serif" }}>
+                      <h3 className="text-2xl font-bold" style={{ color: plan.id === 'elite' ? "#faf7f4" : "#28030F", fontFamily: "var(--font-playfair), Georgia, serif" }}>
                         {plan.name}
                       </h3>
                       {plan.id === 'elite' && (
@@ -390,11 +380,22 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                       )}
                     </div>
                     <p className="text-sm mb-4" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.6)" : "#755760" }}>{plan.description}</p>
-                    <div className="flex items-baseline gap-1 mb-5">
-                      <span className="text-5xl font-bold whitespace-nowrap" style={{ color: plan.id === 'elite' ? "#FDF6F2" : "#28030F", display: "inline-flex", alignItems: "baseline" }}>
+                    <div className="flex items-baseline gap-1 mb-2">
+                      <span className="text-5xl font-bold whitespace-nowrap" style={{ color: plan.id === 'elite' ? "#faf7f4" : "#28030F", display: "inline-flex", alignItems: "baseline" }}>
                         <span>$</span><NumberFlow value={plan.price} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
                       </span>
-                      <span className="text-sm ml-1" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.5)" : "#755760" }}>one-time · {plan.credits} credits</span>
+                      <span className="text-sm ml-1" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.5)" : "#94a3b8" }}>/month · {Math.floor(plan.credits / 2)} renders</span>
+                    </div>
+                    <div className="flex items-center gap-2 mb-5">
+                      <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{
+                        background: plan.popular ? "rgba(235,66,3,0.08)" : plan.id === 'elite' ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.04)",
+                        color: plan.popular ? "var(--brand-color)" : plan.id === 'elite' ? "rgba(253,246,242,0.5)" : "#94a3b8",
+                      }}>
+                        ${(plan.price / Math.floor(plan.credits / 2)).toFixed(2)} per render
+                      </span>
+                      {plan.popular && (
+                        <span className="text-xs font-bold" style={{ color: "var(--brand-color)" }}>← lowest cost/render</span>
+                      )}
                     </div>
 
                     {/* CTA */}
@@ -405,7 +406,13 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
 
                     {/* Trust signal */}
                     <p className="text-xs text-center mt-3" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.4)" : "#a08888" }}>
-                      🔒 Secure via Stripe · Credits never expire
+                      🔒 Secure via Stripe · Cancel anytime ·{' '}
+                      <button
+                        onClick={() => setShowTerms(true)}
+                        style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', textDecoration: 'underline', fontSize: 'inherit', color: 'inherit' }}
+                      >
+                        Subscription Terms
+                      </button>
                     </p>
                   </div>
 
@@ -430,18 +437,18 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
 
 {/* FAQ */}
             <div className="w-full max-w-3xl mx-auto mt-14">
-              <h3 className="text-center text-2xl font-bold mb-8" style={{ color: "#28030F", fontFamily: "var(--font-playfair), Georgia, serif" }}>
+              <h3 className="text-center text-2xl font-bold mb-8" style={{ color: "#27282f", fontFamily: "var(--font-playfair), Georgia, serif" }}>
                 Common Questions
               </h3>
               <div className="space-y-3">
                 {[
                   {
-                    q: "What if I don't use all my credits?",
-                    a: "Credits never expire — ever. Buy today, use them 2 years from now. No pressure, no deadline."
+                    q: "What happens to unused credits at end of month?",
+                    a: "Unused credits reset at the start of each billing cycle. Use as many as you need each month — your plan refreshes automatically."
                   },
                   {
-                    q: "Is it really a one-time payment?",
-                    a: "Yes. No monthly fees, no subscriptions, no hidden charges. You pay once and own those credits."
+                    q: "Can I cancel anytime?",
+                    a: "Yes. Cancel anytime from your dashboard — no penalties, no questions asked. You keep access until the end of your current billing period."
                   },
                   {
                     q: "What quality renders do I get?",

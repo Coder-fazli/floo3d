@@ -11,6 +11,12 @@ const UserSchema = new Schema({
     suspended: { type: Boolean, default: false },
     country: { type: String, default: "" },
     customModel: { type: String, default: null },
+    stripeCustomerId:   { type: String, default: null },   
+    subscriptionId:     { type: String, default: null },
+    subscriptionStatus: { type: String, default: null },   
+    subscriptionPlan:   { type: String, default: null }, 
+    currentPeriodEnd:   { type: Date,   default: null }, 
+    subscriptionCredits: { type: Number, default: null }  
     },
 { timestamps: true });
 
