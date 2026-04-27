@@ -56,11 +56,16 @@
             invoice.lines.data[0]?.period?.end ?? 0) * 1000));
 
           await connectDb();
+
+          // Idempotency check — skip if this exact event was already processed
+          const alreadyProcessed = await User.findOne({ lastInvoiceEventId: event.id }).lean();
+          if (alreadyProcessed) return NextResponse.json({ received: true });
+
           const subscriptionId = typeof (invoice as any).subscription === "string" ? (invoice as any).subscription : null;
           const user = await User.findOne({ stripeCustomerId: customerId }).lean() ??  (subscriptionId ? await User.findOne({
             subscriptionId }).lean() : null);
-          if (user ) {
-            const pricing: any = await 
+          if (user) {
+            const pricing: any = await
             PricingSettings.findOne().lean() ?? {};
             const PLAN_CREDITS: Record<string, number> = {
                 starter: pricing.starterCredits ?? 100,
@@ -72,8 +77,8 @@
               : PLAN_CREDITS[(user as any).subscriptionPlan] ?? 0;
              await User.findByIdAndUpdate(
                 (user as any)._id,
-              { $set: { credits, subscriptionStatus: "active", 
-                currentPeriodEnd: periodEnd } }
+              { $set: { credits, subscriptionStatus: "active",
+                currentPeriodEnd: periodEnd, lastInvoiceEventId: event.id } }
              );
           }
        }

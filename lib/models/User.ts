@@ -16,7 +16,8 @@ const UserSchema = new Schema({
     subscriptionStatus: { type: String, default: null },   
     subscriptionPlan:   { type: String, default: null }, 
     currentPeriodEnd:   { type: Date,   default: null }, 
-    subscriptionCredits: { type: Number, default: null }  
+    subscriptionCredits:    { type: Number, default: null },
+    lastInvoiceEventId:     { type: String, default: null },
     },
 { timestamps: true });
 
