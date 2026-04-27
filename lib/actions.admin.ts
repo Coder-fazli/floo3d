@@ -344,13 +344,40 @@ export async function getBusinessAnalytics(period: string) {
   const freeCost = calcCost(freeLogs);
   const totalCost = paidCost + freeCost;
 
-  // Revenue
+  // Cash revenue: orders placed in this period
   const orders = await Order.find(dateFilter).lean() as any[];
   const revenue = orders.reduce((s: number, o: any) => s + (o.amount ?? 0), 0) / 100;
 
-  // Net profit & margin
-  const netProfit = revenue - totalCost;
-  const margin = revenue > 0 ? (netProfit / revenue) * 100 : 0;
+  // Recognized revenue: attribute credit value at render time, not purchase time.
+  // For each paid render in the period, calculate (order_amount / order_credits) per render.
+  // This ensures a user who bought $49 last week and renders this week still counts.
+  const paidUserIds = [...new Set(paidLogs.map((l: any) => l.userId))];
+  const userOrders = paidUserIds.length > 0
+    ? await Order.find({ userId: { $in: paidUserIds } }).sort({ createdAt: 1 }).lean() as any[]
+    : [];
+
+  // Build price-per-credit map per user (average across all their orders)
+  const userTotalPaid: Record<string, number> = {};
+  const userTotalCredits: Record<string, number> = {};
+  for (const o of userOrders) {
+    if (o.userId && o.credits > 0 && o.amount > 0) {
+      userTotalPaid[o.userId]    = (userTotalPaid[o.userId]    ?? 0) + o.amount / 100;
+      userTotalCredits[o.userId] = (userTotalCredits[o.userId] ?? 0) + o.credits;
+    }
+  }
+  const pricePerCredit: Record<string, number> = {};
+  for (const uid of Object.keys(userTotalPaid)) {
+    pricePerCredit[uid] = userTotalPaid[uid] / userTotalCredits[uid];
+  }
+
+  // Sum recognized revenue from paid renders in this period
+  const recognizedRevenue = paidLogs.reduce((sum: number, l: any) => {
+    return sum + (pricePerCredit[l.userId] ?? 0);
+  }, 0);
+
+  // Net profit uses recognized revenue so timing mismatches don't create false negatives
+  const netProfit = recognizedRevenue - totalCost;
+  const margin = recognizedRevenue > 0 ? (netProfit / recognizedRevenue) * 100 : 0;
 
   // Tool usage breakdown
   const toolCounts: Record<string, number> = {};
@@ -386,7 +413,7 @@ export async function getBusinessAnalytics(period: string) {
   const allOrders = await Order.find(dateFilter).sort({ createdAt: -1 }).lean() as any[];
 
   return JSON.parse(JSON.stringify({
-    revenue, totalCost, paidCost, freeCost, netProfit, margin,
+    revenue, recognizedRevenue, totalCost, paidCost, freeCost, netProfit, margin,
     totalRenders: logs.length, paidRenders: paidLogs.length, freeRenders: freeLogs.length,
     toolUsage, conversionRate, totalUsers, paidUsersCount,
     revenueChart, allOrders,

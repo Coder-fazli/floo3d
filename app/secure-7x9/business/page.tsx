@@ -62,8 +62,10 @@ export default async function BusinessPage({ searchParams }: { searchParams: Pro
               <DollarSign size={13} color="#16a34a" />
             </div>
           </div>
-          <h2 style={{ margin: 0, fontSize: "2rem", fontWeight: 800, color: "#16a34a" }}>{fmt(d.revenue)}</h2>
-          <p style={{ margin: "0.25rem 0 0", fontSize: "0.72rem", color: "#94a3b8" }}>{d.allOrders.length} orders</p>
+          <h2 style={{ margin: 0, fontSize: "2rem", fontWeight: 800, color: "#16a34a" }}>{fmt(d.recognizedRevenue)}</h2>
+          <p style={{ margin: "0.25rem 0 0", fontSize: "0.72rem", color: "#94a3b8" }}>
+            {fmt(d.revenue)} cash · {d.allOrders.length} orders
+          </p>
         </div>
 
         {/* Total AI Cost */}
@@ -87,7 +89,7 @@ export default async function BusinessPage({ searchParams }: { searchParams: Pro
               : <TrendingDown size={14} color="#ef4444" />}
           </div>
           <h2 style={{ margin: 0, fontSize: "2rem", fontWeight: 800, color: d.netProfit >= 0 ? "#22c55e" : "#ef4444" }}>{fmt(d.netProfit)}</h2>
-          <p style={{ margin: "0.25rem 0 0", fontSize: "0.72rem", color: d.netProfit >= 0 ? "#475569" : "#94a3b8" }}>after AI costs</p>
+          <p style={{ margin: "0.25rem 0 0", fontSize: "0.72rem", color: d.netProfit >= 0 ? "#475569" : "#94a3b8" }}>recognized revenue − AI costs</p>
         </div>
 
         {/* Margin */}
