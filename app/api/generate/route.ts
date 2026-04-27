@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 import { uploadImage } from "@/lib/cloudinary";
-import { updateProject, getCredits, deductCredit, getModelSettings, getUserInfo } from "@/lib/actions";
+import { updateProject, getCredits, deductCredit, getModelSettings, getUserInfo, refundCredit } from "@/lib/actions";
 import User from "@/lib/models/User";
 import { buildPrompt } from "@/lib/prompts";
 import Project from "@/lib/models/Project";
@@ -15,6 +15,7 @@ export const maxDuration = 60;
 
 
 export async function POST(request: Request) {
+  let creditDeducted = false; 
   let projectId: string | null = null;
   let modelName = "gemini-3.1-flash-image-preview";
   let resolvedInputType = "interior-design";
@@ -42,8 +43,8 @@ export async function POST(request: Request) {
     if (!isUnlimited && credits < 2) {
       return NextResponse.json({ error: "No credits left" }, { status: 403 });
     }
-    if (!isUnlimited) await deductCredit(userId);
-
+if (!isUnlimited) {                                                                         await deductCredit(userId);                             
+creditDeducted = true;                                                                     }
 
     const imageResponse = await fetch(imageUrl);
     const buffer = await imageResponse.arrayBuffer();
@@ -90,6 +91,7 @@ export async function POST(request: Request) {
 
     if (!imagePart) {
       console.error("Gemini returned no image part after 2 attempts");
+      if (creditDeducted) await refundCredit(userId); 
       await connectDb();
       await GenerationLog.create({
         userId,
@@ -124,6 +126,7 @@ export async function POST(request: Request) {
     try {
       const { userId } = await auth();
       await connectDb();
+      if (creditDeducted && userId) await refundCredit(userId); 
       await Promise.all([
         projectId
           ? Project.findByIdAndUpdate(projectId, {

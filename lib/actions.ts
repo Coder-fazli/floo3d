@@ -80,6 +80,15 @@ export async function deductCredit(userId:string) {
     );
 }
 
+// Refund credits in case of failure
+ export async function refundCredit(userId:string) {
+   await connectDb();
+   await User.findOneAndUpdate(
+     { clerkId: userId },
+     { $inc: { credits: 2 } }
+   );
+ }
+
 export async function getSiteSettings(){
     await connectDb();
     const settings = await SiteSettings.findOne({ key: "home" });
