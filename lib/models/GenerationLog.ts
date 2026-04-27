@@ -12,6 +12,8 @@ const GenerationLogSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+GenerationLogSchema.index({ userId: 1 });
+
 const GenerationLog =
   mongoose.models.GenerationLog ||
   mongoose.model("GenerationLog", GenerationLogSchema);

@@ -23,6 +23,8 @@ const ProjectSchema = new Schema({
     createdAt: { type: Date, default: Date.now },
   });
 
+  ProjectSchema.index({ userId: 1 });
+
   const Project = models.Project || model("Project", ProjectSchema);
 
   export default Project;

@@ -782,7 +782,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                     onDragEnter={(e) => { e.preventDefault(); dragCounterRef.current++; setIsDraggingOver(true); }}
                     onDragLeave={(e) => { e.preventDefault(); dragCounterRef.current--; if (dragCounterRef.current === 0) setIsDraggingOver(false); }}
                     onDragOver={(e) => e.preventDefault()}
-                    onDrop={(e) => { e.preventDefault(); dragCounterRef.current = 0; setIsDraggingOver(false); const f = e.dataTransfer.files[0]; if (f) { handleSidebarFile(f); setUploadModalOpen(false); } }}
+                    onDrop={(e) => { e.preventDefault(); dragCounterRef.current = 0; setIsDraggingOver(false); if (!isAdminView && credits !== null && credits < 2) { setModalType("credits"); setUploadModalOpen(false); return; } const f = e.dataTransfer.files[0]; if (f) { handleSidebarFile(f); setUploadModalOpen(false); } }}
                   >
                     <div className="viz-upload-modal-dropzone-icon">
                       <UploadIcon size={26} strokeWidth={1.6} />
