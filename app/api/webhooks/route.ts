@@ -58,9 +58,27 @@
 
           await connectDb();
 
-          // Idempotency check — skip if this exact event was already processed
+          // Idempotency check — skip credits if this exact event was already processed,
+          // but still ensure the Order record exists (it may have failed on first attempt)
           const alreadyProcessed = await User.findOne({ lastInvoiceEventId: event.id }).lean();
-          if (alreadyProcessed) return NextResponse.json({ received: true });
+          if (alreadyProcessed) {
+            const amountPaidCheck = (invoice.amount_paid ?? 0);
+            if (amountPaidCheck > 0) {
+              const existingOrder = await Order.findOne({ stripeSessionId: invoice.id }).lean();
+              if (!existingOrder) {
+                await Order.create({
+                  userId: (alreadyProcessed as any).clerkId,
+                  email: (alreadyProcessed as any).email ?? invoice.customer_email,
+                  plan: (alreadyProcessed as any).subscriptionPlan,
+                  amount: amountPaidCheck,
+                  credits: (alreadyProcessed as any).subscriptionCredits ?? 0,
+                  stripeSessionId: invoice.id,
+                  currency: invoice.currency,
+                });
+              }
+            }
+            return NextResponse.json({ received: true });
+          }
 
           const subscriptionId = typeof (invoice as any).subscription === "string" ? (invoice as any).subscription : null;
           const user = await User.findOne({ stripeCustomerId: customerId }).lean() ??  (subscriptionId ? await User.findOne({
