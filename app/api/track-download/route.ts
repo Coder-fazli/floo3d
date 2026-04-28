@@ -10,6 +10,6 @@ export async function POST(request: Request) {
     if (!projectId || !/^[a-f\d]{24}$/i.test(projectId))
         return NextResponse.json({ ok: false });
     await connectDb();
-    await Project.findByIdAndUpdate(projectId, { downloadedAt: new Date() });
+    await Project.findByIdAndUpdate(projectId, { downloadedAt: new Date(), $inc: { downloadCount: 1 } });
     return NextResponse.json({ ok: true });
 }

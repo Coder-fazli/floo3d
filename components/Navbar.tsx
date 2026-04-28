@@ -1,27 +1,11 @@
 "use client";
 
 import { Zap, Menu, X, User, LogIn } from "lucide-react";
-import Image from "next/image";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { getUserInfo } from "@/lib/actions";
-import {
-  NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuItem,
-  NavigationMenuLink,
-} from "@/components/ui/navigation-menu";
 import "./Navbar.css";
 import ContactModal from "./ContactModal";
-
-const NAV_LINKS = [
-  { href: "#gallery",  label: "Gallery"  },
-  { href: "#magic",    label: "Magic"    },
-  { href: "#reviews",  label: "Love"     },
-  { href: "#journal",  label: "Journal"  },
-  { href: "#answers",  label: "Answers"  },
-  { href: "/pricing",  label: "Pricing"  },
-];
 
 const Navbar = () => {
   const { isSignedIn, user } = useUser();
@@ -65,26 +49,16 @@ const Navbar = () => {
           <span className="navbar-name">MyHome<span className="navbar-name-accent">Styler</span></span>
         </a>
 
-        {/* Desktop nav using NavigationMenu */}
-        <NavigationMenu className="navbar-desktop-only">
-          <NavigationMenuList className="gap-0">
-            {NAV_LINKS.map(({ href, label }) => (
-              <NavigationMenuItem key={href}>
-                <NavigationMenuLink
-                  href={href}
-                  className="navbar-nav-link"
-                >
-                  {label}
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            ))}
-            {isSignedIn && (
-              <NavigationMenuItem>
-                <button className="navbar-nav-link" onClick={() => setContactOpen(true)}>Support</button>
-              </NavigationMenuItem>
-            )}
-          </NavigationMenuList>
-        </NavigationMenu>
+        {/* Desktop links */}
+        <ul className="navbar-links">
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#magic">Magic</a></li>
+          <li><a href="#reviews">Love</a></li>
+          <li><a href="#journal">Journal</a></li>
+          <li><a href="#answers">Answers</a></li>
+          <li><a href="/pricing">Pricing</a></li>
+          {isSignedIn && <li><button className="navbar-links-btn" onClick={() => setContactOpen(true)}>Support</button></li>}
+        </ul>
 
         {/* Actions */}
         <div className="navbar-actions">
@@ -136,9 +110,12 @@ const Navbar = () => {
       {menuOpen && (
         <div className="navbar-mobile">
           <ul>
-            {NAV_LINKS.map(({ href, label }) => (
-              <li key={href}><a href={href} onClick={() => setMenuOpen(false)}>{label}</a></li>
-            ))}
+            <li><a href="#gallery" onClick={() => setMenuOpen(false)}>Gallery</a></li>
+            <li><a href="#magic" onClick={() => setMenuOpen(false)}>Magic</a></li>
+            <li><a href="#reviews" onClick={() => setMenuOpen(false)}>Love</a></li>
+            <li><a href="#journal" onClick={() => setMenuOpen(false)}>Journal</a></li>
+            <li><a href="#answers" onClick={() => setMenuOpen(false)}>Answers</a></li>
+            <li><a href="/pricing" onClick={() => setMenuOpen(false)}>Pricing</a></li>
             {isSignedIn ? (
               <>
                 <li><a href="/dashboard/profile" onClick={() => setMenuOpen(false)}>Profile</a></li>

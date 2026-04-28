@@ -63,13 +63,6 @@
 .navbar-credits {
   color: #27282f !important;
 }
-.navbar-nav-link {
-  color: rgba(39,40,47,0.7) !important;
-}
-.navbar-nav-link:hover {
-  color: #27282f !important;
-  background: rgba(0,0,0,0.05) !important;
-}
 .navbar-credits-mobile {
   background: var(--brand-color) !important;
   color: #ffffff !important;
@@ -216,10 +209,10 @@
   }
   /* Buttons: CTA takes remaining space, ghost is content-width only */
   .hph-btns {
-    gap: 0.625rem !important;
+    gap: 1rem !important;
     flex-wrap: nowrap !important;
     align-items: stretch !important;
-    margin-bottom: 1.25rem !important;
+    margin-bottom: 1.75rem !important;
   }
   .hph-btns > * {
     flex: 0 0 auto !important;
