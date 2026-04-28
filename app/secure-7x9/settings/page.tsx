@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getSiteSettings } from "@/lib/actions";
-import { saveSiteSettings, saveFloorPlanSettings, saveGeneralSettings, saveLogoImage } from "@/lib/actions.admin";
+import { saveSiteSettings, saveFloorPlanSettings, saveGeneralSettings, saveLogoImage, backfillSubscriptionOrders } from "@/lib/actions.admin";
 
 export default function AdminSettings() {
   // Home page SEO
@@ -28,6 +28,10 @@ export default function AdminSettings() {
   const [faviconUrl, setFaviconUrl] = useState<string | null>(null);
   const [logoUploading, setLogoUploading] = useState(false);
   const [faviconUploading, setFaviconUploading] = useState(false);
+
+  // Backfill
+  const [backfilling, setBackfilling] = useState(false);
+  const [backfillResult, setBackfillResult] = useState<{ created: number; skipped: number } | null>(null);
 
 
   useEffect(() => {
@@ -212,6 +216,33 @@ export default function AdminSettings() {
             <p style={{ fontSize: "0.7rem", color: "#94a3b8", marginTop: "0.35rem" }}>Recommended: 32×32px ICO/PNG</p>
           </div>
         </div>
+      </div>
+
+      {/* Backfill historical subscription revenue */}
+      <div className="adm-card" style={{ padding: "2rem", marginBottom: "1.5rem" }}>
+        <h3 className="adm-settings-title">Backfill Subscription Revenue</h3>
+        <p style={{ fontSize: "0.8rem", color: "#94a3b8", marginBottom: "1.5rem" }}>
+          Creates missing Order records for all past Stripe subscription payments so they appear in analytics.
+          Safe to run multiple times — existing records are never duplicated.
+        </p>
+        <button
+          className="adm-btn-primary"
+          disabled={backfilling}
+          onClick={async () => {
+            setBackfilling(true);
+            setBackfillResult(null);
+            const result = await backfillSubscriptionOrders();
+            setBackfillResult(result);
+            setBackfilling(false);
+          }}
+        >
+          {backfilling ? "Running…" : "Run Backfill"}
+        </button>
+        {backfillResult && (
+          <p style={{ fontSize: "0.8rem", color: "#22c55e", marginTop: "0.75rem" }}>
+            Done — {backfillResult.created} new records created, {backfillResult.skipped} already existed or skipped.
+          </p>
+        )}
       </div>
 
     </div>

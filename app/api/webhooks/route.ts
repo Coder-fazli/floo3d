@@ -2,6 +2,7 @@
   import { NextResponse } from "next/server";
   import { connectDb } from "@/lib/db";
   import User from "@/lib/models/User";
+  import Order from "@/lib/models/Order";
   import PricingSettings from "@/lib/models/PricingSettings";
 
   export const runtime = "nodejs";
@@ -80,6 +81,26 @@
               { $set: { credits, subscriptionStatus: "active",
                 currentPeriodEnd: periodEnd, lastInvoiceEventId: event.id } }
              );
+
+             // Record payment so analytics can track subscription revenue
+             const amountPaid = invoice.amount_paid ?? 0;
+             if (amountPaid > 0) {
+               await Order.findOneAndUpdate(
+                 { stripeSessionId: invoice.id },
+                 {
+                   $setOnInsert: {
+                     userId: (user as any).clerkId,
+                     email: (user as any).email ?? invoice.customer_email,
+                     plan: (user as any).subscriptionPlan,
+                     amount: amountPaid,
+                     credits,
+                     stripeSessionId: invoice.id,
+                     currency: invoice.currency,
+                   }
+                 },
+                 { upsert: true }
+               );
+             }
           }
        }
 

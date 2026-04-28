@@ -4,6 +4,8 @@ import { auth } from "@clerk/nextjs/server";
 import { connectDb } from "./db";
 import { uploadImage } from "./cloudinary";
 import { unstable_noStore as noStore } from "next/cache";
+import mongoose from "mongoose";
+import Stripe from "stripe";
 import User from "./models/User";
 import Project from "./models/Project";
 import SiteSettings from "./models/SiteSettings";
@@ -439,6 +441,70 @@ export async function getBusinessAnalytics(period: string) {
     toolUsage, conversionRate, totalUsers, paidUsersCount,
     revenueChart, allOrders,
   }));
+}
+
+export async function backfillSubscriptionOrders(): Promise<{ created: number; skipped: number }> {
+  await requireAdmin();
+  await connectDb();
+
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+  // Build a clerkId + email lookup keyed by stripeCustomerId
+  const users = await User.find(
+    { stripeCustomerId: { $exists: true, $ne: null } },
+    { clerkId: 1, email: 1, stripeCustomerId: 1, subscriptionPlan: 1, subscriptionCredits: 1 }
+  ).lean() as any[];
+
+  const byCustomer: Record<string, any> = {};
+  for (const u of users) byCustomer[u.stripeCustomerId] = u;
+
+  // Fetch pricing once before the loop
+  const pricing: any = await PricingSettings.findOne().lean() ?? {};
+  const PLAN_CREDITS: Record<string, number> = {
+    starter: pricing.starterCredits ?? 100,
+    pro: pricing.proCredits ?? 300,
+    elite: pricing.eliteCredits ?? 300,
+  };
+
+  let created = 0;
+  let skipped = 0;
+
+  // Page through all paid invoices on Stripe
+  for await (const invoice of stripe.invoices.list({ status: "paid", limit: 100 })) {
+    const customerId = typeof invoice.customer === "string" ? invoice.customer : null;
+    if (!customerId) { skipped++; continue; }
+
+    const user = byCustomer[customerId];
+    if (!user) { skipped++; continue; }
+
+    const amountPaid = invoice.amount_paid ?? 0;
+    if (amountPaid <= 0) { skipped++; continue; }
+
+    const credits = user.subscriptionPlan === "custom"
+      ? (user.subscriptionCredits ?? 0)
+      : PLAN_CREDITS[user.subscriptionPlan] ?? 0;
+
+    const existing = await Order.findOne({ stripeSessionId: invoice.id }).lean();
+    if (existing) { skipped++; continue; }
+
+    // Use collection.insertOne() so Mongoose doesn't override createdAt with today's date
+    const invoiceDate = new Date(invoice.created * 1000);
+    await Order.collection.insertOne({
+      _id: new mongoose.Types.ObjectId(),
+      userId: user.clerkId,
+      email: user.email ?? invoice.customer_email ?? "",
+      plan: user.subscriptionPlan,
+      amount: amountPaid,
+      credits,
+      stripeSessionId: invoice.id,
+      currency: invoice.currency,
+      createdAt: invoiceDate,
+      updatedAt: invoiceDate,
+    });
+    created++;
+  }
+
+  return { created, skipped };
 }
 
 export async function getPricingSettings() {
