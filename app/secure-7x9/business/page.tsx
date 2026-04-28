@@ -10,6 +10,12 @@ const PERIODS = [
   { value: "all",       label: "All Time" },
 ];
 
+const USER_TYPES = [
+  { value: "all",  label: "All Users" },
+  { value: "free", label: "Free Users" },
+  { value: "paid", label: "Paid Users" },
+];
+
 const TOOL_LABELS: Record<string, string> = {
   "floor-plan":           "Floor Plan",
   "interior-design":      "Interior Design",
@@ -18,29 +24,46 @@ const TOOL_LABELS: Record<string, string> = {
   "floor-plan-generator": "FP Generator",
 };
 
-function fmt(n: number) { return `$${n.toFixed(2)}`; }
+function fmt(n: number) { return n < 0 ? `-$${Math.abs(n).toFixed(2)}` : `$${n.toFixed(2)}`; }
 function fmtDate(d: string) {
+  if (d.includes("T")) {
+    const h = parseInt(d.split("T")[1]);
+    return `${h}:00`;
+  }
   return new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-export default async function BusinessPage({ searchParams }: { searchParams: Promise<{ period?: string }> }) {
-  const { period = "week" } = await searchParams;
-  const d = await getBusinessAnalytics(period);
+export default async function BusinessPage({ searchParams }: { searchParams: Promise<{ period?: string; type?: string }> }) {
+  const { period = "week", type = "all" } = await searchParams;
+  const userType = (["all","free","paid"].includes(type) ? type : "all") as "all"|"free"|"paid";
+  const d = await getBusinessAnalytics(period, userType);
   const periodLabel = PERIODS.find(p => p.value === period)?.label ?? "This Week";
   const maxBar = Math.max(...d.revenueChart.map((r: any) => r.amount), 0.01);
 
   return (
     <div className="adm-content">
 
-      {/* Header + Filter */}
+      {/* Header + Filters */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.75rem", flexWrap: "wrap", gap: "1rem" }}>
-        <div>
-          <h1 className="adm-topbar-title" style={{ marginBottom: "0.2rem" }}>Business</h1>
-          <p style={{ margin: 0, fontSize: "0.8rem", color: "#94a3b8" }}>Profit, costs & conversion — <strong style={{ color: "#0f172a" }}>{periodLabel}</strong></p>
+        {/* Left: title + user type tabs */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+          <h1 className="adm-topbar-title" style={{ margin: 0 }}>Business</h1>
+          <div style={{ display: "flex", gap: "0.4rem", background: "#f1f5f9", borderRadius: "0.75rem", padding: "0.3rem", width: "fit-content" }}>
+            {USER_TYPES.map(u => (
+              <Link key={u.value} href={`/secure-7x9/business?period=${period}&type=${u.value}`} style={{
+                padding: "0.3rem 0.75rem", borderRadius: "0.5rem", fontSize: "0.75rem", fontWeight: 600,
+                textDecoration: "none",
+                background: userType === u.value ? "#fff" : "transparent",
+                color: userType === u.value ? (u.value === "paid" ? "#16a34a" : u.value === "free" ? "#d97706" : "#0f172a") : "#64748b",
+                boxShadow: userType === u.value ? "0 1px 4px rgba(0,0,0,0.08)" : "none",
+              }}>{u.label}</Link>
+            ))}
+          </div>
         </div>
+        {/* Right: period filter */}
         <div style={{ display: "flex", gap: "0.4rem", background: "#f1f5f9", borderRadius: "0.75rem", padding: "0.3rem" }}>
           {PERIODS.map(p => (
-            <Link key={p.value} href={`/secure-7x9/business?period=${p.value}`} style={{
+            <Link key={p.value} href={`/secure-7x9/business?period=${p.value}&type=${userType}`} style={{
               padding: "0.35rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
               textDecoration: "none",
               background: period === p.value ? "#fff" : "transparent",
@@ -124,7 +147,7 @@ export default async function BusinessPage({ searchParams }: { searchParams: Pro
             <div>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.4rem" }}>
                 <span style={{ fontSize: "0.8rem", color: "#64748b" }}>Free users ({d.freeRenders} renders)</span>
-                <span style={{ fontSize: "0.8rem", fontWeight: 700, color: "#ef4444" }}>-{fmt(d.freeCost)}</span>
+                <span style={{ fontSize: "0.8rem", fontWeight: 700, color: "#ef4444" }}>{fmt(d.freeCost)}</span>
               </div>
               <div style={{ height: "6px", background: "#f1f5f9", borderRadius: "999px" }}>
                 <div style={{ height: "100%", borderRadius: "999px", background: "#ef4444", width: `${d.totalRenders > 0 ? (d.freeRenders / d.totalRenders) * 100 : 0}%` }} />
@@ -185,7 +208,7 @@ export default async function BusinessPage({ searchParams }: { searchParams: Pro
 
       {/* Revenue Chart */}
       <div className="adm-card" style={{ padding: "1.5rem", marginBottom: "1rem" }}>
-        <h4 style={{ margin: "0 0 1.5rem", fontSize: "0.85rem", fontWeight: 700, color: "#0f172a" }}>Daily Revenue</h4>
+        <h4 style={{ margin: "0 0 1.5rem", fontSize: "0.85rem", fontWeight: 700, color: "#0f172a" }}>{d.isHourly ? "Hourly Revenue" : "Daily Revenue"}</h4>
         <div style={{ display: "flex", alignItems: "flex-end", gap: "0.4rem", height: "120px" }}>
           {d.revenueChart.map((r: any) => (
             <div key={r.date} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "0.4rem", height: "100%" }}>

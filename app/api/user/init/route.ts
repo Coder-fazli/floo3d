@@ -33,6 +33,6 @@ export async function POST(request: Request) {
                     { clerkId: userId },
                     { $set: { signupIp: ip ?? "unknown", credits } }
                 );
-                
-                return NextResponse.json({ ok: true, credits });
+                 return NextResponse.json({ ok: true, credits });
+
 }

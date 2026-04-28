@@ -346,40 +346,40 @@ function getDateRange(period: string) {
   return { from, to, dateFilter: from ? { createdAt: { $gte: from, $lte: to } } : {} };
 }
 
-export async function getBusinessAnalytics(period: string) {
+export async function getBusinessAnalytics(period: string, userType: "all" | "free" | "paid" = "all") {
   await connectDb();
   const { from, to, dateFilter } = getDateRange(period);
 
-  // Get all paid user IDs
+  // Get all paid user IDs (lifetime)
   const paidUsers = await User.find({ hasPurchased: true }).distinct("clerkId");
   const paidSet = new Set(paidUsers);
 
   // Get all successful logs in period
-  const logs = await GenerationLog.find({ ...dateFilter, status: "success" }).lean() as any[];
+  const allLogs = await GenerationLog.find({ ...dateFilter, status: "success" }).lean() as any[];
+  const allPaidLogs = allLogs.filter((l: any) => paidSet.has(l.userId));
+  const allFreeLogs = allLogs.filter((l: any) => !paidSet.has(l.userId));
 
-  // Split by free vs paid
-  const paidLogs = logs.filter((l: any) => paidSet.has(l.userId));
-  const freeLogs = logs.filter((l: any) => !paidSet.has(l.userId));
+  // Apply userType filter to the active log set
+  const logs     = userType === "paid" ? allPaidLogs : userType === "free" ? allFreeLogs : allLogs;
+  const paidLogs = userType === "free" ? [] : allPaidLogs;
+  const freeLogs = userType === "paid" ? [] : allFreeLogs;
 
   // Calculate AI costs
   const calcCost = (ls: any[]) => ls.reduce((sum, l) => sum + (MODEL_COSTS[l.model] ?? 0.067), 0);
-  const paidCost = calcCost(paidLogs);
-  const freeCost = calcCost(freeLogs);
-  const totalCost = paidCost + freeCost;
+  const paidCost  = calcCost(allPaidLogs);
+  const freeCost  = calcCost(allFreeLogs);
+  const totalCost = calcCost(logs);
 
   // Cash revenue: orders placed in this period
   const orders = await Order.find(dateFilter).lean() as any[];
   const revenue = orders.reduce((s: number, o: any) => s + (o.amount ?? 0), 0) / 100;
 
-  // Recognized revenue: attribute credit value at render time, not purchase time.
-  // For each paid render in the period, calculate (order_amount / order_credits) per render.
-  // This ensures a user who bought $49 last week and renders this week still counts.
+  // Recognized revenue: attribute credit value at render time
   const paidUserIds = [...new Set(paidLogs.map((l: any) => l.userId))];
   const userOrders = paidUserIds.length > 0
     ? await Order.find({ userId: { $in: paidUserIds } }).sort({ createdAt: 1 }).lean() as any[]
     : [];
 
-  // Build price-per-credit map per user (average across all their orders)
   const userTotalPaid: Record<string, number> = {};
   const userTotalCredits: Record<string, number> = {};
   for (const o of userOrders) {
@@ -393,16 +393,15 @@ export async function getBusinessAnalytics(period: string) {
     pricePerCredit[uid] = userTotalPaid[uid] / userTotalCredits[uid];
   }
 
-  // Sum recognized revenue from paid renders in this period
+  // Each render costs 2 credits, so recognized revenue per render = pricePerCredit × 2
   const recognizedRevenue = paidLogs.reduce((sum: number, l: any) => {
-    return sum + (pricePerCredit[l.userId] ?? 0);
+    return sum + (pricePerCredit[l.userId] ?? 0) * 2;
   }, 0);
 
-  // Net profit uses recognized revenue so timing mismatches don't create false negatives
   const netProfit = recognizedRevenue - totalCost;
-  const margin = recognizedRevenue > 0 ? (netProfit / recognizedRevenue) * 100 : 0;
+  const margin    = recognizedRevenue > 0 ? (netProfit / recognizedRevenue) * 100 : 0;
 
-  // Tool usage breakdown
+  // Tool usage breakdown (filtered by userType)
   const toolCounts: Record<string, number> = {};
   for (const l of logs) {
     toolCounts[l.inputType] = (toolCounts[l.inputType] ?? 0) + 1;
@@ -411,35 +410,50 @@ export async function getBusinessAnalytics(period: string) {
     .map(([tool, count]) => ({ tool, count }))
     .sort((a, b) => b.count - a.count);
 
-  // Conversion rate
-  const totalUsers = await User.countDocuments();
-  const paidUsersCount = await User.countDocuments({ hasPurchased: true });
+  // Conversion rate — period-specific user counts
+  const userDateFilter = from ? { createdAt: { $gte: from, $lte: to } } : {};
+  const totalUsers     = await User.countDocuments(userDateFilter);
+  const paidUsersCount = await User.countDocuments({ ...userDateFilter, hasPurchased: true });
   const conversionRate = totalUsers > 0 ? (paidUsersCount / totalUsers) * 100 : 0;
 
-  // Daily revenue chart (last 30 days regardless of filter for chart)
-  const chartDays = period === "month" ? 30 : period === "week" ? 7 : 7;
-  const chartFrom = new Date(); chartFrom.setDate(chartFrom.getDate() - chartDays); chartFrom.setHours(0,0,0,0);
-  const chartOrders = await Order.find({ createdAt: { $gte: chartFrom } }).lean() as any[];
-  const dailyRevenue: Record<string, number> = {};
-  for (let i = 0; i < chartDays; i++) {
-    const d = new Date(chartFrom); d.setDate(d.getDate() + i);
-    const key = d.toISOString().slice(0, 10);
-    dailyRevenue[key] = 0;
+  // Revenue chart — scoped to the selected period
+  const isHourly = period === "today" || period === "yesterday";
+  const chartOrders = await Order.find(from ? { createdAt: { $gte: from, $lte: to } } : {}).lean() as any[];
+  const revenueChart: { date: string; amount: number }[] = [];
+
+  if (isHourly) {
+    // 24 hourly buckets
+    for (let h = 0; h < 24; h++) {
+      const slot = new Date(from!); slot.setHours(h, 0, 0, 0);
+      const key = `${slot.toISOString().slice(0, 10)}T${String(h).padStart(2, "0")}`;
+      revenueChart.push({ date: key, amount: 0 });
+    }
+    for (const o of chartOrders) {
+      const h = new Date(o.createdAt).getHours();
+      revenueChart[h].amount += (o.amount ?? 0) / 100;
+    }
+  } else {
+    const chartDays = period === "month" ? 30 : 7;
+    const chartFrom = from ?? new Date(new Date().setDate(new Date().getDate() - chartDays));
+    for (let i = 0; i < chartDays; i++) {
+      const d = new Date(chartFrom); d.setDate(d.getDate() + i);
+      revenueChart.push({ date: d.toISOString().slice(0, 10), amount: 0 });
+    }
+    for (const o of chartOrders) {
+      const key = new Date(o.createdAt).toISOString().slice(0, 10);
+      const slot = revenueChart.find(r => r.date === key);
+      if (slot) slot.amount += (o.amount ?? 0) / 100;
+    }
   }
-  for (const o of chartOrders) {
-    const key = new Date(o.createdAt).toISOString().slice(0, 10);
-    if (key in dailyRevenue) dailyRevenue[key] += (o.amount ?? 0) / 100;
-  }
-  const revenueChart = Object.entries(dailyRevenue).map(([date, amount]) => ({ date, amount }));
 
   // All orders in period
   const allOrders = await Order.find(dateFilter).sort({ createdAt: -1 }).lean() as any[];
 
   return JSON.parse(JSON.stringify({
     revenue, recognizedRevenue, totalCost, paidCost, freeCost, netProfit, margin,
-    totalRenders: logs.length, paidRenders: paidLogs.length, freeRenders: freeLogs.length,
+    totalRenders: logs.length, paidRenders: allPaidLogs.length, freeRenders: allFreeLogs.length,
     toolUsage, conversionRate, totalUsers, paidUsersCount,
-    revenueChart, allOrders,
+    revenueChart, isHourly, allOrders,
   }));
 }
 
