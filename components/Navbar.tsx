@@ -51,7 +51,24 @@ const Navbar = () => {
 
         {/* Desktop links */}
         <ul className="navbar-links">
-          <li><a href="#gallery">Gallery</a></li>
+          <li className="navbar-dropdown-wrap">
+            <button className="navbar-links-btn navbar-dropdown-trigger">
+              Tools
+              <svg className="navbar-dropdown-chevron" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
+            <div className="navbar-dropdown">
+              <div className="navbar-dropdown-inner">
+                <a href="/2d-to-3d-floor-plan-converter" target="_blank" rel="noopener noreferrer" className="navbar-dropdown-item">
+                  <span className="navbar-dropdown-item-title">2D → 3D Converter</span>
+                  <span className="navbar-dropdown-item-desc">Turn floor plans into 3D renders</span>
+                </a>
+                <a href="/floor-plan-generator" target="_blank" rel="noopener noreferrer" className="navbar-dropdown-item">
+                  <span className="navbar-dropdown-item-title">Floor Plan Generator</span>
+                  <span className="navbar-dropdown-item-desc">Generate floor plans with AI</span>
+                </a>
+              </div>
+            </div>
+          </li>
           <li><a href="#magic">Magic</a></li>
           <li><a href="#reviews">Love</a></li>
           <li><a href="#journal">Journal</a></li>
@@ -110,7 +127,8 @@ const Navbar = () => {
       {menuOpen && (
         <div className="navbar-mobile">
           <ul>
-            <li><a href="#gallery" onClick={() => setMenuOpen(false)}>Gallery</a></li>
+            <li><a href="/2d-to-3d-floor-plan-converter" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>2D → 3D Converter</a></li>
+            <li><a href="/floor-plan-generator" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>Floor Plan Generator</a></li>
             <li><a href="#magic" onClick={() => setMenuOpen(false)}>Magic</a></li>
             <li><a href="#reviews" onClick={() => setMenuOpen(false)}>Love</a></li>
             <li><a href="#journal" onClick={() => setMenuOpen(false)}>Journal</a></li>

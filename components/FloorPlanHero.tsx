@@ -53,38 +53,52 @@ export default function FloorPlanHero() {
   const { isSignedIn } = useUser();
   const { openSignUp } = useClerk();
   const [sliderPos, setSliderPos] = useState(40);
+  const sliderPosRef = useRef(40);
   const rafRef = useRef<number | null>(null);
   const isDragging = useRef(false);
 
   useEffect(() => {
-    let fromPos = 40, toPos = 75, segStart = 0, segDuration = 1200;
-
-    const pickNext = (cur: number) => {
-      const min = 10, max = 88;
-      const next = cur < 50
-        ? Math.round(58 + Math.random() * 30)
-        : Math.round(min + Math.random() * 32);
-      return Math.max(min, Math.min(max, next));
-    };
+    const STOPS = [92, 6];
+    let stopIndex = 0;
+    let fromPos = 40;
+    let toPos = STOPS[0];
+    let segStart = 0;
+    let sweepDuration = 1800;
+    let pausing = false;
+    let pauseStart = 0;
+    const PAUSE_MS = 1400;
 
     const ease = (t: number) =>
       t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
     const loop = (now: number) => {
-      if (isDragging.current) { segStart = now; rafRef.current = requestAnimationFrame(loop); return; }
-      if (segStart === 0) segStart = now;
-      const progress = Math.min((now - segStart) / segDuration, 1);
-      setSliderPos(Math.round(fromPos + ease(progress) * (toPos - fromPos)));
-      if (progress >= 1) {
-        fromPos = toPos;
-        toPos = pickNext(fromPos);
-        segDuration = 900 + Math.random() * 600;
-        segStart = now;
+      if (isDragging.current) {
+        segStart = 0; pauseStart = 0; pausing = false;
+        rafRef.current = requestAnimationFrame(loop);
+        return;
       }
+      if (pausing) {
+        if (pauseStart === 0) pauseStart = now;
+        if (now - pauseStart >= PAUSE_MS) {
+          pausing = false; pauseStart = 0;
+          stopIndex = (stopIndex + 1) % STOPS.length;
+          fromPos = toPos; toPos = STOPS[stopIndex];
+          sweepDuration = 1600 + Math.random() * 400;
+          segStart = 0;
+        }
+        rafRef.current = requestAnimationFrame(loop);
+        return;
+      }
+      if (segStart === 0) segStart = now;
+      const progress = Math.min((now - segStart) / sweepDuration, 1);
+      const pos = Math.round(fromPos + ease(progress) * (toPos - fromPos));
+      setSliderPos(pos);
+      sliderPosRef.current = pos;
+      if (progress >= 1) pausing = true;
       rafRef.current = requestAnimationFrame(loop);
     };
 
-    const t = setTimeout(() => { segStart = 0; rafRef.current = requestAnimationFrame(loop); }, 400);
+    const t = setTimeout(() => { rafRef.current = requestAnimationFrame(loop); }, 1600);
     return () => { clearTimeout(t); if (rafRef.current) cancelAnimationFrame(rafRef.current); };
   }, []);
 
@@ -110,7 +124,7 @@ export default function FloorPlanHero() {
 
           {/* Sub */}
           <p className="hph-sub">
-            Convert any 2D floor plan, blueprint, or house plan to a stunning 3D model free online — no credit card, no login, no 3D software. Just upload your 2D drawing and AI does the rest in seconds.
+            Convert any 2D floor plan, blueprint, or house plan to a stunning 3D model free online. Just upload your 2D drawing and AI does the rest in seconds.
           </p>
 
           {/* CTAs */}
@@ -161,25 +175,16 @@ export default function FloorPlanHero() {
           <div className="hph-slider-container">
             <ReactCompareSlider
               position={sliderPos}
-              onPositionChange={setSliderPos}
+              onPositionChange={(p) => { setSliderPos(p); sliderPosRef.current = p; }}
               onPointerDown={() => { isDragging.current = true; }}
               onPointerUp={() => { isDragging.current = false; }}
               onPointerLeave={() => { isDragging.current = false; }}
-              onMouseEnter={() => { isDragging.current = true; }}
-              onMouseLeave={() => { isDragging.current = false; }}
+              onPointerCancel={() => { isDragging.current = false; }}
               style={{ width: "100%", height: "100%" }}
               handle={
                 <ReactCompareSliderHandle
-                  buttonStyle={{
-                    background: "rgba(255,255,255,0.9)",
-                    backdropFilter: "blur(12px)",
-                    border: "1px solid #ffffff",
-                    boxShadow: "0 10px 25px -5px rgba(0,0,0,0.15)",
-                    color: "var(--brand-color)",
-                    width: "3.5rem",
-                    height: "3.5rem",
-                  }}
-                  linesStyle={{ background: "rgba(255,255,255,0.3)", width: 1 }}
+                  buttonStyle={{ display: "none" }}
+                  linesStyle={{ background: "rgba(255,255,255,0.2)", width: 1 }}
                 />
               }
               itemOne={<ReactCompareSliderImage src="/real-2d-plan.jpg" alt="2D Floor Plan" style={{ objectFit: "cover" }} />}
@@ -187,11 +192,11 @@ export default function FloorPlanHero() {
             />
 
             {/* Labels */}
-            <span style={{ position:"absolute", top:24, left:24, zIndex:20, padding:"8px 16px", background:"rgba(255,255,255,0.15)", color:"#fff", fontWeight:700, fontSize:"0.65rem", letterSpacing:"0.15em", borderRadius:100, backdropFilter:"blur(20px)", border:"1px solid rgba(255,255,255,0.2)", pointerEvents:"none", textTransform:"uppercase" }}>
-              Before: 2D Plan
+            <span style={{ position:"absolute", top:12, left:12, zIndex:20, padding:"5px 10px", background:"rgba(255,255,255,0.15)", color:"#fff", fontWeight:700, fontSize:"0.55rem", letterSpacing:"0.12em", borderRadius:100, backdropFilter:"blur(20px)", border:"1px solid rgba(255,255,255,0.2)", pointerEvents:"none", textTransform:"uppercase", whiteSpace:"nowrap" }}>
+              Before
             </span>
-            <span style={{ position:"absolute", top:24, right:24, zIndex:20, padding:"8px 16px", background:"rgba(255,255,255,0.15)", color:"#fff", fontWeight:700, fontSize:"0.65rem", letterSpacing:"0.15em", borderRadius:100, backdropFilter:"blur(20px)", border:"1px solid rgba(255,255,255,0.2)", pointerEvents:"none", textTransform:"uppercase" }}>
-              After: 3D Render
+            <span style={{ position:"absolute", top:12, right:12, zIndex:20, padding:"5px 10px", background:"rgba(255,255,255,0.15)", color:"#fff", fontWeight:700, fontSize:"0.55rem", letterSpacing:"0.12em", borderRadius:100, backdropFilter:"blur(20px)", border:"1px solid rgba(255,255,255,0.2)", pointerEvents:"none", textTransform:"uppercase", whiteSpace:"nowrap" }}>
+              After
             </span>
           </div>
 

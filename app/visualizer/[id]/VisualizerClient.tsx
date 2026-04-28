@@ -95,12 +95,12 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
 
   const [isNewMode, setIsNewMode] = useState(id === "new");
 
-  // Guest mode (embedded pages, no login)
-  const GUEST_CREDITS_KEY = "guest_credits";
-  const GUEST_CREDITS_DEFAULT = 2;
-  const [guestBase64, setGuestBase64] = useState<string | null>(null);
-  const [guestResult, setGuestResult] = useState<string | null>(null);
-  const [guestCredits, setGuestCredits] = useState(GUEST_CREDITS_DEFAULT);
+  // Guest mode disabled — sign-up required
+  // const GUEST_CREDITS_KEY = "guest_credits";
+  // const GUEST_CREDITS_DEFAULT = 2;
+  // const [guestBase64, setGuestBase64] = useState<string | null>(null);
+  // const [guestResult, setGuestResult] = useState<string | null>(null);
+  // const [guestCredits, setGuestCredits] = useState(GUEST_CREDITS_DEFAULT);
 
   const previewCardRef = useRef<HTMLDivElement>(null);
   const [project, setProject] = useState<any>(null);
@@ -193,44 +193,27 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
     return () => clearInterval(interval);
   }, [user]);
 
-  useEffect(() => {
-    if (!embeddedId) return;
-    const stored = localStorage.getItem(GUEST_CREDITS_KEY);
-    if (stored === null) {
-      localStorage.setItem(GUEST_CREDITS_KEY, String(GUEST_CREDITS_DEFAULT));
-    } else {
-      const parsed = Math.max(0, parseInt(stored) || 0);
-      // Reset if stored value exceeds the current max (stale from old limit)
-      const clamped = Math.min(parsed, GUEST_CREDITS_DEFAULT);
-      if (clamped !== parsed) localStorage.setItem(GUEST_CREDITS_KEY, String(clamped));
-      setGuestCredits(clamped);
-    }
-  }, [embeddedId]);
+  // Guest mode localStorage init disabled
+  // useEffect(() => {
+  //   if (!embeddedId) return;
+  //   const stored = localStorage.getItem(GUEST_CREDITS_KEY);
+  //   if (stored === null) {
+  //     localStorage.setItem(GUEST_CREDITS_KEY, String(GUEST_CREDITS_DEFAULT));
+  //   } else {
+  //     const parsed = Math.max(0, parseInt(stored) || 0);
+  //     const clamped = Math.min(parsed, GUEST_CREDITS_DEFAULT);
+  //     if (clamped !== parsed) localStorage.setItem(GUEST_CREDITS_KEY, String(clamped));
+  //     setGuestCredits(clamped);
+  //   }
+  // }, [embeddedId]);
 
   const runGeneration = async () => {
     if (isProcessing) return;
     setMobileTab("history");
 
-    // Guest mode — no login, no project, direct generation
+    // Guest mode disabled — redirect to sign up
     if (embeddedId && !user) {
-      if (!guestBase64) return;
-      if (guestCredits <= 0) { openSignUp({ fallbackRedirectUrl: "/dashboard" }); return; }
-      setIsProcessing(true);
-      try {
-        const res = await fetch("/api/guest-generate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ base64Image: guestBase64, renderStyle, roomType, inputType: "floor-plan" }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Generation failed");
-        setGuestResult(data.renderedBase64);
-        setMobileTab("history");
-        const next = Math.max(0, guestCredits - 1);
-        setGuestCredits(next);
-        localStorage.setItem(GUEST_CREDITS_KEY, String(next));
-      } catch (e: any) { console.error(e); }
-      finally { setIsProcessing(false); }
+      openSignUp({ fallbackRedirectUrl: "/dashboard" });
       return;
     }
 
@@ -334,14 +317,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
     if (!["image/jpeg", "image/png"].includes(file.type)) return;
     if (file.size > 10 * 1024 * 1024) return;
     if (!user) {
-      if (embeddedId) {
-        // Guest mode — store locally, no project creation
-        const reader = new FileReader();
-        reader.onload = () => { setGuestBase64(reader.result as string); setGuestResult(null); };
-        reader.readAsDataURL(file);
-      } else {
-        openSignUp({ fallbackRedirectUrl: "/dashboard" });
-      }
+      openSignUp({ fallbackRedirectUrl: "/dashboard" });
       return;
     }
     if (isCreating) return;
@@ -874,25 +850,6 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
           </div>
         )}
 
-        {/* Embedded info bar */}
-        {embeddedId && (
-          <div className="viz-embed-bar">
-            <span className="viz-embed-bar-icon">⚡</span>
-            {user ? (
-              <span className="viz-embed-bar-text">
-                You have <strong>{credits ?? "—"} credits</strong> remaining.
-              </span>
-            ) : (
-              <span className="viz-embed-bar-text">
-                <strong>{guestCredits} free generation{guestCredits !== 1 ? "s" : ""}</strong> remaining — no sign up needed.{" "}
-                <button className="viz-embed-bar-link" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>
-                  Sign up free → get 2 credits
-                </button>
-                {" "}· no credit card needed
-              </span>
-            )}
-          </div>
-        )}
 
 
         {/* Workspace: sidebar + output */}
@@ -1106,7 +1063,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
               <button
                 className="viz-generate-btn"
                 onClick={runGeneration}
-                disabled={isProcessing || (!isAdminView && credits !== null && credits < 2) || (embeddedId && !user ? !guestBase64 : (activeInputType !== "floor-plan-generator" && (isNewMode || !project)))}
+                disabled={isProcessing || (!isAdminView && credits !== null && credits < 2) || (activeInputType !== "floor-plan-generator" && (isNewMode || !project))}
               >
                 {isProcessing ? (
                   <>
@@ -1119,7 +1076,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                     sparklesCount={6}
                     colors={{ first: "#fff176", second: "#ffd54f" }}
                   >
-                    {(embeddedId && !user) ? (guestResult ? "✦ Regenerate" : "✦ Generate") : (currentImage ? "✦ Regenerate" : "✦ Generate")}
+                    {currentImage ? "✦ Regenerate" : "✦ Generate"}
                   </SparklesText>
                 )}
               </button>
@@ -1136,18 +1093,8 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
 
             {/* Comparison slider */}
             <div className="viz-compare-wrap">
-              {/* Guest mode result */}
-              {embeddedId && !user && guestResult && guestBase64 ? (
-                <ReactCompareSlider
-                  defaultValue={50}
-                  style={{ width: "100%", height: "100%", transform: `scale(${zoomLevel})`, transformOrigin: "center", transition: "transform 0.3s ease" }}
-                  handle={<ReactCompareSliderHandle buttonStyle={{ background: "#fff", border: "none", boxShadow: "0 2px 16px rgba(0,0,0,0.25)", color: "var(--brand-color)" }} linesStyle={{ background: "var(--brand-color)", width: 3, opacity: 0.9 }} />}
-                  itemOne={<ReactCompareSliderImage src={guestBase64} alt="Original" style={{ objectFit: "contain", background: "#f1f5f9" }} />}
-                  itemTwo={<ReactCompareSliderImage src={guestResult} alt="Result" style={{ objectFit: "contain", background: "#f1f5f9", cursor: "zoom-in" }} onClick={() => setLightboxOpen(true)} onContextMenu={e => e.preventDefault()} />}
-                />
-              ) : embeddedId && !user && guestBase64 ? (
-                <img src={guestBase64} alt="Uploaded" style={{ width: "100%", height: "100%", objectFit: "contain", background: "#f1f5f9" }} onContextMenu={e => e.preventDefault()} />
-              ) : activeInputType === "floor-plan-generator" && currentImage ? (
+              {/* Guest mode disabled */}
+              {activeInputType === "floor-plan-generator" && currentImage ? (
                 <img
                   src={currentImage}
                   alt="Generated Floor Plan"

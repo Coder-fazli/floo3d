@@ -6,14 +6,12 @@ import DesignOptions from "@/components/DesignOptions";
 import HowItWorks2 from "@/components/HowItWorks2";
 import RecentProjects from "@/components/RecentProjects";
 import Footer from "@/components/Footer";
-import { Suspense } from "react";
-import VisualizerClient from "@/app/visualizer/[id]/VisualizerClient";
 import FAQ from "@/components/FAQ";
 import TestimonialsMarquee, { type Testimonial, Highlight } from "@/components/TestimonialsMarquee";
-import { getSiteSettings, getAppFrames, getHomeImages } from "@/lib/actions";
+import { getSiteSettings, getHomeImages } from "@/lib/actions";
 
 const DEFAULT_TITLE = "2D to 3D Floor Plan Converter — Convert 2D Floor Plan to 3D Model Free Online";
-const DEFAULT_DESC = "Convert 2D floor plans to 3D models free online — no credit card, no login required. Works with blueprints, house plans & hand-drawn sketches. Results in seconds.";
+const DEFAULT_DESC = "Convert 2D floor plans to 3D models free online. Works with blueprints, house plans & hand-drawn sketches. Results in seconds.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSiteSettings();
@@ -79,17 +77,17 @@ const jsonLd = {
         {
           "@type": "Question",
           "name": "Do I need to sign up or create an account?",
-          "acceptedAnswer": { "@type": "Answer", "text": "No. You can convert your first floor plans completely free without signing up. You get 2 free generations right here on the page — no account, no email, nothing. Sign up only when you want more." },
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes, a free account is required to generate renders. Sign up takes seconds — no credit card needed. You get 2 free credits instantly on sign up." },
         },
         {
           "@type": "Question",
           "name": "Is it really free? Do you need a credit card?",
-          "acceptedAnswer": { "@type": "Answer", "text": "100% free to start — no credit card required, ever. We don't ask for payment details to try the tool. You get 2 free generations as a guest. Sign up free and get 2 credits instantly, still no credit card needed." },
+          "acceptedAnswer": { "@type": "Answer", "text": "100% free to start — no credit card required. Create a free account and get 2 credits instantly. Pay only when you need more." },
         },
         {
           "@type": "Question",
           "name": "How many free conversions do I get?",
-          "acceptedAnswer": { "@type": "Answer", "text": "As a guest you get 2 free 2D to 3D conversions right on this page. Create a free account and get 2 credits added to your balance immediately. No credit card, no subscription required." },
+          "acceptedAnswer": { "@type": "Answer", "text": "Create a free account and get 2 credits added to your balance immediately. No credit card, no subscription required." },
         },
         {
           "@type": "Question",
@@ -181,7 +179,6 @@ const converterTestimonials: Testimonial[] = [
 ];
 
 export default async function FloorPlanConverterPage() {
-  const [frames, homeImages] = await Promise.all([getAppFrames(), getHomeImages()]);
   return (
     <div className="home">
       <script
@@ -194,32 +191,28 @@ export default async function FloorPlanConverterPage() {
 
       <HowItWorks2 />
 
-      <section id="try-converter">
-        <Suspense><VisualizerClient embeddedId="new" frames={frames} /></Suspense>
-      </section>
-
       <DesignOptions />
 
       <RecentProjects />
 
       <TestimonialsMarquee items={converterTestimonials} />
 
-      <FAQ faqs={[
+      <FAQ twoColumns faqs={[
         {
           q: "Do I need to sign up or create an account?",
-          a: "No. You can convert your first floor plans completely free without signing up. You get 2 free generations right here on the page — no account, no email, nothing. Sign up only when you want more.",
+          a: "Yes, a free account is required to generate renders. Sign up takes seconds — no credit card needed. You get 2 free credits instantly on sign up.",
         },
         {
           q: "Is it really free? Do you need a credit card?",
-          a: "100% free to start — no credit card required, ever. We don't ask for payment details to try the tool. You get 2 free generations as a guest. Sign up free and get 2 credits instantly, still no credit card needed.",
+          a: "100% free to start — no credit card required. Create a free account and get 2 credits instantly. Pay only when you need more.",
         },
         {
           q: "How many free conversions do I get?",
-          a: "As a guest you get 2 free 2D to 3D conversions right on this page. Create a free account and get 2 credits added to your balance immediately. No credit card, no subscription required.",
+          a: "Create a free account and get 2 credits added to your balance immediately. No credit card, no subscription required.",
         },
         {
           q: "What happens when I run out of free credits?",
-          a: "When your free credits run out you'll see a prompt to sign up. Creating a free account gives you 2 credits instantly. After that, you can purchase more credit packs — still no subscription, pay only for what you use.",
+          a: "When your free credits run out you can purchase more credit packs — no subscription, pay only for what you use.",
         },
         {
           q: "What types of floor plans does it accept?",

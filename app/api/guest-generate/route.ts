@@ -1,5 +1,12 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
+
+// Guest mode disabled — sign-up required to generate
+export async function POST() {
+  return NextResponse.json({ error: "Sign up to use this feature." }, { status: 403 });
+}
+
+/*
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { buildPrompt } from "@/lib/prompts";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
@@ -34,18 +41,15 @@ export async function POST(request: Request) {
       inputType = "floor-plan",
     } = await request.json();
 
-
     if (!base64Image || base64Image.length > 10_000_000)
-  {  return NextResponse.json({ error: "No image provided or image too large" }, { status: 400 });
-  }
+      return NextResponse.json({ error: "No image provided or image too large" }, { status: 400 });
 
     const mimeMatch = base64Image.match(/^data:(image\/[\w+]+);base64,/);
     const mimeType = (mimeMatch?.[1] as string) || "image/jpeg";
     const base64 = base64Image.replace(/^data:image\/[\w+]+;base64,/, "");
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-3.1-flash-image-preview", // $0.067/image
-      // model: "gemini-2.5-flash-image",       // $0.039/image — activate when ready
+      model: "gemini-3.1-flash-image-preview",
       generationConfig: { responseModalities: ["IMAGE", "TEXT"] } as any,
     });
 
@@ -57,9 +61,8 @@ export async function POST(request: Request) {
     const parts = result.response.candidates![0].content.parts;
     const imagePart = parts.find((p: any) => p.inlineData);
 
-    if (!imagePart) {
+    if (!imagePart)
       return NextResponse.json({ error: "No image generated" }, { status: 500 });
-    }
 
     return NextResponse.json({
       renderedBase64: `data:image/png;base64,${imagePart.inlineData!.data}`,
@@ -70,3 +73,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: error?.message || "Generation failed" }, { status: 500 });
   }
 }
+*/

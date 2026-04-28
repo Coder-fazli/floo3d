@@ -1,7 +1,6 @@
 "use client";
 
 import "./FAQ.css";
-import Image from "next/image";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -32,12 +31,11 @@ export default function FAQ({ faqs, twoColumns }: { faqs?: { q: string; a: strin
     <section className="faq-section" id="answers">
       <div className={`faq-inner${twoColumns ? " faq-inner-full" : ""}`}>
 
-        {/* Left — Questions */}
-        <div className={`faq-left${twoColumns ? " faq-left-full" : ""}`}>
+        <div className="faq-left faq-left-full">
           <header className="faq-header">
             <span className="faq-eyebrow">Help Center</span>
             <h2 className="faq-title">Got Questions?<br />We've Got Answers.</h2>
-            <p className="faq-sub">Select a card to explore how MyHomeStyler transforms your architectural workflow.</p>
+            <p className="faq-sub">Everything you need to know about MyHomeStyler.</p>
           </header>
 
           <div className={`faq-list${twoColumns ? " faq-list-two-col" : ""}`}>
@@ -75,60 +73,6 @@ export default function FAQ({ faqs, twoColumns }: { faqs?: { q: string; a: strin
             ))}
           </div>
         </div>
-
-        {!twoColumns && (
-        <div className="faq-right">
-          <div className="faq-right-label">The Magic of MyHomeStyler</div>
-
-          <div className="faq-visual-wrap">
-            {/* Floating cards */}
-            <div className="faq-float faq-float-tl">
-              <svg width="44" height="44" fill="none" stroke="var(--brand-color)" viewBox="0 0 24 24">
-                <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
-              </svg>
-            </div>
-            <div className="faq-float faq-float-br">
-              <svg width="52" height="52" fill="none" stroke="#fff" viewBox="0 0 24 24">
-                <path d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
-              </svg>
-            </div>
-
-            {/* Central card — hover to reveal 3D */}
-            <div className="faq-card-group">
-
-              {/* 3D render layer — revealed on hover */}
-              <div className="faq-layer faq-layer-3d">
-                <Image src="/faq-3d.png" alt="3D Floor Plan Render" className="faq-layer-img faq-img-scale" fill style={{ objectFit: "cover" }} />
-                <div className="faq-tint" />
-                <div className="faq-scanner-line" />
-              </div>
-
-              {/* 2D blueprint layer — hidden on hover */}
-              <div className="faq-layer faq-layer-2d">
-                <div className="faq-2d-inner">
-                  <Image src="/faq-2d.jpg" alt="2D Blueprint" className="faq-layer-img faq-img-gray" fill style={{ objectFit: "cover" }} />
-                </div>
-                <div className="faq-2d-overlay" />
-                <div className="faq-grid-overlay" />
-              </div>
-
-              {/* Labels */}
-              <div className="faq-label-2d">Source: 2D Plan</div>
-              <div className="faq-label-3d">Output: 3D Visualization</div>
-
-              {/* Hover CTA */}
-              <div className="faq-hover-cta">
-                <span className="faq-cta-text">Hover to Render</span>
-                <span className="faq-cta-dot" />
-              </div>
-            </div>
-
-            {/* Technical accent lines */}
-            <div className="faq-accent faq-accent-right" />
-            <div className="faq-accent faq-accent-left" />
-          </div>
-        </div>
-        )}
 
       </div>
     </section>
