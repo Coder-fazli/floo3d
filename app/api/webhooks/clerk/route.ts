@@ -3,6 +3,7 @@
  import { NextResponse } from "next/server";
  import { connectDb } from "@/lib/db";
  import User from "@/lib/models/User";
+ import { sendWelcomeEmail } from "@/lib/email";
 
   export const runtime = "nodejs";
 
@@ -52,7 +53,7 @@
             await User.findOneAndUpdate(
                 { clerkId: id },
                 {
-                    $set: {
+                     $set: {
                         ...(name && { name }),
                         ...(email && { email }),
                         ...(image_url && { imageUrl: image_url }),
@@ -61,6 +62,11 @@
                 },
                 { upsert: true, new: true }
             );
+             if (evt.type === "user.created" && email) {
+                    await sendWelcomeEmail(email, name).catch(() => 
+                    {});
+                }
+
         }
 
         return NextResponse.json({ received: true });
