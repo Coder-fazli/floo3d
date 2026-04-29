@@ -22,7 +22,10 @@ export async function POST(request: Request) {
            // Already initilized
            if (user.signupIp !== null) return NextResponse.json({ ok: true });
 
-           const ipAlreadyUsed = 
+           const whitelisted = process.env.WHITELISTED_IPS?.split(",").map(s => s.trim()).includes(ip ?? "");
+
+           const ipAlreadyUsed =
+            !whitelisted &&
             ip &&
                 (await User.exists({ signupIp: ip, clerkId: {
                 $ne: userId } }));

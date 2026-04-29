@@ -1,6 +1,7 @@
 import { Search } from "lucide-react";
 import Link from "next/link";
 import { getAllUSers, getAllProjects } from "@/lib/actions.admin";
+import { DeleteUserButton } from "./DeleteUserButton";
 
 const COUNTRY_NAMES = new Intl.DisplayNames(["en"], { type: "region" });
 
@@ -90,7 +91,7 @@ export default async function AdminUsers() {
                   <td style={{ color: "#94a3b8" }}>{u.createdAt}</td>
                   <td className="right" style={{ display: "flex", gap: "1rem", justifyContent: "flex-end" }}>
                     <Link href={`/secure-7x9/users/${u.clerkId}`} className="adm-action-link">View</Link>
-                    <button className="adm-action-link adm-action-link-danger">Delete</button>
+                    <DeleteUserButton clerkId={u.clerkId} name={u.name ?? u.email} />
                   </td>
                 </tr>
               ))}

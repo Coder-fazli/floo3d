@@ -63,8 +63,12 @@
                 { upsert: true, new: true }
             );
              if (evt.type === "user.created" && email) {
-                    await sendWelcomeEmail(email, name).catch(() => 
-                    {});
+                    console.log("[Clerk Webhook] Sending welcome email to:", email);
+                    try {
+                        await sendWelcomeEmail(email, name);
+                    } catch (err: any) {
+                        console.error("[Clerk Webhook] Email failed:", err?.message ?? err);
+                    }
                 }
 
         }
