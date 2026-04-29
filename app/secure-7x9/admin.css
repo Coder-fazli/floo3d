@@ -26,10 +26,9 @@
 }
 
 .adm-sidebar-brand {
-    padding: 1.5rem;
+    padding: 1.25rem 1.5rem;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
     border-bottom: 1px solid #e2e8f0;
 }
 

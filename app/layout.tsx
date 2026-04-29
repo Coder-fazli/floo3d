@@ -29,9 +29,9 @@ export async function generateMetadata() {
       canonical: "https://myhomestyler.com",
     },
     icons: {
-      icon: "/favicon.png",
-      shortcut: "/favicon.png",
-      apple: "/favicon.png",
+      icon: s?.faviconUrl ?? "/favicon.png",
+      shortcut: s?.faviconUrl ?? "/favicon.png",
+      apple: s?.faviconUrl ?? "/favicon.png",
     },
     openGraph: {
       title,

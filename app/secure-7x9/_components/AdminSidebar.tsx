@@ -34,13 +34,7 @@ export default function AdminSidebar() {
   return (
     <aside className="adm-sidebar">
       <div className="adm-sidebar-brand">
-        <div className="adm-sidebar-logo">
-          <Image src="/logo.png" alt="Floo3D" width={32} height={32} />
-        </div>
-        <div>
-          <p className="adm-sidebar-brand-name">Floo3D Admin</p>
-          <p className="adm-sidebar-brand-sub">Management Panel</p>
-        </div>
+        <Image src="/logo.png" alt="MyHomeStyler" width={120} height={40} style={{ objectFit: "contain", objectPosition: "left" }} />
       </div>
 
       <nav className="adm-sidebar-nav">
