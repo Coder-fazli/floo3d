@@ -954,4 +954,6 @@
     .adm-search-input.proj-search { width: 100%; box-sizing: border-box; }
     .adm-topbar { padding: 0 1rem; }
     .adm-topbar-user-info { display: none; }
+    .adm-table .col-hide-mobile { display: none; }
+    .adm-search-input { width: 100%; box-sizing: border-box; }
 }
