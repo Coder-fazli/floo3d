@@ -4,6 +4,29 @@ import { useEffect, useState } from "react";
 import { getSiteSettings } from "@/lib/actions";
 import { saveSiteSettings, saveFloorPlanSettings, saveGeneralSettings, saveLogoImage, backfillSubscriptionOrders } from "@/lib/actions.admin";
 
+function cropToSquare(dataUrl: string, size = 256): Promise<string> {
+  return new Promise((resolve) => {
+    const img = new window.Image();
+    img.onload = () => {
+      const s = Math.min(img.width, img.height);
+      const canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(
+        img,
+        (img.width - s) / 2,
+        (img.height - s) / 2,
+        s, s,
+        0, 0,
+        size, size
+      );
+      resolve(canvas.toDataURL("image/png"));
+    };
+    img.src = dataUrl;
+  });
+}
+
 export default function AdminSettings() {
   // Home page SEO
   const [metaTitle, setMetaTitle] = useState("");
@@ -208,7 +231,7 @@ export default function AdminSettings() {
           <div>
             <label className="adm-form-label">Favicon</label>
             <div style={{ width: 60, height: 60, border: "2px dashed #e2e8f0", borderRadius: "0.75rem", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", background: "#f8fafc", cursor: "pointer" }}
-              onClick={() => { const i = document.createElement("input"); i.type = "file"; i.accept = "image/*"; i.onchange = async (e) => { const f = (e.target as HTMLInputElement).files?.[0]; if (!f) return; setFaviconUploading(true); const r = new FileReader(); r.onload = async () => { const url = await saveLogoImage(r.result as string, "favicon"); setFaviconUrl(url); setFaviconUploading(false); }; r.readAsDataURL(f); }; i.click(); }}>
+              onClick={() => { const i = document.createElement("input"); i.type = "file"; i.accept = "image/*"; i.onchange = async (e) => { const f = (e.target as HTMLInputElement).files?.[0]; if (!f) return; setFaviconUploading(true); const r = new FileReader(); r.onload = async () => { const cropped = await cropToSquare(r.result as string, 256); const url = await saveLogoImage(cropped, "favicon"); setFaviconUrl(url); setFaviconUploading(false); }; r.readAsDataURL(f); }; i.click(); }}>
               {faviconUploading ? <span style={{ fontSize: "0.65rem", color: "#94a3b8" }}>…</span>
                 : faviconUrl ? <img src={faviconUrl} alt="Favicon" style={{ width: 40, height: 40, objectFit: "contain" }} />
                 : <span style={{ fontSize: "0.65rem", color: "#94a3b8", textAlign: "center" }}>Click</span>}
