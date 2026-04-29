@@ -317,7 +317,7 @@
 }
 
 .adm-table th {
-    padding: 0.875rem 1.5rem;
+    padding: 0.875rem 1rem;
     font-size: 0.7rem;
     font-weight: 700;
     color: #94a3b8;
@@ -338,7 +338,7 @@
 .adm-table tbody tr:hover { background: #fafafa; }
 
 .adm-table td {
-    padding: 1rem 1.5rem;
+    padding: 0.875rem 1rem;
     font-size: 0.875rem;
     color: #27282f;
     vertical-align: middle;

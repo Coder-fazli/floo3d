@@ -7,6 +7,12 @@ import { DeleteUserButton } from "./DeleteUserButton";
 
 const COUNTRY_NAMES = new Intl.DisplayNames(["en"], { type: "region" });
 
+const fmtDate = (d: any) => {
+  if (!d) return "—";
+  try { return new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }); }
+  catch { return "—"; }
+};
+
 interface Props {
   users: any[];
   projectCountByUser: Record<string, number>;
@@ -41,7 +47,7 @@ export function UsersTable({ users, projectCountByUser }: Props) {
         </div>
       </div>
 
-      <div className="adm-card" style={{ overflow: "hidden" }}>
+      <div className="adm-card" style={{ overflow: "clip" }}>
         <div style={{ overflowX: "auto" }}>
           <table className="adm-table">
             <thead>
@@ -103,7 +109,7 @@ export function UsersTable({ users, projectCountByUser }: Props) {
                     <input className="adm-credits-input" type="number" defaultValue={u.credits} />
                   </td>
                   <td className="col-hide-mobile">{projectCountByUser[u.clerkId] ?? 0}</td>
-                  <td className="col-hide-mobile" style={{ color: "#94a3b8" }}>{u.createdAt}</td>
+                  <td className="col-hide-mobile" style={{ color: "#94a3b8", whiteSpace: "nowrap" }}>{fmtDate(u.createdAt)}</td>
                   <td className="right" style={{ display: "flex", gap: "1rem", justifyContent: "flex-end" }}>
                     <Link href={`/secure-7x9/users/${u.clerkId}`} className="adm-action-link">View</Link>
                     <DeleteUserButton clerkId={u.clerkId} name={u.name ?? u.email} />

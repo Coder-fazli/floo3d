@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ['geoip-lite'],
   async redirects() {
     return [
       { source: '/privacy', destination: '/privacy-policy', permanent: true },

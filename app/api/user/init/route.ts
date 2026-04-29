@@ -2,7 +2,9 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { connectDb } from "@/lib/db";
 import User from "@/lib/models/User";
-import geoip from "geoip-lite";                  
+import geoip from "geoip-lite";
+
+export const dynamic = 'force-dynamic';                  
                                             
 
 export async function POST(request: Request) {
