@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 import { uploadImage } from "@/lib/cloudinary";
-import { updateProject, getCredits, deductCredit, getModelSettings, getUserInfo, refundCredit } from "@/lib/actions";
+import { updateProject, getCredits, deductCredit, getUserInfo, refundCredit } from "@/lib/actions";
 import User from "@/lib/models/User";
 import { buildPrompt } from "@/lib/prompts";
 import Project from "@/lib/models/Project";
