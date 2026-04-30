@@ -13,6 +13,7 @@ const PricingSettingsSchema = new mongoose.Schema({
   eliteCredits:       { type: Number, default: 300 },
   eliteDescription:   { type: String, default: "Highest accuracy AI — for architects, agencies and real estate professionals who demand the best." },
   eliteFeatures:      { type: [String], default: ["300 credits — 150 AI renders", "All Pro features included", "Highest accuracy AI model", "Superior material & texture detail", "More realistic lighting & shadows", "Sharper architectural lines", "Best for client presentations", "Commercial usage rights", "Priority support"] },
+  topUpPricePerCredit: { type: Number, default: 0.5 },
 }, { timestamps: true });
 
 const PricingSettings =

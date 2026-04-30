@@ -87,7 +87,7 @@ export async function POST(request: Request) {
             generationCount: 1,
           }),
           GenerationLog.create({
-            userId,
+           userId,
             inputType: "floor-plan-generator",
             model: modelName,
             status: "success",

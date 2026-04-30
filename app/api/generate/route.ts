@@ -35,7 +35,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid image URL" }, { status: 400 });
 
     await connectDb();
-    const userDoc = await User.findOne({ clerkId: userId }, { suspended: 1, credits: 1, subscriptionStatus: 1 }).lean() as any;
+    const userDoc = await User.findOne({ clerkId: userId }, { suspended: 1, credits: 1, subscriptionStatus: 1, autoTopUp: 1, stripeCustomerId: 1 }).lean() as any;
     
     if (userDoc?.suspended) return NextResponse.json({ error: "suspended" }, { status: 403 });
     if (userDoc?.subscriptionStatus && userDoc.subscriptionStatus !== "active" ) return NextResponse.json({ error: "Subscription not active" }, { status: 403 });
@@ -59,8 +59,22 @@ export async function POST(request: Request) {
     const isUnlimited = credits >= 99999;
     if (!isUnlimited) {
       const ok = await deductCredit(userId);
-      if (!ok) return NextResponse.json({ error: "No credits left" }, { status: 403 });
-      creditDeducted = true
+      if (!ok) {
+        if (userDoc.autoTopUp && userDoc.stripeCustomerId) {
+          const topup = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/stripe/auto-topup`, {
+            method: "POST",
+            headers: { Cookie: request.headers.get("cookie") ?? "" },
+          });
+          if (topup.ok) {
+            const retryOk = await deductCredit(userId);
+            if (!retryOk) return NextResponse.json({ error: "No credits left" }, { status: 403 });
+          } else {
+            return NextResponse.json({ error: "Auto top-up failed — please check your payment method." }, { status: 402 });
+          }
+        } else {
+          return NextResponse.json({ error: "No credits left" }, { status: 403 });
+        }
+      }
        }
 
     const imageResponse = await fetch(imageUrl);

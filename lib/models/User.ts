@@ -18,8 +18,11 @@ const UserSchema = new Schema({
     currentPeriodEnd:   { type: Date,   default: null }, 
     subscriptionCredits:    { type: Number, default: null },
     lastInvoiceEventId:     { type: String, default: null },
-    signupIp: { type: String, default: null }
+    signupIp: { type: String, default: null },
+    autoTopUp: { type: Boolean, default: false },
+    autoTopUpCredits: { type: Number, default: 10 },
     },
+    
 { timestamps: true });
 
 UserSchema.index({ signupIp: 1 });

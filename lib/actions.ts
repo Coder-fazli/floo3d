@@ -5,6 +5,7 @@ import Project from "./models/Project";
 import User from "./models/User";
 import SiteSettings from "./models/SiteSettings";
 import AppFrames from "./models/AppFrames";
+import { auth } from "@clerk/nextjs/server";
 
 export type FramesData = {
   fallbacks: Record<string, { before?: string; after?: string }>;
@@ -154,4 +155,30 @@ export async function saveUserCountry(clerkId: string, country: string): Promise
     { clerkId, $or: [{ country: { $exists: false } }, { country: "" }] },
     { $set: { country } }
   );
+}
+
+export async function saveAutoTopUpSettings(autoTopUp: boolean, autoTopUpCredits: number) {
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+  await connectDb();
+  await User.findOneAndUpdate(
+    { clerkId: userId },
+    { $set: { autoTopUp, autoTopUpCredits } }
+  );
+}
+
+export async function getAutoTopUpSettings() {
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+  await connectDb();
+  const user = await User.findOne(
+    { clerkId: userId }, 
+    { autoTopUp: 1, autoTopUpCredits: 1, 
+      stripeCustomerId: 1 }).lean() as any;
+
+       return {                         
+          autoTopUp: user?.autoTopUp ?? false,           
+          autoTopUpCredits: user?.autoTopUpCredits ?? 10,
+          hasSavedCard: !!user?.stripeCustomerId,        
+      };
 }
