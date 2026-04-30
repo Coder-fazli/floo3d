@@ -40,7 +40,22 @@ export async function POST(request: Request) {
     if (userDoc?.suspended) return NextResponse.json({ error: "suspended" }, { status: 403 });
     if (userDoc?.subscriptionStatus && userDoc.subscriptionStatus !== "active" ) return NextResponse.json({ error: "Subscription not active" }, { status: 403 });
 
+  const userInfo = await getUserInfo(userId);                                                   
+  const isSpecialAngle = viewAngle === "isometric" || viewAngle ===        
+  "crossSection";                                                          
+                                                                           
+  if (isSpecialAngle && !userInfo.customModel) {                           
+    const isPro = ["pro", "elite"].includes(userInfo.subscriptionPlan ??   
+  "");                                                                  
+    if (!isPro) {                                                          
+      return NextResponse.json(
+        { error: "Isometric view is available on Pro and Elite plans only. Please upgrade." }, { status: 403 }                                                    
+      );               
+    }   
+  }  
     const credits = await getCredits(userId);
+
+    
     const isUnlimited = credits >= 99999;
     if (!isUnlimited) {
       const ok = await deductCredit(userId);
@@ -55,21 +70,12 @@ export async function POST(request: Request) {
     const contentType = imageResponse.headers.get("content-type") ?? "";
     const mimeType: "image/png" | "image/jpeg" = contentType.includes("png") ? "image/png" : "image/jpeg";
 
-    const [modelSettings, userInfo] = await Promise.all([getModelSettings(), getUserInfo(userId)]);
-    const isSpecialAngle = viewAngle === "isometric" || viewAngle === "crossSection";
-
     if (userInfo.customModel) {
       modelName = userInfo.customModel;
     } else if (isSpecialAngle) {
-      const isPro = ["pro", "elite"].includes(userInfo.subscriptionPlan ?? "");
-      if(!isPro) {
-        return NextResponse.json(
-        { error: "Isometric view is available on Pro and Elite plans only. Please upgrade." }, { status: 403 }
-      );
-      }
       modelName = "gemini-3-pro-image-preview";
     } else {
-      modelName = modelSettings[inputType] ?? "gemini-3.1-flash-image-preview";
+      modelName = "gemini-3.1-flash-image-preview";
     }
 
     const model = genAI.getGenerativeModel({
