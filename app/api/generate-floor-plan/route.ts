@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 import { uploadImage } from "@/lib/cloudinary";
-import { getCredits, deductCredit, refundCredit, getModelSettings, getUserInfo } from "@/lib/actions";
+import { getCredits, deductCredit, refundCredit } from "@/lib/actions";
 import User from "@/lib/models/User";
 import { buildFloorPlanGeneratorPrompt, FloorPlanGeneratorConfig }
  from "@/lib/prompts/floor-plan-generator";
@@ -44,16 +44,6 @@ export async function POST(request: Request) {
 
      // Build prompt
       const prompt = buildFloorPlanGeneratorPrompt(config, customPrompt);
-
-      // Read model — customModel per user overrides everything, then hasPurchased, then global settings
-      const [modelSettings, userInfo] = await Promise.all([getModelSettings(), getUserInfo(userId)]);
-      if (userInfo.customModel) {
-        modelName = userInfo.customModel;
-      } else {
-        modelName = userInfo.hasPurchased
-          ? "gemini-3-pro-image-preview"
-          : (modelSettings["floor-plan-generator"] ?? "gemini-3.1-flash-image-preview");
-      }
 
       // Call Gemini API
         const model = genAI.getGenerativeModel({
