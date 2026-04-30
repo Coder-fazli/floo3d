@@ -60,12 +60,16 @@ export async function POST(request: Request) {
 
     if (userInfo.customModel) {
       modelName = userInfo.customModel;
-    } else if (userInfo.hasPurchased) {
+    } else if (isSpecialAngle) {
+      const isPro = ["pro", "elite"].includes(userInfo.subscriptionPlan ?? "");
+      if(!isPro) {
+        return NextResponse.json(
+        { error: "Isometric view is available on Pro and Elite plans only. Please upgrade." }, { status: 403 }
+      );
+      }
       modelName = "gemini-3-pro-image-preview";
     } else {
-      modelName = isSpecialAngle
-        ? (modelSettings["isometric"] ?? "gemini-3-pro-image-preview")
-        : (modelSettings[inputType] ?? "gemini-3.1-flash-image-preview");
+      modelName = modelSettings[inputType] ?? "gemini-3.1-flash-image-preview";
     }
 
     const model = genAI.getGenerativeModel({
