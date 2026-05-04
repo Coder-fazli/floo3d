@@ -133,18 +133,46 @@
           { $set: { subscriptionStatus: "past_due" }}
         );
       }
+
+      // Subscription cancellation handling
+       if (event.type === "customer.subscription.updated") {
+          const subscription = event.data.object as Stripe.Subscription;
+
+          await connectDb();
+          await User.findOneAndUpdate(
+            { subscriptionId: subscription.id },
+            {
+              $set:{
+                subscriptionStatus: subscription.status,
+                cancelAtPeriodEnd: subscription.cancel_at_period_end,
+                cancelAt: subscription.cancel_at
+                ? new Date(subscription.cancel_at * 1000)
+                : null,
+                currentPeriodEnd: ( subscription as any).current_period_end
+                ? new Date(( subscription as any ).current_period_end * 1000)
+                : null,
+              },
+            }
+          );
+       }
          
-      // Subscripiton cancellation handling
+      // Subscripiton deleting handling
       if (event.type === "customer.subscription.deleted") {
          const subscription = event.data.object as Stripe.Subscription;
       
           await connectDb();
           await User.findOneAndUpdate(
             { subscriptionId: subscription.id}, 
-          { $set: { 
+            { 
+            $set: { 
               subscriptionStatus: "canceled",
               subscriptionId: null,
               hasPurchased: false,
+              subscriptionPlan: null,
+              currentPeriodEnd: null,
+              subscriptionCredits: null,
+              cancelAtPeriodEnd: false,
+              cancelAt: null,
             } }
           );
       }
@@ -152,7 +180,6 @@
 
        
     }
-
 
 
     

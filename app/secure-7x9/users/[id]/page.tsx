@@ -4,6 +4,7 @@ import { Calendar, Lock, RotateCcw, Trash2, ChevronLeft, ShoppingBag, Activity }
 import { getUserByClerkId, getProjects } from "@/lib/actions";
 import { updateUserCredits, deleteUSer, getOrdersByUser, getLogsByUser, suspendUser, updateUserModel } from "@/lib/actions.admin";
 import AdminViewButton from "./AdminViewButton";
+import CancelSubscriptionButton from "./CancelSubscriptionButton";
 
 const MODEL_COSTS: Record<string, number> = {
   "gemini-3-pro-image-preview":     0.134,
@@ -366,6 +367,12 @@ export default async function AdminUserDetail({ params }: { params: Promise<{ id
               <Lock size={14} /> {user.suspended ? "Unsuspend Account" : "Suspend Account"}
             </button>
           </form>
+          <CancelSubscriptionButton
+            clerkId={user.clerkId}
+            hasSubscription={!!user.subscriptionId}
+            cancelScheduled={!!user.cancelAtPeriodEnd}
+            name={user.name || user.email || "this user"}
+          />
           <button className="adm-danger-btn"><RotateCcw size={14} /> Reset Credits</button>
           <form action={handleDelete} style={{ display: "inline" }}>
             <button type="submit" className="adm-danger-btn adm-danger-btn-solid"><Trash2 size={14} /> Delete Account</button>

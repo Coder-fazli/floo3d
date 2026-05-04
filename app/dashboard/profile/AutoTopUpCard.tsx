@@ -48,11 +48,6 @@ export function AutoTopUpCard() {
   const creditsUsed = Math.max(0, planCredits - currentCredits);
   const spentAmount = (creditsUsed * 0.5).toFixed(2);
 
-  // Credits remaining bar — starts full, empties as credits are used
-  const remainPct = planCredits >= 99999 ? 100 : Math.min(100, Math.round((currentCredits / planCredits) * 100));
-  const remainColor = remainPct > 50 ? "var(--brand-color)" : remainPct > 20 ? "#f97316" : "#ef4444";
-
-  // Spent bar — starts empty, fills as money is spent
   const spentPct = planCredits >= 99999 ? 0 : Math.min(100, Math.round((creditsUsed / planCredits) * 100));
 
   return (

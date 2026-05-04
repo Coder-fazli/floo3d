@@ -16,6 +16,8 @@ const PLAN_LABELS: Record<string, string> = {
 export default function SubscriptionPage() {
   const { user } = useUser();
   const [info, setInfo] = useState<any>(null);
+  const [cancelLoading, setCancelLoading] = useState(false);
+  const [cancelError, setCancelError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -23,7 +25,41 @@ export default function SubscriptionPage() {
   }, [user]);
 
   const planLabel = info?.subscriptionPlan ? PLAN_LABELS[info.subscriptionPlan] ?? info.subscriptionPlan : null;
-  const periodEnd = info?.currentPeriodEnd ? new Date(info.currentPeriodEnd).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : null;
+  const isCancelScheduled = !!info?.cancelAtPeriodEnd;
+  const subscriptionDate = isCancelScheduled ? info?.cancelAt ?? info?.currentPeriodEnd : info?.currentPeriodEnd;
+  const dateLabel = isCancelScheduled ? "Cancels on" : "Renews on";
+  const periodEnd = subscriptionDate ? new Date(subscriptionDate).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : null;
+
+  const handleCancelSubscription = async () => {
+    const shouldCancel = window.confirm(
+      "Cancel your subscription at the end of the current billing period?"
+    );
+    if (!shouldCancel) return;
+
+    try {
+      setCancelLoading(true);
+      setCancelError(null);
+
+      const res = await fetch("/api/stripe/cancel-subscription", {
+        method: "POST",
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to cancel subscription");
+      }
+
+      setInfo((prev: any) => ({
+        ...prev,
+        cancelAtPeriodEnd: data.cancelAtPeriodEnd ?? true,
+        cancelAt: data.cancelAt ? new Date(data.cancelAt * 1000).toISOString() : prev?.currentPeriodEnd ?? null,
+      }));
+    } catch (error: any) {
+      setCancelError(error?.message || "Could not cancel subscription.");
+    } finally {
+      setCancelLoading(false);
+    }
+  };
 
   return (
     <div className="home">
@@ -42,7 +78,7 @@ export default function SubscriptionPage() {
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "0.5rem", flexWrap: "wrap", gap: "0.75rem" }}>
                   <div>
                     <span style={{ fontSize: "1.25rem", fontWeight: 800, color: "#27282f" }}>{planLabel}</span>
-                    <span style={{ marginLeft: "0.6rem", fontSize: "0.7rem", fontWeight: 700, padding: "0.2rem 0.6rem", borderRadius: "9999px", background: info.subscriptionStatus === "active" ? "#dcfce7" : "#fee2e2", color: info.subscriptionStatus === "active" ? "#16a34a" : "#dc2626", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                    <span style={{ marginLeft: "0.6rem", fontSize: "0.7rem", fontWeight: 700, padding: "0.2rem 0.6rem", borderRadius: "9999px", background: isCancelScheduled ? "#fef3c7" : info.subscriptionStatus === "active" ? "#dcfce7" : "#fee2e2", color: isCancelScheduled ? "#b45309" : info.subscriptionStatus === "active" ? "#16a34a" : "#dc2626", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                       {info.subscriptionStatus ?? "—"}
                     </span>
                   </div>
@@ -52,8 +88,41 @@ export default function SubscriptionPage() {
                 </div>
                 {periodEnd && (
                   <p style={{ margin: "0.75rem 0 0", fontSize: "0.78rem", color: "#64748b" }}>
-                    Renews on <strong>{periodEnd}</strong>
+                    {dateLabel} <strong>{periodEnd}</strong>
                   </p>
+                )}
+                {isCancelScheduled ? (
+                  <div style={{ marginTop: "1rem", padding: "0.85rem 1rem", borderRadius: "0.75rem", background: "#fff7ed", border: "1px solid #fed7aa" }}>
+                    <p style={{ margin: 0, fontSize: "0.78rem", color: "#9a3412", lineHeight: 1.5 }}>
+                      Your subscription is still active for the rest of the current billing period. No further renewal will be charged.
+                    </p>
+                  </div>
+                ) : (
+                  <div style={{ marginTop: "1rem", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "0.75rem" }}>
+                    <button
+                      onClick={handleCancelSubscription}
+                      disabled={cancelLoading}
+                      style={{
+                        padding: "0.55rem 1rem",
+                        background: "#fff7f7",
+                        color: "#dc2626",
+                        border: "1px solid #fecaca",
+                        borderRadius: "0.5rem",
+                        fontSize: "0.72rem",
+                        fontWeight: 700,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.12em",
+                        cursor: cancelLoading ? "wait" : "pointer",
+                      }}
+                    >
+                      {cancelLoading ? "Canceling..." : "Cancel Subscription"}
+                    </button>
+                    {cancelError && (
+                      <p style={{ margin: 0, fontSize: "0.78rem", color: "#dc2626" }}>
+                        {cancelError}
+                      </p>
+                    )}
+                  </div>
                 )}
               </>
             ) : (

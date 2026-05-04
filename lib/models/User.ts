@@ -17,6 +17,8 @@ const UserSchema = new Schema({
     subscriptionPlan:   { type: String, default: null }, 
     currentPeriodEnd:   { type: Date,   default: null }, 
     subscriptionCredits:    { type: Number, default: null },
+    cancelAtPeriodEnd: { type: Boolean, default: false },
+    cancelAt: { type: Date, default: null },
     lastInvoiceEventId:     { type: String, default: null },
     signupIp: { type: String, default: null },
     autoTopUp: { type: Boolean, default: false },

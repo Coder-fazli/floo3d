@@ -67,7 +67,16 @@ export async function getCredits(userId: string, name?: string, email?: string) 
     return user.credits;
 }
 
-export async function getUserInfo(userId: string): Promise<{ credits: number; hasPurchased: boolean; customModel: string | null; subscriptionStatus: string | null; subscriptionPlan: string | null; currentPeriodEnd: Date | null }> {
+export async function getUserInfo(userId: string): Promise<{ credits: number; 
+hasPurchased: boolean; 
+customModel: string | null; 
+subscriptionStatus: string | null; 
+subscriptionPlan: string | null; 
+currentPeriodEnd: Date | null;
+cancelAtPeriodEnd: boolean;
+cancelAt: Date | null;
+}> 
+{
     await connectDb();
     const user = await User.findOne({ clerkId: userId });
     return {
@@ -77,6 +86,8 @@ export async function getUserInfo(userId: string): Promise<{ credits: number; ha
         subscriptionStatus: user?.subscriptionStatus ?? null,
         subscriptionPlan: user?.subscriptionPlan ?? null,
         currentPeriodEnd: user?.currentPeriodEnd ?? null,
+        cancelAtPeriodEnd: user?.cancelAtPeriodEnd ?? false,
+        cancelAt: user?.cancelAt ?? null,
     };
 }
 
