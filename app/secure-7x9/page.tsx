@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getAnalytics } from "@/lib/actions.admin";
-import { Users, Layers, TrendingUp, AlertTriangle, ShoppingBag, Zap } from "lucide-react";
+import { Users, Layers, TrendingUp, AlertTriangle, ShoppingBag, Zap, Download } from "lucide-react";
 
 const PERIODS = [
   { value: "today",     label: "Today" },
@@ -101,6 +101,18 @@ export default async function AdminOverview({ searchParams }: { searchParams: Pr
           </div>
           <h2 style={{ margin: 0, fontSize: "2.5rem", fontWeight: 800, color: d.errors > 0 ? "#ef4444" : "#0f172a", lineHeight: 1 }}>{d.errors}</h2>
           <p style={{ margin: 0, fontSize: "0.75rem", color: "#94a3b8" }}>failed generations</p>
+        </div>
+
+        {/* SMALL: Downloads */}
+        <div className="adm-card" style={{ gridColumn: "span 3", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <p style={{ margin: 0, fontSize: "0.75rem", fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.06em" }}>Downloads</p>
+            <div style={{ width: "2rem", height: "2rem", borderRadius: "0.5rem", background: "rgba(59,130,246,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Download size={14} color="#3b82f6" />
+            </div>
+          </div>
+          <h2 style={{ margin: 0, fontSize: "2.5rem", fontWeight: 800, color: "#0f172a", lineHeight: 1 }}>{d.downloads}</h2>
+          <p style={{ margin: 0, fontSize: "0.75rem", color: "#94a3b8" }}>images downloaded</p>
         </div>
 
         {/* SMALL stats row — inline horizontal card */}

@@ -293,12 +293,15 @@ export async function getAnalytics(period: string) {
 
   const dateFilter = from ? { createdAt: { $gte: from, $lte: to } } : {};
 
+  const downloadDateFilter = from ? { downloadedAt: { $gte: from, $lte: to } } : { downloadedAt: { $ne: null } };
+
   const [
     totalUsers, newUsers,
     totalProjects, newRenders,
     errors, orders,
     recentRenders, recentErrors, recentPurchases,
     recentlyActive,
+    downloads,
   ] = await Promise.all([
     User.countDocuments(),
     User.countDocuments(dateFilter),
@@ -310,6 +313,7 @@ export async function getAnalytics(period: string) {
     GenerationLog.find({ ...dateFilter, status: "error" }).sort({ createdAt: -1 }).limit(5).lean(),
     Order.find(dateFilter).sort({ createdAt: -1 }).limit(5).lean(),
     User.find({}).sort({ updatedAt: -1 }).limit(8).lean(),
+    Project.countDocuments(downloadDateFilter),
   ]);
 
   const revenue = orders.reduce((s: number, o: any) => s + (o.amount ?? 0), 0);
@@ -320,6 +324,7 @@ export async function getAnalytics(period: string) {
     errors, revenue,
     recentRenders, recentErrors, recentPurchases,
     recentlyActive,
+    downloads,
   }));
 }
 

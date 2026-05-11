@@ -40,3 +40,31 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 app/icon.png
+
+# design mockups & assets (not source code)
+/Admin dashboard components/
+/Blog components/
+/Dashboards cards/
+/FAQ components/
+/Footer components/
+/Generations failed ui/
+/How it works Components/
+/Minimalistic/
+/New Features for `project/
+/New hero components/
+/New section for home page/
+/Out of credits/
+/SIngle project Component/
+/Upload error/
+/User dashboard components/
+/Visualiser page(user dashboard)/
+/projects cards/
+/stitch/
+/stitch_1_extracted/
+*.zip
+home-page-preview.html
+Floo3D.png
+ChatGPT*.png
+tp-n-*.jpg
+tprpt6ynttmrfyhgvixz.jpg
+uygvjgh.png
