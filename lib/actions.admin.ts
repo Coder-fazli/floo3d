@@ -542,6 +542,8 @@ export async function savePricingSettings(data: {
   starterPrice: number; starterCredits: number; starterDescription: string; starterFeatures: string[];
   proPrice: number; proCredits: number; proDescription: string; proFeatures: string[];
   elitePrice: number; eliteCredits: number; eliteDescription: string; eliteFeatures: string[];
+  saleEnabled?: boolean; saleDiscount?: number; saleEndDate?: string | null;
+  customPackEnabled?: boolean;
 }) {
   await requireAdmin();
   await connectDb();

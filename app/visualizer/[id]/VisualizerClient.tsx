@@ -634,19 +634,28 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
               <button className="viz-modal-close" onClick={() => setAngleModalOpen(false)}>✕</button>
             </div>
             <div className="viz-modal-grid viz-modal-scroll">
-              {Object.entries(ANGLE_LABELS).map(([key, label]) => (
-                <div
-                  key={key}
-                  className={`viz-modal-item${viewAngle === key ? " viz-modal-item-active" : ""}`}
-                  onClick={() => setViewAngle(key)}
-                >
-                  <div className="viz-modal-item-img">
-                    <img src={getAngleImage(key)} alt={label} onError={(e) => { (e.target as HTMLImageElement).src = "/real-3d-render.jpg"; }} />
-                    {viewAngle === key && <div className="viz-modal-item-check">✓</div>}
+              {Object.entries(ANGLE_LABELS).map(([key, label]) => {
+                const isLocked = (key === "isometric" || key === "crossSection") && !hasPurchased && !isAdminView;
+                return (
+                  <div
+                    key={key}
+                    className={`viz-modal-item${viewAngle === key ? " viz-modal-item-active" : ""}${isLocked ? " viz-modal-item-locked" : ""}`}
+                    onClick={() => isLocked ? window.open("/pricing", "_blank") : setViewAngle(key)}
+                    style={{ position: "relative", opacity: isLocked ? 0.7 : 1 }}
+                  >
+                    <div className="viz-modal-item-img">
+                      <img src={getAngleImage(key)} alt={label} onError={(e) => { (e.target as HTMLImageElement).src = "/real-3d-render.jpg"; }} />
+                      {viewAngle === key && <div className="viz-modal-item-check">✓</div>}
+                      {isLocked && (
+                        <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.45)", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "0.5rem" }}>
+                          <span style={{ fontSize: "1.25rem" }}>👑</span>
+                        </div>
+                      )}
+                    </div>
+                    <span className="viz-modal-item-label">{label}{isLocked ? " · Pro" : ""}</span>
                   </div>
-                  <span className="viz-modal-item-label">{label}</span>
-                </div>
-              ))}
+                );
+              })}
             </div>
             <div className="viz-modal-footer viz-modal-footer-sticky">
               <button className="viz-modal-cancel" onClick={() => setAngleModalOpen(false)}>Cancel</button>

@@ -8,6 +8,8 @@ type Settings = {
   starterPrice: number; starterCredits: number; starterDescription: string; starterFeatures: string[];
   proPrice: number; proCredits: number; proDescription: string; proFeatures: string[];
   elitePrice: number; eliteCredits: number; eliteDescription: string; eliteFeatures: string[];
+  saleEnabled?: boolean; saleDiscount?: number; saleEndDate?: string | null;
+  customPackEnabled?: boolean;
 };
 
 function PlanEditor({
@@ -83,6 +85,10 @@ export default function PricingAdmin({ settings }: { settings: Settings }) {
     starterFeatures: settings.starterFeatures ?? [],
     proFeatures:     settings.proFeatures ?? [],
     eliteFeatures:   settings.eliteFeatures ?? [],
+    saleEnabled:       settings.saleEnabled       ?? false,
+    saleDiscount:      settings.saleDiscount      ?? 25,
+    saleEndDate:       settings.saleEndDate       ?? null,
+    customPackEnabled: settings.customPackEnabled ?? true,
   });
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -115,6 +121,67 @@ export default function PricingAdmin({ settings }: { settings: Settings }) {
         >
           {saved ? <><CheckCircle2 size={14} /> Saved!</> : saving ? "Saving…" : "Save Changes"}
         </button>
+      </div>
+
+      {/* ── Sale Banner Settings ── */}
+      <div className="adm-card" style={{ padding: "1.5rem", marginBottom: "1.5rem" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
+          <div>
+            <p style={{ margin: 0, fontSize: "0.82rem", fontWeight: 700, color: "#27282f" }}>⚡ Sale Banner</p>
+            <p style={{ margin: "0.15rem 0 0", fontSize: "0.72rem", color: "#94a3b8" }}>Shows a floating countdown pill on the pricing page</p>
+          </div>
+          <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }}>
+            <span style={{ fontSize: "0.78rem", color: "#475569", fontWeight: 600 }}>{data.saleEnabled ? "Active" : "Off"}</span>
+            <button
+              onClick={() => setData(p => ({ ...p, saleEnabled: !p.saleEnabled }))}
+              style={{ width: "42px", height: "24px", borderRadius: "9999px", border: "none", cursor: "pointer", background: data.saleEnabled ? "var(--brand-color)" : "#e2e8f0", position: "relative", transition: "background 0.2s" }}
+            >
+              <span style={{ position: "absolute", top: "3px", left: data.saleEnabled ? "21px" : "3px", width: "18px", height: "18px", borderRadius: "9999px", background: "#fff", transition: "left 0.2s", boxShadow: "0 1px 4px rgba(0,0,0,0.2)" }} />
+            </button>
+          </label>
+        </div>
+        {data.saleEnabled && (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div>
+              <label className="adm-form-label">Discount %</label>
+              <input
+                className="adm-form-input"
+                type="number"
+                min={1} max={99}
+                value={data.saleDiscount ?? 25}
+                onChange={e => setData(p => ({ ...p, saleDiscount: parseInt(e.target.value) }))}
+              />
+            </div>
+            <div>
+              <label className="adm-form-label">Sale End Date & Time</label>
+              <input
+                className="adm-form-input"
+                type="datetime-local"
+                value={data.saleEndDate ? new Date(data.saleEndDate).toISOString().slice(0, 16) : ""}
+                onChange={e => setData(p => ({ ...p, saleEndDate: e.target.value ? new Date(e.target.value).toISOString() : null }))}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ── Custom Pack visibility ── */}
+      <div className="adm-card" style={{ padding: "1.25rem 1.5rem", marginBottom: "1.5rem" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div>
+            <p style={{ margin: 0, fontSize: "0.82rem", fontWeight: 700, color: "#27282f" }}>Custom Pack Tab</p>
+            <p style={{ margin: "0.15rem 0 0", fontSize: "0.72rem", color: "#94a3b8" }}>Shows the &quot;Credit Plans / Custom Pack&quot; tab switcher on the pricing page</p>
+          </div>
+          <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }}>
+            <span style={{ fontSize: "0.78rem", color: "#475569", fontWeight: 600 }}>{data.customPackEnabled ? "Visible" : "Hidden"}</span>
+            <button
+              onClick={() => setData(p => ({ ...p, customPackEnabled: !p.customPackEnabled }))}
+              style={{ width: "42px", height: "24px", borderRadius: "9999px", border: "none", cursor: "pointer", background: data.customPackEnabled ? "var(--brand-color)" : "#e2e8f0", position: "relative", transition: "background 0.2s" }}
+            >
+              <span style={{ position: "absolute", top: "3px", left: data.customPackEnabled ? "21px" : "3px", width: "18px", height: "18px", borderRadius: "9999px", background: "#fff", transition: "left 0.2s", boxShadow: "0 1px 4px rgba(0,0,0,0.2)" }} />
+            </button>
+          </label>
+        </div>
       </div>
 
       {/* Plan editors side by side */}

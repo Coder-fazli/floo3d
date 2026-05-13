@@ -172,10 +172,27 @@ export default function HomePageHero({ heroBeforeUrl, heroAfterUrl, ctaOverride,
         </div>
 
         {/* ── Right: Slider ── */}
-        <div className="hph-slider-wrap">
+        <div className="hph-slider-wrap" style={{ position: "relative" }}>
           <div className="hph-slider-glow" />
 
+          {/* Mascot peeking from top */}
+          <img
+            src="/mascot.png"
+            alt="Homie"
+            style={{
+              position: "absolute",
+              top: -55,
+              right: 24,
+              width: 150,
+              height: "auto",
+              zIndex: 60,
+              pointerEvents: "none",
+              filter: "drop-shadow(0 6px 12px rgba(0,0,0,0.15))",
+            }}
+          />
+
           <div className="hph-slider-container">
+
             <ReactCompareSlider
               position={sliderPos}
               onPositionChange={(p) => { setSliderPos(p); sliderPosRef.current = p; }}

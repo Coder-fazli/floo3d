@@ -15,7 +15,154 @@ type PricingSettings = {
   starterPrice: number; starterCredits: number; starterDescription: string; starterFeatures: string[];
   proPrice: number; proCredits: number; proDescription: string; proFeatures: string[];
   elitePrice: number; eliteCredits: number; eliteDescription: string; eliteFeatures: string[];
+  saleEnabled?: boolean; saleDiscount?: number; saleEndDate?: string | null;
+  customPackEnabled?: boolean;
 };
+
+function SaleBanner({ discount, endDate, elitePrice }: { discount: number; endDate: string; elitePrice: number }) {
+  const [parts, setParts] = useState({ d: 0, h: 0, m: 0, s: 0, expired: false });
+
+  useEffect(() => {
+    const calc = () => {
+      const diff = new Date(endDate).getTime() - Date.now();
+      if (diff <= 0) { setParts(p => ({ ...p, expired: true })); return; }
+      setParts({
+        d: Math.floor(diff / 86400000),
+        h: Math.floor((diff % 86400000) / 3600000),
+        m: Math.floor((diff % 3600000) / 60000),
+        s: Math.floor((diff % 60000) / 1000),
+        expired: false,
+      });
+    };
+    calc();
+    const t = setInterval(calc, 1000);
+    return () => clearInterval(t);
+  }, [endDate]);
+
+  if (parts.expired) return null;
+
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const maxSaving = (Math.round(elitePrice * discount) / 100).toFixed(2);
+  const isUrgent = parts.d === 0 && parts.h === 0;
+
+  const units = [
+    { val: pad(parts.d), label: "days" },
+    { val: pad(parts.h), label: "hrs" },
+    { val: pad(parts.m), label: "min" },
+    { val: pad(parts.s), label: "sec" },
+  ].filter(u => !(u.label === "days" && parts.d === 0));
+
+  return (
+    <div
+      className="flex flex-col sm:flex-row sm:items-center sm:justify-between"
+      style={{
+        background: isUrgent
+          ? "linear-gradient(135deg, #e00000 0%, #9e0000 100%)"
+          : "linear-gradient(135deg, #fb3b01 0%, #c42800 100%)",
+        borderRadius: "0.875rem",
+        padding: "0.875rem 1.25rem",
+        marginBottom: "0.5rem",
+        gap: "0.75rem",
+        position: "relative",
+        overflow: "hidden",
+        transition: "background 1s ease",
+      }}
+    >
+      {/* Glint */}
+      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 12% 40%, rgba(255,255,255,0.08) 0%, transparent 55%)", pointerEvents: "none" }} />
+
+      {/* Left — badge + copy */}
+      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", position: "relative" }}>
+        <div className="animate-pulse flex-shrink-0" style={{
+          background: "rgba(255,255,255,0.16)",
+          border: "1px solid rgba(255,255,255,0.22)",
+          borderRadius: "0.55rem",
+          padding: "0.4rem 0.65rem",
+          textAlign: "center",
+        }}>
+          <span style={{ fontSize: "1rem", fontWeight: 900, color: "#fff", letterSpacing: "0.02em", display: "block", lineHeight: 1 }}>
+            -{discount}%
+          </span>
+          <span style={{ fontSize: "0.55rem", fontWeight: 700, color: "rgba(255,255,255,0.75)", textTransform: "uppercase", letterSpacing: "0.08em", display: "block", marginTop: "0.15rem" }}>
+            live now
+          </span>
+        </div>
+        <div>
+          <p style={{ margin: 0, fontSize: "0.88rem", fontWeight: 800, color: "#fff", lineHeight: 1.3 }}>
+            Saving up to{" "}
+            <span style={{ textDecoration: "underline", textUnderlineOffset: "3px", textDecorationThickness: "2px" }}>
+              ${maxSaving}
+            </span>{" "}
+            — don&apos;t lose it
+          </p>
+          {/* Social proof hidden on mobile, shown on sm+ */}
+          <p className="hidden sm:block" style={{ margin: "0.2rem 0 0", fontSize: "0.72rem", color: "rgba(255,255,255,0.72)", lineHeight: 1.45 }}>
+            {isUrgent
+              ? <span style={{ fontWeight: 800, color: "#fff" }}>Less than 1 hour left — prices go back to full. No exceptions.</span>
+              : <>Trusted by 2,400+ homeowners, agents &amp; architects ·{" "}
+                  <span style={{ fontWeight: 700, color: "rgba(255,255,255,0.92)" }}>
+                    Once the timer hits zero, it&apos;s back to full price. No exceptions.
+                  </span>
+                </>
+            }
+          </p>
+          {/* Mobile-only short urgency line */}
+          <p className="block sm:hidden" style={{ margin: "0.1rem 0 0", fontSize: "0.68rem", fontWeight: 600, color: "rgba(255,255,255,0.8)", lineHeight: 1.3 }}>
+            {isUrgent ? "Less than 1 hour left. No extensions." : "Prices reset when timer hits zero."}
+          </p>
+        </div>
+      </div>
+
+      {/* Countdown — full width centered on mobile, auto on desktop */}
+      <div className="flex items-center justify-center sm:justify-end flex-shrink-0" style={{ gap: "0.25rem" }}>
+        {units.map((unit, i) => (
+          <div key={unit.label} style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
+            {i > 0 && (
+              <span style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.9rem", fontWeight: 300, marginBottom: "0.7rem" }}>:</span>
+            )}
+            <div style={{ textAlign: "center" }}>
+              <div style={{
+                background: isUrgent ? "rgba(255,255,255,0.18)" : "rgba(0,0,0,0.28)",
+                border: `1px solid ${isUrgent ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.1)"}`,
+                borderRadius: "0.375rem",
+                padding: "0.25rem 0.45rem",
+                minWidth: "2rem",
+                overflow: "hidden",
+                position: "relative",
+                height: "1.75rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}>
+                <AnimatePresence mode="popLayout">
+                  <motion.span
+                    key={unit.val}
+                    initial={{ y: -14, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: 14, opacity: 0 }}
+                    transition={{ duration: 0.18, ease: "easeOut" }}
+                    style={{
+                      fontVariantNumeric: "tabular-nums",
+                      fontFamily: "monospace",
+                      fontSize: "1rem",
+                      fontWeight: 800,
+                      color: "#fff",
+                      lineHeight: 1,
+                      display: "block",
+                    }}
+                  >
+                    {unit.val}
+                  </motion.span>
+                </AnimatePresence>
+              </div>
+              <p style={{ margin: "0.15rem 0 0", fontSize: "0.55rem", color: "rgba(255,255,255,0.6)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>{unit.label}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 // ── Pricing FAQ Item ───────────────────────────────────────────────────────
 function PricingFAQItem({ q, a }: { q: string; a: string }) {
@@ -208,6 +355,7 @@ function CustomPlan({ onBuy, loading }: { onBuy: (credits: number, price: number
 
 // ── Main Component ──────────────────────────────────────────────────────────
 export default function PricingClient({ pricingSettings }: { pricingSettings?: PricingSettings }) {
+  const customPackEnabled = pricingSettings?.customPackEnabled ?? true;
   const [tab, setTab] = useState('0');
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -320,17 +468,23 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
     <div className="px-4 pt-16 pb-24 min-h-screen max-w-7xl mx-auto relative">
       <SubscriptionTermsModal open={showTerms} onClose={() => setShowTerms(false)} />
 
+
       {/* Header */}
       <article className="text-center mb-10 space-y-4">
-        <span className="inline-block text-xs font-black tracking-widest uppercase mb-2" style={{ color: "var(--brand-color)" }}>Pricing</span>
+
         <h2 className="text-4xl md:text-5xl font-bold leading-tight" style={{ color: "#27282f", fontFamily: "var(--font-playfair), Georgia, serif" }}>
-          Monthly plans.<br />Cancel anytime.
+          Monthly plans.
         </h2>
         <p className="text-base max-w-lg mx-auto" style={{ color: "#64748b" }}>
           Subscribe monthly, credits refresh every cycle. No lock-in — cancel anytime, no surprises.
         </p>
-        <PricingSwitch selected={tab} onSwitch={setTab} />
+        {customPackEnabled && <PricingSwitch selected={tab} onSwitch={setTab} />}
 
+        {pricingSettings?.saleEnabled && pricingSettings.saleEndDate && (
+          <div style={{ marginTop: "1.25rem" }}>
+            <SaleBanner discount={pricingSettings.saleDiscount ?? 25} endDate={pricingSettings.saleEndDate} elitePrice={pricingSettings.elitePrice ?? 49.99} />
+          </div>
+        )}
       </article>
 
       {/* Plans tab */}
@@ -380,23 +534,28 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                       )}
                     </div>
                     <p className="text-sm mb-4" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.6)" : "#755760" }}>{plan.description}</p>
+                    {pricingSettings?.saleEnabled && pricingSettings.saleEndDate && (() => {
+                      const disc = pricingSettings.saleDiscount ?? 25;
+                      const originalPrice = Math.round(plan.price / (1 - disc / 100) * 100) / 100;
+                      const saving = Math.round((originalPrice - plan.price) * 100) / 100;
+                      return (
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem" }}>
+                          <span style={{ fontSize: "1.15rem", color: plan.id === 'elite' ? "rgba(253,246,242,0.4)" : "#94a3b8", textDecoration: "line-through", fontWeight: 500 }}>
+                            ${originalPrice.toFixed(2)}
+                          </span>
+                          <span style={{ fontSize: "0.85rem", fontWeight: 800, color: "#16a34a", background: "#dcfce7", padding: "0.2rem 0.6rem", borderRadius: "9999px" }}>
+                            Save ${saving.toFixed(2)}
+                          </span>
+                        </div>
+                      );
+                    })()}
                     <div className="flex items-baseline gap-1 mb-2">
                       <span className="text-5xl font-bold whitespace-nowrap" style={{ color: plan.id === 'elite' ? "#faf7f4" : "#28030F", display: "inline-flex", alignItems: "baseline" }}>
                         <span>$</span><NumberFlow value={plan.price} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
                       </span>
                       <span className="text-sm ml-1" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.5)" : "#94a3b8" }}>/month · {Math.floor(plan.credits / 2)} renders</span>
                     </div>
-                    <div className="flex items-center gap-2 mb-5">
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{
-                        background: plan.popular ? "rgba(235,66,3,0.08)" : plan.id === 'elite' ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.04)",
-                        color: plan.popular ? "var(--brand-color)" : plan.id === 'elite' ? "rgba(253,246,242,0.5)" : "#94a3b8",
-                      }}>
-                        ${(plan.price / Math.floor(plan.credits / 2)).toFixed(2)} per render
-                      </span>
-                      {plan.popular && (
-                        <span className="text-xs font-bold" style={{ color: "var(--brand-color)" }}>← lowest cost/render</span>
-                      )}
-                    </div>
+                    <div className="mb-5" />
 
                     {/* CTA */}
                     <GlowButton
@@ -406,7 +565,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
 
                     {/* Trust signal */}
                     <p className="text-xs text-center mt-3" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.4)" : "#a08888" }}>
-                      🔒 Secure via Stripe · Cancel anytime ·{' '}
+                      🔒 Secure via Stripe ·{' '}
                       <button
                         onClick={() => setShowTerms(true)}
                         style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', textDecoration: 'underline', fontSize: 'inherit', color: 'inherit' }}
@@ -471,7 +630,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
         )}
 
         {/* Custom tab */}
-        {tab === '1' && (
+        {customPackEnabled && tab === '1' && (
           <motion.div
             key="custom"
             initial={{ opacity: 0, y: 10 }}

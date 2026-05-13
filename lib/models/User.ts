@@ -23,6 +23,7 @@ const UserSchema = new Schema({
     signupIp: { type: String, default: null },
     autoTopUp: { type: Boolean, default: false },
     autoTopUpCredits: { type: Number, default: 10 },
+    lastCampaign: { type: String, default: null },
     },
     
 { timestamps: true });

@@ -3,7 +3,7 @@
 .hph-section {
   position: relative;
   padding: 8rem 0 6rem;
-  overflow: hidden;
+  overflow: visible;
   background: #faf7f4;
 }
 
