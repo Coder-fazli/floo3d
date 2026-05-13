@@ -1,4 +1,3 @@
-"use client";
 import { Html, Body, Container, Text, Button, Img } from "@react-email/components";
 
 export function CampaignEmail({ name, body, ctaText, ctaUrl, logoUrl, btnColor }: {
