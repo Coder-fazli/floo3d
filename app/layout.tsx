@@ -102,6 +102,25 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             crossOrigin="anonymous"
           />
 
+          {/* Google Ads */}
+          <Script
+            id="google-ads"
+            strategy="afterInteractive"
+            src="https://www.googletagmanager.com/gtag/js?id=AW-18163004206"
+          />
+          <Script
+            id="google-ads-config"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'AW-18163004206');
+              `,
+            }}
+          />
+
           {/* Yandex Metrika */}
           <Script
             id="yandex-metrika"
