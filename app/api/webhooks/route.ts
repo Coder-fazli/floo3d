@@ -81,8 +81,33 @@
           }
 
           const subscriptionId = typeof (invoice as any).subscription === "string" ? (invoice as any).subscription : null;
-          const user = await User.findOne({ stripeCustomerId: customerId }).lean() ??  (subscriptionId ? await User.findOne({
+          let user: any = await User.findOne({ stripeCustomerId: customerId }).lean() ??  (subscriptionId ? await User.findOne({
             subscriptionId }).lean() : null);
+
+          // Race-condition fallback: Stripe can deliver invoice.paid before
+          // checkout.session.completed, so the user may not yet have
+          // stripeCustomerId/subscriptionId set. Recover by matching the
+          // Stripe customer email, then self-heal by linking the IDs.
+          if (!user) {
+            try {
+              const customer: any = await stripe.customers.retrieve(customerId);
+              const custEmail = customer?.email || invoice.customer_email;
+              if (custEmail) {
+                user = await User.findOne({ email: custEmail }).lean();
+                if (user) {
+                  await User.findByIdAndUpdate(user._id, {
+                    $set: {
+                      stripeCustomerId: customerId,
+                      ...(subscriptionId ? { subscriptionId } : {}),
+                    },
+                  });
+                }
+              }
+            } catch (e) {
+              console.error("invoice.paid fallback lookup failed:", (e as Error).message);
+            }
+          }
+
           if (user) {
             const pricing: any = await
             PricingSettings.findOne().lean() ?? {};
