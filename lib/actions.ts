@@ -58,7 +58,7 @@ export async function getCredits(userId: string, name?: string, email?: string) 
     const isAdmin = userId === process.env.ADMIN_USER_ID;
     const update: any = {
       $setOnInsert: {
-        credits: isAdmin ? 99999 : 2,
+        credits: isAdmin ? 999999 : 2,
         role: isAdmin ? 'admin' : 'user',
       },
     };
