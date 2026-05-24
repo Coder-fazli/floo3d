@@ -8,6 +8,7 @@ import RecentProjects from "@/components/RecentProjects";
 import Footer from "@/components/Footer";
 import FAQ from "@/components/FAQ";
 import TestimonialsMarquee from "@/components/TestimonialsMarquee";
+import ProductShowcase from "@/components/ProductShowcase";
 import { getHomeImages } from "@/lib/actions";
 const reviews = [
   { name: "David M.", handle: "@davidm", avatar: "/avatars/av1.jpg", text: "I rendered my entire apartment floor plan in under 2 minutes. The 3D output is stunning, clients love it." },
@@ -94,6 +95,8 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <MainHero heroBeforeUrl={homeImages.heroBeforeUrl} heroAfterUrl={homeImages.heroAfterUrl} />
+
+      <ProductShowcase />
 
       <DesignOptions transformImages={homeImages.transformImages} />
 

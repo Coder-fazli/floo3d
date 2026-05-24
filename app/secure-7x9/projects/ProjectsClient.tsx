@@ -19,6 +19,7 @@ const STATUS_OPTS = [
   { key: "done", label: "Done" },
   { key: "pending", label: "Pending" },
   { key: "error", label: "Error" },
+  { key: "downloaded", label: "Downloaded" },
 ];
 
 const SORT_OPTS = [
@@ -67,6 +68,7 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
     if (activeTab !== "all") list = list.filter((p) => p.inputType === activeTab);
     if (statusFilter !== "all") {
       if (statusFilter === "done") list = list.filter((p) => p.status === "done" && p.renderedImageUrl);
+      else if (statusFilter === "downloaded") list = list.filter((p) => p.downloadedAt != null);
       else if (statusFilter === "error") list = list.filter((p) => p.status === "error");
       else list = list.filter((p) => p.status === "pending" || (!p.renderedImageUrl && p.status !== "error"));
     }
