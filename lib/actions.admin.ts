@@ -13,6 +13,7 @@ import AppFrames from "./models/AppFrames";
 import GenerationLog from "./models/GenerationLog";
 import Order from "./models/Order";
 import PricingSettings from "./models/PricingSettings";
+import Post from "./models/Posts";
 
 async function requireAdmin() {
   const { userId, sessionClaims } = await auth();
@@ -536,6 +537,23 @@ export async function getPricingSettings() {
   result.proFeatures     = result.proFeatures ?? [];
   result.eliteFeatures   = result.eliteFeatures ?? [];
   return result;
+}
+
+// ─── Posts ────────────────────────────────────────────────────────────────────
+
+export async function getAllPosts() {
+  await requireAdmin();
+  noStore();
+  await connectDb();
+  const posts = await Post.find({}).sort({ createdAt: -1 }).lean();
+  return JSON.parse(JSON.stringify(posts));
+}
+
+export async function getPostById(id: string) {
+  await requireAdmin();
+  await connectDb();
+  const post = await Post.findById(id).lean();
+  return post ? JSON.parse(JSON.stringify(post)) : null;
 }
 
 export async function savePricingSettings(data: {

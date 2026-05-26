@@ -3,13 +3,15 @@ import MainHero from "@/components/MainHero";
 import DesignOptions from "@/components/DesignOptions";
 import HowItWorks2 from "@/components/HowItWorks2";
 import StatsBar from "@/components/StatsBar";
-import Blog from "@/components/Blog";
+import BlogsSection from "@/components/ui/blogs";
 import RecentProjects from "@/components/RecentProjects";
 import Footer from "@/components/Footer";
 import FAQ from "@/components/FAQ";
 import TestimonialsMarquee from "@/components/TestimonialsMarquee";
 import ProductShowcase from "@/components/ProductShowcase";
 import { getHomeImages } from "@/lib/actions";
+import { connectDb } from "@/lib/db";
+import Post from "@/lib/models/Posts";
 const reviews = [
   { name: "David M.", handle: "@davidm", avatar: "/avatars/av1.jpg", text: "I rendered my entire apartment floor plan in under 2 minutes. The 3D output is stunning, clients love it." },
   { name: "Jessica K.", handle: "@jessicak", avatar: "/avatars/av2.jpg", text: "As an architect, this saves me hours. The AI understands spatial layout better than I expected." },
@@ -88,6 +90,20 @@ const jsonLd = {
 
 export default async function Home() {
   const homeImages = await getHomeImages();
+  await connectDb();
+  const rawPosts = await Post.find({ status: "published" })
+    .sort({ createdAt: -1 })
+    .limit(3)
+    .select("title slug excerpt coverImage tags createdAt")
+    .lean() as any[];
+  const blogPosts = rawPosts.map((p) => ({
+    title: p.title,
+    description: p.excerpt ?? "",
+    image: p.coverImage ?? null,
+    publishDate: new Date(p.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+    readMoreLink: `/blog/${p.slug}`,
+    category: p.tags?.[0]?.toUpperCase() ?? "BLOG",
+  }));
   return (
     <div className="home">
       <script
@@ -107,7 +123,7 @@ export default async function Home() {
 
       <TestimonialsMarquee />
 
-      <Blog />
+      <BlogsSection posts={blogPosts} />
 
       <FAQ twoColumns />
 

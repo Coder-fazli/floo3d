@@ -15,6 +15,8 @@ const isPublicRoute = createRouteMatcher([
   "/terms-of-service(.*)",
   "/refund-policy(.*)",
   "/contact(.*)",
+  "/blog(.*)",        
+  "/api/posts(.*)",    
 ]);
 
 const isAdminRoute = createRouteMatcher(["/secure-7x9(.*)"]);
