@@ -128,9 +128,8 @@ export default async function SinglePostPage({ params }: { params: Promise<{ slu
         )}
       </header>
 
-      <div className="post-divider"><hr /></div>
-
       {/* Article body */}
+      <section className="post-body-section">
       <div className="post-body-wrap">
         <Link href="/blog" className="post-back">
           <ArrowLeft size={14} /> Back to Blog
@@ -150,6 +149,7 @@ export default async function SinglePostPage({ params }: { params: Promise<{ slu
           </div>
         )}
       </div>
+      </section>
 
       <Footer />
     </div>
