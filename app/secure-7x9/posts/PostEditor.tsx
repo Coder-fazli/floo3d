@@ -64,7 +64,9 @@ export default function PostEditor({ post }: { post?: PostData }) {
   const [slugEdited, setSlugEdited] = useState(isEdit);
   const [isDirty, setIsDirty] = useState(false);
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
+  const [uploadingBodyImg, setUploadingBodyImg] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const imgFileInputRef = useRef<HTMLInputElement>(null);
 
   const editor = useEditor({
     extensions: [
@@ -166,6 +168,34 @@ export default function PostEditor({ post }: { post?: PostData }) {
       setUploadingCover(false);
     }
   }, [showToast]);
+
+  const handleBodyImageUpload = useCallback(async (file: File) => {
+    if (!file.type.startsWith("image/")) { showToast("Please select an image file", "error"); return; }
+    setUploadingBodyImg(true);
+    try {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const base64 = reader.result as string;
+        const res = await fetch("/api/admin/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ base64, folder: "blog/content" }),
+        });
+        if (!res.ok) throw new Error("Upload failed");
+        const { url } = await res.json();
+        editor?.chain().focus().setImage({ src: url }).run();
+        setIsDirty(true);
+        setImgDialog(false);
+        showToast("Image uploaded!", "success");
+        setUploadingBodyImg(false);
+      };
+      reader.onerror = () => { showToast("Failed to read file", "error"); setUploadingBodyImg(false); };
+      reader.readAsDataURL(file);
+    } catch {
+      showToast("Upload failed. Try again.", "error");
+      setUploadingBodyImg(false);
+    }
+  }, [editor, showToast]);
 
   const addTag = useCallback(() => {
     const t = tagInput.trim().toLowerCase();
@@ -503,8 +533,30 @@ export default function PostEditor({ post }: { post?: PostData }) {
         <div className="pe-img-dialog" onClick={() => setImgDialog(false)}>
           <div className="pe-img-dialog-box" onClick={(e) => e.stopPropagation()}>
             <h4>Insert Image</h4>
+
+            {/* Upload from device */}
+            <input
+              ref={imgFileInputRef}
+              type="file"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleBodyImageUpload(f); e.target.value = ""; }}
+            />
+            <button
+              className="pe-upload-btn"
+              style={{ marginBottom: "0.75rem" }}
+              onClick={() => imgFileInputRef.current?.click()}
+              disabled={uploadingBodyImg}
+            >
+              {uploadingBodyImg
+                ? <><Loader2 size={13} className="animate-spin" /> Uploading...</>
+                : <><Upload size={13} /> Upload from device</>
+              }
+            </button>
+
+            <div className="pe-upload-divider">or paste URL</div>
+
             <div className="pe-field">
-              <label>Image URL</label>
               <input
                 autoFocus
                 value={imgUrl}
