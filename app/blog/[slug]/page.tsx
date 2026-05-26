@@ -7,9 +7,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   await connectDb();
-  const post = await Post.findOne({ slug: params.slug, status: "published" }).lean() as any;
+  const post = await Post.findOne({ slug, status: "published" }).lean() as any;
   if (!post) return {};
   return {
     title: post.title + " — MyHomeStyler Blog",
@@ -22,9 +23,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function SinglePostPage({ params }: { params: { slug: string } }) {
+export default async function SinglePostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   await connectDb();
-  const post = await Post.findOne({ slug: params.slug, status: "published" }).lean() as any;
+  const post = await Post.findOne({ slug, status: "published" }).lean() as any;
   if (!post) notFound();
 
   const date = new Date(post.createdAt).toLocaleDateString("en-US", {
