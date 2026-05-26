@@ -24,6 +24,9 @@ interface PostData {
   tags?: string[];
   status?: "draft" | "published";
   slug?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  focusKeyword?: string;
 }
 
 function toSlug(title: string) {
@@ -61,6 +64,9 @@ export default function PostEditor({ post }: { post?: PostData }) {
   const [linkUrl, setLinkUrl] = useState("");
   const [imgDialog, setImgDialog] = useState(false);
   const [imgUrl, setImgUrl] = useState("");
+  const [metaTitle, setMetaTitle]           = useState(post?.metaTitle ?? "");
+  const [metaDescription, setMetaDescription] = useState(post?.metaDescription ?? "");
+  const [focusKeyword, setFocusKeyword]     = useState(post?.focusKeyword ?? "");
   const [slugEdited, setSlugEdited] = useState(isEdit);
   const [isDirty, setIsDirty] = useState(false);
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
@@ -120,6 +126,9 @@ export default function PostEditor({ post }: { post?: PostData }) {
         coverImage: coverImage.trim(),
         tags,
         status: saveStatus,
+        metaTitle: metaTitle.trim(),
+        metaDescription: metaDescription.trim(),
+        focusKeyword: focusKeyword.trim(),
       };
 
       const url = isEdit ? `/api/admin/posts/${post._id}` : "/api/admin/posts";
@@ -467,6 +476,68 @@ export default function PostEditor({ post }: { post?: PostData }) {
                   </button>
                 </div>
               )}
+            </div>
+          </div>
+
+          {/* SEO */}
+          <div className="pe-sidebar-card">
+            <div className="pe-sidebar-card-header">
+              <h3><Eye size={13} /> SEO</h3>
+            </div>
+            <div className="pe-sidebar-card-body">
+              {/* SERP Preview */}
+              <div className="pe-serp-preview">
+                <p className="pe-serp-label">Google Preview</p>
+                <div className="pe-serp-box">
+                  <p className="pe-serp-url">myhomestyler.com › blog › {slug || "post-slug"}</p>
+                  <p className="pe-serp-title">{metaTitle || title || "Post Title"}</p>
+                  <p className="pe-serp-desc">{metaDescription || excerpt || "Your meta description will appear here in Google search results."}</p>
+                </div>
+              </div>
+
+              <div className="pe-field" style={{ marginTop: "0.75rem" }}>
+                <label>
+                  Focus Keyword
+                </label>
+                <input
+                  value={focusKeyword}
+                  onChange={(e) => { setFocusKeyword(e.target.value); setIsDirty(true); }}
+                  placeholder="e.g. floor plan generator"
+                />
+              </div>
+
+              <div className="pe-field">
+                <label>
+                  Meta Title
+                  <span className={`pe-char-count ${metaTitle.length > 60 ? "pe-char-over" : metaTitle.length > 50 ? "pe-char-good" : ""}`}>
+                    {metaTitle.length}/60
+                  </span>
+                </label>
+                <input
+                  value={metaTitle}
+                  onChange={(e) => { setMetaTitle(e.target.value); setIsDirty(true); }}
+                  placeholder={title ? title + " — MyHomeStyler Blog" : "SEO title..."}
+                  maxLength={80}
+                />
+                {!metaTitle && <p className="pe-seo-hint">Defaults to post title if left empty</p>}
+              </div>
+
+              <div className="pe-field">
+                <label>
+                  Meta Description
+                  <span className={`pe-char-count ${metaDescription.length > 160 ? "pe-char-over" : metaDescription.length > 120 ? "pe-char-good" : ""}`}>
+                    {metaDescription.length}/160
+                  </span>
+                </label>
+                <textarea
+                  value={metaDescription}
+                  onChange={(e) => { setMetaDescription(e.target.value); setIsDirty(true); }}
+                  placeholder={excerpt || "Short description for search engines..."}
+                  rows={3}
+                  maxLength={200}
+                />
+                {!metaDescription && <p className="pe-seo-hint">Defaults to excerpt if left empty</p>}
+              </div>
             </div>
           </div>
 

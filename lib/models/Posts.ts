@@ -7,10 +7,12 @@ import mongoose, { Schema, Document } from 'mongoose';
     excerpt: { type: String, default: ''  },
     coverImage: { type: String, default: null }, 
     tags:       { type: [String], default: [] },
-    status:     { type: String, enum: ["draft", "published"],
-    default: "draft" },
-    createdAt:  { type: Date, default: Date.now },
-    updatedAt:  { type: Date, default: Date.now },
+    status:          { type: String, enum: ["draft", "published"], default: "draft" },
+    metaTitle:       { type: String, default: "" },
+    metaDescription: { type: String, default: "" },
+    focusKeyword:    { type: String, default: "" },
+    createdAt:       { type: Date, default: Date.now },
+    updatedAt:       { type: Date, default: Date.now },
 });
 
 PostSchema.index({ slug: 1 });

@@ -13,13 +13,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const post = await Post.findOne({ slug, status: "published" }).lean() as any;
   if (!post) return {};
   const url = `https://myhomestyler.com/blog/${slug}`;
+  const seoTitle = post.metaTitle || post.title + " — MyHomeStyler Blog";
+  const seoDesc  = post.metaDescription || post.excerpt || post.title;
   return {
-    title: post.title + " — MyHomeStyler Blog",
-    description: post.excerpt || post.title,
+    title: seoTitle,
+    description: seoDesc,
     alternates: { canonical: url },
     openGraph: {
-      title: post.title,
-      description: post.excerpt,
+      title: seoTitle,
+      description: seoDesc,
       url,
       type: "article",
       publishedTime: post.createdAt,

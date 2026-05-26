@@ -20,7 +20,10 @@ export async function PUT(request: Request, { params }: {
         excerpt,
         coverImage,
         tags,
-        status
+        status,
+        metaTitle,
+        metaDescription,
+        focusKeyword,
          } = await request.json() as {
         title?: string;
         content?: string;
@@ -28,6 +31,9 @@ export async function PUT(request: Request, { params }: {
         coverImage?: string;
         tags?: string[];
         status?: string;
+        metaTitle?: string;
+        metaDescription?: string;
+        focusKeyword?: string;
       };
 
       const { id } = await params;
@@ -35,9 +41,7 @@ export async function PUT(request: Request, { params }: {
 
       const post = await Post.findByIdAndUpdate(
         id,
-        { $set: 
-          {title, content, excerpt, coverImage, tags,
-          status, updatedAt: new Date() } },
+        { $set: { title, content, excerpt, coverImage, tags, status, metaTitle, metaDescription, focusKeyword, updatedAt: new Date() } },
           { new: true }
         );
        if (!post) return NextResponse.json({ error: "Not found" }, { status: 404 });

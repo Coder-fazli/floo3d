@@ -48,7 +48,10 @@ export async function POST(request: Request) {
         excerpt,
         coverImage,
         tags,
-        status
+        status,
+        metaTitle,
+        metaDescription,
+        focusKeyword,
       } = await request.json() as {
         title?: string;
         content?: string;
@@ -56,6 +59,9 @@ export async function POST(request: Request) {
         coverImage?: string;
         tags?: string[];
         status?: string;
+        metaTitle?: string;
+        metaDescription?: string;
+        focusKeyword?: string;
       };
 
       if (!title) return NextResponse.json({ error: "Title is required" }, { status: 400 });
@@ -66,8 +72,7 @@ export async function POST(request: Request) {
       const existing = await Post.findOne({ slug }).lean();
       if (existing) slug = `${slug}-${Date.now()}`;
 
-      const post = await Post.create({ title, slug, content,
-      excerpt, coverImage, tags, status });
+      const post = await Post.create({ title, slug, content, excerpt, coverImage, tags, status, metaTitle, metaDescription, focusKeyword });
       return NextResponse.json({ post }, { status: 201 });
 
       
