@@ -1,4 +1,4 @@
-import "../blog.css";
+import "../blog/blog.css";
 import { connectDb } from "@/lib/db";
 import Post from "@/lib/models/Posts";
 import Navbar from "@/components/Navbar";
@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   await connectDb();
   const post = await Post.findOne({ slug, status: "published" }).lean() as any;
   if (!post) return {};
-  const url = `https://myhomestyler.com/blog/${slug}`;
+  const url = `https://myhomestyler.com/${slug}`;
   const seoTitle = post.metaTitle || post.title + " — MyHomeStyler Blog";
   const seoDesc  = post.metaDescription || post.excerpt || post.title;
   return {
@@ -30,8 +30,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title,
-      description: post.excerpt,
+      title: seoTitle,
+      description: seoDesc,
       images: post.coverImage ? [post.coverImage] : [],
     },
   };
@@ -66,8 +66,8 @@ export default async function SinglePostPage({ params }: { params: Promise<{ slu
       url: "https://myhomestyler.com",
       logo: { "@type": "ImageObject", url: "https://myhomestyler.com/logo.png" },
     },
-    url: `https://myhomestyler.com/blog/${post.slug}`,
-    mainEntityOfPage: { "@type": "WebPage", "@id": `https://myhomestyler.com/blog/${post.slug}` },
+    url: `https://myhomestyler.com/${post.slug}`,
+    mainEntityOfPage: { "@type": "WebPage", "@id": `https://myhomestyler.com/${post.slug}` },
     keywords: post.tags?.join(", ") ?? "",
   };
 
@@ -79,18 +79,18 @@ export default async function SinglePostPage({ params }: { params: Promise<{ slu
       />
       <Navbar />
 
-      {/* Breadcrumb */}
-      <nav className="post-breadcrumb">
-        <Link href="/">Home</Link>
-        <span className="post-breadcrumb-sep">›</span>
-        <Link href="/blog">Blog</Link>
-        <span className="post-breadcrumb-sep">›</span>
-        <span className="post-breadcrumb-current">{post.title}</span>
-      </nav>
-
       {/* Header — title left, image right */}
       <header className="post-header">
         <div className="post-header-left">
+          {/* Breadcrumb */}
+          <nav className="post-breadcrumb">
+            <Link href="/">Home</Link>
+            <span className="post-breadcrumb-sep">›</span>
+            <Link href="/blog">Blog</Link>
+            <span className="post-breadcrumb-sep">›</span>
+            <span className="post-breadcrumb-current">{post.title}</span>
+          </nav>
+
           {/* Tags + date */}
           <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "0.25rem" }}>
             {post.tags?.length > 0 && (
@@ -130,25 +130,25 @@ export default async function SinglePostPage({ params }: { params: Promise<{ slu
 
       {/* Article body */}
       <section className="post-body-section">
-      <div className="post-body-wrap">
-        <Link href="/blog" className="post-back">
-          <ArrowLeft size={14} /> Back to Blog
-        </Link>
+        <div className="post-body-wrap">
+          <Link href="/blog" className="post-back">
+            <ArrowLeft size={14} /> Back to Blog
+          </Link>
 
-        <article
-          className="post-body"
-          dangerouslySetInnerHTML={{ __html: post.content ?? "" }}
-        />
+          <article
+            className="post-body"
+            dangerouslySetInnerHTML={{ __html: post.content ?? "" }}
+          />
 
-        {/* Tags footer */}
-        {post.tags?.length > 0 && (
-          <div className="post-tags-footer">
-            {post.tags.map((t: string) => (
-              <span key={t} className="post-tag-footer">{t}</span>
-            ))}
-          </div>
-        )}
-      </div>
+          {/* Tags footer */}
+          {post.tags?.length > 0 && (
+            <div className="post-tags-footer">
+              {post.tags.map((t: string) => (
+                <span key={t} className="post-tag-footer">{t}</span>
+              ))}
+            </div>
+          )}
+        </div>
       </section>
 
       <Footer />

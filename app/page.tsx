@@ -101,7 +101,7 @@ export default async function Home() {
     description: p.excerpt ?? "",
     image: p.coverImage ?? null,
     publishDate: new Date(p.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-    readMoreLink: `/blog/${p.slug}`,
+    readMoreLink: `/${p.slug}`,
     category: p.tags?.[0]?.toUpperCase() ?? "BLOG",
   }));
   return (

@@ -489,7 +489,7 @@ export default function PostEditor({ post }: { post?: PostData }) {
               <div className="pe-serp-preview">
                 <p className="pe-serp-label">Google Preview</p>
                 <div className="pe-serp-box">
-                  <p className="pe-serp-url">myhomestyler.com › blog › {slug || "post-slug"}</p>
+                  <p className="pe-serp-url">myhomestyler.com › {slug || "post-slug"}</p>
                   <p className="pe-serp-title">{metaTitle || title || "Post Title"}</p>
                   <p className="pe-serp-desc">{metaDescription || excerpt || "Your meta description will appear here in Google search results."}</p>
                 </div>

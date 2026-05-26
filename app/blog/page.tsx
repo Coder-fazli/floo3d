@@ -39,7 +39,7 @@ export default async function BlogPage() {
         ) : (
           <div className="blog-grid">
             {posts.map((post) => (
-              <Link href={`/blog/${post.slug}`} key={post._id?.toString()} className="blog-card">
+              <Link href={`/${post.slug}`} key={post._id?.toString()} className="blog-card">
                 {post.coverImage ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={post.coverImage} alt={post.title} className="blog-card-img" />
