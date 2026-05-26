@@ -12,13 +12,25 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   await connectDb();
   const post = await Post.findOne({ slug, status: "published" }).lean() as any;
   if (!post) return {};
+  const url = `https://myhomestyler.com/blog/${slug}`;
   return {
     title: post.title + " — MyHomeStyler Blog",
     description: post.excerpt || post.title,
+    alternates: { canonical: url },
     openGraph: {
       title: post.title,
       description: post.excerpt,
-      images: post.coverImage ? [{ url: post.coverImage }] : [],
+      url,
+      type: "article",
+      publishedTime: post.createdAt,
+      modifiedTime: post.updatedAt,
+      images: post.coverImage ? [{ url: post.coverImage, width: 1200, height: 630, alt: post.title }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      images: post.coverImage ? [post.coverImage] : [],
     },
   };
 }
@@ -33,8 +45,36 @@ export default async function SinglePostPage({ params }: { params: Promise<{ slu
     month: "long", day: "numeric", year: "numeric",
   });
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt ?? "",
+    image: post.coverImage ? [post.coverImage] : [],
+    datePublished: new Date(post.createdAt).toISOString(),
+    dateModified: new Date(post.updatedAt ?? post.createdAt).toISOString(),
+    author: {
+      "@type": "Organization",
+      name: "MyHomeStyler Team",
+      url: "https://myhomestyler.com",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "MyHomeStyler",
+      url: "https://myhomestyler.com",
+      logo: { "@type": "ImageObject", url: "https://myhomestyler.com/logo.png" },
+    },
+    url: `https://myhomestyler.com/blog/${post.slug}`,
+    mainEntityOfPage: { "@type": "WebPage", "@id": `https://myhomestyler.com/blog/${post.slug}` },
+    keywords: post.tags?.join(", ") ?? "",
+  };
+
   return (
     <div className="post-page">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar />
 
       {/* Breadcrumb */}

@@ -6,13 +6,13 @@ import Underline from "@tiptap/extension-underline";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft, Bold, Italic, Underline as UnderlineIcon, Strikethrough,
   Heading1, Heading2, Heading3, List, ListOrdered, Quote, Code, FileCode,
   Link as LinkIcon, Image as ImageIcon, Minus, Undo, Redo, Save, Send,
-  Eye, FileText, X, Tag, Check, Loader2
+  Eye, FileText, X, Tag, Check, Loader2, Upload,
 } from "lucide-react";
 
 interface PostData {
@@ -55,18 +55,25 @@ export default function PostEditor({ post }: { post?: PostData }) {
   const [tagInput, setTagInput] = useState("");
   const [status, setStatus] = useState<"draft" | "published">(post?.status ?? "draft");
   const [saving, setSaving] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
   const [toast, setToast] = useState<{ msg: string; type: "success" | "error" } | null>(null);
   const [linkDialog, setLinkDialog] = useState(false);
   const [linkUrl, setLinkUrl] = useState("");
   const [imgDialog, setImgDialog] = useState(false);
   const [imgUrl, setImgUrl] = useState("");
   const [slugEdited, setSlugEdited] = useState(isEdit);
+  const [isDirty, setIsDirty] = useState(false);
+  const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const editor = useEditor({
     extensions: [
       StarterKit,
       Underline,
-      Link.configure({ openOnClick: false, HTMLAttributes: { rel: "noopener noreferrer" } }),
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: { rel: "noopener noreferrer", target: "_blank" },
+      }),
       Image.configure({ allowBase64: false }),
       Placeholder.configure({ placeholder: "Start writing your post content here..." }),
     ],
@@ -74,7 +81,19 @@ export default function PostEditor({ post }: { post?: PostData }) {
     editorProps: {
       attributes: { class: "tiptap" },
     },
+    onUpdate: () => setIsDirty(true),
   });
+
+  // Warn on browser close / reload when dirty
+  useEffect(() => {
+    if (!isDirty) return;
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, [isDirty]);
 
   // Auto-generate slug from title
   useEffect(() => {
@@ -108,6 +127,7 @@ export default function PostEditor({ post }: { post?: PostData }) {
 
       const data = await res.json();
       setStatus(saveStatus);
+      setIsDirty(false);
       showToast(saveStatus === "published" ? "Published!" : "Draft saved", "success");
 
       if (!isEdit && data.post?._id) {
@@ -120,13 +140,40 @@ export default function PostEditor({ post }: { post?: PostData }) {
     }
   }, [title, slug, excerpt, coverImage, tags, editor, isEdit, post, router, showToast]);
 
+  const handleCoverUpload = useCallback(async (file: File) => {
+    if (!file.type.startsWith("image/")) { showToast("Please select an image file", "error"); return; }
+    setUploadingCover(true);
+    try {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const base64 = reader.result as string;
+        const res = await fetch("/api/admin/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ base64, folder: "blog/covers" }),
+        });
+        if (!res.ok) throw new Error("Upload failed");
+        const { url } = await res.json();
+        setCoverImage(url);
+        setIsDirty(true);
+        showToast("Image uploaded!", "success");
+        setUploadingCover(false);
+      };
+      reader.onerror = () => { showToast("Failed to read file", "error"); setUploadingCover(false); };
+      reader.readAsDataURL(file);
+    } catch {
+      showToast("Upload failed. Try again.", "error");
+      setUploadingCover(false);
+    }
+  }, [showToast]);
+
   const addTag = useCallback(() => {
     const t = tagInput.trim().toLowerCase();
-    if (t && !tags.includes(t)) setTags((p) => [...p, t]);
+    if (t && !tags.includes(t)) { setTags((p) => [...p, t]); setIsDirty(true); }
     setTagInput("");
   }, [tagInput, tags]);
 
-  const removeTag = (t: string) => setTags((p) => p.filter((x) => x !== t));
+  const removeTag = (t: string) => { setTags((p) => p.filter((x) => x !== t)); setIsDirty(true); };
 
   const applyLink = () => {
     if (!linkUrl) { editor?.chain().focus().unsetLink().run(); }
@@ -141,6 +188,11 @@ export default function PostEditor({ post }: { post?: PostData }) {
     setImgUrl("");
   };
 
+  const handleBack = () => {
+    if (isDirty) { setShowLeaveConfirm(true); }
+    else { router.push("/secure-7x9/posts"); }
+  };
+
   if (!editor) return null;
 
   return (
@@ -148,7 +200,7 @@ export default function PostEditor({ post }: { post?: PostData }) {
       {/* Top bar */}
       <div className="pe-topbar">
         <div className="pe-topbar-left">
-          <button className="pe-back-btn" onClick={() => router.push("/secure-7x9/posts")}>
+          <button className="pe-back-btn" onClick={handleBack}>
             <ArrowLeft size={14} /> Posts
           </button>
           <p className="pe-topbar-title">{title || "Untitled post"}</p>
@@ -156,6 +208,7 @@ export default function PostEditor({ post }: { post?: PostData }) {
             {status === "published" ? <Eye size={10} /> : <FileText size={10} />}
             {status}
           </span>
+          {isDirty && <span className="pe-unsaved-badge">Unsaved changes</span>}
         </div>
         <div className="pe-topbar-right">
           <button className="pe-btn-draft" onClick={() => handleSave("draft")} disabled={saving}>
@@ -178,7 +231,7 @@ export default function PostEditor({ post }: { post?: PostData }) {
             className="pe-title-input"
             placeholder="Post title..."
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => { setTitle(e.target.value); setIsDirty(true); }}
             rows={2}
           />
           <div className="pe-title-divider" />
@@ -294,10 +347,10 @@ export default function PostEditor({ post }: { post?: PostData }) {
               <div className="pe-field">
                 <label>Status</label>
                 <div className="pe-status-select">
-                  <button className={`pe-status-opt${status === "draft" ? " active-draft" : ""}`} onClick={() => setStatus("draft")}>
+                  <button className={`pe-status-opt${status === "draft" ? " active-draft" : ""}`} onClick={() => { setStatus("draft"); setIsDirty(true); }}>
                     Draft
                   </button>
-                  <button className={`pe-status-opt${status === "published" ? " active-published" : ""}`} onClick={() => setStatus("published")}>
+                  <button className={`pe-status-opt${status === "published" ? " active-published" : ""}`} onClick={() => { setStatus("published"); setIsDirty(true); }}>
                     Published
                   </button>
                 </div>
@@ -321,7 +374,7 @@ export default function PostEditor({ post }: { post?: PostData }) {
                 <label>URL Slug</label>
                 <input
                   value={slug}
-                  onChange={(e) => { setSlug(e.target.value); setSlugEdited(true); }}
+                  onChange={(e) => { setSlug(e.target.value); setSlugEdited(true); setIsDirty(true); }}
                   placeholder="post-url-slug"
                 />
               </div>
@@ -329,7 +382,7 @@ export default function PostEditor({ post }: { post?: PostData }) {
                 <label>Excerpt</label>
                 <textarea
                   value={excerpt}
-                  onChange={(e) => setExcerpt(e.target.value)}
+                  onChange={(e) => { setExcerpt(e.target.value); setIsDirty(true); }}
                   placeholder="Short summary shown on blog cards..."
                   rows={3}
                 />
@@ -343,13 +396,46 @@ export default function PostEditor({ post }: { post?: PostData }) {
               <h3><ImageIcon size={13} /> Cover Image</h3>
             </div>
             <div className="pe-sidebar-card-body">
+              {/* Upload button */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) handleCoverUpload(f); e.target.value = ""; }}
+              />
+              <button
+                className="pe-upload-btn"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingCover}
+              >
+                {uploadingCover
+                  ? <><Loader2 size={13} className="animate-spin" /> Uploading...</>
+                  : <><Upload size={13} /> Upload Image</>
+                }
+              </button>
+
+              <div className="pe-upload-divider">or paste URL</div>
+
               <div className="pe-field">
-                <label>Image URL</label>
-                <input value={coverImage} onChange={(e) => setCoverImage(e.target.value)} placeholder="https://..." />
+                <input
+                  value={coverImage}
+                  onChange={(e) => { setCoverImage(e.target.value); setIsDirty(true); }}
+                  placeholder="https://..."
+                />
               </div>
               {coverImage && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={coverImage} alt="Cover preview" className="pe-cover-preview" />
+                <div className="pe-cover-preview-wrap">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={coverImage} alt="Cover preview" className="pe-cover-preview" />
+                  <button
+                    className="pe-cover-remove"
+                    onClick={() => { setCoverImage(""); setIsDirty(true); }}
+                    title="Remove cover image"
+                  >
+                    <X size={12} />
+                  </button>
+                </div>
               )}
             </div>
           </div>
@@ -430,6 +516,28 @@ export default function PostEditor({ post }: { post?: PostData }) {
             <div className="pe-link-dialog-actions">
               <button className="pe-link-cancel" onClick={() => setImgDialog(false)}>Cancel</button>
               <button className="pe-link-confirm" onClick={insertImage}>Insert</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Leave confirmation */}
+      {showLeaveConfirm && (
+        <div className="pe-link-dialog" onClick={() => setShowLeaveConfirm(false)}>
+          <div className="pe-link-dialog-box" onClick={(e) => e.stopPropagation()}>
+            <h4>Unsaved changes</h4>
+            <p style={{ fontSize: "0.85rem", color: "#666", marginBottom: "1rem" }}>
+              You have unsaved changes. Leave without saving?
+            </p>
+            <div className="pe-link-dialog-actions">
+              <button className="pe-link-cancel" onClick={() => setShowLeaveConfirm(false)}>Stay</button>
+              <button
+                className="pe-link-confirm"
+                style={{ background: "#dc2626" }}
+                onClick={() => { setIsDirty(false); router.push("/secure-7x9/posts"); }}
+              >
+                Leave without saving
+              </button>
             </div>
           </div>
         </div>

@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
         rules: [
             {
                 userAgent: '*',
-                allow: ['/', '/2d-to-3d-floor-plan-converter', '/floor-plan-generator'],
+                allow: ['/', '/2d-to-3d-floor-plan-converter', '/floor-plan-generator', '/blog/'],
                 disallow: ['/secure-7x9/', '/api/', '/dashboard/', '/sign-in/', '/sign-up/'],
             },
             {
