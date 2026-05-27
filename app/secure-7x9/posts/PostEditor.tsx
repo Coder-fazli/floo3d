@@ -51,7 +51,10 @@ export default function PostEditor({ post }: { post?: PostData }) {
   const isEdit = !!post?._id;
 
   const [title, setTitle] = useState(post?.title ?? "");
-  const [slug, setSlug] = useState(post?.slug ?? "");
+  
+  const [slugOverride, setSlugOverride] = useState(post?.slug ??"");
+  const slug = slugOverride !== "" ? slugOverride : toSlug(title);
+
   const [excerpt, setExcerpt] = useState(post?.excerpt ?? "");
   const [coverImage, setCoverImage] = useState(post?.coverImage ?? "");
   const [tags, setTags] = useState<string[]>(post?.tags ?? []);
@@ -67,7 +70,6 @@ export default function PostEditor({ post }: { post?: PostData }) {
   const [metaTitle, setMetaTitle]           = useState(post?.metaTitle ?? "");
   const [metaDescription, setMetaDescription] = useState(post?.metaDescription ?? "");
   const [focusKeyword, setFocusKeyword]     = useState(post?.focusKeyword ?? "");
-  const slugEditedRef = useRef(isEdit);
   const [isDirty, setIsDirty] = useState(false);
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
   const [uploadingBodyImg, setUploadingBodyImg] = useState(false);
@@ -103,10 +105,6 @@ export default function PostEditor({ post }: { post?: PostData }) {
     return () => window.removeEventListener("beforeunload", handler);
   }, [isDirty]);
 
-  // Auto-generate slug from title only if user hasn't manually edited it
-  useEffect(() => {
-    if (!slugEditedRef.current && title) setSlug(toSlug(title));
-  }, [title]);
 
   const wordCount = editor?.getText().split(/\s+/).filter(Boolean).length ?? 0;
 
@@ -413,7 +411,7 @@ export default function PostEditor({ post }: { post?: PostData }) {
                 <label>URL Slug</label>
                 <input
                   value={slug}
-                  onChange={(e) => { slugEditedRef.current = true; setSlug(e.target.value); setIsDirty(true); }}
+                  onChange={(e) => { setSlugOverride(e.target.value); setIsDirty(true); }}
                   placeholder="post-url-slug"
                 />
               </div>
