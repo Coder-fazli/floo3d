@@ -18,8 +18,26 @@ export default async function BlogPage() {
     .select("title slug excerpt coverImage tags createdAt")
     .lean() as any[];
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "MyHomeStyler Blog",
+    description: "Design tips, AI insights, and home styling inspiration.",
+    url: "https://myhomestyler.com/blog",
+    itemListElement: posts.map((p, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `https://myhomestyler.com/${p.slug}`,
+      name: p.title,
+    })),
+  };
+
   return (
     <div className="blog-page">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar />
 
       {/* Hero */}
