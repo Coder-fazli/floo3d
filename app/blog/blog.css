@@ -169,7 +169,7 @@
 .post-header {
   max-width: 960px;
   margin: 0 auto;
-  padding: 3rem 1.5rem 3rem;
+  padding: 3rem 1.5rem 2rem;
   display: grid;
   grid-template-columns: 1fr 380px;
   gap: 3rem;
@@ -275,9 +275,9 @@
   border-top: 1px solid #e9e7e2;
 }
 .post-body-wrap {
-  max-width: 720px;
+  max-width: 960px;
   margin: 0 auto;
-  padding: 3.5rem 1.5rem 5rem;
+  padding: 2rem 1.5rem 5rem;
 }
 
 /* Article typography */
@@ -391,6 +391,22 @@
   transition: all 0.15s;
 }
 .post-tag-footer:hover { background: #fff3ed; color: #ec5b13; }
+
+/* Figure / image with caption */
+.post-body .post-figure {
+  margin: 1.75rem 0;
+}
+.post-body .post-figure img {
+  margin: 0;
+}
+.post-body .post-figure figcaption {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  text-align: center;
+  margin-top: 0.5rem;
+  font-style: italic;
+  line-height: 1.5;
+}
 
 /* Empty blog state */
 .blog-empty {

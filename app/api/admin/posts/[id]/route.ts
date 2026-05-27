@@ -41,7 +41,8 @@ export async function PUT(request: Request, { params }: {
       const { id } = await params;
       await connectDb();
 
-      const post = await Post.findByIdAndUpdate(
+      const post = await Post.find
+      ByIdAndUpdate(
         id,
         { $set: { title, slug, content, excerpt, coverImage, tags, status, metaTitle, metaDescription, focusKeyword, updatedAt: new Date() } },
           { new: true }
