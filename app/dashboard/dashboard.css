@@ -55,8 +55,8 @@
 /* Type cards grid */
 .nr-type-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
 }
 
 .nr-type-card {
@@ -188,7 +188,7 @@
   box-shadow: 0 2px 8px rgba(236, 91, 19, 0.2);
 }
 
-@media (max-width: 860px) {
+@media (max-width: 1024px) {
   .nr-type-grid {
     grid-template-columns: repeat(2, 1fr);
   }
