@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { ArrowUpRight, FolderOpen, Sparkles, X } from "lucide-react";
-import AutoCompareSlider from "@/components/AutoCompareSlider";
 import { type FramesData, getUserInfo, saveUserCountry } from "@/lib/actions";
 import { DEFAULT_FALLBACKS } from "@/lib/frameDefaults";
 import { Zap } from "lucide-react";
@@ -174,8 +173,7 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
             {Object.keys(INPUT_TYPE_META).map((id) => {
               const def = DEFAULT_FALLBACKS[id];
               const saved = frames.fallbacks[id] ?? {};
-              const imgBefore = saved.before ?? def.before;
-              const imgAfter  = saved.after  ?? def.after;
+              const cardImage = saved.image ?? def.image;
               const { label, desc } = INPUT_TYPE_META[id];
               return (
                 <div
@@ -184,7 +182,8 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
                   onClick={() => router.push(`/visualizer/new?type=${id}`)}
                 >
                   <div className="nr-reveal-container">
-                    <AutoCompareSlider before={imgBefore} after={imgAfter} />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={cardImage} alt={label} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                     {/* Mobile only: gradient + overlaid text */}
                     <div className="nr-card-gradient" />
                     <div className="nr-card-overlay-info">

@@ -69,7 +69,7 @@ export default function FramesClient({ initialFrames }: Props) {
 
   const setUpl = (key: string, val: boolean) => setUploading((u) => ({ ...u, [key]: val }));
 
-  const handleFallback = async (type: string, slot: "before" | "after", file: File) => {
+  const handleFallback = async (type: string, slot: "before" | "after" | "image", file: File) => {
     const uk = `f:${type}:${slot}`;
     setUpl(uk, true);
     try {
@@ -117,11 +117,11 @@ export default function FramesClient({ initialFrames }: Props) {
 
       {/* Input Type Covers */}
       <div className="adm-card" style={{ padding: "1.75rem", marginBottom: "1.5rem" }}>
-        <h3 className="adm-settings-title" style={{ marginBottom: "0.375rem" }}>Input Type Covers</h3>
+        <h3 className="adm-settings-title" style={{ marginBottom: "0.375rem" }}>Dashboard Card Images</h3>
         <p style={{ fontSize: "0.8rem", color: "#94a3b8", marginBottom: "1.5rem" }}>
-          Before / After comparison images shown when no project has been uploaded yet.
+          Single card image shown on the dashboard for each transformation type. Click to replace.
         </p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: "1.25rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "1.25rem" }}>
           {Object.keys(DEFAULT_FALLBACKS).map((type) => {
             const def = DEFAULT_FALLBACKS[type];
             const saved = frames.fallbacks[type] ?? {};
@@ -130,10 +130,11 @@ export default function FramesClient({ initialFrames }: Props) {
                 <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#0f172a", marginBottom: "0.875rem" }}>
                   {INPUT_TYPE_LABELS[type]}
                 </p>
-                <div style={{ display: "flex", gap: "0.75rem" }}>
-                  <ImageSlot src={saved.before ?? def.before} label="Before" uploading={!!uploading[`f:${type}:before`]} onPick={(f) => handleFallback(type, "before", f)} />
-                  <ImageSlot src={saved.after  ?? def.after}  label="After"  uploading={!!uploading[`f:${type}:after`]}  onPick={(f) => handleFallback(type, "after",  f)} />
-                </div>
+                <ImageSlot
+                  src={saved.image ?? def.image}
+                  uploading={!!uploading[`f:${type}:image`]}
+                  onPick={(f) => handleFallback(type, "image", f)}
+                />
               </div>
             );
           })}

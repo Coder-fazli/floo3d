@@ -1,9 +1,9 @@
-export const DEFAULT_FALLBACKS: Record<string, { before: string; after: string; labelBefore: string; labelAfter: string }> = {
-  "floor-plan":      { before: "/real-2d-plan.jpg",         after: "/real-3d-render.jpg",      labelBefore: "Original 2D Plan",  labelAfter: "AI 3D Render" },
-  "interior-design": { before: "/card-room-before.webp",    after: "/card-room-after.webp",    labelBefore: "Original Room",     labelAfter: "AI Redesigned" },
-  "outdoor":         { before: "/card-outdoor-before.webp", after: "/card-outdoor-after.webp", labelBefore: "Original Outdoor",  labelAfter: "AI Outdoor Design" },
-  "empty-room":           { before: "/card-empty-before.webp",   after: "/card-empty-after.webp",   labelBefore: "Furnished Room",    labelAfter: "Emptied Room" },
-  "floor-plan-generator": { before: "/real-2d-plan.jpg",         after: "/real-3d-render.jpg",      labelBefore: "Configuration",     labelAfter: "Generated Plan" },
+export const DEFAULT_FALLBACKS: Record<string, { before: string; after: string; image: string; labelBefore: string; labelAfter: string }> = {
+  "floor-plan":           { before: "/real-2d-plan.jpg",         after: "/real-3d-render.jpg",      image: "/real-3d-render.jpg",      labelBefore: "Original 2D Plan",  labelAfter: "AI 3D Render" },
+  "interior-design":      { before: "/card-room-before.webp",    after: "/card-room-after.webp",    image: "/card-room-after.webp",    labelBefore: "Original Room",     labelAfter: "AI Redesigned" },
+  "outdoor":              { before: "/card-outdoor-before.webp", after: "/card-outdoor-after.webp", image: "/card-outdoor-after.webp", labelBefore: "Original Outdoor",  labelAfter: "AI Outdoor Design" },
+  "empty-room":           { before: "/card-empty-before.webp",   after: "/card-empty-after.webp",   image: "/card-empty-after.webp",   labelBefore: "Furnished Room",    labelAfter: "Emptied Room" },
+  "floor-plan-generator": { before: "/real-2d-plan.jpg",         after: "/real-3d-render.jpg",      image: "/real-3d-render.jpg",      labelBefore: "Configuration",     labelAfter: "Generated Plan" },
 };
 
 // Keyed by inputType → styleName → default image path

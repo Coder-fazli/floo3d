@@ -8,7 +8,7 @@ import AppFrames from "./models/AppFrames";
 import { auth } from "@clerk/nextjs/server";
 
 export type FramesData = {
-  fallbacks: Record<string, { before?: string; after?: string }>;
+  fallbacks: Record<string, { before?: string; after?: string; image?: string }>;
   styles: Record<string, Record<string, string>>; // inputType → styleName → url
   angles: Record<string, string>; // angleName → url
   roomTypes: Record<string, string>; // roomName → url
