@@ -70,7 +70,7 @@
 .nr-reveal-container {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 2;
   border-radius: 0.75rem;
   background: #f1f5f9;
   border: 1px solid #e8e4df;
@@ -217,7 +217,7 @@
 
   /* Card image: wide landscape, no border */
   .nr-reveal-container {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 3 / 2;
     border-radius: 1rem;
     border: none;
     box-shadow: 0 2px 16px rgba(0,0,0,0.14);

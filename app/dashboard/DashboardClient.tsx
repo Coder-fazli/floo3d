@@ -183,7 +183,7 @@ export default function DashboardClient({ frames, displayName }: { frames: Frame
                 >
                   <div className="nr-reveal-container">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={cardImage} alt={label} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+                    <img src={cardImage} alt={label} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain" }} />
                     {/* Mobile only: gradient + overlaid text */}
                     <div className="nr-card-gradient" />
                     <div className="nr-card-overlay-info">
