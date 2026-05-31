@@ -1,4 +1,4 @@
-import "./home.css";
+import "../home.css";
 import MainHero from "@/components/MainHero";
 import DesignOptions from "@/components/DesignOptions";
 import HowItWorks2 from "@/components/HowItWorks2";
