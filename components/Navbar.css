@@ -434,18 +434,29 @@
 
 /* Language switcher */
 .navbar-lang-btn {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #27282f;
-  background: rgba(0,0,0,0.05);
-  border: 1px solid rgba(0,0,0,0.1);
-  border-radius: 6px;
-  padding: 0.3rem 0.65rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  height: 2rem;
+  padding: 0 0.7rem;
+  background: transparent;
+  border: 1.5px solid rgba(39,40,47,0.18);
+  border-radius: 999px;
   cursor: pointer;
-  transition: background 0.2s;
-  font-family: var(--font-cairo), var(--font-roboto), sans-serif;
-  letter-spacing: 0;
+  transition: border-color 0.18s, background 0.18s;
+  color: #27282f;
 }
 .navbar-lang-btn:hover {
-  background: rgba(0,0,0,0.1);
+  border-color: rgba(39,40,47,0.4);
+  background: rgba(39,40,47,0.04);
+}
+.navbar-lang-icon {
+  font-size: 0.8rem;
+  line-height: 1;
+}
+.navbar-lang-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  font-family: var(--font-cairo), var(--font-roboto), sans-serif;
 }

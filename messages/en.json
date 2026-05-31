@@ -83,5 +83,49 @@
     "copyright": "© 2026 MyHomeStyler Systems Inc. All rights reserved.",
     "language": "English (US)",
     "status": "Status: Operational"
+  },
+  "pricing": {
+    "pageTitle": "Simple, Transparent Pricing",
+    "pageSub": "Start free. Upgrade when you're ready. No subscriptions, no surprises.",
+    "mostPopular": "Most Popular",
+    "bestValue": "Best Value",
+    "perCredit": "per credit",
+    "getStarted": "Get Started Free",
+    "buyCredits": "Buy Credits",
+    "save": "Save",
+    "off": "off",
+    "saleEnds": "Sale ends in",
+    "days": "days",
+    "hrs": "hrs",
+    "min": "min",
+    "sec": "sec",
+    "freePlanLabel": "Free Plan",
+    "proPlanLabel": "Pro Plan",
+    "creditsIncluded": "credits included",
+    "whatYouGet": "What you get",
+    "freeOnSignup": "Free on sign up",
+    "signUpForFree": "Sign Up for Free",
+    "alreadyHaveAccount": "Already have an account?",
+    "logIn": "Log in"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "myRenders": "My Renders",
+    "menu": "Menu",
+    "accountSettings": "Account Settings",
+    "mySubscription": "My Subscription",
+    "privacyPolicy": "Privacy Policy",
+    "support": "Support",
+    "logOut": "Log Out",
+    "credits": "Credits",
+    "upgrade": "Upgrade →"
+  },
+  "dashboard": {
+    "searchProjects": "Search projects...",
+    "gallery": "Gallery",
+    "logOut": "Log Out",
+    "freePlan": "Free Plan",
+    "proPlan": "Pro Plan",
+    "creditsLabel": "Credits"
   }
 }

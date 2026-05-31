@@ -7,7 +7,8 @@ import { getSiteSettings } from "@/lib/actions";
 import CrispChat from "@/components/CrispChat";
 import CookieBanner from "@/components/CookieBanner";
 import Script from "next/script";
-import { getLocale } from "next-intl/server";
+import { getLocale, getMessages } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
 
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400","700","900"], variable: "--font-playfair" });
 const roboto = Roboto({ subsets: ["latin"], weight: ["400","500","700","900"], variable: "--font-roboto" });
@@ -16,8 +17,12 @@ const cairo = Cairo({ subsets: ["arabic", "latin"], weight: ["400","500","600","
 export async function generateMetadata() {
   const locale = await getLocale();
   const s = await getSiteSettings();
-  const title = s?.metaTitle ?? "MyHomeStyler – Free Home Design AI Tool | 2D to 3D in Seconds";
-  const description = s?.metaDescription ?? "Free home design AI tool. Transform any floor plan into a stunning 3D render in seconds. No software needed — used by architects, designers & homeowners.";
+  const title = locale === 'ar'
+    ? "MyHomeStyler – برنامج تصميم منزل بالذكاء الاصطناعي | من 2D إلى 3D في ثوانٍ"
+    : (s?.metaTitle ?? "MyHomeStyler – Free Home Design AI Tool | 2D to 3D in Seconds");
+  const description = locale === 'ar'
+    ? "أفضل أداة ذكاء اصطناعي لتصميم المنازل. حوّل مخططك إلى تصور ثلاثي الأبعاد في أقل من 60 ثانية. مجاني للبدء — يستخدمه المعماريون والمصممون وأصحاب المنازل."
+    : (s?.metaDescription ?? "Free home design AI tool. Transform any floor plan into a stunning 3D render in seconds. No software needed — used by architects, designers & homeowners.");
   return {
     title,
     description,
@@ -44,8 +49,9 @@ export async function generateMetadata() {
     openGraph: {
       title,
       description,
-      url: "https://myhomestyler.com",
+      url: locale === 'ar' ? "https://myhomestyler.com/ar" : "https://myhomestyler.com",
       siteName: "MyHomeStyler",
+      locale: locale === 'ar' ? 'ar_AE' : 'en_US',
       images: [{ url: "https://myhomestyler.com/og-image.png", width: 512, height: 512, alt: "MyHomeStyler" }],
       type: "website",
     },
@@ -60,11 +66,13 @@ export async function generateMetadata() {
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const locale = await getLocale();
+  const messages = await getMessages();
   const isRTL = locale === 'ar';
   return (
     <ClerkProvider>
       <html lang={locale} dir={isRTL ? 'rtl' : 'ltr'} className={cn(playfair.variable, roboto.variable, cairo.variable)}>
-        <body className={`${playfair.variable} ${roboto.variable}`}>
+        <body className={`${playfair.variable} ${roboto.variable} ${cairo.variable}`}>
+          <NextIntlClientProvider locale={locale} messages={messages}>
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
@@ -153,6 +161,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <CrispChat />
           {children}
           <CookieBanner />
+          </NextIntlClientProvider>
         </body>
       </html>
     </ClerkProvider>

@@ -54,7 +54,7 @@ const Navbar = () => {
       <nav className="navbar-inner">
 
         {/* Brand */}
-        <a href="/" className="navbar-brand">
+        <a href={locale === 'ar' ? '/ar' : '/'} className="navbar-brand">
           <img src="/logo.png" alt="MyHomeStyler" className="navbar-logo-img" />
           <span className="navbar-name">MyHome<span className="navbar-name-accent">Styler</span></span>
         </a>
@@ -135,7 +135,8 @@ const Navbar = () => {
             onClick={() => switchLocale(locale === "en" ? "ar" : "en")}
             title="Switch language"
           >
-            {locale === "en" ? "عربي" : "EN"}
+            <span className="navbar-lang-icon">🌐</span>
+            <span className="navbar-lang-label">{locale === "en" ? "عربي" : "EN"}</span>
           </button>
 
           <button className="navbar-burger" onClick={() => setMenuOpen(!menuOpen)}>

@@ -7,7 +7,6 @@ import { getUserInfo } from "@/lib/actions";
 import { Search, Bell, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import GoogleTranslate from "./GoogleTranslate";
 
 export default function DashboardNavbar() {
   const { user } = useUser();
@@ -58,10 +57,6 @@ export default function DashboardNavbar() {
             <span className="dbnav-credits-full">{credits !== null ? `${credits} Credits` : "Loading…"}</span>
             <span className="dbnav-credits-short">{credits ?? "—"}</span>
           </div>
-
-          <div className="dbnav-divider" />
-
-          <GoogleTranslate />
 
           <div className="dbnav-divider" />
 

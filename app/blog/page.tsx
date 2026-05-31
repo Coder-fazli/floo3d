@@ -9,6 +9,14 @@ import { ArrowRight, FileText } from "lucide-react";
 export const metadata = {
   title: "Blog — MyHomeStyler",
   description: "Design tips, AI insights, and home styling inspiration from the MyHomeStyler team.",
+  alternates: {
+    canonical: "https://myhomestyler.com/blog",
+    languages: {
+      en: "https://myhomestyler.com/blog",
+      "ar-AE": "https://myhomestyler.com/ar/blog",
+      "x-default": "https://myhomestyler.com/blog",
+    },
+  },
 };
 
 export default async function BlogPage() {
