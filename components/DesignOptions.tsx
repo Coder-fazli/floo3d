@@ -3,6 +3,7 @@
 import "./DesignOptions.css";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import AutoCompareSlider from "@/components/AutoCompareSlider";
 
 function useFadeIn() {
@@ -20,12 +21,12 @@ function useFadeIn() {
   return ref;
 }
 
-function ImgCard({ before, after, badge }: { before: string; after: string; badge?: string }) {
+function ImgCard({ before, after, badge, beforeLabel, afterLabel }: { before: string; after: string; badge?: string; beforeLabel: string; afterLabel: string }) {
   return (
     <div className="do-img-card">
       <AutoCompareSlider before={before} after={after} />
-      <span className="do-label do-label-before">Before</span>
-      <span className="do-label do-label-after">After</span>
+      <span className="do-label do-label-before">{beforeLabel}</span>
+      <span className="do-label do-label-after">{afterLabel}</span>
       {badge && <div className="do-img-badge">{badge}</div>}
     </div>
   );
@@ -34,6 +35,7 @@ function ImgCard({ before, after, badge }: { before: string; after: string; badg
 type TransformImages = Record<string, { before?: string; after?: string }>;
 
 export default function DesignOptions({ transformImages = {} }: { transformImages?: TransformImages }) {
+  const t = useTranslations("design");
   const refHeader = useFadeIn();
   const ref01 = useFadeIn();
   const ref02 = useFadeIn();
@@ -48,74 +50,66 @@ export default function DesignOptions({ transformImages = {} }: { transformImage
       {/* ── Header ── */}
       <div className="do-header do-fade" ref={refHeader}>
         <div>
-          <span className="do-eyebrow">Visual Storytelling</span>
+          <span className="do-eyebrow">{t("eyebrow")}</span>
           <h2 className="do-heading">
-            Limitless<br />
-            <span className="do-heading-accent">Transformations</span>
+            {t("heading")}<br />
+            <span className="do-heading-accent">{t("headingAccent")}</span>
           </h2>
         </div>
-        <p className="do-header-desc">
-          The best AI interior design tools in one place — from free AI floor plan generators to AI landscape design, room redesign, and virtual staging.
-        </p>
+        <p className="do-header-desc">{t("headerDesc")}</p>
       </div>
 
       {/* ── Items ── */}
       <div className="do-items">
 
-        {/* 01 — Blueprint Floor Plan to 3D */}
+        {/* 01 */}
         <div className="do-item do-fade" ref={ref01}>
           <span className="do-ghost-num" style={{ top: "-1.5rem", left: "-0.5rem" }}>01</span>
           <div className="do-grid">
             <div className="do-col-img-left">
-              <ImgCard before={img("01","before","/real-2d-plan.jpg")} after={img("01","after","/real-3d-render.jpg")} badge="Rendering Phase: Final Polish" />
+              <ImgCard before={img("01","before","/real-2d-plan.jpg")} after={img("01","after","/real-3d-render.jpg")} badge="Rendering Phase: Final Polish" beforeLabel={t("before")} afterLabel={t("after")} />
             </div>
             <div className="do-col-text-right">
               <div className="do-text-card">
-                <h3 className="do-item-title">Blueprint Floor Plan to 3D</h3>
-                <p className="do-item-desc">
-                  The easiest way to convert 2D floor plans to 3D online — free AI floor plan generator with no software needed. Upload a blueprint, get a photorealistic render instantly.
-                </p>
-                <Link href="/dashboard" className="do-cta-btn">Try It Now</Link>
+                <h3 className="do-item-title">{t("item1Title")}</h3>
+                <p className="do-item-desc">{t("item1Desc")}</p>
+                <Link href="/dashboard" className="do-cta-btn">{t("tryNow")}</Link>
               </div>
             </div>
           </div>
         </div>
 
-        {/* 02 — Room Style Transfer */}
+        {/* 02 */}
         <div className="do-item do-fade" ref={ref02}>
           <span className="do-ghost-num" style={{ top: "-1.5rem", right: "-0.5rem" }}>02</span>
           <div className="do-grid">
             <div className="do-col-text-left">
               <div className="do-text-card">
-                <h3 className="do-item-title">Room Style Transfer</h3>
-                <p className="do-item-desc">
-                  The best AI interior design tool for room redesign. Upload any room photo, pick a style, and our AI interior design generator reimagines the space with new furniture, materials, and lighting.
-                </p>
-                <Link href="/dashboard" className="do-cta-btn">Try It Now</Link>
+                <h3 className="do-item-title">{t("item2Title")}</h3>
+                <p className="do-item-desc">{t("item2Desc")}</p>
+                <Link href="/dashboard" className="do-cta-btn">{t("tryNow")}</Link>
               </div>
             </div>
             <div className="do-col-img-right">
-              <ImgCard before={img("02","before","/fp-before-1.png")} after={img("02","after","/fp-after-1.jpg")} />
+              <ImgCard before={img("02","before","/fp-before-1.png")} after={img("02","after","/fp-after-1.jpg")} beforeLabel={t("before")} afterLabel={t("after")} />
             </div>
           </div>
         </div>
 
-        {/* 03 — Empty the Room */}
+        {/* 03 */}
         <div className="do-item do-fade" ref={ref03}>
           <div className="do-flex-row">
             <div className="do-flex-img">
-              <ImgCard before={img("03","before","/fp-before-2.png")} after={img("03","after","/fp-after-2.jpg")} />
+              <ImgCard before={img("03","before","/fp-before-2.png")} after={img("03","after","/fp-after-2.jpg")} beforeLabel={t("before")} afterLabel={t("after")} />
               <div className="do-corner-thumb">
                 <img src={img("03","after","/fp-after-2.jpg")} alt="3D render" />
               </div>
             </div>
             <div className="do-flex-text">
               <div className="do-text-card">
-                <h3 className="do-item-title">Empty the Room</h3>
-                <p className="do-item-desc">
-                  AI virtual staging made simple — remove all furniture and decor instantly to reveal a clean, empty space. Perfect for real estate listings and planning fresh layouts.
-                </p>
-                <Link href="/dashboard" className="do-cta-btn">Try It Now</Link>
+                <h3 className="do-item-title">{t("item3Title")}</h3>
+                <p className="do-item-desc">{t("item3Desc")}</p>
+                <Link href="/dashboard" className="do-cta-btn">{t("tryNow")}</Link>
               </div>
             </div>
           </div>

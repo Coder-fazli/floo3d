@@ -3,6 +3,7 @@
 import "./HowItWorks2.css";
 import { motion, useMotionValue, animate } from "framer-motion";
 import { useRef } from "react";
+import { useTranslations } from "next-intl";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -54,6 +55,7 @@ function ArrowBtn({ direction, onClick }: { direction: "left" | "right"; onClick
 }
 
 export default function HowItWorks2() {
+  const t = useTranslations("hiw");
   const OFFSET = typeof window !== "undefined" ? window.innerWidth * 0.08 : 120;
   const x = useMotionValue(-(pairs.length * STEP) + OFFSET);
 
@@ -98,11 +100,11 @@ export default function HowItWorks2() {
           style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "2.5rem" }}
         >
           <div style={{ maxWidth: "36rem" }}>
-            <p className="hiw2-eyebrow">Best AI Interior Design Tools · Free to Use</p>
-            <h2 className="hiw2-title" style={{ margin: "0 0 0.75rem" }}>Upload Any Space.<br />Get a Pro Visual.</h2>
-            <p className="hiw2-sub" style={{ margin: 0 }}>
-              The best AI app for interior design, floor plan rendering, virtual staging, and AI landscape design.
-            </p>
+            <p className="hiw2-eyebrow">{t("eyebrow")}</p>
+            <h2 className="hiw2-title" style={{ margin: "0 0 0.75rem" }}>
+              {t("title").split("\n").map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)}
+            </h2>
+            <p className="hiw2-sub" style={{ margin: 0 }}>{t("sub")}</p>
           </div>
 
           <div style={{ display: "flex", gap: "0.75rem", flexShrink: 0 }}>

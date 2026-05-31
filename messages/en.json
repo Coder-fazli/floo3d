@@ -39,6 +39,40 @@
     "clicksTitle": "Zero Effort",
     "clicksDesc": "No complex software to learn. If you can upload a file, you can create a 3D masterpiece."
   },
+  "hero2": {
+    "ctaTry": "Try It Free",
+    "ctaExamples": "See Examples",
+    "trustedBy": "Trusted by",
+    "trustedCount": "architects &",
+    "happyUsers": "happy users"
+  },
+  "hiw": {
+    "eyebrow": "Best AI Interior Design Tools · Free to Use",
+    "title": "Upload Any Space.\nGet a Pro Visual.",
+    "sub": "The best AI app for interior design, floor plan rendering, virtual staging, and AI landscape design."
+  },
+  "design": {
+    "eyebrow": "Visual Storytelling",
+    "heading": "Limitless",
+    "headingAccent": "Transformations",
+    "headerDesc": "The best AI interior design tools in one place — from free AI floor plan generators to AI landscape design, room redesign, and virtual staging.",
+    "before": "Before",
+    "after": "After",
+    "tryNow": "Try It Now",
+    "item1Title": "Blueprint Floor Plan to 3D",
+    "item1Desc": "The easiest way to convert 2D floor plans to 3D online — free AI floor plan generator with no software needed. Upload a blueprint, get a photorealistic render instantly.",
+    "item2Title": "Room Style Transfer",
+    "item2Desc": "The best AI interior design tool for room redesign. Upload any room photo, pick a style, and our AI interior design generator reimagines the space with new furniture, materials, and lighting.",
+    "item3Title": "Empty the Room",
+    "item3Desc": "AI virtual staging made simple — remove all furniture and decor instantly to reveal a clean, empty space. Perfect for real estate listings and planning fresh layouts.",
+    "item4Title": "Outdoor & Garden Design",
+    "item4Desc": "Free AI landscape design and AI backyard design. Upload any outdoor photo — garden, patio, or home exterior — and get a photorealistic redesign with plants, materials, and lighting."
+  },
+  "marquee": {
+    "industrial": "Industrial",
+    "luxury": "Luxury",
+    "minimalist": "Minimalist"
+  },
   "blog": {
     "eyebrow": "THE JOURNAL",
     "title": "Design Tips & AI Insights",

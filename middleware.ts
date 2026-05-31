@@ -29,7 +29,9 @@ const isPublicRoute = createRouteMatcher([
 const isAdminRoute = createRouteMatcher(["/secure-7x9(.*)"]);
 
 // Paths that bypass locale routing (dashboard, admin, auth, API)
+// Also redirect /ar/dashboard → /dashboard etc. for non-locale app sections
 const SKIP_LOCALE = /^\/(dashboard|secure-7x9|sign-in|sign-up|api|_next|visualizer)(\/?.*)?$/;
+const AR_APP_REDIRECT = /^\/ar\/(dashboard|secure-7x9|sign-in|sign-up|visualizer)(\/.*)?$/;
 
 export default clerkMiddleware(async (auth, request) => {
   if (isAdminRoute(request)) {
@@ -41,6 +43,12 @@ export default clerkMiddleware(async (auth, request) => {
 
   if (!isPublicRoute(request)) {
     await auth.protect();
+  }
+
+  // Redirect /ar/dashboard → /dashboard (dashboard is English-only)
+  if (AR_APP_REDIRECT.test(request.nextUrl.pathname)) {
+    const stripped = request.nextUrl.pathname.replace(/^\/ar/, "");
+    return NextResponse.redirect(new URL(stripped, request.url));
   }
 
   // Skip i18n routing for non-public app sections

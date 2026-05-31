@@ -18,16 +18,22 @@ const Navbar = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const t = useTranslations("nav");
-  const locale = useLocale();
+  useLocale(); // keep provider in sync but don't rely on it for active state
+
+  // Derive active locale from the URL — always accurate on all pages
+  const [isAr, setIsAr] = useState(false);
+  useEffect(() => {
+    setIsAr(window.location.pathname.startsWith("/ar"));
+  }, []);
 
   const switchLocale = (next: "en" | "ar") => {
     const cur = window.location.pathname;
     if (next === "ar") {
-      const dest = cur.startsWith("/ar") ? cur : "/ar" + (cur === "/" ? "" : cur);
-      window.location.href = dest;
+      if (cur.startsWith("/ar")) return; // already Arabic
+      window.location.href = "/ar" + (cur === "/" ? "" : cur);
     } else {
-      const dest = cur.startsWith("/ar") ? (cur.replace(/^\/ar/, "") || "/") : cur;
-      window.location.href = dest;
+      if (!cur.startsWith("/ar")) return; // already English
+      window.location.href = cur.replace(/^\/ar(?=\/|$)/, "") || "/";
     }
   };
 
@@ -139,11 +145,11 @@ const Navbar = () => {
           {/* Language switcher — segmented: shows current, click other to switch */}
           <div className="navbar-lang-toggle">
             <button
-              className={`navbar-lang-opt${locale === "en" ? " active" : ""}`}
+              className={`navbar-lang-opt${!isAr ? " active" : ""}`}
               onClick={() => switchLocale("en")}
             >EN</button>
             <button
-              className={`navbar-lang-opt${locale === "ar" ? " active" : ""}`}
+              className={`navbar-lang-opt${isAr ? " active" : ""}`}
               onClick={() => switchLocale("ar")}
             >عربي</button>
           </div>
@@ -177,8 +183,8 @@ const Navbar = () => {
               </li>
             )}
             <li style={{ display: "flex", gap: "0.5rem", padding: "0.5rem 0" }}>
-              <button className={`navbar-lang-opt${locale === "en" ? " active" : ""}`} onClick={() => { switchLocale("en"); setMenuOpen(false); }}>EN</button>
-              <button className={`navbar-lang-opt${locale === "ar" ? " active" : ""}`} onClick={() => { switchLocale("ar"); setMenuOpen(false); }}>عربي</button>
+              <button className={`navbar-lang-opt${!isAr ? " active" : ""}`} onClick={() => { switchLocale("en"); setMenuOpen(false); }}>EN</button>
+              <button className={`navbar-lang-opt${isAr ? " active" : ""}`} onClick={() => { switchLocale("ar"); setMenuOpen(false); }}>عربي</button>
             </li>
           </ul>
         </div>

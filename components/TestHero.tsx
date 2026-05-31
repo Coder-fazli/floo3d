@@ -8,6 +8,7 @@ import { Star } from "lucide-react";
 import "./TestHero.css";
 import AutoCompareSlider from "./AutoCompareSlider";
 import { CountUp } from "@/components/ui/count-up";
+import { useTranslations } from "next-intl";
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -48,6 +49,8 @@ const IMAGES = [
 export default function TestHero({ heroBeforeUrl, heroAfterUrl }: { heroBeforeUrl?: string | null; heroAfterUrl?: string | null }) {
   const { isSignedIn, isLoaded } = useUser();
   const { openSignUp } = useClerk();
+  const th = useTranslations("hero");
+  const th2 = useTranslations("hero2");
 
   const beforeSrc = heroBeforeUrl ?? "/hero-before.jpg";
   const afterSrc  = heroAfterUrl  ?? "/hero-after.jpg";
@@ -66,28 +69,28 @@ export default function TestHero({ heroBeforeUrl, heroAfterUrl }: { heroBeforeUr
           animate="visible"
         >
           <motion.h1 className="th-heading" variants={item}>
-            AI-Powered<br />
-            <span className="th-heading-accent">Home Styler</span><br />
-            for Any Space.
+            {th("line1")}<br />
+            <span className="th-heading-accent">{th("accent")}</span><br />
+            {th("line2")}
           </motion.h1>
 
           <motion.p className="th-sub" variants={item}>
-            Upload a photo. Get a pro redesign in seconds.
+            {th("sub")}
           </motion.p>
 
           <motion.div className="th-cta-group" variants={item}>
             <div className="th-btns">
               {isSignedIn ? (
-                <Link href="/dashboard" className="th-btn-primary">Try It Free</Link>
+                <Link href="/dashboard" className="th-btn-primary">{th2("ctaTry")}</Link>
               ) : (
                 <button className="th-btn-primary" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>
-                  Try It Free
+                  {th2("ctaTry")}
                 </button>
               )}
-              <Link href="/#reviews" className="th-btn-secondary">See Examples</Link>
+              <Link href="/#reviews" className="th-btn-secondary">{th2("ctaExamples")}</Link>
             </div>
 
-            {/* Trust — directly under buttons */}
+            {/* Trust */}
             <div style={{ display: "flex", alignItems: "center", gap: "0.875rem" }}>
               <div style={{ display: "flex" }}>
                 {AVATARS.map((src, i) => (
@@ -109,11 +112,11 @@ export default function TestHero({ heroBeforeUrl, heroAfterUrl }: { heroBeforeUr
                   ))}
                 </div>
                 <p style={{ fontSize: "0.78rem", color: "#475569", margin: 0, fontWeight: 500 }}>
-                  Trusted by{" "}
+                  {th2("trustedBy")}{" "}
                   <CountUp value={2500} duration={2} separator="," suffix="+" colorScheme="gradient" className="font-bold" />
-                  {" "}architects &{" "}
+                  {" "}{th2("trustedCount")}{" "}
                   <a href="/#reviews" style={{ color: "var(--brand-color)", fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "2px" }}>
-                    happy users
+                    {th2("happyUsers")}
                   </a>
                 </p>
               </div>

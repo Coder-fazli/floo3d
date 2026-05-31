@@ -4,4 +4,5 @@ export const routing = defineRouting({
   locales: ['en', 'ar'],
   defaultLocale: 'en',
   localePrefix: 'as-needed', // English: /   Arabic: /ar/
+  localeCookie: false,        // pure URL-based switching, no cookie interference
 });
