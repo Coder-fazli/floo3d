@@ -251,23 +251,3 @@
   max-width: 100% !important;
 }
 
-/* ── Blog cards: pin "Read more" + date to bottom regardless of content height ── */
-
-/* The card wrapper (identified by its Tailwind classes visible in DevTools) */
-.shadow-md.backdrop-blur-sm.cursor-pointer {
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-/* Content area = last child div inside the card (below the image) */
-.shadow-md.backdrop-blur-sm.cursor-pointer > div:last-child {
-  display: flex !important;
-  flex-direction: column !important;
-  flex: 1 !important;
-}
-
-/* Footer row (Read More + date) = last child inside the content area */
-.shadow-md.backdrop-blur-sm.cursor-pointer > div:last-child > div:last-child,
-.shadow-md.backdrop-blur-sm.cursor-pointer > div:last-child > *:last-child {
-  margin-top: auto !important;
-}

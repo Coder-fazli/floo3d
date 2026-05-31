@@ -55,10 +55,10 @@ export default function BlogsSection({ posts }: { posts?: BlogPost[] }) {
         <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
           {articles.map((article, index) => (
             <div
-              className="cursor-pointer border border-gray-300/50 bg-white/50 shadow-none backdrop-blur-sm transition-shadow hover:shadow-md"
+              className="cursor-pointer border border-gray-300/50 bg-white/50 shadow-none backdrop-blur-sm transition-shadow hover:shadow-md flex flex-col"
               key={index}
             >
-              <div className="p-0">
+              <div className="p-0 flex flex-col flex-1">
                 <div className="relative mb-4 sm:mb-6">
                   {article.image ? (
                     <Image
@@ -75,14 +75,14 @@ export default function BlogsSection({ posts }: { posts?: BlogPost[] }) {
                     #{article.category}
                   </p>
                 </div>
-                <div className="px-3 pb-3 sm:px-4 sm:pb-4">
+                <div className="px-3 pb-3 sm:px-4 sm:pb-4 flex flex-col flex-1">
                   <h3 className="mb-2 font-normal text-base text-gray-900 tracking-tight sm:mb-2 sm:text-lg md:text-2xl">
                     {article.title}
                   </h3>
                   <p className="mb-4 text-gray-600 text-xs leading-relaxed sm:mb-6 sm:text-sm">
                     {article.description}
                   </p>
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mt-auto">
                     <Link
                       className="group relative flex items-center overflow-hidden font-medium text-gray-900 text-xs transition-colors hover:text-gray-700 sm:text-sm"
                       href={article.readMoreLink}
