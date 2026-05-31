@@ -28,9 +28,9 @@ const isPublicRoute = createRouteMatcher([
 
 const isAdminRoute = createRouteMatcher(["/secure-7x9(.*)"]);
 
-// Paths that bypass locale routing (dashboard, admin, auth, API)
-// Also redirect /ar/dashboard → /dashboard etc. for non-locale app sections
-const SKIP_LOCALE = /^\/(dashboard|secure-7x9|sign-in|sign-up|api|_next|visualizer)(\/?.*)?$/;
+// Static pages that are NOT under app/[locale]/ — skip next-intl rewriting
+// so /pricing stays as /pricing, not /en/pricing → 404
+const SKIP_LOCALE = /^\/(dashboard|secure-7x9|sign-in|sign-up|api|_next|visualizer|pricing|blog|contact|privacy-policy|terms-of-service|refund-policy|2d-to-3d-floor-plan-converter|floor-plan-generator|projects|new|color-test)(\/?.*)?$/;
 const AR_APP_REDIRECT = /^\/ar\/(dashboard|secure-7x9|sign-in|sign-up|visualizer)(\/.*)?$/;
 
 export default clerkMiddleware(async (auth, request) => {
