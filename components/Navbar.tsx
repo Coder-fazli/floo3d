@@ -7,7 +7,8 @@ import { getUserInfo } from "@/lib/actions";
 import "./Navbar.css";
 import ContactModal from "./ContactModal";
 import { useTranslations, useLocale } from "next-intl";
-import { useRouter, usePathname, Link as LocaleLink } from "@/i18n/navigation";
+import { Link as LocaleLink } from "@/i18n/navigation";
+// switchLocale uses window.location directly — works on all pages incl. non-locale routes
 
 const Navbar = () => {
   const { isSignedIn, user } = useUser();
@@ -18,8 +19,17 @@ const Navbar = () => {
   const [contactOpen, setContactOpen] = useState(false);
   const t = useTranslations("nav");
   const locale = useLocale();
-  const router = useRouter();
-  const pathname = usePathname();
+
+  const switchLocale = (next: "en" | "ar") => {
+    const cur = window.location.pathname;
+    if (next === "ar") {
+      const dest = cur.startsWith("/ar") ? cur : "/ar" + (cur === "/" ? "" : cur);
+      window.location.href = dest;
+    } else {
+      const dest = cur.startsWith("/ar") ? (cur.replace(/^\/ar/, "") || "/") : cur;
+      window.location.href = dest;
+    }
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -44,12 +54,6 @@ const Navbar = () => {
     try { await signOut(); } catch (e) { console.error(e); }
   };
 
-  const switchLocale = (next: "en" | "ar") => {
-    // Use pathname from next-intl (stripped of locale prefix).
-    // Fall back to "/" if pathname is empty or looks wrong to avoid /ar/ar.
-    const target = pathname && pathname !== "" ? pathname : "/";
-    router.replace(target, { locale: next });
-  };
 
   return (
     <>

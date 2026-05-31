@@ -21,6 +21,12 @@ export default function AppSidebar() {
   const [contactOpen, setContactOpen] = useState(false);
   const t = useTranslations("sidebar");
 
+  const switchLang = () => {
+    const cur = window.location.pathname;
+    const isAr = cur.startsWith("/ar");
+    window.location.href = isAr ? (cur.replace(/^\/ar/, "") || "/") : "/ar" + (cur === "/" ? "" : cur);
+  };
+
   useEffect(() => {
     if (!user) return;
     getUserInfo(user.id).then(d => {
@@ -110,6 +116,12 @@ export default function AppSidebar() {
                 <button className="viz-burger-item" onClick={() => { setContactOpen(true); setBurgerOpen(false); }}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                   {t("support")}
+                </button>
+                <button className="viz-burger-item" onClick={switchLang}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                  </svg>
+                  عربي / EN
                 </button>
                 <div className="viz-burger-divider" />
                 <button className="viz-burger-item viz-burger-item-danger" onClick={() => signOut({ redirectUrl: "/" })}>
