@@ -7,7 +7,14 @@ import { getPricingSettings } from "@/lib/actions.admin";
 export const metadata = {
   title: "Pricing — MyHomeStyler",
   description: "Simple, transparent pricing for AI floor plan generation and interior design. Start free, upgrade when ready.",
-  alternates: { canonical: "https://myhomestyler.com/pricing" },
+  alternates: {
+    canonical: "https://myhomestyler.com/pricing",
+    languages: {
+      en: "https://myhomestyler.com/pricing",
+      "ar-AE": "https://myhomestyler.com/ar/pricing",
+      "x-default": "https://myhomestyler.com/pricing",
+    },
+  },
   robots: { index: true, follow: true },
 };
 

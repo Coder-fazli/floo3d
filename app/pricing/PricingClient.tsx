@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import { useClerk, useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import SubscriptionTermsModal from '@/components/SubscriptionTermsModal';
+import { useTranslations } from 'next-intl';
 
 type PricingSettings = {
   starterPrice: number; starterCredits: number; starterDescription: string; starterFeatures: string[];
@@ -190,12 +191,13 @@ function PricingFAQItem({ q, a }: { q: string; a: string }) {
 
 // ── Tab Switch (exact 21st.dev style) ──────────────────────────────────────
 function PricingSwitch({ selected, onSwitch }: { selected: string; onSwitch: (v: string) => void }) {
+  const t = useTranslations("pricing");
   return (
     <div className="flex justify-center">
       <div className="relative z-10 mx-auto flex w-fit rounded-xl bg-neutral-50 border border-gray-200 p-1">
         {[
-          { value: '0', label: 'Credit Plans' },
-          { value: '1', label: 'Custom Pack', badge: 'New' },
+          { value: '0', label: t("creditPlansTab") },
+          { value: '1', label: t("customPackTab"), badge: t("tabBadge") },
         ].map((tab) => (
           <button
             key={tab.value}
@@ -362,6 +364,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
   const [showTerms, setShowTerms] = useState(false);
   const { openSignUp } = useClerk();
   const { isSignedIn } = useUser();
+  const t = useTranslations("pricing");
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -473,10 +476,10 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
       <article className="text-center mb-10 space-y-4">
 
         <h2 className="text-4xl md:text-5xl font-bold leading-tight" style={{ color: "#27282f", fontFamily: "var(--font-playfair), Georgia, serif" }}>
-          Monthly plans.
+          {t("pageTitle")}
         </h2>
         <p className="text-base max-w-lg mx-auto" style={{ color: "#64748b" }}>
-          Subscribe monthly, credits refresh every cycle. No lock-in — cancel anytime, no surprises.
+          {t("pageSub")}
         </p>
         {customPackEnabled && <PricingSwitch selected={tab} onSwitch={setTab} />}
 
@@ -517,7 +520,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                   {plan.popular && (
                     <div className="absolute -top-4 left-0 right-0 flex justify-center">
                       <span className="px-4 py-1.5 rounded-full text-xs font-black tracking-widest uppercase text-white" style={{ background: "var(--brand-color)" }}>
-                        ★ Most Popular
+                        ★ {t("mostPopular")}
                       </span>
                     </div>
                   )}
@@ -529,7 +532,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                       </h3>
                       {plan.id === 'elite' && (
                         <span className="px-2 py-1 rounded-full text-xs font-bold" style={{ background: "rgba(235,66,3,0.2)", color: "var(--brand-color)" }}>
-                          Best AI
+                          {t("bestAi")}
                         </span>
                       )}
                     </div>
@@ -553,13 +556,13 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                       <span className="text-5xl font-bold whitespace-nowrap" style={{ color: plan.id === 'elite' ? "#faf7f4" : "#28030F", display: "inline-flex", alignItems: "baseline" }}>
                         <span>$</span><NumberFlow value={plan.price} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
                       </span>
-                      <span className="text-sm ml-1" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.5)" : "#94a3b8" }}>/month · {Math.floor(plan.credits / 2)} renders</span>
+                      <span className="text-sm ml-1" style={{ color: plan.id === 'elite' ? "rgba(253,246,242,0.5)" : "#94a3b8" }}>{t("perMonth")} · {Math.floor(plan.credits / 2)} {t("renders")}</span>
                     </div>
                     <div className="mb-5" />
 
                     {/* CTA */}
                     <GlowButton
-                      label={loadingPlan === plan.id ? 'Redirecting…' : plan.cta}
+                      label={loadingPlan === plan.id ? t("redirecting") : plan.cta}
                       onClick={() => handleBuy(plan.id)}
                     />
 
@@ -597,30 +600,15 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
 {/* FAQ */}
             <div className="w-full max-w-3xl mx-auto mt-14">
               <h3 className="text-center text-2xl font-bold mb-8" style={{ color: "#27282f", fontFamily: "var(--font-playfair), Georgia, serif" }}>
-                Common Questions
+                {t("commonQuestions")}
               </h3>
               <div className="space-y-3">
                 {[
-                  {
-                    q: "What happens to unused credits at end of month?",
-                    a: "Unused credits reset at the start of each billing cycle. Use as many as you need each month — your plan refreshes automatically."
-                  },
-                  {
-                    q: "Can I cancel anytime?",
-                    a: "Yes. Cancel anytime from your dashboard — no penalties, no questions asked. You keep access until the end of your current billing period."
-                  },
-                  {
-                    q: "What quality renders do I get?",
-                    a: "All plans output HD renders with no watermark. Elite uses our highest-accuracy AI model for sharper lines and superior material detail — ideal for client presentations."
-                  },
-                  {
-                    q: "Can I use the renders commercially?",
-                    a: "Yes. Every plan includes full commercial usage rights. Use them in proposals, listings, presentations, or sell them to clients."
-                  },
-                  {
-                    q: "How many credits does one render cost?",
-                    a: "Every render costs 2 credits regardless of which tool you use — floor plan to 3D, room redesign, virtual staging, or outdoor design."
-                  },
+                  { q: t("faqQ1"), a: t("faqA1") },
+                  { q: t("faqQ2"), a: t("faqA2") },
+                  { q: t("faqQ3"), a: t("faqA3") },
+                  { q: t("faqQ4"), a: t("faqA4") },
+                  { q: t("faqQ5"), a: t("faqA5") },
                 ].map((item, i) => (
                   <PricingFAQItem key={i} q={item.q} a={item.a} />
                 ))}

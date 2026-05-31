@@ -20,7 +20,14 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: { canonical: "/2d-to-3d-floor-plan-converter" },
+    alternates: {
+      canonical: "https://myhomestyler.com/2d-to-3d-floor-plan-converter",
+      languages: {
+        en: "https://myhomestyler.com/2d-to-3d-floor-plan-converter",
+        "ar-AE": "https://myhomestyler.com/ar/2d-to-3d-floor-plan-converter",
+        "x-default": "https://myhomestyler.com/2d-to-3d-floor-plan-converter",
+      },
+    },
     openGraph: {
       title,
       description,
