@@ -22,9 +22,9 @@ export default function AppSidebar() {
   const t = useTranslations("sidebar");
 
   const switchLang = () => {
-    const cur = window.location.pathname;
-    const isAr = cur.startsWith("/ar");
-    window.location.href = isAr ? (cur.replace(/^\/ar/, "") || "/") : "/ar" + (cur === "/" ? "" : cur);
+    // Dashboard has no Arabic equivalent — navigate to locale home
+    const isAr = window.location.pathname.startsWith("/ar");
+    window.location.href = isAr ? "/" : "/ar";
   };
 
   useEffect(() => {

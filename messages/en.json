@@ -73,6 +73,36 @@
     "luxury": "Luxury",
     "minimalist": "Minimalist"
   },
+  "showcase": {
+    "eyebrow": "See it in action",
+    "title": "From 2D sketch to photorealistic 3D —",
+    "titleAccent": "in seconds",
+    "sub": "Upload any floor plan, pick a design style, and watch the AI do its thing. No software. No learning curve.",
+    "feat1": "Renders in 30 seconds",
+    "feat2": "20+ design styles",
+    "feat3": "Any 2D floor plan",
+    "feat4": "Export HD PNG / JPG / PDF"
+  },
+  "gallery": {
+    "eyebrow": "Community Showcase",
+    "title": "Real Results from Real Users",
+    "sub": "See how architects, interior designers, and homeowners use our AI tools — from virtual staging to AI landscape design.",
+    "input": "Input",
+    "item1Name": "Emma Wilson",
+    "item1Label": "London Loft Conversion",
+    "item2Name": "Sarah Chen",
+    "item2Label": "Coastal Villa Masterpiece",
+    "item3Name": "James Patel",
+    "item3Label": "Modern Living Room Redesign",
+    "item4Name": "Lucas Müller",
+    "item4Label": "Dark Luxury 3D Render",
+    "item5Name": "Priya Sharma",
+    "item5Label": "Virtual Staged Bedroom",
+    "item6Name": "Omar Tariq",
+    "item6Label": "Minimalist Kitchen Render",
+    "item7Name": "Nina Rossi",
+    "item7Label": "Scandinavian Living Space"
+  },
   "blog": {
     "eyebrow": "THE JOURNAL",
     "title": "Design Tips & AI Insights",

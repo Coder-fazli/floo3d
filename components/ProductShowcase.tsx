@@ -1,15 +1,12 @@
 "use client";
 import Image from "next/image";
 import { useRef, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
-const FEATURES = [
-  { icon: "⚡", label: "Renders in 30 seconds" },
-  { icon: "🎨", label: "20+ design styles" },
-  { icon: "📐", label: "Any 2D floor plan" },
-  { icon: "📤", label: "Export HD PNG / JPG / PDF" },
-];
+const ICONS = ["⚡", "🎨", "📐", "📤"];
 
 export default function ProductShowcase() {
+  const t = useTranslations("showcase");
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -39,27 +36,16 @@ export default function ProductShowcase() {
       >
         {/* Eyebrow */}
         <p style={{ color: "#ec5b13", fontSize: "0.72rem", fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 14 }}>
-          See it in action
+          {t("eyebrow")}
         </p>
 
-        {/* Headline */}
-        <h2
-          style={{
-            fontFamily: "var(--font-playfair), Georgia, serif",
-            color: "#1a1a1a",
-            fontSize: "clamp(1.75rem, 4.5vw, 2.85rem)",
-            fontWeight: 800,
-            lineHeight: 1.15,
-            marginBottom: 16,
-          }}
-        >
-          From 2D sketch to photorealistic 3D —{" "}
-          <span style={{ color: "#ec5b13", fontStyle: "italic" }}>in seconds</span>
+        <h2 style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#1a1a1a", fontSize: "clamp(1.75rem, 4.5vw, 2.85rem)", fontWeight: 800, lineHeight: 1.15, marginBottom: 16 }}>
+          {t("title")}{" "}
+          <span style={{ color: "#ec5b13", fontStyle: "italic" }}>{t("titleAccent")}</span>
         </h2>
 
         <p style={{ color: "#64748b", fontSize: "1rem", lineHeight: 1.65, maxWidth: 480, margin: "0 auto 52px" }}>
-          Upload any floor plan, pick a design style, and watch the AI do its thing.
-          No software. No learning curve.
+          {t("sub")}
         </p>
 
         {/* Image card */}
@@ -97,28 +83,20 @@ export default function ProductShowcase() {
 
         {/* Feature pills */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center", marginTop: 40 }}>
-          {FEATURES.map((f, i) => (
+          {([t("feat1"), t("feat2"), t("feat3"), t("feat4")] as string[]).map((label, i) => (
             <span
-              key={f.label}
+              key={i}
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 7,
-                background: "#ffffff",
-                border: "1px solid #e5e7eb",
-                color: "#374151",
-                borderRadius: 100,
-                padding: "8px 18px",
-                fontSize: "0.84rem",
-                fontWeight: 500,
+                display: "inline-flex", alignItems: "center", gap: 7,
+                background: "#ffffff", border: "1px solid #e5e7eb", color: "#374151",
+                borderRadius: 100, padding: "8px 18px", fontSize: "0.84rem", fontWeight: 500,
                 boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
                 opacity: visible ? 1 : 0,
                 transform: visible ? "translateY(0)" : "translateY(14px)",
                 transition: `opacity 0.5s ease ${0.3 + i * 0.09}s, transform 0.5s ease ${0.3 + i * 0.09}s`,
               }}
             >
-              <span>{f.icon}</span>
-              {f.label}
+              <span>{ICONS[i]}</span>{label}
             </span>
           ))}
         </div>
