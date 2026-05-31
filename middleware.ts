@@ -45,15 +45,21 @@ export default clerkMiddleware(async (auth, request) => {
     await auth.protect();
   }
 
-  // Redirect /ar/dashboard → /dashboard (dashboard is English-only)
+  // Redirect /ar/dashboard → /dashboard (we handle locale via cookie instead)
   if (AR_APP_REDIRECT.test(request.nextUrl.pathname)) {
     const stripped = request.nextUrl.pathname.replace(/^\/ar/, "");
     return NextResponse.redirect(new URL(stripped, request.url));
   }
 
-  // Skip i18n routing for non-public app sections
+  // For dashboard/app routes: skip URL-based locale routing but honour
+  // the preferred-locale cookie so getLocale() returns the right language
   if (SKIP_LOCALE.test(request.nextUrl.pathname)) {
-    return NextResponse.next();
+    const preferred = request.cookies.get("preferred-locale")?.value;
+    const response = NextResponse.next();
+    if (preferred === "ar" || preferred === "en") {
+      response.headers.set("x-next-intl-locale", preferred);
+    }
+    return response;
   }
 
   return handleI18nRouting(request as NextRequest);

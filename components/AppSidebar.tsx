@@ -21,10 +21,17 @@ export default function AppSidebar() {
   const [contactOpen, setContactOpen] = useState(false);
   const t = useTranslations("sidebar");
 
+  const [dashLang, setDashLang] = useState<"en" | "ar">("en");
+
+  useEffect(() => {
+    const match = document.cookie.match(/preferred-locale=(en|ar)/);
+    if (match) setDashLang(match[1] as "en" | "ar");
+  }, []);
+
   const switchLang = () => {
-    // Dashboard has no Arabic equivalent — navigate to locale home
-    const isAr = window.location.pathname.startsWith("/ar");
-    window.location.href = isAr ? "/" : "/ar";
+    const next = dashLang === "en" ? "ar" : "en";
+    document.cookie = `preferred-locale=${next}; path=/; max-age=31536000`;
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -121,7 +128,7 @@ export default function AppSidebar() {
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
                   </svg>
-                  عربي / EN
+                  {dashLang === "en" ? "🇦🇪 عربي" : "🇬🇧 English"}
                 </button>
                 <div className="viz-burger-divider" />
                 <button className="viz-burger-item viz-burger-item-danger" onClick={() => signOut({ redirectUrl: "/" })}>
