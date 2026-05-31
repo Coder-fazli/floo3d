@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 interface BlogPost {
   title: string;
@@ -40,16 +41,17 @@ const FALLBACK: BlogPost[] = [
 
 export default function BlogsSection({ posts }: { posts?: BlogPost[] }) {
   const articles = posts && posts.length > 0 ? posts : FALLBACK;
+  const t = useTranslations("blog");
 
   return (
     <section className="bg-white px-4 py-12 sm:py-16 md:py-20">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 text-center sm:mb-12">
           <p className="mb-3 font-medium text-gray-600 text-xs uppercase tracking-wider sm:mb-4">
-            THE JOURNAL
+            {t("eyebrow")}
           </p>
           <h2 className="font-normal text-2xl text-gray-900 tracking-tight sm:text-3xl md:text-5xl">
-            Design Tips & AI Insights
+            {t("title")}
           </h2>
         </div>
         <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -91,7 +93,7 @@ export default function BlogsSection({ posts }: { posts?: BlogPost[] }) {
                         <ArrowRight className="h-3 w-3 translate-x-0 opacity-100 transition-all duration-500 ease-in group-hover:translate-x-8 group-hover:opacity-0 sm:h-4 sm:w-4" />
                         <ArrowRight className="absolute top-1/2 -left-4 h-4 w-4 -translate-y-1/2 transition-all duration-500 ease-in-out group-hover:left-2 sm:-left-5 sm:h-4 sm:w-4 sm:group-hover:left-3" />
                       </span>
-                      Read more
+                      {t("readMore")}
                     </Link>
                     <span className="flex items-center gap-2 text-[10px] text-gray-500 sm:gap-3 sm:text-xs">
                       {article.publishDate}
@@ -110,7 +112,7 @@ export default function BlogsSection({ posts }: { posts?: BlogPost[] }) {
             href="/blog"
             className="inline-flex items-center gap-2 text-sm font-600 text-gray-600 hover:text-black transition-colors"
           >
-            View all articles <ArrowRight size={14} />
+            {t("viewAll")} <ArrowRight size={14} />
           </Link>
         </div>
       </div>

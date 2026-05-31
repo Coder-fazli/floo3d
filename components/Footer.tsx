@@ -3,9 +3,11 @@
 import "./Footer.css";
 import { Box, ArrowRight, Globe } from "lucide-react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
+  const t = useTranslations("footer");
 
   return (
     <footer className="ftr-footer">
@@ -25,29 +27,27 @@ export default function Footer() {
               </div>
               <span className="ftr-logo-name">MyHomeStyler</span>
             </div>
-            <p className="ftr-brand-desc">
-              AI-powered space visualization for architects, designers, and real estate professionals. Floor plans, room redesigns, empty interiors, outdoor renders — all in one platform.
-            </p>
+            <p className="ftr-brand-desc">{t("brandDesc")}</p>
             <div className="ftr-badges">
-              <span className="ftr-badge-pill">Built with Passion</span>
+              <span className="ftr-badge-pill">{t("builtWith")}</span>
             </div>
           </div>
 
           {/* Newsletter */}
           <div className="ftr-newsletter">
             <div className="ftr-newsletter-card">
-              <h3 className="ftr-newsletter-title">Stay ahead of the curve</h3>
-              <p className="ftr-newsletter-sub">Get weekly tips on AI interior design, free AI landscape design tools, and new features.</p>
+              <h3 className="ftr-newsletter-title">{t("newsletterTitle")}</h3>
+              <p className="ftr-newsletter-sub">{t("newsletterSub")}</p>
               <form className="ftr-form" onSubmit={(e) => e.preventDefault()}>
                 <input
                   className="ftr-input"
                   type="email"
-                  placeholder="Email address"
+                  placeholder={t("emailPlaceholder")}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <button className="ftr-subscribe-btn" type="submit">
-                  Subscribe
+                  {t("subscribe")}
                   <ArrowRight size={16} className="ftr-subscribe-icon" />
                 </button>
               </form>
@@ -59,53 +59,52 @@ export default function Footer() {
         {/* Nav links */}
         <div className="ftr-nav">
           <div className="ftr-nav-col">
-            <h4 className="ftr-nav-heading">Product</h4>
+            <h4 className="ftr-nav-heading">{t("productHeading")}</h4>
             <ul className="ftr-nav-list">
-              <li><a href="#" className="ftr-nav-link">Features</a></li>
-              <li><a href="#" className="ftr-nav-link">Solutions</a></li>
-              <li><a href="#" className="ftr-nav-link">Pricing</a></li>
-              <li><a href="#" className="ftr-nav-link">Enterprise</a></li>
+              <li><a href="#" className="ftr-nav-link">{t("features")}</a></li>
+              <li><a href="#" className="ftr-nav-link">{t("solutions")}</a></li>
+              <li><a href="/pricing" className="ftr-nav-link">{t("pricing")}</a></li>
+              <li><a href="#" className="ftr-nav-link">{t("enterprise")}</a></li>
             </ul>
           </div>
           <div className="ftr-nav-col">
-            <h4 className="ftr-nav-heading">Company</h4>
+            <h4 className="ftr-nav-heading">{t("companyHeading")}</h4>
             <ul className="ftr-nav-list">
-              <li><a href="/contact" className="ftr-nav-link">Contact Us</a></li>
+              <li><a href="/contact" className="ftr-nav-link">{t("contactUs")}</a></li>
             </ul>
           </div>
           <div className="ftr-nav-col">
-            <h4 className="ftr-nav-heading">Tools</h4>
+            <h4 className="ftr-nav-heading">{t("toolsHeading")}</h4>
             <ul className="ftr-nav-list">
-              <li><a href="/2d-to-3d-floor-plan-converter" className="ftr-nav-link">2D to 3D Converter</a></li>
-              <li><a href="/floor-plan-generator" className="ftr-nav-link">Floor Plan Generator</a></li>
-              <li><a href="/pricing" className="ftr-nav-link">Pricing</a></li>
+              <li><a href="/2d-to-3d-floor-plan-converter" className="ftr-nav-link">{t("converter")}</a></li>
+              <li><a href="/floor-plan-generator" className="ftr-nav-link">{t("floorPlan")}</a></li>
+              <li><a href="/pricing" className="ftr-nav-link">{t("pricing")}</a></li>
             </ul>
           </div>
           <div className="ftr-nav-col">
-            <h4 className="ftr-nav-heading">Legal</h4>
+            <h4 className="ftr-nav-heading">{t("legalHeading")}</h4>
             <ul className="ftr-nav-list">
-              <li><a href="/privacy-policy" className="ftr-nav-link">Privacy Policy</a></li>
-              <li><a href="/terms-of-service" className="ftr-nav-link">Terms of Service</a></li>
-              <li><a href="/refund-policy" className="ftr-nav-link">Refund Policy</a></li>
-              <li><a href="/contact" className="ftr-nav-link">Contact</a></li>
+              <li><a href="/privacy-policy" className="ftr-nav-link">{t("privacyPolicy")}</a></li>
+              <li><a href="/terms-of-service" className="ftr-nav-link">{t("termsOfService")}</a></li>
+              <li><a href="/refund-policy" className="ftr-nav-link">{t("refundPolicy")}</a></li>
+              <li><a href="/contact" className="ftr-nav-link">{t("contact")}</a></li>
             </ul>
           </div>
         </div>
 
         {/* Bottom bar */}
         <div className="ftr-bottom">
-          <p className="ftr-copy">© 2026 MyHomeStyler Systems Inc. All rights reserved.</p>
-
+          <p className="ftr-copy">{t("copyright")}</p>
 
           {/* Right meta */}
           <div className="ftr-meta">
             <button className="ftr-meta-btn">
               <Globe size={16} />
-              English (US)
+              {t("language")}
             </button>
             <div className="ftr-divider" />
             <button className="ftr-meta-btn">
-              Status: Operational
+              {t("status")}
               <span className="ftr-status-dot" />
             </button>
           </div>

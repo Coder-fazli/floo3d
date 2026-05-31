@@ -2,12 +2,7 @@
 
 import { motion } from "framer-motion";
 import "./HowItWorks2.css";
-
-const stats = [
-  { num: "< 60s",   title: "Blazing Fast",  desc: "From upload to finished visual in less than a minute. Save hours of manual design work." },
-  { num: "99.9%",   title: "High Accuracy", desc: "Proprietary AI captures every dimension with precision. Expect professional-grade results every time." },
-  { num: "1-Click", title: "Zero Effort",   desc: "No complex software to learn. If you can upload a file, you can create a 3D masterpiece." },
-];
+import { useTranslations } from "next-intl";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -18,6 +13,13 @@ const fadeUp = {
 };
 
 export default function StatsBar() {
+  const t = useTranslations("stats");
+  const stats = [
+    { num: t("speed"),    title: t("speedTitle"),    desc: t("speedDesc") },
+    { num: t("accuracy"), title: t("accuracyTitle"), desc: t("accuracyDesc") },
+    { num: t("clicks"),   title: t("clicksTitle"),   desc: t("clicksDesc") },
+  ];
+
   return (
     <div className="hiw2-stats">
       <div className="hiw2-stats-grid">

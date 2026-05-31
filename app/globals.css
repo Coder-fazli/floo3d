@@ -1,5 +1,22 @@
 @import "tailwindcss";
 
+/* ── Arabic / RTL ── */
+[dir="rtl"] {
+  font-family: var(--font-cairo), sans-serif;
+}
+[dir="rtl"] body {
+  text-align: right;
+}
+[dir="rtl"] .navbar-inner {
+  flex-direction: row-reverse;
+}
+[dir="rtl"] .navbar-links {
+  flex-direction: row-reverse;
+}
+[dir="rtl"] .navbar-actions {
+  flex-direction: row-reverse;
+}
+
 /* ── Glow Button ── */
 .glow-btn {
   position: relative;

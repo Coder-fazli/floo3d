@@ -1,5 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import { Playfair_Display, Roboto } from "next/font/google";
+import { Playfair_Display, Roboto, Cairo } from "next/font/google";
 import "./globals.css";
 import "./theme-test.css";
 import { cn } from "@/lib/utils";
@@ -7,11 +7,14 @@ import { getSiteSettings } from "@/lib/actions";
 import CrispChat from "@/components/CrispChat";
 import CookieBanner from "@/components/CookieBanner";
 import Script from "next/script";
+import { getLocale } from "next-intl/server";
 
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400","700","900"], variable: "--font-playfair" });
 const roboto = Roboto({ subsets: ["latin"], weight: ["400","500","700","900"], variable: "--font-roboto" });
+const cairo = Cairo({ subsets: ["arabic", "latin"], weight: ["400","500","600","700"], variable: "--font-cairo" });
 
 export async function generateMetadata() {
+  const locale = await getLocale();
   const s = await getSiteSettings();
   const title = s?.metaTitle ?? "MyHomeStyler – Free Home Design AI Tool | 2D to 3D in Seconds";
   const description = s?.metaDescription ?? "Free home design AI tool. Transform any floor plan into a stunning 3D render in seconds. No software needed — used by architects, designers & homeowners.";
@@ -26,7 +29,12 @@ export async function generateMetadata() {
       "google-adsense-account": "ca-pub-6790452039559569",
     },
     alternates: {
-      canonical: "https://myhomestyler.com",
+      canonical: locale === 'ar' ? "https://myhomestyler.com/ar" : "https://myhomestyler.com",
+      languages: {
+        'en': 'https://myhomestyler.com',
+        'ar-AE': 'https://myhomestyler.com/ar',
+        'x-default': 'https://myhomestyler.com',
+      },
     },
     icons: {
       icon: s?.faviconUrl ?? "/favicon.png",
@@ -50,10 +58,12 @@ export async function generateMetadata() {
   };
 }
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const locale = await getLocale();
+  const isRTL = locale === 'ar';
   return (
     <ClerkProvider>
-      <html lang="en" className={cn(playfair.variable, roboto.variable)}>
+      <html lang={locale} dir={isRTL ? 'rtl' : 'ltr'} className={cn(playfair.variable, roboto.variable, cairo.variable)}>
         <body className={`${playfair.variable} ${roboto.variable}`}>
           <script
             type="application/ld+json"

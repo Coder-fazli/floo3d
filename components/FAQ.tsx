@@ -3,28 +3,17 @@
 import "./FAQ.css";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
-const DEFAULT_FAQS = [
-  {
-    q: "Is this the best free AI interior design app?",
-    a: "MyHomeStyler is among the best AI interior design tools available — and it's free to start. Every new account gets 2 free credits covering all 4 tools: AI interior design, free AI floor plan generator, virtual staging AI, and AI landscape design. No credit card required.",
-  },
-  {
-    q: "Can I use it as a free AI room design and room planner?",
-    a: "Yes. MyHomeStyler is a full AI room planner and AI interior styler in one. Upload a room photo, pick a style, and the AI interior design generator redesigns the space with new furniture, materials, and lighting — keeping your original layout intact.",
-  },
-  {
-    q: "Does it support AI landscape design and AI backyard design free?",
-    a: "Absolutely. The Outdoor tool supports free AI landscape design, AI backyard design, AI garden design, and home exterior design. Upload any outdoor photo and get a photorealistic redesign with realistic plants, materials, and lighting.",
-  },
-  {
-    q: "Can I convert a 2D floor plan to 3D online free?",
-    a: "Yes — MyHomeStyler is a free AI floor plan generator that converts 2D floor plans to 3D renders online, no software or account setup needed. Upload a blueprint or hand-drawn sketch and get a photorealistic 3D result in under 60 seconds.",
-  },
-];
+import { useTranslations } from "next-intl";
 
 export default function FAQ({ faqs, twoColumns }: { faqs?: { q: string; a: string }[]; twoColumns?: boolean } = {}) {
   const [active, setActive] = useState<number | null>(null);
+  const t = useTranslations("faq");
+  const DEFAULT_FAQS = [
+    { q: t("q1"), a: t("a1") },
+    { q: t("q2"), a: t("a2") },
+    { q: t("q3"), a: t("a3") },
+    { q: t("q4"), a: t("a4") },
+  ];
   const FAQS = faqs ?? DEFAULT_FAQS;
 
   return (
@@ -33,9 +22,9 @@ export default function FAQ({ faqs, twoColumns }: { faqs?: { q: string; a: strin
 
         <div className="faq-left faq-left-full">
           <header className="faq-header">
-            <span className="faq-eyebrow">Help Center</span>
-            <h2 className="faq-title">Got Questions?<br />We've Got Answers.</h2>
-            <p className="faq-sub">Everything you need to know about MyHomeStyler.</p>
+            <span className="faq-eyebrow">{t("eyebrow")}</span>
+            <h2 className="faq-title">{t("title").split("\n").map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)}</h2>
+            <p className="faq-sub">{t("sub")}</p>
           </header>
 
           <div className={`faq-list${twoColumns ? " faq-list-two-col" : ""}`}>

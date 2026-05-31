@@ -88,7 +88,8 @@ const jsonLd = {
   ],
 };
 
-export default async function Home() {
+export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const homeImages = await getHomeImages();
   await connectDb();
   const rawPosts = await Post.find({ status: "published" })
@@ -96,12 +97,13 @@ export default async function Home() {
     .limit(3)
     .select("title slug excerpt coverImage tags createdAt")
     .lean() as any[];
+  const dateLocale = locale === 'ar' ? 'ar-AE' : 'en-US';
   const blogPosts = rawPosts.map((p) => ({
     title: p.title,
     description: p.excerpt ?? "",
     image: p.coverImage ?? null,
-    publishDate: new Date(p.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-    readMoreLink: `/${p.slug}`,
+    publishDate: new Date(p.createdAt).toLocaleDateString(dateLocale, { month: "short", day: "numeric", year: "numeric" }),
+    readMoreLink: locale === 'ar' ? `/ar/${p.slug}` : `/${p.slug}`,
     category: p.tags?.[0]?.toUpperCase() ?? "BLOG",
   }));
   return (

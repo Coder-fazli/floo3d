@@ -431,3 +431,21 @@
     .navbar-mobile-group { display: flex; }
     .navbar-icon-btn     { display: flex; }
 }
+
+/* Language switcher */
+.navbar-lang-btn {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #27282f;
+  background: rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 6px;
+  padding: 0.3rem 0.65rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: var(--font-cairo), var(--font-roboto), sans-serif;
+  letter-spacing: 0;
+}
+.navbar-lang-btn:hover {
+  background: rgba(0,0,0,0.1);
+}

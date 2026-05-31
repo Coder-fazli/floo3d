@@ -1,4 +1,4 @@
-import "../blog/blog.css";
+import "../../blog/blog.css";
 import { connectDb } from "@/lib/db";
 import Post from "@/lib/models/Posts";
 import Navbar from "@/components/Navbar";
@@ -7,26 +7,59 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+const BACK_LABEL: Record<string, string> = {
+  en: "Back to Blog",
+  ar: "العودة إلى المدونة",
+};
+const HOME_LABEL: Record<string, string> = {
+  en: "Home",
+  ar: "الرئيسية",
+};
+const BLOG_LABEL: Record<string, string> = {
+  en: "Blog",
+  ar: "المدونة",
+};
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}) {
+  const { locale, slug } = await params;
   await connectDb();
   const post = await Post.findOne({ slug, status: "published" }).lean() as any;
   if (!post) return {};
-  const url = `https://myhomestyler.com/${slug}`;
+
+  const base = "https://myhomestyler.com";
+  const url = locale === "ar" ? `${base}/ar/${slug}` : `${base}/${slug}`;
+  const enUrl = `${base}/${slug}`;
+  const arUrl = `${base}/ar/${slug}`;
+
   const seoTitle = post.metaTitle || post.title + " — MyHomeStyler Blog";
-  const seoDesc  = post.metaDescription || post.excerpt || post.title;
+  const seoDesc = post.metaDescription || post.excerpt || post.title;
+
   return {
     title: seoTitle,
     description: seoDesc,
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      languages: {
+        en: enUrl,
+        "ar-AE": arUrl,
+        "x-default": enUrl,
+      },
+    },
     openGraph: {
       title: seoTitle,
       description: seoDesc,
       url,
       type: "article",
+      locale: locale === "ar" ? "ar_AE" : "en_US",
       publishedTime: post.createdAt,
       modifiedTime: post.updatedAt,
-      images: post.coverImage ? [{ url: post.coverImage, width: 1200, height: 630, alt: post.title }] : [],
+      images: post.coverImage
+        ? [{ url: post.coverImage, width: 1200, height: 630, alt: post.title }]
+        : [],
     },
     twitter: {
       card: "summary_large_image",
@@ -37,15 +70,25 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export default async function SinglePostPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+export default async function SinglePostPage({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}) {
+  const { locale, slug } = await params;
   await connectDb();
   const post = await Post.findOne({ slug, status: "published" }).lean() as any;
   if (!post) notFound();
 
-  const date = new Date(post.createdAt).toLocaleDateString("en-US", {
-    month: "long", day: "numeric", year: "numeric",
+  const dateLocale = locale === "ar" ? "ar-AE" : "en-US";
+  const date = new Date(post.createdAt).toLocaleDateString(dateLocale, {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
   });
+
+  const blogHref = locale === "ar" ? "/ar/blog" : "/blog";
+  const homeHref = locale === "ar" ? "/ar" : "/";
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -66,8 +109,10 @@ export default async function SinglePostPage({ params }: { params: Promise<{ slu
       url: "https://myhomestyler.com",
       logo: { "@type": "ImageObject", url: "https://myhomestyler.com/logo.png" },
     },
-    url: `https://myhomestyler.com/${post.slug}`,
-    mainEntityOfPage: { "@type": "WebPage", "@id": `https://myhomestyler.com/${post.slug}` },
+    url: locale === "ar"
+      ? `https://myhomestyler.com/ar/${slug}`
+      : `https://myhomestyler.com/${slug}`,
+    inLanguage: locale === "ar" ? "ar-AE" : "en-US",
     keywords: post.tags?.join(", ") ?? "",
   };
 
@@ -79,19 +124,16 @@ export default async function SinglePostPage({ params }: { params: Promise<{ slu
       />
       <Navbar />
 
-      {/* Header — title left, image right */}
       <header className="post-header">
         <div className="post-header-left">
-          {/* Breadcrumb */}
           <nav className="post-breadcrumb">
-            <Link href="/">Home</Link>
+            <Link href={homeHref}>{HOME_LABEL[locale] ?? "Home"}</Link>
             <span className="post-breadcrumb-sep">›</span>
-            <Link href="/blog">Blog</Link>
+            <Link href={blogHref}>{BLOG_LABEL[locale] ?? "Blog"}</Link>
             <span className="post-breadcrumb-sep">›</span>
             <span className="post-breadcrumb-current">{post.title}</span>
           </nav>
 
-          {/* Tags + date */}
           <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "0.25rem" }}>
             {post.tags?.length > 0 && (
               <div className="post-header-tags">
@@ -103,13 +145,9 @@ export default async function SinglePostPage({ params }: { params: Promise<{ slu
             <span className="post-header-date">{date}</span>
           </div>
 
-          {/* Title */}
           <h1 className="post-title">{post.title}</h1>
-
-          {/* Excerpt lead */}
           {post.excerpt && <p className="post-excerpt-lead">{post.excerpt}</p>}
 
-          {/* Author */}
           <div className="post-author">
             <div className="post-author-avatar">M</div>
             <div>
@@ -119,7 +157,6 @@ export default async function SinglePostPage({ params }: { params: Promise<{ slu
           </div>
         </div>
 
-        {/* Cover image */}
         {post.coverImage && (
           <div className="post-header-img-wrap">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -128,11 +165,10 @@ export default async function SinglePostPage({ params }: { params: Promise<{ slu
         )}
       </header>
 
-      {/* Article body */}
       <section className="post-body-section">
         <div className="post-body-wrap">
-          <Link href="/blog" className="post-back">
-            <ArrowLeft size={14} /> Back to Blog
+          <Link href={blogHref} className="post-back">
+            <ArrowLeft size={14} /> {BACK_LABEL[locale] ?? "Back to Blog"}
           </Link>
 
           <article
@@ -140,7 +176,6 @@ export default async function SinglePostPage({ params }: { params: Promise<{ slu
             dangerouslySetInnerHTML={{ __html: post.content ?? "" }}
           />
 
-          {/* Tags footer */}
           {post.tags?.length > 0 && (
             <div className="post-tags-footer">
               {post.tags.map((t: string) => (
