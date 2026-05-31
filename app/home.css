@@ -253,24 +253,21 @@
 
 /* ── Blog cards: pin "Read more" + date to bottom regardless of content height ── */
 
-/* Card body (grandparent of Read More btn): flex column so footer can be pushed down */
-div:has(> div > .blg-cta-btn),
-div:has(> a > .blg-cta-btn),
-div:has(> .blg-cta-btn) {
+/* The card wrapper (identified by its Tailwind classes visible in DevTools) */
+.shadow-md.backdrop-blur-sm.cursor-pointer {
   display: flex !important;
   flex-direction: column !important;
 }
 
-/* Footer row (direct parent of Read More btn): auto top margin pins it to bottom */
-div:has(> .blg-cta-btn) {
+/* Content area = last child div inside the card (below the image) */
+.shadow-md.backdrop-blur-sm.cursor-pointer > div:last-child {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+}
+
+/* Footer row (Read More + date) = last child inside the content area */
+.shadow-md.backdrop-blur-sm.cursor-pointer > div:last-child > div:last-child,
+.shadow-md.backdrop-blur-sm.cursor-pointer > div:last-child > *:last-child {
   margin-top: auto !important;
-}
-
-/* Each card in the grid: stretch to full row height */
-[class*="blg-card"],
-[class*="blg-post-card"],
-[class*="blg-item"] {
-  display: flex !important;
-  flex-direction: column !important;
-  height: 100% !important;
 }
