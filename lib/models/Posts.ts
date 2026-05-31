@@ -16,8 +16,8 @@ import mongoose, { Schema, Document } from 'mongoose';
     updatedAt:       { type: Date, default: Date.now },
 });
 
-PostSchema.index({ slug: 1 });
 PostSchema.index({ status: 1 });
+PostSchema.index({ locale: 1 });
 
 
 const Post = mongoose.models.Post || mongoose.model("Post", PostSchema);

@@ -136,15 +136,17 @@ const Navbar = () => {
             </>
           )}
 
-          {/* Language switcher */}
-          <button
-            className="navbar-lang-btn"
-            onClick={() => switchLocale(locale === "en" ? "ar" : "en")}
-            title="Switch language"
-          >
-            <span className="navbar-lang-icon">🌐</span>
-            <span className="navbar-lang-label">{locale === "en" ? "عربي" : "EN"}</span>
-          </button>
+          {/* Language switcher — segmented: shows current, click other to switch */}
+          <div className="navbar-lang-toggle">
+            <button
+              className={`navbar-lang-opt${locale === "en" ? " active" : ""}`}
+              onClick={() => switchLocale("en")}
+            >EN</button>
+            <button
+              className={`navbar-lang-opt${locale === "ar" ? " active" : ""}`}
+              onClick={() => switchLocale("ar")}
+            >عربي</button>
+          </div>
 
           <button className="navbar-burger" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -174,10 +176,9 @@ const Navbar = () => {
                 </a>
               </li>
             )}
-            <li>
-              <button className="navbar-links-btn" onClick={() => switchLocale(locale === "en" ? "ar" : "en")}>
-                {locale === "en" ? "عربي" : "English"}
-              </button>
+            <li style={{ display: "flex", gap: "0.5rem", padding: "0.5rem 0" }}>
+              <button className={`navbar-lang-opt${locale === "en" ? " active" : ""}`} onClick={() => { switchLocale("en"); setMenuOpen(false); }}>EN</button>
+              <button className={`navbar-lang-opt${locale === "ar" ? " active" : ""}`} onClick={() => { switchLocale("ar"); setMenuOpen(false); }}>عربي</button>
             </li>
           </ul>
         </div>
