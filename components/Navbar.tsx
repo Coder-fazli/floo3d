@@ -7,7 +7,7 @@ import { getUserInfo } from "@/lib/actions";
 import "./Navbar.css";
 import ContactModal from "./ContactModal";
 import { useTranslations, useLocale } from "next-intl";
-import { useRouter, usePathname } from "@/i18n/navigation";
+import { useRouter, usePathname, Link as LocaleLink } from "@/i18n/navigation";
 
 const Navbar = () => {
   const { isSignedIn, user } = useUser();
@@ -45,7 +45,10 @@ const Navbar = () => {
   };
 
   const switchLocale = (next: "en" | "ar") => {
-    router.replace(pathname, { locale: next });
+    // Use pathname from next-intl (stripped of locale prefix).
+    // Fall back to "/" if pathname is empty or looks wrong to avoid /ar/ar.
+    const target = pathname && pathname !== "" ? pathname : "/";
+    router.replace(target, { locale: next });
   };
 
   return (
@@ -54,10 +57,10 @@ const Navbar = () => {
       <nav className="navbar-inner">
 
         {/* Brand */}
-        <a href={locale === 'ar' ? '/ar' : '/'} className="navbar-brand">
+        <LocaleLink href="/" className="navbar-brand">
           <img src="/logo.png" alt="MyHomeStyler" className="navbar-logo-img" />
           <span className="navbar-name">MyHome<span className="navbar-name-accent">Styler</span></span>
-        </a>
+        </LocaleLink>
 
         {/* Desktop links */}
         <ul className="navbar-links">

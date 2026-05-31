@@ -3,7 +3,7 @@ import { connectDb } from "@/lib/db";
 import Post from "@/lib/models/Posts";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
@@ -87,8 +87,8 @@ export default async function SinglePostPage({
     year: "numeric",
   });
 
-  const blogHref = locale === "ar" ? "/ar/blog" : "/blog";
-  const homeHref = locale === "ar" ? "/ar" : "/";
+  const blogHref = "/blog";
+  const homeHref = "/";
 
   const jsonLd = {
     "@context": "https://schema.org",
