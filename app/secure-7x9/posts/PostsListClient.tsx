@@ -2,7 +2,7 @@
 import "./editor.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Pencil, Trash2, FileText, Eye } from "lucide-react";
+import { Plus, Pencil, Trash2, FileText, Eye, ExternalLink } from "lucide-react";
 
 const FILTERS = [
   { key: "all", label: "All" },
@@ -120,6 +120,15 @@ export default function PostsListClient({ posts }: { posts: any[] }) {
 
               {/* Actions */}
               <div className="pe-post-actions">
+                <a
+                  className="pe-icon-btn"
+                  title="Open post"
+                  href={`/${post.slug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink size={13} />
+                </a>
                 <button
                   className="pe-icon-btn"
                   title="Edit"
