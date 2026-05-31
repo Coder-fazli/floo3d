@@ -190,7 +190,25 @@
     "faqQ4": "Can I use the renders commercially?",
     "faqA4": "Yes. Every plan includes full commercial usage rights. Use them in proposals, listings, presentations, or sell them to clients.",
     "faqQ5": "How many credits does one render cost?",
-    "faqA5": "Every render costs 2 credits regardless of which tool you use — floor plan to 3D, room redesign, virtual staging, or outdoor design."
+    "faqA5": "Every render costs 2 credits regardless of which tool you use — floor plan to 3D, room redesign, virtual staging, or outdoor design.",
+    "save": "Save",
+    "getPlan": "Get",
+    "starterDesc": "Great for homeowners and designers working on a single project.",
+    "proDesc": "Best value for designers who need results fast.",
+    "eliteDesc": "Highest accuracy AI — for architects, agencies and real estate professionals.",
+    "starterIncludesHeader": "Starter includes:",
+    "proIncludesHeader": "Everything in Starter, plus:",
+    "eliteIncludesHeader": "Everything in Pro, plus:",
+    "starterFeatures": ["50 AI renders per month", "All 4 AI tools included", "HD quality renders", "PNG, JPG & PDF export", "No watermark", "Commercial usage rights"],
+    "proFeatures": ["150 AI renders per month", "Isometric & cross-section views", "More design styles", "Priority generation queue", "Up to 3 active projects", "$0.17 per render"],
+    "eliteFeatures": ["Highest accuracy AI model", "Superior material & texture detail", "Sharper architectural lines", "Best for client presentations", "Priority support", "Commercial usage rights"]
+  },
+  "cookie": {
+    "title": "We use cookies",
+    "text": "To improve your experience and analyse traffic. See our",
+    "privacyLink": "Privacy Policy",
+    "decline": "Decline",
+    "acceptAll": "Accept All"
   },
   "sidebar": {
     "dashboard": "Dashboard",

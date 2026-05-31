@@ -373,50 +373,26 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
       id: 'starter', name: 'Starter', Icon: Zap,
       price: pricingSettings?.starterPrice ?? 9.99,
       credits: pricingSettings?.starterCredits ?? 100,
-      description: pricingSettings?.starterDescription ?? 'Great for homeowners and designers working on a single project.',
-      includes: [
-        'Starter includes:',
-        '50 AI renders per month',
-        'All 4 AI tools included',
-        'HD quality renders',
-        'PNG, JPG & PDF export',
-        'No watermark',
-        'Commercial usage rights',
-      ],
-      cta: 'Get Starter',
+      description: pricingSettings?.starterDescription ?? t("starterDesc"),
+      includes: [t("starterIncludesHeader"), ...(t.raw("starterFeatures") as string[])],
+      cta: `${t("getPlan")} Starter`,
     },
     {
       id: 'pro', name: 'Pro', Icon: Shield,
       price: pricingSettings?.proPrice ?? 24.99,
       credits: pricingSettings?.proCredits ?? 300,
-      description: pricingSettings?.proDescription ?? 'Best value for designers who need results fast.',
+      description: pricingSettings?.proDescription ?? t("proDesc"),
       popular: true,
-      includes: [
-        'Everything in Starter, plus:',
-        '150 AI renders per month',
-        'Isometric & cross-section views',
-        'More design styles',
-        'Priority generation queue',
-        'Up to 3 active projects',
-        '$0.17 per render',
-      ],
-      cta: 'Get Pro',
+      includes: [t("proIncludesHeader"), ...(t.raw("proFeatures") as string[])],
+      cta: `${t("getPlan")} Pro`,
     },
     {
       id: 'elite', name: 'Elite', Icon: Star,
       price: pricingSettings?.elitePrice ?? 49.99,
       credits: pricingSettings?.eliteCredits ?? 300,
-      description: pricingSettings?.eliteDescription ?? 'Highest accuracy AI — for architects, agencies and real estate professionals.',
-      includes: [
-        'Everything in Pro, plus:',
-        'Highest accuracy AI model',
-        'Superior material & texture detail',
-        'Sharper architectural lines',
-        'Best for client presentations',
-        'Priority support',
-        'Commercial usage rights',
-      ],
-      cta: 'Get Elite',
+      description: pricingSettings?.eliteDescription ?? t("eliteDesc"),
+      includes: [t("eliteIncludesHeader"), ...(t.raw("eliteFeatures") as string[])],
+      cta: `${t("getPlan")} Elite`,
     },
   ];
 
@@ -547,7 +523,7 @@ export default function PricingClient({ pricingSettings }: { pricingSettings?: P
                             ${originalPrice.toFixed(2)}
                           </span>
                           <span style={{ fontSize: "0.85rem", fontWeight: 800, color: "#16a34a", background: "#dcfce7", padding: "0.2rem 0.6rem", borderRadius: "9999px" }}>
-                            Save ${saving.toFixed(2)}
+                            {t("save")} ${saving.toFixed(2)}
                           </span>
                         </div>
                       );

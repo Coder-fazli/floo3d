@@ -1,9 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false);
+  const t = useTranslations("cookie");
 
   useEffect(() => {
     if (!localStorage.getItem("cookie_consent")) setVisible(true);
@@ -51,12 +53,12 @@ export default function CookieBanner() {
         </div>
         <div>
           <p style={{ margin: "0 0 0.25rem", fontSize: "0.82rem", fontWeight: 700, color: "#0f172a" }}>
-            We use cookies
+            {t("title")}
           </p>
           <p style={{ margin: 0, fontSize: "0.76rem", color: "#64748b", lineHeight: 1.5 }}>
-            To improve your experience and analyse traffic. See our{" "}
+            {t("text")}{" "}
             <Link href="/privacy-policy" style={{ color: "var(--brand-color)", fontWeight: 600, textDecoration: "none" }}>
-              Privacy Policy
+              {t("privacyLink")}
             </Link>.
           </p>
         </div>
@@ -77,7 +79,7 @@ export default function CookieBanner() {
           fontFamily: "inherit",
           transition: "border-color 0.15s",
         }}>
-          Decline
+          {t("decline")}
         </button>
         <button onClick={accept} style={{
           flex: 2,
@@ -93,7 +95,7 @@ export default function CookieBanner() {
           boxShadow: "0 4px 14px rgba(236,91,19,0.3)",
           transition: "opacity 0.15s",
         }}>
-          Accept All
+          {t("acceptAll")}
         </button>
       </div>
 
