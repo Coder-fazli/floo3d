@@ -49,6 +49,7 @@ export async function POST(request: Request) {
         coverImage,
         tags,
         status,
+        locale,
         metaTitle,
         metaDescription,
         focusKeyword,
@@ -59,6 +60,7 @@ export async function POST(request: Request) {
         coverImage?: string;
         tags?: string[];
         status?: string;
+        locale?: string;
         metaTitle?: string;
         metaDescription?: string;
         focusKeyword?: string;
@@ -72,7 +74,7 @@ export async function POST(request: Request) {
       const existing = await Post.findOne({ slug }).lean();
       if (existing) slug = `${slug}-${Date.now()}`;
 
-      const post = await Post.create({ title, slug, content, excerpt, coverImage, tags, status, metaTitle, metaDescription, focusKeyword });
+      const post = await Post.create({ title, slug, content, excerpt, coverImage, tags, status, locale: locale ?? "en", metaTitle, metaDescription, focusKeyword });
       return NextResponse.json({ post }, { status: 201 });
 
       

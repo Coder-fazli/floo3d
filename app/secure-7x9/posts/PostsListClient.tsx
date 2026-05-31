@@ -13,9 +13,11 @@ const FILTERS = [
 export default function PostsListClient({ posts }: { posts: any[] }) {
   const router = useRouter();
   const [filter, setFilter] = useState("all");
+  const [locale, setLocale] = useState<"en" | "ar">("en");
   const [deleting, setDeleting] = useState<string | null>(null);
 
-  const filtered = filter === "all" ? posts : posts.filter((p) => p.status === filter);
+  const byLocale = posts.filter((p) => (p.locale ?? "en") === locale);
+  const filtered = filter === "all" ? byLocale : byLocale.filter((p) => p.status === filter);
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this post? This cannot be undone.")) return;
@@ -28,8 +30,10 @@ export default function PostsListClient({ posts }: { posts: any[] }) {
     }
   };
 
-  const publishedCount = posts.filter((p) => p.status === "published").length;
-  const draftCount = posts.filter((p) => p.status === "draft").length;
+  const enCount = posts.filter((p) => (p.locale ?? "en") === "en").length;
+  const arCount = posts.filter((p) => p.locale === "ar").length;
+  const publishedCount = byLocale.filter((p) => p.status === "published").length;
+  const draftCount = byLocale.filter((p) => p.status === "draft").length;
 
   return (
     <div className="adm-content">
@@ -38,15 +42,48 @@ export default function PostsListClient({ posts }: { posts: any[] }) {
         <div>
           <h1 className="adm-topbar-title" style={{ marginBottom: "0.25rem" }}>Posts</h1>
           <p style={{ margin: 0, fontSize: "0.8rem", color: "#94a3b8" }}>
-            {posts.length} total &nbsp;·&nbsp;
+            {byLocale.length} total &nbsp;·&nbsp;
             <span style={{ color: "#16a34a", fontWeight: 600 }}>{publishedCount} published</span>
             &nbsp;·&nbsp;
             <span style={{ color: "#64748b", fontWeight: 600 }}>{draftCount} drafts</span>
           </p>
         </div>
-        <button className="adm-btn-primary" onClick={() => router.push("/secure-7x9/posts/new")}>
+        <button className="adm-btn-primary" onClick={() => router.push(`/secure-7x9/posts/new?locale=${locale}`)}>
           <Plus size={14} /> New Post
         </button>
+      </div>
+
+      {/* Language tabs */}
+      <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
+        {([["en", "🇬🇧 English", enCount], ["ar", "🇦🇪 Arabic", arCount]] as const).map(([key, label, count]) => (
+          <button
+            key={key}
+            onClick={() => setLocale(key)}
+            style={{
+              padding: "0.4rem 1rem",
+              borderRadius: "999px",
+              border: locale === key ? "2px solid #fb3b01" : "2px solid #e2e8f0",
+              background: locale === key ? "rgba(251,59,1,0.06)" : "#fff",
+              color: locale === key ? "#fb3b01" : "#64748b",
+              fontWeight: 700,
+              fontSize: "0.78rem",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.4rem",
+            }}
+          >
+            {label}
+            <span style={{
+              background: locale === key ? "rgba(251,59,1,0.12)" : "#f1f5f9",
+              color: locale === key ? "#fb3b01" : "#94a3b8",
+              borderRadius: "999px",
+              padding: "0.05rem 0.45rem",
+              fontSize: "0.65rem",
+              fontWeight: 700,
+            }}>{count}</span>
+          </button>
+        ))}
       </div>
 
       {/* Filters */}
@@ -67,7 +104,7 @@ export default function PostsListClient({ posts }: { posts: any[] }) {
               borderRadius: "9999px",
               padding: "0.1rem 0.45rem",
             }}>
-              {f.key === "all" ? posts.length : posts.filter((p) => p.status === f.key).length}
+              {f.key === "all" ? byLocale.length : byLocale.filter((p) => p.status === f.key).length}
             </span>
           </button>
         ))}
@@ -123,7 +160,7 @@ export default function PostsListClient({ posts }: { posts: any[] }) {
                 <a
                   className="pe-icon-btn"
                   title="Open post"
-                  href={`/${post.slug}`}
+                  href={post.locale === "ar" ? `/ar/${post.slug}` : `/${post.slug}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >

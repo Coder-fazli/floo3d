@@ -71,6 +71,7 @@ interface PostData {
   _id?: string; title?: string; content?: string; excerpt?: string;
   coverImage?: string; tags?: string[]; status?: "draft" | "published";
   slug?: string; metaTitle?: string; metaDescription?: string; focusKeyword?: string;
+  locale?: "en" | "ar";
 }
 
 function toSlug(title: string) {
@@ -91,6 +92,7 @@ function Toast({ msg, type, onClose }: { msg: string; type: "success" | "error";
 export default function PostEditor({ post }: { post?: PostData }) {
   const router = useRouter();
   const isEdit = !!post?._id;
+  const [postLocale, setPostLocale] = useState<"en" | "ar">(post?.locale ?? "en");
 
   const [title, setTitle]   = useState(post?.title ?? "");
   const [slugOverride, setSlugOverride] = useState(post?.slug ?? "");
@@ -161,6 +163,7 @@ export default function PostEditor({ post }: { post?: PostData }) {
         title: title.trim(), slug: slug || toSlug(title),
         content: editor?.getHTML() ?? "", excerpt: excerpt.trim(),
         coverImage: coverImage.trim(), tags, status: saveStatus,
+        locale: postLocale,
         metaTitle: metaTitle.trim(), metaDescription: metaDescription.trim(),
         focusKeyword: focusKeyword.trim(),
       };
@@ -355,6 +358,13 @@ export default function PostEditor({ post }: { post?: PostData }) {
           <div className="pe-sidebar-card">
             <div className="pe-sidebar-card-header"><h3><Send size={13} /> Publish</h3></div>
             <div className="pe-sidebar-card-body">
+              <div className="pe-field">
+                <label>Language</label>
+                <div className="pe-status-select">
+                  <button className={`pe-status-opt${postLocale === "en" ? " active-published" : ""}`} onClick={() => { setPostLocale("en"); setIsDirty(true); }}>🇬🇧 EN</button>
+                  <button className={`pe-status-opt${postLocale === "ar" ? " active-published" : ""}`} onClick={() => { setPostLocale("ar"); setIsDirty(true); }}>🇦🇪 AR</button>
+                </div>
+              </div>
               <div className="pe-field">
                 <label>Status</label>
                 <div className="pe-status-select">

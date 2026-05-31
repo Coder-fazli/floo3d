@@ -89,10 +89,10 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
   const { locale } = await params;
   const homeImages = await getHomeImages();
   await connectDb();
-  const rawPosts = await Post.find({ status: "published" })
+  const rawPosts = await Post.find({ status: "published", locale: locale === "ar" ? "ar" : { $in: ["en", null, undefined] } })
     .sort({ createdAt: -1 })
     .limit(3)
-    .select("title slug excerpt coverImage tags createdAt")
+    .select("title slug excerpt coverImage tags createdAt locale")
     .lean() as any[];
   const dateLocale = locale === 'ar' ? 'ar-AE' : 'en-US';
   const blogPosts = rawPosts.map((p) => ({
