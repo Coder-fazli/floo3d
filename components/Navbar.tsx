@@ -20,20 +20,35 @@ const Navbar = () => {
   const t = useTranslations("nav");
   useLocale(); // keep provider in sync but don't rely on it for active state
 
-  // Derive active locale from the URL — always accurate on all pages
+  // Active locale: URL prefix wins on locale routes (home / blog posts),
+  // otherwise the preferred-locale cookie decides.
   const [isAr, setIsAr] = useState(false);
   useEffect(() => {
-    setIsAr(window.location.pathname.startsWith("/ar"));
+    const path = window.location.pathname;
+    if (path === "/ar" || path.startsWith("/ar/")) {
+      setIsAr(true);
+    } else if (path === "/") {
+      setIsAr(false);
+    } else {
+      setIsAr(/(?:^|;\s*)preferred-locale=ar/.test(document.cookie));
+    }
   }, []);
 
   const switchLocale = (next: "en" | "ar") => {
+    // Always remember the choice in a cookie (used by non-locale pages).
+    document.cookie = `preferred-locale=${next}; path=/; max-age=31536000`;
     const cur = window.location.pathname;
-    if (next === "ar") {
-      if (cur.startsWith("/ar")) return; // already Arabic
-      window.location.href = "/ar" + (cur === "/" ? "" : cur);
+    const onLocaleRoute = cur === "/" || cur === "/ar" || cur.startsWith("/ar/");
+    if (onLocaleRoute) {
+      // Home / blog posts have real /ar URLs — switch the URL.
+      if (next === "ar") {
+        window.location.href = cur.startsWith("/ar") ? cur : "/ar" + (cur === "/" ? "" : cur);
+      } else {
+        window.location.href = cur.replace(/^\/ar(?=\/|$)/, "") || "/";
+      }
     } else {
-      if (!cur.startsWith("/ar")) return; // already English
-      window.location.href = cur.replace(/^\/ar(?=\/|$)/, "") || "/";
+      // Static / app pages translate via the cookie — just reload.
+      window.location.reload();
     }
   };
 
