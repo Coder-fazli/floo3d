@@ -76,10 +76,10 @@ export default function BlogsSection({ posts }: { posts?: BlogPost[] }) {
                   </p>
                 </div>
                 <div className="px-3 pb-3 sm:px-4 sm:pb-4 flex flex-col flex-1">
-                  <h3 className="mb-2 font-normal text-base text-gray-900 tracking-tight sm:mb-2 sm:text-lg md:text-2xl">
+                  <h3 className="mb-2 font-normal text-base text-gray-900 tracking-tight sm:mb-2 sm:text-lg md:text-2xl line-clamp-2">
                     {article.title}
                   </h3>
-                  <p className="mb-4 text-gray-600 text-xs leading-relaxed sm:mb-6 sm:text-sm">
+                  <p className="mb-4 text-gray-600 text-xs leading-relaxed sm:mb-6 sm:text-sm line-clamp-3">
                     {article.description}
                   </p>
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mt-auto">
