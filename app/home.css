@@ -250,3 +250,27 @@
   background: #faf7f4 !important;
   max-width: 100% !important;
 }
+
+/* ── Blog cards: pin "Read more" + date to bottom regardless of content height ── */
+
+/* Card body (grandparent of Read More btn): flex column so footer can be pushed down */
+div:has(> div > .blg-cta-btn),
+div:has(> a > .blg-cta-btn),
+div:has(> .blg-cta-btn) {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Footer row (direct parent of Read More btn): auto top margin pins it to bottom */
+div:has(> .blg-cta-btn) {
+  margin-top: auto !important;
+}
+
+/* Each card in the grid: stretch to full row height */
+[class*="blg-card"],
+[class*="blg-post-card"],
+[class*="blg-item"] {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+}
