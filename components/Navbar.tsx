@@ -20,35 +20,41 @@ const Navbar = () => {
   const t = useTranslations("nav");
   useLocale(); // keep provider in sync but don't rely on it for active state
 
-  // Active locale: URL prefix wins on locale routes (home / blog posts),
-  // otherwise the preferred-locale cookie decides.
+  // Pages served on ONE URL (Arabic via cookie). Everything else — home, tool
+  // pages, blog posts — is URL-localized under /ar.
+  const isCookiePage = (bare: string) =>
+    ["/pricing", "/blog", "/contact", "/privacy-policy", "/terms-of-service",
+     "/refund-policy", "/dashboard", "/projects", "/new", "/color-test",
+     "/sign-in", "/sign-up", "/visualizer"]
+      .some((b) => bare === b || bare.startsWith(b + "/"));
+
+  // Active locale indicator.
   const [isAr, setIsAr] = useState(false);
   useEffect(() => {
     const path = window.location.pathname;
+    const bare = path.replace(/^\/ar(?=\/|$)/, "") || "/";
     if (path === "/ar" || path.startsWith("/ar/")) {
-      setIsAr(true);
-    } else if (path === "/") {
-      setIsAr(false);
+      setIsAr(true);                              // under /ar → Arabic
+    } else if (isCookiePage(bare)) {
+      setIsAr(/(?:^|;\s*)preferred-locale=ar/.test(document.cookie)); // cookie decides
     } else {
-      setIsAr(/(?:^|;\s*)preferred-locale=ar/.test(document.cookie));
+      setIsAr(false);                             // URL-localized English page
     }
   }, []);
 
   const switchLocale = (next: "en" | "ar") => {
-    // Always remember the choice in a cookie (used by non-locale pages).
+    // Always remember the choice in a cookie (used by cookie-localized pages).
     document.cookie = `preferred-locale=${next}; path=/; max-age=31536000`;
     const cur = window.location.pathname;
-    const onLocaleRoute = cur === "/" || cur === "/ar" || cur.startsWith("/ar/");
-    if (onLocaleRoute) {
-      // Home / blog posts have real /ar URLs — switch the URL.
-      if (next === "ar") {
-        window.location.href = cur.startsWith("/ar") ? cur : "/ar" + (cur === "/" ? "" : cur);
-      } else {
-        window.location.href = cur.replace(/^\/ar(?=\/|$)/, "") || "/";
-      }
-    } else {
-      // Static / app pages translate via the cookie — just reload.
+    const bare = cur.replace(/^\/ar(?=\/|$)/, "") || "/";
+    if (isCookiePage(bare)) {
+      // Same URL serves both languages — just reload to apply the cookie.
       window.location.reload();
+    } else {
+      // URL-localized (home, tools, blog posts) — switch the URL.
+      window.location.href = next === "ar"
+        ? "/ar" + (bare === "/" ? "" : bare)
+        : bare;
     }
   };
 
