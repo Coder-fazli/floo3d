@@ -110,12 +110,7 @@ const Navbar = () => {
               </div>
             </div>
           </li>
-          <li><a href="#magic">{t("magic")}</a></li>
-          <li><a href="#reviews">{t("love")}</a></li>
-          <li><a href="#journal">{t("journal")}</a></li>
-          <li><a href="#answers">{t("answers")}</a></li>
           <li><a href="/pricing">{t("pricing")}</a></li>
-          {isSignedIn && <li><button className="navbar-links-btn" onClick={() => setContactOpen(true)}>{t("support")}</button></li>}
         </ul>
 
         {/* Actions */}
@@ -183,15 +178,10 @@ const Navbar = () => {
           <ul>
             <li><a href={`${toolPrefix}/2d-to-3d-floor-plan-converter`} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>{t("converter")}</a></li>
             <li><a href={`${toolPrefix}/floor-plan-generator`} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>{t("floorPlan")}</a></li>
-            <li><a href="#magic" onClick={() => setMenuOpen(false)}>{t("magic")}</a></li>
-            <li><a href="#reviews" onClick={() => setMenuOpen(false)}>{t("love")}</a></li>
-            <li><a href="#journal" onClick={() => setMenuOpen(false)}>{t("journal")}</a></li>
-            <li><a href="#answers" onClick={() => setMenuOpen(false)}>{t("answers")}</a></li>
             <li><a href="/pricing" onClick={() => setMenuOpen(false)}>{t("pricing")}</a></li>
             {isSignedIn ? (
               <>
                 <li><a href="/dashboard/profile" onClick={() => setMenuOpen(false)}>{t("profile")}</a></li>
-                <li><a href="#" onClick={() => { setContactOpen(true); setMenuOpen(false); }}>{t("support")}</a></li>
               </>
             ) : (
               <li>
