@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { localizedUrl } from "@/lib/seo";
 
 const BACK_LABEL: Record<string, string> = {
   en: "Back to Blog",
@@ -25,15 +26,15 @@ export async function generateMetadata({
 }: {
   params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { locale, slug } = await params;
+  const { slug } = await params;
   await connectDb();
   const post = await Post.findOne({ slug, status: "published" }).lean() as any;
   if (!post) return {};
 
-  const base = "https://myhomestyler.com";
-  const url = locale === "ar" ? `${base}/ar/${slug}` : `${base}/${slug}`;
-  const enUrl = `${base}/${slug}`;
-  const arUrl = `${base}/ar/${slug}`;
+  // Canonical follows the post's OWN locale, not the URL it was reached by.
+  // This consolidates /slug and /ar/slug (both resolve the same post) onto one URL.
+  const postLocale = post.locale === "ar" ? "ar" : "en";
+  const url = localizedUrl(`/${slug}`, postLocale);
 
   const seoTitle = post.metaTitle || post.title + " — MyHomeStyler Blog";
   const seoDesc = post.metaDescription || post.excerpt || post.title;
@@ -41,20 +42,14 @@ export async function generateMetadata({
   return {
     title: seoTitle,
     description: seoDesc,
-    alternates: {
-      canonical: url,
-      languages: {
-        en: enUrl,
-        "ar-AE": arUrl,
-        "x-default": enUrl,
-      },
-    },
+    // No cross-locale hreflang: posts are independent (no en↔ar translation pairs).
+    alternates: { canonical: url },
     openGraph: {
       title: seoTitle,
       description: seoDesc,
       url,
       type: "article",
-      locale: locale === "ar" ? "ar_AE" : "en_US",
+      locale: postLocale === "ar" ? "ar_AE" : "en_US",
       publishedTime: post.createdAt,
       modifiedTime: post.updatedAt,
       images: post.coverImage
@@ -80,6 +75,8 @@ export default async function SinglePostPage({
   const post = await Post.findOne({ slug, status: "published" }).lean() as any;
   if (!post) notFound();
 
+  // Use the post's own locale for canonical URL + schema; URL locale only for date display.
+  const postLocale = post.locale === "ar" ? "ar" : "en";
   const dateLocale = locale === "ar" ? "ar-AE" : "en-US";
   const date = new Date(post.createdAt).toLocaleDateString(dateLocale, {
     month: "long",
@@ -109,10 +106,8 @@ export default async function SinglePostPage({
       url: "https://myhomestyler.com",
       logo: { "@type": "ImageObject", url: "https://myhomestyler.com/logo.png" },
     },
-    url: locale === "ar"
-      ? `https://myhomestyler.com/ar/${slug}`
-      : `https://myhomestyler.com/${slug}`,
-    inLanguage: locale === "ar" ? "ar-AE" : "en-US",
+    url: localizedUrl(`/${slug}`, postLocale),
+    inLanguage: postLocale === "ar" ? "ar-AE" : "en-US",
     keywords: post.tags?.join(", ") ?? "",
   };
 

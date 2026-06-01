@@ -9,6 +9,7 @@ import CookieBanner from "@/components/CookieBanner";
 import Script from "next/script";
 import { getLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
+import { localizedUrl } from "@/lib/seo";
 
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400","700","900"], variable: "--font-playfair" });
 const roboto = Roboto({ subsets: ["latin"], weight: ["400","500","700","900"], variable: "--font-roboto" });
@@ -34,11 +35,11 @@ export async function generateMetadata() {
       "google-adsense-account": "ca-pub-6790452039559569",
     },
     alternates: {
-      canonical: locale === 'ar' ? "https://myhomestyler.com/ar" : "https://myhomestyler.com",
+      canonical: localizedUrl("/", locale),
       languages: {
-        'en': 'https://myhomestyler.com',
-        'ar-AE': 'https://myhomestyler.com/ar',
-        'x-default': 'https://myhomestyler.com',
+        'en': localizedUrl("/", "en"),
+        'ar-AE': localizedUrl("/", "ar"),
+        'x-default': localizedUrl("/", "en"),
       },
     },
     icons: {
@@ -49,7 +50,7 @@ export async function generateMetadata() {
     openGraph: {
       title,
       description,
-      url: locale === 'ar' ? "https://myhomestyler.com/ar" : "https://myhomestyler.com",
+      url: localizedUrl("/", locale),
       siteName: "MyHomeStyler",
       locale: locale === 'ar' ? 'ar_AE' : 'en_US',
       images: [{ url: "https://myhomestyler.com/og-image.png", width: 512, height: 512, alt: "MyHomeStyler" }],

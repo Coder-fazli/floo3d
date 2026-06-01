@@ -20,14 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: {
-      canonical: "https://myhomestyler.com/floor-plan-generator",
-      languages: {
-        en: "https://myhomestyler.com/floor-plan-generator",
-        "ar-AE": "https://myhomestyler.com/ar/floor-plan-generator",
-        "x-default": "https://myhomestyler.com/floor-plan-generator",
-      },
-    },
+    alternates: { canonical: "https://myhomestyler.com/floor-plan-generator" },
     openGraph: {
       title,
       description,
