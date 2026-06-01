@@ -29,7 +29,9 @@ const isPublicRoute = createRouteMatcher([
 const isAdminRoute = createRouteMatcher(["/secure-7x9(.*)"]);
 
 // Names of routes that live OUTSIDE app/[locale]/ (each has its own folder).
-const NON_LOCALE_PAGES = "dashboard|sign-in|sign-up|visualizer|pricing|blog|contact|privacy-policy|terms-of-service|refund-policy|2d-to-3d-floor-plan-converter|floor-plan-generator|projects|new|color-test";
+// NOTE: the two tool pages now live UNDER app/[locale]/ for real Arabic SEO URLs,
+// so they are intentionally absent here (they route through next-intl).
+const NON_LOCALE_PAGES = "dashboard|sign-in|sign-up|visualizer|pricing|blog|contact|privacy-policy|terms-of-service|refund-policy|projects|new|color-test";
 
 // Admin + internals: ALWAYS English, never read the locale cookie.
 const FORCE_EN = /^\/(secure-7x9|api|_next)(\/?.*)?$/;

@@ -6,21 +6,31 @@ const BASE = "https://myhomestyler.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
+  // Pages that exist in BOTH English and Arabic (real distinct URLs).
+  const bilingual = [
+    { path: "/", priority: 1 },
+    { path: "/2d-to-3d-floor-plan-converter", priority: 0.9 },
+    { path: "/floor-plan-generator", priority: 0.9 },
+  ];
+
   const staticRoutes: MetadataRoute.Sitemap = [
-    // English — real pages with their own routes
-    { url: BASE,                                    lastModified: now, changeFrequency: "weekly", priority: 1,
-      alternates: { languages: { en: BASE, "ar-AE": `${BASE}/ar` } } },
-    { url: `${BASE}/2d-to-3d-floor-plan-converter`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${BASE}/floor-plan-generator`,          lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${BASE}/blog`,                          lastModified: now, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${BASE}/pricing`,                       lastModified: now, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${BASE}/privacy-policy`,                lastModified: now, changeFrequency: "yearly", priority: 0.4 },
-    { url: `${BASE}/terms-of-service`,              lastModified: now, changeFrequency: "yearly", priority: 0.4 },
-    { url: `${BASE}/refund-policy`,                 lastModified: now, changeFrequency: "yearly", priority: 0.4 },
-    { url: `${BASE}/contact`,                       lastModified: now, changeFrequency: "yearly", priority: 0.5 },
-    // Arabic — only the home page has a distinct indexable URL
-    { url: `${BASE}/ar`,                            lastModified: now, changeFrequency: "weekly", priority: 1,
-      alternates: { languages: { en: BASE, "ar-AE": `${BASE}/ar` } } },
+    // Bilingual pages — emit both locales, each cross-linked via hreflang.
+    ...bilingual.flatMap(({ path, priority }) => {
+      const en = path === "/" ? BASE : `${BASE}${path}`;
+      const ar = path === "/" ? `${BASE}/ar` : `${BASE}/ar${path}`;
+      const languages = { en, "ar-AE": ar };
+      return [
+        { url: en, lastModified: now, changeFrequency: "weekly" as const, priority, alternates: { languages } },
+        { url: ar, lastModified: now, changeFrequency: "weekly" as const, priority, alternates: { languages } },
+      ];
+    }),
+    // English-only pages (Arabic served on same URL via cookie — single canonical).
+    { url: `${BASE}/blog`,             lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/pricing`,          lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/privacy-policy`,   lastModified: now, changeFrequency: "yearly", priority: 0.4 },
+    { url: `${BASE}/terms-of-service`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
+    { url: `${BASE}/refund-policy`,    lastModified: now, changeFrequency: "yearly", priority: 0.4 },
+    { url: `${BASE}/contact`,          lastModified: now, changeFrequency: "yearly", priority: 0.5 },
   ];
 
   try {

@@ -76,6 +76,9 @@ const Navbar = () => {
   };
 
 
+  // Tool pages have real /ar URLs — prefix internal links when Arabic.
+  const toolPrefix = isAr ? "/ar" : "";
+
   return (
     <>
     <header className="navbar">
@@ -96,11 +99,11 @@ const Navbar = () => {
             </button>
             <div className="navbar-dropdown">
               <div className="navbar-dropdown-inner">
-                <a href="/2d-to-3d-floor-plan-converter" target="_blank" rel="noopener noreferrer" className="navbar-dropdown-item">
+                <a href={`${toolPrefix}/2d-to-3d-floor-plan-converter`} target="_blank" rel="noopener noreferrer" className="navbar-dropdown-item">
                   <span className="navbar-dropdown-item-title">{t("converter")}</span>
                   <span className="navbar-dropdown-item-desc">{t("converterDesc")}</span>
                 </a>
-                <a href="/floor-plan-generator" target="_blank" rel="noopener noreferrer" className="navbar-dropdown-item">
+                <a href={`${toolPrefix}/floor-plan-generator`} target="_blank" rel="noopener noreferrer" className="navbar-dropdown-item">
                   <span className="navbar-dropdown-item-title">{t("floorPlan")}</span>
                   <span className="navbar-dropdown-item-desc">{t("floorPlanDesc")}</span>
                 </a>
@@ -178,8 +181,8 @@ const Navbar = () => {
       {menuOpen && (
         <div className="navbar-mobile">
           <ul>
-            <li><a href="/2d-to-3d-floor-plan-converter" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>{t("converter")}</a></li>
-            <li><a href="/floor-plan-generator" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>{t("floorPlan")}</a></li>
+            <li><a href={`${toolPrefix}/2d-to-3d-floor-plan-converter`} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>{t("converter")}</a></li>
+            <li><a href={`${toolPrefix}/floor-plan-generator`} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>{t("floorPlan")}</a></li>
             <li><a href="#magic" onClick={() => setMenuOpen(false)}>{t("magic")}</a></li>
             <li><a href="#reviews" onClick={() => setMenuOpen(false)}>{t("love")}</a></li>
             <li><a href="#journal" onClick={() => setMenuOpen(false)}>{t("journal")}</a></li>

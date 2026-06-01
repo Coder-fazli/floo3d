@@ -49,7 +49,23 @@ const features = [
   },
 ];
 
-export default function FloorPlanHero() {
+const STRINGS = {
+  en: {
+    h1: "2D to 3D Floor", accent: "Plan Converter", h3: "Free. Online. Instant.",
+    sub: "Convert any 2D floor plan, blueprint, or house plan to a stunning 3D model free online. Just upload your 2D drawing and AI does the rest in seconds.",
+    ctaPrimary: "Convert Free", ctaSecondary: "See How It Works",
+    trustedPre: "Trusted by", trustedMid: "architects &", happyUsers: "happy users",
+  },
+  ar: {
+    h1: "محوّل المخطط", accent: "من 2D إلى 3D", h3: "مجاني. أونلاين. فوري.",
+    sub: "حوّل أي مخطط منزل ثنائي الأبعاد أو مخطط معماري إلى تصور ثلاثي الأبعاد مذهل مجاناً عبر الإنترنت. ارفع رسمتك والذكاء الاصطناعي يتولّى الباقي في ثوانٍ.",
+    ctaPrimary: "حوّل مجاناً", ctaSecondary: "شاهد كيف يعمل",
+    trustedPre: "موثوق من", trustedMid: "معماري و", happyUsers: "مستخدم سعيد",
+  },
+};
+
+export default function FloorPlanHero({ lang = "en" }: { lang?: "en" | "ar" }) {
+  const s = STRINGS[lang];
   const { isSignedIn } = useUser();
   const { openSignUp } = useClerk();
   const [sliderPos, setSliderPos] = useState(40);
@@ -117,20 +133,18 @@ export default function FloorPlanHero() {
 
           {/* Heading */}
           <h1 className="hph-heading">
-            2D to 3D Floor<br />
-            <span className="hph-heading-accent">Plan Converter</span><br />
-            Free. Online. Instant.
+            {s.h1}<br />
+            <span className="hph-heading-accent">{s.accent}</span><br />
+            {s.h3}
           </h1>
 
           {/* Sub */}
-          <p className="hph-sub">
-            Convert any 2D floor plan, blueprint, or house plan to a stunning 3D model free online. Just upload your 2D drawing and AI does the rest in seconds.
-          </p>
+          <p className="hph-sub">{s.sub}</p>
 
           {/* CTAs */}
           <div className="hph-btns">
-            <a href="#try-converter" className="hph-btn-primary">Convert Free</a>
-            <Link href="#how-it-works" className="hph-btn-secondary">See How It Works</Link>
+            <a href="#try-converter" className="hph-btn-primary">{s.ctaPrimary}</a>
+            <Link href="#how-it-works" className="hph-btn-secondary">{s.ctaSecondary}</Link>
           </div>
 
           {/* Trusted users */}
@@ -157,11 +171,11 @@ export default function FloorPlanHero() {
                 ))}
               </div>
               <p style={{ fontSize: "0.78rem", color: "#475569", margin: 0, fontWeight: 500 }}>
-                Trusted by{" "}
+                {s.trustedPre}{" "}
                 <CountUp value={2500} duration={2} separator="," suffix="+" colorScheme="gradient" className="font-bold" />
-                {" "}architects &{" "}
+                {" "}{s.trustedMid}{" "}
                 <a href="/#reviews" style={{ color: "var(--brand-color)", fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "2px" }}>
-                  happy users
+                  {s.happyUsers}
                 </a>
               </p>
             </div>

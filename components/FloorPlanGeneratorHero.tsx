@@ -49,13 +49,35 @@ const features = [
   },
 ];
 
+const STRINGS = {
+  en: {
+    badge: "AI Floor Plan Generator Free · No Login Required",
+    h1: "AI Floor Plan", accent: "Generator", h3: "Free. Online. Instant.",
+    sub: "Generate any floor plan from scratch with AI — no design skills, no software, no credit card. Configure your rooms, pick a style, and get a professional floor plan in seconds.",
+    ctaPrimary: "Generate Free", ctaSecondary: "See How It Works",
+    trustedPre: "Trusted by", trustedMid: "architects &", happyUsers: "happy users",
+    floatLabel: "Floor Plan Generated", floatSub: "AI processed your layout in 1.8s",
+  },
+  ar: {
+    badge: "مولّد مخططات المنازل بالذكاء الاصطناعي مجاناً · بدون تسجيل دخول",
+    h1: "مولّد مخططات المنازل", accent: "بالذكاء الاصطناعي", h3: "مجاني. أونلاين. فوري.",
+    sub: "أنشئ أي مخطط منزل من الصفر بالذكاء الاصطناعي — بدون مهارات تصميم، بدون برامج، بدون بطاقة ائتمان. حدّد غرفك، اختر الأسلوب، واحصل على مخطط احترافي في ثوانٍ.",
+    ctaPrimary: "أنشئ مجاناً", ctaSecondary: "شاهد كيف يعمل",
+    trustedPre: "موثوق من", trustedMid: "معماري و", happyUsers: "مستخدم سعيد",
+    floatLabel: "تم إنشاء المخطط", floatSub: "عالج الذكاء الاصطناعي مخططك في 1.8 ثانية",
+  },
+};
+
 export default function FloorPlanGeneratorHero({
   heroBeforeUrl = "/real-2d-plan.jpg",
   heroAfterUrl  = "/real-3d-render.jpg",
+  lang = "en",
 }: {
   heroBeforeUrl?: string;
   heroAfterUrl?: string;
+  lang?: "en" | "ar";
 }) {
+  const s = STRINGS[lang];
   const { isSignedIn } = useUser();
   const { openSignUp } = useClerk();
   const [sliderPos, setSliderPos] = useState(40);
@@ -127,25 +149,23 @@ export default function FloorPlanGeneratorHero({
               <span className="hph-badge-ping" />
               <span className="hph-badge-dot" />
             </span>
-            <span className="hph-badge-text">AI Floor Plan Generator Free · No Login Required</span>
+            <span className="hph-badge-text">{s.badge}</span>
           </div>
 
           {/* Heading */}
           <h1 className="hph-heading">
-            AI Floor Plan<br />
-            <span className="hph-heading-accent">Generator</span><br />
-            Free. Online. Instant.
+            {s.h1}<br />
+            <span className="hph-heading-accent">{s.accent}</span><br />
+            {s.h3}
           </h1>
 
           {/* Sub */}
-          <p className="hph-sub">
-            Generate any floor plan from scratch with AI — no design skills, no software, no credit card. Configure your rooms, pick a style, and get a professional floor plan in seconds.
-          </p>
+          <p className="hph-sub">{s.sub}</p>
 
           {/* CTAs */}
           <div className="hph-btns">
-            <a href="#generator" className="hph-btn-primary">Generate Free</a>
-            <Link href="#how-it-works" className="hph-btn-secondary">See How It Works</Link>
+            <a href="#generator" className="hph-btn-primary">{s.ctaPrimary}</a>
+            <Link href="#how-it-works" className="hph-btn-secondary">{s.ctaSecondary}</Link>
           </div>
 
           {/* Trusted users */}
@@ -172,11 +192,11 @@ export default function FloorPlanGeneratorHero({
                 ))}
               </div>
               <p style={{ fontSize: "0.78rem", color: "#475569", margin: 0, fontWeight: 500 }}>
-                Trusted by{" "}
+                {s.trustedPre}{" "}
                 <CountUp value={2500} duration={2} separator="," suffix="+" colorScheme="gradient" className="font-bold" />
-                {" "}architects &{" "}
+                {" "}{s.trustedMid}{" "}
                 <a href="#reviews" style={{ color: "var(--brand-color)", fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "2px" }}>
-                  happy users
+                  {s.happyUsers}
                 </a>
               </p>
             </div>
@@ -223,12 +243,12 @@ export default function FloorPlanGeneratorHero({
                   <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
-              <span className="hph-float-label">Floor Plan Generated</span>
+              <span className="hph-float-label">{s.floatLabel}</span>
             </div>
             <div className="hph-float-bar-bg">
               <div className="hph-float-bar-fill" />
             </div>
-            <p className="hph-float-sub">AI processed your layout in 1.8s</p>
+            <p className="hph-float-sub">{s.floatSub}</p>
           </div>
         </div>
 
