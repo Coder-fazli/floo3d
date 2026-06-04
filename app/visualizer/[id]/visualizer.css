@@ -1498,7 +1498,7 @@
 /* Generate button wrap */
 /* ── Custom Requirements ── */
 .viz-custom-prompt-wrap {
-    margin: 0.25rem 1rem 0.5rem;
+    margin: 1.25rem 1rem 0.5rem;
     padding: 0.875rem 1rem 1rem;
     display: flex;
     flex-direction: column;

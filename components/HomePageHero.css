@@ -2,7 +2,7 @@
 
 .hph-section {
   position: relative;
-  padding: 8rem 0 6rem;
+  padding: 6rem 0 6rem;
   overflow: visible;
   background: #faf7f4;
 }
@@ -28,8 +28,9 @@
 
 @media (min-width: 1024px) {
   .hph-grid {
-    grid-template-columns: 5fr 7fr;
+    grid-template-columns: 1fr 1.2fr;
     gap: 4rem;
+    min-height: calc(100vh - 12rem);
   }
 }
 
@@ -95,9 +96,9 @@
 
 /* Heading */
 .hph-heading {
-  font-size: clamp(2.5rem, 4vw, 4.5rem);
+  font-size: clamp(2.5rem, 4.5vw, 5.5rem);
   font-weight: 800;
-  line-height: 1.1;
+  line-height: 1.2;
   letter-spacing: -0.03em;
   color: #27282f;
   margin: 0 0 1.5rem;
@@ -112,12 +113,12 @@
 
 /* Subtext */
 .hph-sub {
-  font-size: 1.1rem;
-  color: #5F6B6B;
-  line-height: 1.65;
-  max-width: 32rem;
+  font-size: 1.25rem;
+  color: #4a5568;
+  line-height: 1.7;
+  max-width: 34rem;
   font-weight: 500;
-  margin: 0 0 2.5rem;
+  margin: 0 0 3rem;
 }
 
 /* CTA buttons */
