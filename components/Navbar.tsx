@@ -118,6 +118,7 @@ const Navbar = () => {
               </div>
             </div>
           </li>
+          <li><a href="/showcase">{t("showcase")}</a></li>
           <li><a href="/pricing">{t("pricing")}</a></li>
         </ul>
 
@@ -190,6 +191,7 @@ const Navbar = () => {
           <ul>
             <li><a href={`${toolPrefix}/2d-to-3d-floor-plan-converter`} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>{t("converter")}</a></li>
             <li><a href={`${toolPrefix}/floor-plan-generator`} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>{t("floorPlan")}</a></li>
+            <li><a href="/showcase" onClick={() => setMenuOpen(false)}>{t("showcase")}</a></li>
             <li><a href="/pricing" onClick={() => setMenuOpen(false)}>{t("pricing")}</a></li>
             {isSignedIn ? (
               <>

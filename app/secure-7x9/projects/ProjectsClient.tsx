@@ -2,7 +2,8 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { Search, AlertCircle, CheckCircle2, Clock, Zap, Download, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, AlertCircle, CheckCircle2, Clock, Zap, Download, ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { setProjectFeatured } from "@/lib/actions.admin";
 
 const PAGE_SIZE = 20;
 
@@ -62,6 +63,25 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
   const [sortOrder, setSortOrder] = useState("newest");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+
+  // Optimistic featured state: id -> boolean (overrides the value from the server).
+  const [featuredOverride, setFeaturedOverride] = useState<Record<string, boolean>>({});
+  const [featPending, setFeatPending] = useState<string | null>(null);
+  const isFeatured = (p: any): boolean => featuredOverride[p._id] ?? !!p.featured;
+
+  async function toggleFeatured(p: any) {
+    const next = !isFeatured(p);
+    setFeatPending(p._id);
+    setFeaturedOverride((m) => ({ ...m, [p._id]: next })); // optimistic
+    try {
+      await setProjectFeatured(p._id, next);
+    } catch (e) {
+      setFeaturedOverride((m) => ({ ...m, [p._id]: !next })); // revert on failure
+      alert("Could not update — only completed renders can be featured.");
+    } finally {
+      setFeatPending(null);
+    }
+  }
 
   const filtered = useMemo(() => {
     let list = [...projects];
@@ -306,10 +326,31 @@ export default function ProjectsClient({ projects }: { projects: any[] }) {
 
                     {/* Action */}
                     <td className="right">
-                      <button className="adm-action-link" onClick={async () => {
-                        await fetch("/api/admin/view-project", { method: "POST" });
-                        window.open(`/visualizer/${p._id}`, "_blank");
-                      }}>View</button>
+                      <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+                        {p.status === "done" && p.renderedImageUrl && (
+                          <button
+                            onClick={() => toggleFeatured(p)}
+                            disabled={featPending === p._id}
+                            title={isFeatured(p) ? "Featured on showcase — click to remove" : "Feature on showcase + Pinterest"}
+                            style={{
+                              display: "inline-flex", alignItems: "center", gap: "0.3rem",
+                              padding: "0.3rem 0.6rem", borderRadius: "0.4rem", cursor: "pointer",
+                              fontSize: "0.72rem", fontWeight: 700, whiteSpace: "nowrap",
+                              border: isFeatured(p) ? "1px solid #fb3b01" : "1px solid #e2e8f0",
+                              background: isFeatured(p) ? "rgba(251,59,1,0.08)" : "#fff",
+                              color: isFeatured(p) ? "#fb3b01" : "#64748b",
+                              opacity: featPending === p._id ? 0.5 : 1,
+                            }}
+                          >
+                            <Star size={12} fill={isFeatured(p) ? "#fb3b01" : "none"} />
+                            {isFeatured(p) ? "Featured" : "Feature"}
+                          </button>
+                        )}
+                        <button className="adm-action-link" onClick={async () => {
+                          await fetch("/api/admin/view-project", { method: "POST" });
+                          window.open(`/visualizer/${p._id}`, "_blank");
+                        }}>View</button>
+                      </div>
                     </td>
                   </tr>
                 ))

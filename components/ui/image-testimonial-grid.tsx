@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -15,13 +17,22 @@ interface MasonryGridProps extends React.HTMLAttributes<HTMLDivElement> {
   gap?: number;
 }
 
+// Responsive column scales (1 col on phones → up to N on desktop).
+// Tailwind needs literal class names, so we map the desired max column count.
+const COLUMN_CLASSES: Record<number, string> = {
+  2: 'columns-2',
+  3: 'columns-2 lg:columns-3',
+  4: 'columns-2 md:columns-3 xl:columns-4',
+  5: 'columns-2 md:columns-3 lg:columns-4 2xl:columns-5',
+};
+
 const MasonryGrid = React.forwardRef<HTMLDivElement, MasonryGridProps>(
   ({ className, columns = 3, gap = 4, children, ...props }, ref) => {
-    // Dynamically create the style object for column layout
+    // Only the gap is set inline; column count is responsive via Tailwind classes.
     const style = {
-      columnCount: columns,
       columnGap: `${gap * 0.25}rem`, // Converts gap unit to rem
     };
+    const columnsClass = COLUMN_CLASSES[columns] ?? COLUMN_CLASSES[3];
 
     // Animation variants for child elements
     const cardVariants = {
@@ -37,7 +48,7 @@ const MasonryGrid = React.forwardRef<HTMLDivElement, MasonryGridProps>(
     };
 
     return (
-      <div ref={ref} style={style} className={cn('w-full', className)} {...props}>
+      <div ref={ref} style={style} className={cn('w-full', columnsClass, className)} {...props}>
         {React.Children.map(children, (child) => (
           <motion.div
             className="mb-4 break-inside-avoid" // Prevents items from breaking across columns

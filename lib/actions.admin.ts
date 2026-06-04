@@ -41,6 +41,25 @@ export async function getAllProjects() {
   return JSON.parse(JSON.stringify(result));
 }
 
+// Toggle whether a render is featured on the public showcase (and Pinterest feed).
+export async function setProjectFeatured(projectId: string, featured: boolean) {
+  await requireAdmin();
+  await connectDb();
+  const project = await Project.findById(projectId).select("renderedImageUrl status").lean() as any;
+  if (!project) throw new Error("Project not found");
+  // Only a finished render can be featured.
+  if (featured && (!project.renderedImageUrl || project.status === "error")) {
+    throw new Error("Only completed renders can be featured");
+  }
+  await Project.findByIdAndUpdate(projectId, {
+    featured,
+    featuredAt: featured ? new Date() : null,
+  });
+  revalidatePath("/secure-7x9/projects");
+  revalidatePath("/showcase");
+  return { ok: true, featured };
+}
+
 export async function getAllUSers() {
   await requireAdmin();
   noStore();

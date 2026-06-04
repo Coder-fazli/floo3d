@@ -21,10 +21,13 @@ const ProjectSchema = new Schema({
     downloadedAt: { type: Date, default: null },
     downloadCount: { type: Number, default: 0 },
     rating: { type: String, enum: ["like", "dislike", null], default: null },
+    featured: { type: Boolean, default: false },
+    featuredAt: { type: Date, default: null },
     createdAt: { type: Date, default: Date.now },
   });
 
   ProjectSchema.index({ userId: 1 });
+  ProjectSchema.index({ featured: 1, featuredAt: -1 });
 
   const Project = models.Project || model("Project", ProjectSchema);
 

@@ -24,6 +24,7 @@ const isPublicRoute = createRouteMatcher([
   "/refund-policy(.*)",
   "/contact(.*)",
   "/blog(.*)",
+  "/showcase(.*)",
   "/api/posts(.*)",
   "/:slug",
 ]);
@@ -33,7 +34,7 @@ const isAdminRoute = createRouteMatcher(["/secure-7x9(.*)"]);
 // Names of routes that live OUTSIDE app/[locale]/ (each has its own folder).
 // NOTE: the two tool pages now live UNDER app/[locale]/ for real Arabic SEO URLs,
 // so they are intentionally absent here (they route through next-intl).
-const NON_LOCALE_PAGES = "dashboard|sign-in|sign-up|visualizer|pricing|blog|contact|privacy-policy|terms-of-service|refund-policy|projects|new|color-test";
+const NON_LOCALE_PAGES = "dashboard|sign-in|sign-up|visualizer|pricing|blog|showcase|contact|privacy-policy|terms-of-service|refund-policy|projects|new|color-test";
 
 // Admin + internals: ALWAYS English, never read the locale cookie.
 const FORCE_EN = /^\/(secure-7x9|api|_next)(\/?.*)?$/;
@@ -88,7 +89,7 @@ export default clerkMiddleware(async (auth, request) => {
 
 export const config = {
   matcher: [
-    "/((?!_next|api|favicon\\.ico|robots\\.txt|sitemap\\.xml|(?:ar/|es/)?feed\\.xml|.*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/((?!_next|api|favicon\\.ico|robots\\.txt|sitemap\\.xml|(?:ar/|es/)?feed\\.xml|showcase\\.xml|.*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
     "/(api|trpc)(.*)",
   ],
 };

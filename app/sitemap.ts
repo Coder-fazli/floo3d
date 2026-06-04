@@ -27,6 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ];
     }),
     // English-only pages (Arabic served on same URL via cookie — single canonical).
+    { url: `${BASE}/showcase`,         lastModified: now, changeFrequency: "daily",  priority: 0.8 },
     { url: `${BASE}/blog`,             lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE}/pricing`,          lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE}/privacy-policy`,   lastModified: now, changeFrequency: "yearly", priority: 0.4 },
