@@ -13,5 +13,7 @@ export const SITE_URL = "https://myhomestyler.com";
  */
 export function localizedUrl(path: string, locale: string = "en"): string {
   const clean = path === "/" ? "" : path;
-  return locale === "ar" ? `${SITE_URL}/ar${clean}` : `${SITE_URL}${clean}`;
+  if (locale === "ar") return `${SITE_URL}/ar${clean}`;
+  if (locale === "es") return `${SITE_URL}/es${clean}`;
+  return `${SITE_URL}${clean}`;
 }

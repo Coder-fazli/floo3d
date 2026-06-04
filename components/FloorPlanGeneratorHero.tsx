@@ -66,6 +66,14 @@ const STRINGS = {
     trustedPre: "موثوق من", trustedMid: "معماري و", happyUsers: "مستخدم سعيد",
     floatLabel: "تم إنشاء المخطط", floatSub: "عالج الذكاء الاصطناعي مخططك في 1.8 ثانية",
   },
+  es: {
+    badge: "Generador de Planos con IA Gratis · Sin Registro",
+    h1: "Generador de Planos", accent: "con IA", h3: "Gratis. Online. Al Instante.",
+    sub: "Crea cualquier plano desde cero con IA — sin conocimientos de diseño, sin software, sin tarjeta de crédito. Configura tus habitaciones, elige un estilo y obtén un plano profesional en segundos.",
+    ctaPrimary: "Crear Gratis", ctaSecondary: "Ver Cómo Funciona",
+    trustedPre: "La confianza de", trustedMid: "arquitectos y", happyUsers: "usuarios satisfechos",
+    floatLabel: "Plano Generado", floatSub: "La IA procesó tu plano en 1,8 s",
+  },
 };
 
 export default function FloorPlanGeneratorHero({
@@ -75,7 +83,7 @@ export default function FloorPlanGeneratorHero({
 }: {
   heroBeforeUrl?: string;
   heroAfterUrl?: string;
-  lang?: "en" | "ar";
+  lang?: "en" | "ar" | "es";
 }) {
   const s = STRINGS[lang];
   const { isSignedIn } = useUser();
@@ -164,8 +172,14 @@ export default function FloorPlanGeneratorHero({
 
           {/* CTAs */}
           <div className="hph-btns">
-            <a href="#generator" className="hph-btn-primary">{s.ctaPrimary}</a>
-            <Link href="#how-it-works" className="hph-btn-secondary">{s.ctaSecondary}</Link>
+            {isSignedIn ? (
+              <Link href="/dashboard" className="hph-btn-primary">{s.ctaPrimary}</Link>
+            ) : (
+              <button className="hph-btn-primary" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>
+                {s.ctaPrimary}
+              </button>
+            )}
+            <Link href="#magic" className="hph-btn-secondary">{s.ctaSecondary}</Link>
           </div>
 
           {/* Trusted users */}
@@ -195,7 +209,7 @@ export default function FloorPlanGeneratorHero({
                 {s.trustedPre}{" "}
                 <CountUp value={2500} duration={2} separator="," suffix="+" colorScheme="gradient" className="font-bold" />
                 {" "}{s.trustedMid}{" "}
-                <a href="#reviews" style={{ color: "var(--brand-color)", fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "2px" }}>
+                <a href="/#reviews" style={{ color: "var(--brand-color)", fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "2px" }}>
                   {s.happyUsers}
                 </a>
               </p>
@@ -257,11 +271,11 @@ export default function FloorPlanGeneratorHero({
       {/* ── Feature cards ── */}
       <div className="hph-features">
         {features.map((f) => (
-          <a href="#generator" key={f.title} className="hph-feat-card">
+          <Link href="/dashboard" key={f.title} className="hph-feat-card">
             <div className="hph-feat-icon">{f.icon}</div>
             <h3 className="hph-feat-title">{f.title}</h3>
             <p className="hph-feat-desc">{f.desc}</p>
-          </a>
+          </Link>
         ))}
       </div>
 

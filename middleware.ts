@@ -10,7 +10,9 @@ const isPublicRoute = createRouteMatcher([
   "/sign-up(.*)",
   "/",
   "/ar",
+  "/es",
   "/ar/(.*)",
+  "/es/(.*)",
   "/visualizer(.*)",
   "/2d-to-3d-floor-plan-converter(.*)",
   "/api/guest-generate(.*)",
@@ -35,8 +37,8 @@ const NON_LOCALE_PAGES = "dashboard|sign-in|sign-up|visualizer|pricing|blog|cont
 
 // Admin + internals: ALWAYS English, never read the locale cookie.
 const FORCE_EN = /^\/(secure-7x9|api|_next)(\/?.*)?$/;
-// /ar/<non-locale-page> has no real route → redirect to the bare path (+ remember ar via cookie).
-const AR_REDIRECT = new RegExp(`^\\/ar\\/(${NON_LOCALE_PAGES})(\\/.*)?$`);
+// /ar|/es + <non-locale-page> has no real route → redirect to the bare path (+ remember locale via cookie).
+const LOCALE_REDIRECT = new RegExp(`^\\/(ar|es)\\/(${NON_LOCALE_PAGES})(\\/.*)?$`);
 // Non-locale pages: serve directly, but honour the preferred-locale cookie for translations.
 const COOKIE_LOCALE = new RegExp(`^\\/(${NON_LOCALE_PAGES})(\\/?.*)?$`);
 
@@ -59,12 +61,14 @@ export default clerkMiddleware(async (auth, request) => {
     return NextResponse.next();
   }
 
-  // /ar/pricing, /ar/dashboard, etc. have no route → redirect to the bare path,
-  // remembering Arabic preference via cookie so the page still renders in Arabic.
-  if (AR_REDIRECT.test(path)) {
-    const stripped = path.replace(/^\/ar/, "") || "/";
+  // /ar|/es + /pricing, /dashboard, etc. have no route → redirect to the bare path,
+  // remembering the locale preference via cookie so the page still renders translated.
+  const redirectMatch = LOCALE_REDIRECT.exec(path);
+  if (redirectMatch) {
+    const loc = redirectMatch[1]; // "ar" | "es"
+    const stripped = path.replace(/^\/(ar|es)/, "") || "/";
     const res = NextResponse.redirect(new URL(stripped, request.url));
-    res.cookies.set("preferred-locale", "ar", { path: "/", maxAge: 31536000 });
+    res.cookies.set("preferred-locale", loc, { path: "/", maxAge: 31536000 });
     return res;
   }
 
@@ -72,7 +76,7 @@ export default clerkMiddleware(async (auth, request) => {
   if (COOKIE_LOCALE.test(path)) {
     const preferred = request.cookies.get("preferred-locale")?.value;
     const response = NextResponse.next();
-    if (preferred === "ar" || preferred === "en") {
+    if (preferred === "ar" || preferred === "es" || preferred === "en") {
       response.headers.set("x-next-intl-locale", preferred);
     }
     return response;

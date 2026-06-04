@@ -92,7 +92,7 @@ function Toast({ msg, type, onClose }: { msg: string; type: "success" | "error";
 export default function PostEditor({ post }: { post?: PostData }) {
   const router = useRouter();
   const isEdit = !!post?._id;
-  const [postLocale, setPostLocale] = useState<"en" | "ar">(post?.locale ?? "en");
+  const [postLocale, setPostLocale] = useState<"en" | "ar" | "es">(post?.locale ?? "en");
 
   const [title, setTitle]   = useState(post?.title ?? "");
   const [slugOverride, setSlugOverride] = useState(post?.slug ?? "");
@@ -363,6 +363,7 @@ export default function PostEditor({ post }: { post?: PostData }) {
                 <div className="pe-status-select">
                   <button className={`pe-status-opt${postLocale === "en" ? " active-published" : ""}`} onClick={() => { setPostLocale("en"); setIsDirty(true); }}>🇬🇧 EN</button>
                   <button className={`pe-status-opt${postLocale === "ar" ? " active-published" : ""}`} onClick={() => { setPostLocale("ar"); setIsDirty(true); }}>🇦🇪 AR</button>
+                  <button className={`pe-status-opt${postLocale === "es" ? " active-published" : ""}`} onClick={() => { setPostLocale("es"); setIsDirty(true); }}>🇪🇸 ES</button>
                 </div>
               </div>
               <div className="pe-field">

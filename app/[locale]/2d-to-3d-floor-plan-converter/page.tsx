@@ -27,6 +27,13 @@ const COPY = {
     breadcrumb: "محوّل المخطط من 2D إلى 3D",
     home: "الرئيسية",
   },
+  es: {
+    title: "Conversor de Planos 2D a 3D — Convierte tu Plano 2D en Modelo 3D Gratis Online",
+    desc: "Convierte planos 2D en modelos 3D gratis online. Funciona con planos arquitectónicos, planos de casa y bocetos a mano. Resultados en segundos.",
+    schemaName: "Conversor de Planos 2D a 3D de MyHomeStyler",
+    breadcrumb: "Conversor de Planos 2D a 3D",
+    home: "Inicio",
+  },
 };
 
 const FAQS = {
@@ -48,6 +55,15 @@ const FAQS = {
     { q: "هل يمكنني تنزيل التصور ثلاثي الأبعاد؟", a: "نعم. بمجرد جاهزية تصورك، اضغط زر التنزيل لحفظه كصورة PNG عالية الدقة. المستخدمون المسجّلون يحصلون على تنزيلات Ultra HD ويمكنهم حفظ جميع التصورات في لوحة مشاريعهم." },
     { q: "ما أساليب التصميم المتاحة؟", a: "يمكنك الاختيار من 6 أساليب: عصري، إسكندنافي، صناعي، ريفي، فاخر، وبسيط. كل أسلوب يطبّق مواد وأثاثاً وإضاءة ولمسات مختلفة على تصور مخططك." },
   ],
+  es: [
+    { q: "¿Necesito registrarme o crear una cuenta?", a: "Sí, se necesita una cuenta gratuita para generar renders. Registrarte lleva segundos — sin tarjeta de crédito. Recibes 2 créditos gratis al instante al registrarte." },
+    { q: "¿Es realmente gratis? ¿Hace falta tarjeta de crédito?", a: "100% gratis para empezar — sin tarjeta de crédito. Crea una cuenta gratuita y obtén 2 créditos al instante. Paga solo cuando necesites más." },
+    { q: "¿Cuántas conversiones gratis obtengo?", a: "Crea una cuenta gratuita y obtén 2 créditos añadidos a tu saldo de inmediato. Sin tarjeta de crédito ni suscripción." },
+    { q: "¿Qué tipos de planos acepta?", a: "Funciona con cualquier imagen de plano 2D — bocetos a mano, planos escaneados, exportaciones CAD (PNG/JPG), dibujos arquitectónicos o cualquier imagen de plano de casa en 2D. Mientras sea un PNG o JPG de menos de 10 MB, la IA puede procesarlo." },
+    { q: "¿Cuánto tarda la conversión a 3D?", a: "La mayoría de los planos 2D se convierten en un render 3D en 15–30 segundos. Los planos complejos con muchas habitaciones pueden tardar hasta 60 segundos. Verás un indicador de progreso en directo mientras la IA trabaja." },
+    { q: "¿Puedo descargar el render 3D?", a: "Sí. Cuando tu render 3D esté listo, pulsa el botón Descargar para guardarlo como PNG de alta resolución. Los usuarios registrados acceden a descargas en Ultra HD y pueden guardar todos sus renders en su panel de proyectos." },
+    { q: "¿Qué estilos de diseño hay disponibles?", a: "Puedes elegir entre 6 estilos: Moderno, Escandinavo, Industrial, Rústico, Lujo y Minimalista. Cada estilo aplica diferentes materiales, muebles, iluminación y acabados al render de tu plano." },
+  ],
 };
 
 const converterTestimonials: Testimonial[] = [
@@ -61,11 +77,11 @@ const converterTestimonials: Testimonial[] = [
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
-  const isAr = locale === "ar";
-  const c = isAr ? COPY.ar : COPY.en;
+  const c = COPY[locale as keyof typeof COPY] ?? COPY.en;
   const s = await getSiteSettings();
-  const title = isAr ? c.title : (s?.floorPlanMetaTitle || c.title);
-  const description = isAr ? c.desc : (s?.floorPlanMetaDescription || c.desc);
+  // English can be overridden from the CMS; ar/es use the hardcoded translated copy.
+  const title = locale === "en" ? (s?.floorPlanMetaTitle || c.title) : c.title;
+  const description = locale === "en" ? (s?.floorPlanMetaDescription || c.desc) : c.desc;
   return {
     title,
     description,
@@ -74,6 +90,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       languages: {
         en: localizedUrl(PATH, "en"),
         "ar-AE": localizedUrl(PATH, "ar"),
+        "es-ES": localizedUrl(PATH, "es"),
         "x-default": localizedUrl(PATH, "en"),
       },
     },
@@ -81,16 +98,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       title,
       description,
       url: localizedUrl(PATH, locale),
-      locale: isAr ? "ar_AE" : "en_US",
+      locale: locale === "ar" ? "ar_AE" : locale === "es" ? "es_ES" : "en_US",
       images: [{ url: "/og-2d-to-3d-floor-plan.jpg", width: 1200, height: 630 }],
     },
   };
 }
 
 function buildJsonLd(locale: string) {
-  const isAr = locale === "ar";
-  const c = isAr ? COPY.ar : COPY.en;
-  const faqs = isAr ? FAQS.ar : FAQS.en;
+  const c = COPY[locale as keyof typeof COPY] ?? COPY.en;
+  const faqs = FAQS[locale as keyof typeof FAQS] ?? FAQS.en;
+  const inLanguage = locale === "ar" ? "ar-AE" : locale === "es" ? "es-ES" : "en-US";
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -100,15 +117,15 @@ function buildJsonLd(locale: string) {
         applicationCategory: "DesignApplication",
         operatingSystem: "Web",
         url: localizedUrl(PATH, locale),
-        inLanguage: isAr ? "ar-AE" : "en-US",
-        offers: { "@type": "Offer", price: "0", priceCurrency: isAr ? "AED" : "USD" },
+        inLanguage,
+        offers: { "@type": "Offer", price: "0", priceCurrency: locale === "ar" ? "AED" : locale === "es" ? "EUR" : "USD" },
         aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "2547", bestRating: "5", worstRating: "1" },
         description: c.desc,
         screenshot: "https://myhomestyler.com/og-2d-to-3d-floor-plan.jpg",
       },
       {
         "@type": "FAQPage",
-        inLanguage: isAr ? "ar-AE" : "en-US",
+        inLanguage,
         mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
       },
       {
@@ -124,7 +141,7 @@ function buildJsonLd(locale: string) {
 
 export default async function FloorPlanConverterPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const lang = locale === "ar" ? "ar" : "en";
+  const lang = (["ar", "es"].includes(locale) ? locale : "en") as "en" | "ar" | "es";
   return (
     <div className="home">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildJsonLd(locale)) }} />
@@ -134,7 +151,7 @@ export default async function FloorPlanConverterPage({ params }: { params: Promi
       <DesignOptions />
       <RecentProjects />
       <TestimonialsMarquee items={converterTestimonials} />
-      <FAQ twoColumns faqs={lang === "ar" ? FAQS.ar : FAQS.en} />
+      <FAQ twoColumns faqs={FAQS[lang] ?? FAQS.en} />
       <Footer />
     </div>
   );

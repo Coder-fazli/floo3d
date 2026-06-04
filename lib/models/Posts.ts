@@ -3,7 +3,7 @@ import mongoose, { Schema, Document } from 'mongoose';
  const PostSchema = new Schema({
     title: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
-    locale: { type: String, enum: ["en", "ar"], default: "en" },
+    locale: { type: String, enum: ["en", "ar", "es"], default: "en" },
     content: { type: String, default: '' },
     excerpt: { type: String, default: ''  },
     coverImage: { type: String, default: null },

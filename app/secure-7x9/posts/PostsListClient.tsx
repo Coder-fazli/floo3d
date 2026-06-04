@@ -13,7 +13,7 @@ const FILTERS = [
 export default function PostsListClient({ posts }: { posts: any[] }) {
   const router = useRouter();
   const [filter, setFilter] = useState("all");
-  const [locale, setLocale] = useState<"en" | "ar">("en");
+  const [locale, setLocale] = useState<"en" | "ar" | "es">("en");
   const [deleting, setDeleting] = useState<string | null>(null);
 
   const byLocale = posts.filter((p) => (p.locale ?? "en") === locale);
@@ -32,6 +32,7 @@ export default function PostsListClient({ posts }: { posts: any[] }) {
 
   const enCount = posts.filter((p) => (p.locale ?? "en") === "en").length;
   const arCount = posts.filter((p) => p.locale === "ar").length;
+  const esCount = posts.filter((p) => p.locale === "es").length;
   const publishedCount = byLocale.filter((p) => p.status === "published").length;
   const draftCount = byLocale.filter((p) => p.status === "draft").length;
 
@@ -55,7 +56,7 @@ export default function PostsListClient({ posts }: { posts: any[] }) {
 
       {/* Language tabs */}
       <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
-        {([["en", "🇬🇧 English", enCount], ["ar", "🇦🇪 Arabic", arCount]] as const).map(([key, label, count]) => (
+        {([["en", "🇬🇧 English", enCount], ["ar", "🇦🇪 Arabic", arCount], ["es", "🇪🇸 Spanish", esCount]] as const).map(([key, label, count]) => (
           <button
             key={key}
             onClick={() => setLocale(key)}

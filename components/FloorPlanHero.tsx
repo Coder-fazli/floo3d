@@ -62,9 +62,15 @@ const STRINGS = {
     ctaPrimary: "حوّل مجاناً", ctaSecondary: "شاهد كيف يعمل",
     trustedPre: "موثوق من", trustedMid: "معماري و", happyUsers: "مستخدم سعيد",
   },
+  es: {
+    h1: "Conversor de Plano", accent: "2D a 3D", h3: "Gratis. Online. Al Instante.",
+    sub: "Convierte cualquier plano 2D, plano arquitectónico o plano de casa en un impresionante modelo 3D gratis online. Solo sube tu dibujo 2D y la IA hace el resto en segundos.",
+    ctaPrimary: "Convertir Gratis", ctaSecondary: "Ver Cómo Funciona",
+    trustedPre: "La confianza de", trustedMid: "arquitectos y", happyUsers: "usuarios satisfechos",
+  },
 };
 
-export default function FloorPlanHero({ lang = "en" }: { lang?: "en" | "ar" }) {
+export default function FloorPlanHero({ lang = "en" }: { lang?: "en" | "ar" | "es" }) {
   const s = STRINGS[lang];
   const { isSignedIn } = useUser();
   const { openSignUp } = useClerk();
@@ -143,8 +149,14 @@ export default function FloorPlanHero({ lang = "en" }: { lang?: "en" | "ar" }) {
 
           {/* CTAs */}
           <div className="hph-btns">
-            <a href="#try-converter" className="hph-btn-primary">{s.ctaPrimary}</a>
-            <Link href="#how-it-works" className="hph-btn-secondary">{s.ctaSecondary}</Link>
+            {isSignedIn ? (
+              <Link href="/dashboard" className="hph-btn-primary">{s.ctaPrimary}</Link>
+            ) : (
+              <button className="hph-btn-primary" onClick={() => openSignUp({ fallbackRedirectUrl: "/dashboard" })}>
+                {s.ctaPrimary}
+              </button>
+            )}
+            <Link href="#magic" className="hph-btn-secondary">{s.ctaSecondary}</Link>
           </div>
 
           {/* Trusted users */}

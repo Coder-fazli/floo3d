@@ -14,14 +14,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   const staticRoutes: MetadataRoute.Sitemap = [
-    // Bilingual pages — emit both locales, each cross-linked via hreflang.
+    // Multilingual pages — emit each locale, all cross-linked via hreflang.
     ...bilingual.flatMap(({ path, priority }) => {
       const en = path === "/" ? BASE : `${BASE}${path}`;
       const ar = path === "/" ? `${BASE}/ar` : `${BASE}/ar${path}`;
-      const languages = { en, "ar-AE": ar };
+      const es = path === "/" ? `${BASE}/es` : `${BASE}/es${path}`;
+      const languages = { en, "ar-AE": ar, "es-ES": es };
       return [
         { url: en, lastModified: now, changeFrequency: "weekly" as const, priority, alternates: { languages } },
         { url: ar, lastModified: now, changeFrequency: "weekly" as const, priority, alternates: { languages } },
+        { url: es, lastModified: now, changeFrequency: "weekly" as const, priority, alternates: { languages } },
       ];
     }),
     // English-only pages (Arabic served on same URL via cookie — single canonical).
@@ -41,7 +43,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     // Each post appears once, at its own locale's URL.
     const postRoutes: MetadataRoute.Sitemap = posts.map((p) => ({
-      url: p.locale === "ar" ? `${BASE}/ar/${p.slug}` : `${BASE}/${p.slug}`,
+      url: p.locale === "ar" ? `${BASE}/ar/${p.slug}` : p.locale === "es" ? `${BASE}/es/${p.slug}` : `${BASE}/${p.slug}`,
       lastModified: p.updatedAt ?? p.createdAt ?? new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.7,

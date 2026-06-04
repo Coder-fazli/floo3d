@@ -89,9 +89,21 @@ export function buildFloorPlanGeneratorPrompt(config: FloorPlanGeneratorConfig, 
         ? `EXTRAS — include all of the following:\n${activeExtras.map(e => `- ${e}`).join("\n")}`
         : "";
 
+    // Blueprint & colored plans use text labels; isometric & 3d-top-down must stay text-free.
+    const allowsText = style === "blueprint" || style === "colored";
+
+    const stairText = allowsText
+        ? `Place a staircase near the entrance hall or a central corridor — draw it as parallel lines with an "UP" arrow, and label the drawing "Ground Floor".`
+        : `Place a clearly visible staircase near the entrance hall or a central corridor. Render it as a 3D staircase volume — add NO text, arrows, or labels of any kind.`;
+
     const floorBlock = floors > 1
-        ? `FLOORS: ${floors}-floor building. Show the GROUND FLOOR PLAN ONLY. Place a staircase near the entrance hall or a central corridor — draw it as parallel lines with an "UP" arrow. Label the drawing "Ground Floor".`
+        ? `FLOORS: ${floors}-floor building. Show the GROUND FLOOR PLAN ONLY. ${stairText}`
         : `FLOORS: Single-storey building.`;
+
+    // For multi-floor homes, only ground-floor rooms are drawn; bedrooms live upstairs (not shown).
+    const completenessRule = floors > 1
+        ? `COMPLETENESS (multi-floor): This drawing is the GROUND FLOOR only. Place the public and service rooms here — Living Room, Kitchen, Dining Room, Office, and ONE bathroom / guest WC — together with the staircase${extras.garage ? " and the garage" : ""}. Bedrooms and their en-suite bathrooms are located on the upper floor(s) and MUST NOT be drawn on this plan. Do not add unlisted rooms.`
+        : `COMPLETENESS: Every room in the list must appear exactly once: ${roomList}. Do not add unlisted rooms. Do not omit any listed room.`;
 
     const furnitureRule = style === "blueprint"
         ? "NO furniture of any kind. Show fixed elements only: walls, doors (swing arcs), windows, stairs, built-in kitchen counter outline, bathroom fixture outlines (toilet D, sink oval, bath rectangle)."
@@ -119,7 +131,7 @@ BUILDING FOOTPRINT:
 ROOM LAYOUT RULES — FOLLOW ALL STRICTLY:
 1. AREA SCALE: Total built area is ${areaDisplay}. Every room must be proportionally sized to this total. Do not make rooms too large or too small for a ${areaM2} m² ${propertyType}.
 2. ROOM SIZE HIERARCHY: Living room = largest room. Bedrooms = medium-large. Kitchen and dining = medium. Bathrooms = smallest. Office ≈ bedroom size.
-3. COMPLETENESS: Every room in the list must appear exactly once: ${roomList}. Do not add unlisted rooms. Do not omit any listed room.
+3. ${completenessRule}
 4. CIRCULATION: Include a small entrance hallway at the front door. Add narrow corridors only where needed to connect rooms. Every room must be accessible through its own door — never only through another room (except en-suite bathrooms directly off a master bedroom).
 5. LOGICAL ADJACENCY: Kitchen must be adjacent or directly connected to dining room. Living room near the entrance. Bedrooms grouped together away from kitchen and living areas. Bathrooms adjacent to the bedrooms they serve. Office away from bedrooms if space allows.
 6. WET ROOMS: Kitchen and bathrooms should share or be near a common plumbing wall. Group them on the same side of the building where possible.

@@ -11,14 +11,17 @@ import { localizedUrl } from "@/lib/seo";
 const BACK_LABEL: Record<string, string> = {
   en: "Back to Blog",
   ar: "العودة إلى المدونة",
+  es: "Volver al Blog",
 };
 const HOME_LABEL: Record<string, string> = {
   en: "Home",
   ar: "الرئيسية",
+  es: "Inicio",
 };
 const BLOG_LABEL: Record<string, string> = {
   en: "Blog",
   ar: "المدونة",
+  es: "Blog",
 };
 
 export async function generateMetadata({
@@ -33,7 +36,7 @@ export async function generateMetadata({
 
   // Canonical follows the post's OWN locale, not the URL it was reached by.
   // This consolidates /slug and /ar/slug (both resolve the same post) onto one URL.
-  const postLocale = post.locale === "ar" ? "ar" : "en";
+  const postLocale = post.locale === "ar" ? "ar" : post.locale === "es" ? "es" : "en";
   const url = localizedUrl(`/${slug}`, postLocale);
 
   const seoTitle = post.metaTitle || post.title + " — MyHomeStyler Blog";
@@ -49,7 +52,7 @@ export async function generateMetadata({
       description: seoDesc,
       url,
       type: "article",
-      locale: postLocale === "ar" ? "ar_AE" : "en_US",
+      locale: postLocale === "ar" ? "ar_AE" : postLocale === "es" ? "es_ES" : "en_US",
       publishedTime: post.createdAt,
       modifiedTime: post.updatedAt,
       images: post.coverImage
@@ -76,8 +79,8 @@ export default async function SinglePostPage({
   if (!post) notFound();
 
   // Use the post's own locale for canonical URL + schema; URL locale only for date display.
-  const postLocale = post.locale === "ar" ? "ar" : "en";
-  const dateLocale = locale === "ar" ? "ar-AE" : "en-US";
+  const postLocale = post.locale === "ar" ? "ar" : post.locale === "es" ? "es" : "en";
+  const dateLocale = locale === "ar" ? "ar-AE" : locale === "es" ? "es-ES" : "en-US";
   const date = new Date(post.createdAt).toLocaleDateString(dateLocale, {
     month: "long",
     day: "numeric",
@@ -107,7 +110,7 @@ export default async function SinglePostPage({
       logo: { "@type": "ImageObject", url: "https://myhomestyler.com/logo.png" },
     },
     url: localizedUrl(`/${slug}`, postLocale),
-    inLanguage: postLocale === "ar" ? "ar-AE" : "en-US",
+    inLanguage: postLocale === "ar" ? "ar-AE" : postLocale === "es" ? "es-ES" : "en-US",
     keywords: post.tags?.join(", ") ?? "",
   };
 

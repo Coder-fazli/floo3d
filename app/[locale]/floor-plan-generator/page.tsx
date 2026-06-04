@@ -28,6 +28,13 @@ const COPY = {
     breadcrumb: "مولّد مخططات المنازل بالذكاء الاصطناعي",
     home: "الرئيسية",
   },
+  es: {
+    title: "Generador de Planos con IA — Crea Planos Personalizados Gratis Online",
+    desc: "Genera un plano 2D personalizado desde cero con IA. Elige tus habitaciones, tamaño y estilo — obtén un plano profesional en segundos. Gratis para empezar.",
+    schemaName: "Generador de Planos con IA de MyHomeStyler",
+    breadcrumb: "Generador de Planos con IA",
+    home: "Inicio",
+  },
 };
 
 const FAQS = {
@@ -51,15 +58,25 @@ const FAQS = {
     { q: "هل أحتاج للتسجيل لإنشاء مخطط؟", a: "تحتاج حساباً مجانياً لإنشاء المخططات. التسجيل يستغرق أقل من دقيقة ويمنحك أرصدة مجانية فوراً — بدون بطاقة ائتمان." },
     { q: "هل يمكنني إنشاء مخطط منزل متعدد الطوابق؟", a: "نعم. يمكنك تحديد عدد الطوابق حتى 5. يأخذ الذكاء الاصطناعي عدد الطوابق بعين الاعتبار عند إنشاء المخطط وتوزيع الغرف عبر المستويات." },
   ],
+  es: [
+    { q: "¿Es gratis el generador de planos con IA?", a: "Sí — nuestra herramienta gratuita de generación de planos con IA te permite crear planos profesionales sin tarjeta de crédito. Las cuentas nuevas reciben créditos gratis al instante para que empieces a generar de inmediato." },
+    { q: "¿Qué es un generador de planos con IA?", a: "Un generador de planos con IA es una herramienta que crea planos arquitectónicos automáticamente según tus datos — tipo de propiedad, número de habitaciones, tamaño y estilo. En lugar de dibujar a mano, la IA se encarga de la distribución y el diseño en segundos." },
+    { q: "¿Qué puede crear el generador de planos con IA?", a: "Puede producir tres tipos de planos: planos arquitectónicos en blanco y negro, planos de habitaciones con colores suaves e iconos de muebles, y vistas isométricas en 3D. Funciona para casas, apartamentos, villas, estudios y oficinas." },
+    { q: "¿Puedo convertir el plano generado en un render 3D?", a: "Sí. Después de que la IA cree tu plano, pulsa Convertir a 3D para abrirlo en el visualizador y generar un render 3D fotorrealista a partir de él — sin subir nada más." },
+    { q: "¿Cuánto tarda el generador de planos con IA?", a: "La mayoría de los resultados están listos en 15–30 segundos. Verás un indicador de carga en directo mientras la IA trabaja en tu distribución." },
+    { q: "¿Qué tipos de propiedad admite?", a: "El generador admite Casa, Apartamento, Villa, Estudio y Oficina. Cada tipo de propiedad influye en cómo la IA distribuye las habitaciones y los espacios en el plano." },
+    { q: "¿Necesito registrarme para generar un plano?", a: "Necesitas una cuenta gratuita para generar planos. Registrarte lleva menos de un minuto y te da créditos gratis de inmediato — sin tarjeta de crédito." },
+    { q: "¿Puedo generar un plano de varias plantas?", a: "Sí. Puedes establecer hasta 5 plantas. La IA tiene en cuenta el número de plantas al generar la distribución y repartir las habitaciones entre los niveles." },
+  ],
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
-  const isAr = locale === "ar";
-  const c = isAr ? COPY.ar : COPY.en;
+  const c = COPY[locale as keyof typeof COPY] ?? COPY.en;
   const s = await getSiteSettings();
-  const title = isAr ? c.title : (s?.floorPlanGeneratorMetaTitle || c.title);
-  const description = isAr ? c.desc : (s?.floorPlanGeneratorMetaDescription || c.desc);
+  // English can be overridden from the CMS; ar/es use the hardcoded translated copy.
+  const title = locale === "en" ? (s?.floorPlanGeneratorMetaTitle || c.title) : c.title;
+  const description = locale === "en" ? (s?.floorPlanGeneratorMetaDescription || c.desc) : c.desc;
   return {
     title,
     description,
@@ -68,6 +85,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       languages: {
         en: localizedUrl(PATH, "en"),
         "ar-AE": localizedUrl(PATH, "ar"),
+        "es-ES": localizedUrl(PATH, "es"),
         "x-default": localizedUrl(PATH, "en"),
       },
     },
@@ -75,16 +93,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       title,
       description,
       url: localizedUrl(PATH, locale),
-      locale: isAr ? "ar_AE" : "en_US",
+      locale: locale === "ar" ? "ar_AE" : locale === "es" ? "es_ES" : "en_US",
       images: [{ url: "/og-floor-plan-generator.jpg", width: 1200, height: 630 }],
     },
   };
 }
 
 function buildJsonLd(locale: string) {
-  const isAr = locale === "ar";
-  const c = isAr ? COPY.ar : COPY.en;
-  const faqs = isAr ? FAQS.ar : FAQS.en;
+  const c = COPY[locale as keyof typeof COPY] ?? COPY.en;
+  const faqs = FAQS[locale as keyof typeof FAQS] ?? FAQS.en;
+  const inLanguage = locale === "ar" ? "ar-AE" : locale === "es" ? "es-ES" : "en-US";
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -94,15 +112,15 @@ function buildJsonLd(locale: string) {
         applicationCategory: "DesignApplication",
         operatingSystem: "Web",
         url: localizedUrl(PATH, locale),
-        inLanguage: isAr ? "ar-AE" : "en-US",
-        offers: { "@type": "Offer", price: "0", priceCurrency: isAr ? "AED" : "USD" },
+        inLanguage,
+        offers: { "@type": "Offer", price: "0", priceCurrency: locale === "ar" ? "AED" : locale === "es" ? "EUR" : "USD" },
         aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "1840", bestRating: "5", worstRating: "1" },
         description: c.desc,
         screenshot: "https://myhomestyler.com/og-floor-plan-generator.jpg",
       },
       {
         "@type": "FAQPage",
-        inLanguage: isAr ? "ar-AE" : "en-US",
+        inLanguage,
         mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
       },
       {
@@ -118,7 +136,7 @@ function buildJsonLd(locale: string) {
 
 export default async function FloorPlanGeneratorPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const lang = locale === "ar" ? "ar" : "en";
+  const lang = (["ar", "es"].includes(locale) ? locale : "en") as "en" | "ar" | "es";
   const fpgImages = await getFpgImages();
   return (
     <div className="home">
@@ -133,7 +151,7 @@ export default async function FloorPlanGeneratorPage({ params }: { params: Promi
       <DesignOptions />
       <RecentProjects />
       <TestimonialsMarquee />
-      <FaqServer twoColumns faqs={lang === "ar" ? FAQS.ar : FAQS.en} />
+      <FaqServer twoColumns faqs={FAQS[lang] ?? FAQS.en} />
       <Footer />
     </div>
   );
