@@ -15,6 +15,7 @@ const Navbar = () => {
   const { signOut, openSignIn, openSignUp } = useClerk();
   const [credits, setCredits] = useState<number | null>(null);
   const [logoSrc, setLogoSrc] = useState<string>("/logo.png");
+  const [logoHeight, setLogoHeight] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
@@ -63,7 +64,9 @@ const Navbar = () => {
 
   // Load the admin-configured logo (falls back to /logo.png).
   useEffect(() => {
-    getSiteSettings().then((s) => { if (s?.logoUrl) setLogoSrc(s.logoUrl); }).catch(() => {});
+    getSiteSettings().then((s) => {
+      if (s?.logoUrl) { setLogoSrc(s.logoUrl); setLogoHeight(s.logoHeight || 40); }
+    }).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -100,7 +103,12 @@ const Navbar = () => {
 
         {/* Brand */}
         <LocaleLink href="/" className="navbar-brand">
-          <img src={logoSrc} alt="MyHomeStyler" className="navbar-logo-img" />
+          <img
+            src={logoSrc}
+            alt="MyHomeStyler"
+            className="navbar-logo-img"
+            style={logoHeight ? { height: `${logoHeight}px`, width: "auto", marginRight: 0 } : undefined}
+          />
           <span className="navbar-name">MyHome<span className="navbar-name-accent">Styler</span></span>
         </LocaleLink>
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getSiteSettings } from "@/lib/actions";
-import { saveSiteSettings, saveFloorPlanSettings, saveGeneralSettings, saveLogoImage, backfillSubscriptionOrders } from "@/lib/actions.admin";
+import { saveSiteSettings, saveFloorPlanSettings, saveGeneralSettings, saveLogoImage, saveLogoHeight, backfillSubscriptionOrders } from "@/lib/actions.admin";
 
 function cropToSquare(dataUrl: string, size = 256): Promise<string> {
   return new Promise((resolve) => {
@@ -48,6 +48,7 @@ export default function AdminSettings() {
 
   // Branding
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const [logoHeight, setLogoHeight] = useState(40);
   const [faviconUrl, setFaviconUrl] = useState<string | null>(null);
   const [logoUploading, setLogoUploading] = useState(false);
   const [faviconUploading, setFaviconUploading] = useState(false);
@@ -67,6 +68,7 @@ export default function AdminSettings() {
         setSiteName(s.siteName ?? "");
         setSupportEmail(s.supportEmail ?? "");
         setLogoUrl(s.logoUrl ?? null);
+        setLogoHeight(s.logoHeight ?? 40);
         setFaviconUrl(s.faviconUrl ?? null);
       }
     });
@@ -225,6 +227,27 @@ export default function AdminSettings() {
                 : <span style={{ fontSize: "0.75rem", color: "#94a3b8" }}>Click to upload</span>}
             </div>
             <p style={{ fontSize: "0.7rem", color: "#94a3b8", marginTop: "0.35rem" }}>Recommended: 320×80px PNG</p>
+
+            {/* Logo size control */}
+            <div style={{ marginTop: "0.9rem", maxWidth: 220 }}>
+              <label className="adm-form-label" style={{ display: "flex", justifyContent: "space-between" }}>
+                <span>Logo size</span>
+                <span style={{ color: "#fb3b01", fontWeight: 700 }}>{logoHeight}px</span>
+              </label>
+              <input
+                type="range" min={16} max={120} step={1} value={logoHeight}
+                onChange={(e) => setLogoHeight(Number(e.target.value))}
+                onMouseUp={() => saveLogoHeight(logoHeight)}
+                onTouchEnd={() => saveLogoHeight(logoHeight)}
+                style={{ width: "100%", accentColor: "#fb3b01", display: "block" }}
+              />
+              {/* Live preview at the chosen height */}
+              <div style={{ marginTop: "0.6rem", height: 64, display: "flex", alignItems: "center", justifyContent: "center", background: "#fff", border: "1px solid #eee", borderRadius: "0.5rem" }}>
+                {logoUrl
+                  ? <img src={logoUrl} alt="preview" style={{ height: logoHeight, width: "auto", objectFit: "contain" }} />
+                  : <span style={{ fontSize: "0.7rem", color: "#cbd5e1" }}>Upload a logo to preview</span>}
+              </div>
+            </div>
           </div>
 
           {/* Favicon */}

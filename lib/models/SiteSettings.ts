@@ -20,6 +20,7 @@ const SiteSettingsSchema = new mongoose.Schema({
    siteName:     { type: String, default: "MyHomeStyler" },
    supportEmail: { type: String, default: "support@myhomestyler.com" },
    logoUrl:      { type: String, default: null },
+   logoHeight:   { type: Number, default: 40 },
    faviconUrl:   { type: String, default: null },
    // AI model selection per input type
    models: { type: mongoose.Schema.Types.Mixed, default: {} },

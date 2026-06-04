@@ -126,6 +126,15 @@ export async function saveLogoImage(base64: string, type: "logo" | "favicon") {
   return url;
 }
 
+// Display height (px) of the logo in the navbar.
+export async function saveLogoHeight(height: number) {
+  await requireAdmin();
+  await connectDb();
+  const clamped = Math.max(16, Math.min(120, Math.round(height) || 40));
+  await SiteSettings.findOneAndUpdate({ key: "home" }, { logoHeight: clamped }, { upsert: true, new: true });
+  return clamped;
+}
+
 // ─── SEO Settings ─────────────────────────────────────────────────────────────
 
 export async function saveSiteSettings(metaTitle: string, metaDescription: string) {
