@@ -8,6 +8,15 @@ import Project from "@/lib/models/Project";
 import User from "@/lib/models/User";
 import { SITE_URL } from "@/lib/seo";
 
+// Turn a stored name OR an email into a friendly first name only (privacy: no email, no surname).
+function firstName(raw?: string): string {
+  let n = (raw || "").trim();
+  if (!n) return "MyHomeStyler User";
+  if (n.includes("@")) n = n.split("@")[0]; // strip email domain if name is an email
+  const first = n.split(/[\s._-]+/)[0] || "";
+  return first ? first.charAt(0).toUpperCase() + first.slice(1) : "MyHomeStyler User";
+}
+
 export const revalidate = 600; // refresh the gallery every 10 min
 
 export const metadata: Metadata = {
@@ -30,7 +39,6 @@ type Item = {
   style: string;
   type: string;
   authorName: string;
-  authorAvatar: string;
 };
 
 async function getShowcase(): Promise<Item[]> {
@@ -42,9 +50,9 @@ async function getShowcase(): Promise<Item[]> {
     .lean()) as any[];
 
   const userIds = [...new Set(projects.map((p) => p.userId))];
-  const users = (await User.find({ clerkId: { $in: userIds } }, { clerkId: 1, name: 1, imageUrl: 1 }).lean()) as any[];
-  const userMap: Record<string, { name: string; imageUrl: string }> = {};
-  for (const u of users) userMap[u.clerkId] = { name: u.name, imageUrl: u.imageUrl };
+  const users = (await User.find({ clerkId: { $in: userIds } }, { clerkId: 1, name: 1 }).lean()) as any[];
+  const userMap: Record<string, string> = {};
+  for (const u of users) userMap[u.clerkId] = u.name;
 
   const TYPE_LABEL: Record<string, string> = {
     "floor-plan": "3D Floor Plan",
@@ -60,8 +68,7 @@ async function getShowcase(): Promise<Item[]> {
     anchor: `render-${String(p._id).slice(-8)}`,
     style: p.renderStyle || "Modern",
     type: TYPE_LABEL[p.inputType] || "AI Render",
-    authorName: userMap[p.userId]?.name?.trim() || "MyHomeStyler User",
-    authorAvatar: userMap[p.userId]?.imageUrl || "",
+    authorName: firstName(userMap[p.userId]),
   }));
 }
 
@@ -109,18 +116,12 @@ export default async function ShowcasePage() {
                   className="block w-full h-auto"
                 />
                 <figcaption className="flex items-center gap-3 p-3">
-                  {it.authorAvatar ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={it.authorAvatar}
-                      alt={it.authorName}
-                      className="h-9 w-9 rounded-full object-cover ring-2 ring-white shadow"
-                    />
-                  ) : (
-                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#fb3b01] text-sm font-bold text-white">
-                      {it.authorName[0]?.toUpperCase() || "M"}
-                    </span>
-                  )}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/mascot-avatar.jpg"
+                    alt="MyHomeStyler"
+                    className="h-9 w-9 shrink-0 rounded-full object-cover ring-2 ring-white shadow bg-white"
+                  />
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold text-[#27282f]">{it.authorName}</p>
                     <p className="truncate text-xs text-slate-500">
