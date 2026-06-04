@@ -1048,7 +1048,10 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
             {(activeInputType === "floor-plan" || activeInputType === "floor-plan-generator") && (
               <div className="viz-custom-prompt-wrap">
                 <label className="viz-custom-prompt-label">
-                  Custom Requirements
+                  <span className="viz-custom-prompt-label-text">
+                    <Sparkles size={13} strokeWidth={2.5} className="viz-custom-prompt-icon" />
+                    Custom Requirements
+                  </span>
                   <span className="viz-custom-prompt-count">{customPrompt.length}/1000</span>
                 </label>
                 <textarea
