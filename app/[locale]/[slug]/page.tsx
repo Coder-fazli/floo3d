@@ -110,15 +110,27 @@ export default async function SinglePostPage({
       logo: { "@type": "ImageObject", url: "https://myhomestyler.com/logo.png" },
     },
     url: localizedUrl(`/${slug}`, postLocale),
+    mainEntityOfPage: { "@type": "WebPage", "@id": localizedUrl(`/${slug}`, postLocale) },
     inLanguage: postLocale === "ar" ? "ar-AE" : postLocale === "es" ? "es-ES" : "en-US",
     keywords: post.tags?.join(", ") ?? "",
+  };
+
+  // Breadcrumb structured data (Home > Blog > Post) → enables breadcrumb rich snippets.
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: HOME_LABEL[postLocale] ?? "Home", item: localizedUrl("/", postLocale) },
+      { "@type": "ListItem", position: 2, name: BLOG_LABEL[postLocale] ?? "Blog", item: localizedUrl("/blog", "en") },
+      { "@type": "ListItem", position: 3, name: post.title },
+    ],
   };
 
   return (
     <div className="post-page">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([jsonLd, breadcrumbJsonLd]) }}
       />
       <Navbar />
 
