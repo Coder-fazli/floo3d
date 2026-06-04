@@ -3,7 +3,7 @@
 import { Zap, Menu, X, User, LogIn } from "lucide-react";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import { getUserInfo } from "@/lib/actions";
+import { getUserInfo, getSiteSettings } from "@/lib/actions";
 import "./Navbar.css";
 import ContactModal from "./ContactModal";
 import { useTranslations, useLocale } from "next-intl";
@@ -14,6 +14,7 @@ const Navbar = () => {
   const { isSignedIn, user } = useUser();
   const { signOut, openSignIn, openSignUp } = useClerk();
   const [credits, setCredits] = useState<number | null>(null);
+  const [logoSrc, setLogoSrc] = useState<string>("/logo.png");
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
@@ -60,6 +61,11 @@ const Navbar = () => {
     }
   };
 
+  // Load the admin-configured logo (falls back to /logo.png).
+  useEffect(() => {
+    getSiteSettings().then((s) => { if (s?.logoUrl) setLogoSrc(s.logoUrl); }).catch(() => {});
+  }, []);
+
   useEffect(() => {
     if (!user) return;
     getUserInfo(user.id).then(d => setCredits(d.credits));
@@ -94,7 +100,7 @@ const Navbar = () => {
 
         {/* Brand */}
         <LocaleLink href="/" className="navbar-brand">
-          <img src="/logo.png" alt="MyHomeStyler" className="navbar-logo-img" />
+          <img src={logoSrc} alt="MyHomeStyler" className="navbar-logo-img" />
           <span className="navbar-name">MyHome<span className="navbar-name-accent">Styler</span></span>
         </LocaleLink>
 
