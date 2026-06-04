@@ -37,6 +37,7 @@ export async function generateMetadata() {
     },
     other: {
       "google-adsense-account": "ca-pub-6790452039559569",
+      "p:domain_verify": "68a44cef84dc1e098854cd9af0172133",
     },
     alternates: {
       canonical: localizedUrl("/", locale),
