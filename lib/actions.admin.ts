@@ -57,6 +57,7 @@ export async function setProjectFeatured(projectId: string, featured: boolean) {
   });
   revalidatePath("/secure-7x9/projects");
   revalidatePath("/showcase");
+  revalidatePath("/showcase.xml");
   return { ok: true, featured };
 }
 
