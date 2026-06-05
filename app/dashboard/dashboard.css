@@ -112,55 +112,76 @@
   box-shadow: 0 2px 8px rgba(236, 91, 19, 0.4);
 }
 
-/* Gradient overlay — always on */
+/* No full overlay — the image stays fully bright; the glass bar gives its own contrast */
 .nr-card-gradient {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(10,10,14,0.82) 0%, rgba(10,10,14,0.3) 48%, transparent 72%);
-  pointer-events: none;
-  z-index: 5;
+  display: none;
 }
 
-/* Text overlay — always on */
+/* Glassmorphism bottom bar — thin, frosted, inset & rounded (never covers the card) */
 .nr-card-overlay-info {
   display: flex;
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  right: 0.5rem;
   z-index: 10;
-  padding: 1rem 1.1rem 1rem;
-  align-items: flex-end;
+  padding: 0.4rem 0.45rem 0.4rem 0.65rem;
+  align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: 0.5rem;
+  background: rgba(17, 18, 22, 0.46);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+/* The generic ".nr-reveal-container > div { height:100% }" rule (for the slider)
+   also hits this bar — override it so the bar stays a small bottom strip. */
+.nr-reveal-container > .nr-card-overlay-info {
+  width: auto;
+  height: auto;
+}
+
+/* Text block shrinks so the pill always fits; both lines stay single-line */
+.nr-card-overlay-info > div {
+  min-width: 0;
+  flex: 1;
 }
 
 .nr-type-label {
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   font-weight: 800;
   color: #ffffff;
-  margin: 0 0 0.2rem;
+  margin: 0;
   letter-spacing: -0.01em;
-  line-height: 1.2;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
 }
 
 .nr-type-desc {
-  font-size: 0.7rem;
-  color: rgba(255,255,255,0.72);
-  margin: 0;
-  line-height: 1.35;
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0.05rem 0 0;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* "Try" pill button */
 .nr-type-cta {
   flex-shrink: 0;
-  align-self: flex-end;
   color: #1a1a1a;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 700;
   background: #ffffff;
   border-radius: 9999px;
-  padding: 0.38rem 0.9rem;
+  padding: 0.32rem 0.75rem;
   white-space: nowrap;
   letter-spacing: 0.01em;
   box-shadow: 0 1px 4px rgba(0,0,0,0.12);
@@ -240,7 +261,10 @@
     transform: none;
   }
   .nr-card-overlay-info {
-    padding: 0.875rem 1rem;
+    bottom: 0.7rem;
+    left: 0.7rem;
+    right: 0.7rem;
+    padding: 0.8rem 0.85rem;
   }
   .nr-type-label {
     font-size: 1.1rem;
@@ -262,7 +286,7 @@
 }
 
 .db-main {
-    max-width: 80rem;
+    max-width: 92rem;
     margin: 0 auto;
     padding: 2rem 2rem 4rem;
     display: flex;

@@ -15,7 +15,6 @@ import Link from "next/link";
 import { Upload as UploadIcon, Sparkles, X, ExternalLink, Home, Zap } from "lucide-react";
 import ProjectModal from "@/components/ProjectModal";
 import AppSidebar from "@/components/AppSidebar";
-import { HoleBackground } from "@/components/animate-ui/components/backgrounds/hole";
 import { SparklesText } from "@/components/ui/sparkles-text";
 import ExpandButton from "@/components/ui/ExpandButton";
 import CompareButton from "@/components/ui/CompareButton";
@@ -1190,10 +1189,14 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
 
               {isProcessing && (
                 <div className="viz-processing">
-                  <HoleBackground className="absolute inset-0 before:![background:radial-gradient(ellipse_at_50%_55%,transparent_10%,black_50%)]" />
-                  <div style={{ position: "relative", zIndex: 40, display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem" }}>
+                  <video
+                    src="/myhomestyler-loader.mp4"
+                    autoPlay loop muted playsInline
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 40, padding: "1.5rem 1rem 1.1rem", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem", background: "linear-gradient(to top, rgba(10,10,14,0.78) 0%, rgba(10,10,14,0.3) 55%, transparent 100%)" }}>
                     <AITextLoading texts={LOADING_TEXTS[activeInputType] ?? LOADING_TEXTS["floor-plan"]} />
-                    <p style={{ margin: 0, fontSize: "0.8rem", color: "rgba(255,255,255,0.45)", letterSpacing: "0.03em" }}>This usually takes under a minute</p>
+                    <p style={{ margin: 0, fontSize: "0.8rem", color: "rgba(255,255,255,0.7)", letterSpacing: "0.03em" }}>This usually takes under a minute</p>
                   </div>
                 </div>
               )}
