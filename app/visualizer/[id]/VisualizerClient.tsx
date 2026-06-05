@@ -1192,7 +1192,7 @@ export default function VisualizerClient({ embeddedId, frames, defaultType, isAd
                   <video
                     src="/myhomestyler-loader.mp4"
                     autoPlay loop muted playsInline
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover scale-[1.32]"
                   />
                   <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 40, padding: "1.5rem 1rem 1.1rem", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem", background: "linear-gradient(to top, rgba(10,10,14,0.78) 0%, rgba(10,10,14,0.3) 55%, transparent 100%)" }}>
                     <AITextLoading texts={LOADING_TEXTS[activeInputType] ?? LOADING_TEXTS["floor-plan"]} />
