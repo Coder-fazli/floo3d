@@ -80,7 +80,8 @@ const TYPE_LABEL: Record<string, string> = {
   "floor-plan": "3D Floor Plan",
   "interior-design": "Interior Design",
   outdoor: "Outdoor & Garden Design",
-  "empty-room": "Virtual Staging",
+  "empty-room": "Empty Room",
+  "virtual-staging": "Virtual Staging",
   "floor-plan-generator": "Floor Plan",
 };
 

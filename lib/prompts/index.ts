@@ -3,6 +3,7 @@ import { buildFloorPlanPrompt } from "./floor-plan";
 import { buildInteriorDesignPrompt } from "./interior-design";
 import { buildOutdoorPrompt } from "./outdoor";         
 import { buildEmptyRoomPrompt } from "./empty-room"; 
+import { buildVirtualStagingPrompt } from "./virtual-staging";
 
 function appendCustomPrompt(prompt: string, customPrompt?: string): string {
     if (!customPrompt?.trim()) return prompt;
@@ -16,6 +17,7 @@ export function buildPrompt(config: PromptConfig): string {
     if (inputType === "interior-design") return buildInteriorDesignPrompt(style, roomType, customPrompt);
     if (inputType === "outdoor") return buildOutdoorPrompt(style, customPrompt);
     if (inputType === "empty-room") return buildEmptyRoomPrompt();
+    if (inputType === "virtual-staging") return buildVirtualStagingPrompt(style, roomType, customPrompt);
 
     return appendCustomPrompt(buildFloorPlanPrompt(style, viewAngle), customPrompt);
 }

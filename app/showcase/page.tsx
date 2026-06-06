@@ -58,7 +58,8 @@ async function getShowcase(): Promise<Item[]> {
     "floor-plan": "3D Floor Plan",
     "interior-design": "Interior Design",
     outdoor: "Outdoor & Garden",
-    "empty-room": "Virtual Staging",
+    "empty-room": "Empty Room",
+    "virtual-staging": "Virtual Staging",
     "floor-plan-generator": "Floor Plan",
   };
 

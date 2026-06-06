@@ -4,6 +4,7 @@ export const DEFAULT_FALLBACKS: Record<string, { before: string; after: string; 
   "outdoor":              { before: "/card-outdoor-before.webp", after: "/card-outdoor-after.webp", image: "/card-outdoor-after.webp", labelBefore: "Original Outdoor",  labelAfter: "AI Outdoor Design" },
   "empty-room":           { before: "/card-empty-before.webp",   after: "/card-empty-after.webp",   image: "/card-empty-after.webp",   labelBefore: "Furnished Room",    labelAfter: "Emptied Room" },
   "floor-plan-generator": { before: "/real-2d-plan.jpg",         after: "/real-3d-render.jpg",      image: "/real-3d-render.jpg",      labelBefore: "Configuration",     labelAfter: "Generated Plan" },
+  "virtual-staging":      { before: "/card-empty-after.webp",    after: "/card-room-after.webp",    image: "/card-staging.png",        labelBefore: "Empty Room",        labelAfter: "Staged" },
 };
 
 // Keyed by inputType → styleName → default image path
@@ -41,6 +42,16 @@ export const DEFAULT_STYLES: Record<string, Record<string, string>> = {
     "Isometric":    "/real-3d-render.jpg",
     "3D Top-Down":  "/real-3d-render.jpg",
   },
+  "virtual-staging": {
+    "Modern":        "/card-room-after.webp",
+    "Scandinavian":  "/style-scandinavian.jpg",
+    "Industrial":    "/style-industrial.jpg",
+    "Rustic":        "/style-rustic.webp",
+    "Luxury":        "/style-luxury.jpg",
+    "Minimalist":    "/style-minimalist.jpg",
+    "Coastal":       "/style-scandinavian.jpg",
+    "Mid-Century":   "/style-rustic.webp",
+  },
 };
 
 export const INPUT_TYPE_LABELS: Record<string, string> = {
@@ -49,6 +60,7 @@ export const INPUT_TYPE_LABELS: Record<string, string> = {
   "outdoor":         "Garden & Yard Design",
   "empty-room":           "Empty Room",
   "floor-plan-generator": "Floor Plan Generator",
+  "virtual-staging": "Virtual Staging",
 };
 
 export const DEFAULT_ANGLES: Record<string, string> = {
