@@ -12,12 +12,11 @@ import { Zap } from "lucide-react";
 
 const INPUT_TYPE_META: Record<string, { label: string; desc: string; hint: string }> = {
   "floor-plan":           { label: "Blueprint → 3D",       desc: "Upload a floor plan blueprint to get a photorealistic 3D render", hint: "📐 Upload: a blueprint or floor plan drawing" },
-  "floor-plan-generator": { label: "Floor Plan Generator",  desc: "Generate a custom floor plan from scratch with AI",              hint: "✏️ No upload needed — just describe your space" },
   "interior-design":      { label: "Interior Redesign",     desc: "Reimagine any room with AI-powered styling",                    hint: "📷 Upload: a photo of an existing room" },
   "outdoor":              { label: "Garden & Yard Design",  desc: "Transform your exterior with stunning landscape AI",             hint: "📷 Upload: a photo of your garden or yard" },
+  "floor-plan-generator": { label: "Floor Plan Generator",  desc: "Generate a custom floor plan from scratch with AI",              hint: "✏️ No upload needed — just describe your space" },
   "empty-room":           { label: "Empty the Room",        desc: "Remove all furniture to reveal a clean, empty space",            hint: "📷 Upload: a photo of a furnished room" },
   "virtual-staging":      { label: "Virtual Staging",       desc: "Furnish empty rooms with AI",                                    hint: "📷 Upload: a photo of an empty room" },
-
 };
 
 export default function DashboardClient({ frames, displayName }: { frames: FramesData; displayName: string | null }) {
