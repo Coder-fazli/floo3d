@@ -109,20 +109,35 @@
           }
 
           if (user) {
-            const pricing: any = await
-            PricingSettings.findOne().lean() ?? {};
-            const PLAN_CREDITS: Record<string, number> = {
-                starter: pricing.starterCredits ?? 100,
-                pro: pricing.proCredits ?? 300,
-                elite: pricing.eliteCredits ?? 300
-            };
-            const credits = (user as any).subscriptionPlan === "custom"
-              ? ((user as any).subscriptionCredits ?? 0)
-              : PLAN_CREDITS[(user as any).subscriptionPlan] ?? 0;
+            // Subscription metadata is snapshotted onto the invoice at finalization
+            // time, so it's available immediately — unlike User.subscriptionPlan,
+            // which is only set once checkout.session.completed has run. Stripe
+            // doesn't guarantee event ordering, so invoice.paid can arrive first;
+            // reading from the invoice itself avoids that race.
+            const subMeta: any = (invoice as any).parent?.subscription_details?.metadata ?? {};
+            const plan: string | null = subMeta.plan || (user as any).subscriptionPlan || null;
+
+            let credits: number;
+            if (subMeta.credits) {
+              credits = parseInt(subMeta.credits, 10) || 0;
+            } else {
+              const pricing: any = await PricingSettings.findOne().lean() ?? {};
+              const PLAN_CREDITS: Record<string, number> = {
+                  starter: pricing.starterCredits ?? 100,
+                  pro: pricing.proCredits ?? 300,
+                  elite: pricing.eliteCredits ?? 300
+              };
+              credits = plan === "custom"
+                ? ((user as any).subscriptionCredits ?? 0)
+                : PLAN_CREDITS[plan as string] ?? 0;
+            }
+
              await User.findByIdAndUpdate(
                 (user as any)._id,
               { $set: { credits, subscriptionStatus: "active",
-                currentPeriodEnd: periodEnd, lastInvoiceEventId: event.id } }
+                currentPeriodEnd: periodEnd, lastInvoiceEventId: event.id,
+                ...(plan ? { subscriptionPlan: plan } : {}),
+                ...(subMeta.credits ? { subscriptionCredits: credits } : {}) } }
              );
 
              // Record payment so analytics can track subscription revenue
@@ -134,7 +149,7 @@
                    $setOnInsert: {
                      userId: (user as any).clerkId,
                      email: (user as any).email ?? invoice.customer_email,
-                     plan: (user as any).subscriptionPlan,
+                     plan,
                      amount: amountPaid,
                      credits,
                      stripeSessionId: invoice.id,

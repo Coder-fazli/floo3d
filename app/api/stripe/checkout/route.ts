@@ -41,6 +41,9 @@ export async function POST(request: Request) {
       }],
       metadata: { userId, plan: "custom", credits:
   customCredits.toString() },
+      subscription_data: {
+        metadata: { userId, plan: "custom", credits: customCredits.toString() },
+      },
       success_url: `${returnUrl ??
   origin}?success=1&plan=custom`,
       cancel_url: `${origin}/pricing?canceled=1`,
@@ -82,6 +85,9 @@ export async function POST(request: Request) {
         userId,
         plan,
         credits: planData.credits.toString(),
+      },
+      subscription_data: {
+        metadata: { userId, plan, credits: planData.credits.toString() },
       },
       success_url: `${returnUrl ?? origin}?success=1&plan=${plan}`,
       cancel_url:  `${returnUrl ?? `${origin}/pricing`}?canceled=1`,
